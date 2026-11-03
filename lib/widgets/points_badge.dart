@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 /// FPTU Student Activity Score Badge
+/// Anti-Slop Architecture: High-contrast, tabular figures, collegiate badge style.
 class ActivityPointsBadge extends StatelessWidget {
   final int points;
 
@@ -10,23 +11,24 @@ class ActivityPointsBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(AppTheme.radiusChip),
-        border: Border.all(color: AppTheme.primaryContainer.withOpacity(0.4)),
+        color: AppTheme.primaryContainer,
+        borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
+        border: Border.all(color: AppTheme.hairline, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.stars_rounded, size: 16, color: AppTheme.primary),
-          const SizedBox(width: 6),
+          const Icon(Icons.bolt_rounded, size: 15, color: AppTheme.primary),
+          const SizedBox(width: 4),
           Text(
             '+$points Điểm Rèn Luyện',
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppTheme.primary,
+              letterSpacing: 0.2,
+              color: AppTheme.onPrimaryContainer,
             ),
           ),
         ],

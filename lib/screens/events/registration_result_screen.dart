@@ -5,6 +5,7 @@ import '../../widgets/app_button.dart';
 import '../tickets/digital_ticket_screen.dart';
 
 /// S17: Registration Success Screen
+/// Anti-slop Editorial Success: high-contrast ticket matriculation, monospace pass code, zero blur.
 class RegistrationResultScreen extends StatelessWidget {
   final TicketModel ticket;
 
@@ -13,7 +14,7 @@ class RegistrationResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevent physical back re-submit (flutter-handoff constraint)
+      canPop: false, // Prevent physical back re-submit
       child: Scaffold(
         backgroundColor: AppTheme.background,
         body: SafeArea(
@@ -23,55 +24,52 @@ class RegistrationResultScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Animated Success Icon
+                  // High contrast Success Icon
                   Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE8F5E9),
-                      shape: BoxShape.circle,
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: AppTheme.successSoft,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                      border: Border.all(color: AppTheme.successBorder, width: 1),
                     ),
                     child: const Icon(
-                      Icons.check_circle_rounded,
-                      color: AppTheme.success,
-                      size: 52,
+                      Icons.check_circle_outline_rounded,
+                      color: AppTheme.successInk,
+                      size: 36,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
 
-                  Text(
-                    'ĐĂNG KÝ THÀNH CÔNG!',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.primary,
-                        ),
+                  const Text(
+                    'ĐĂNG KÝ THÀNH CÔNG',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.obsidian,
+                      letterSpacing: -0.3,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 6),
+                  const Text(
                     'Vé điện tử của bạn đã được khởi tạo và lưu trữ an toàn trong ví vé cá nhân.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.onSurfaceVariant,
-                        ),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: AppTheme.textMuted,
+                      height: 1.4,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
 
                   // Ticket Mini Summary Card
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppTheme.surface,
                       borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-                      border: Border.all(color: AppTheme.outlineVariant),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.04),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      border: Border.all(color: AppTheme.hairline, width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,26 +78,26 @@ class RegistrationResultScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'MÃ VÉ ĐIỆN TỬ',
+                              'MÃ VÉ ĐIỆN TỬ FPTU',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w700,
-                                color: AppTheme.primary,
+                                color: AppTheme.textMuted,
                                 letterSpacing: 0.8,
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFE8F5E9),
-                                borderRadius: BorderRadius.circular(AppTheme.radiusChip),
+                                color: AppTheme.successSoft,
+                                borderRadius: BorderRadius.circular(4),
                               ),
                               child: const Text(
                                 'ACTIVE',
                                 style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppTheme.success,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppTheme.successInk,
                                 ),
                               ),
                             ),
@@ -109,40 +107,46 @@ class RegistrationResultScreen extends StatelessWidget {
                         Text(
                           ticket.id,
                           style: const TextStyle(
-                            fontSize: 22,
+                            fontFamily: 'monospace',
+                            fontSize: 20,
                             fontWeight: FontWeight.w800,
-                            letterSpacing: 1.2,
-                            color: AppTheme.onSurface,
+                            letterSpacing: 1.0,
+                            color: AppTheme.primary,
                           ),
                         ),
                         const SizedBox(height: 12),
-                        const Divider(height: 1, color: AppTheme.surfaceContainer),
+                        const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
                         const SizedBox(height: 12),
                         Text(
                           ticket.eventTitle,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.onSurface,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${ticket.eventTime} · ${ticket.eventDate}',
-                          style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                          style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
                   // Google Calendar Sync Shortcut
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppTheme.surfaceContainer,
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppTheme.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                      border: Border.all(color: AppTheme.hairline, width: 1),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.event_available, color: AppTheme.primary, size: 18),
+                      children: [
+                        Icon(Icons.event_available, color: AppTheme.obsidian, size: 16),
                         SizedBox(width: 8),
                         Flexible(
                           child: Text(
@@ -150,15 +154,15 @@ class RegistrationResultScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.primary,
+                              fontWeight: FontWeight.w500,
+                              color: AppTheme.onSurface,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 24),
 
                   // Action Buttons
                   AppPrimaryButton(
@@ -168,7 +172,7 @@ class RegistrationResultScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => DigitalTicketScreen(ticket: ticket),
+                          builder: (ctx) => DigitalTicketScreen(ticket: ticket),
                         ),
                       );
                     },

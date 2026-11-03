@@ -3,7 +3,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../models/ticket_model.dart';
 import '../theme/app_theme.dart';
 
-/// Digital Ticket Card with QR Code
+/// Pass-Style Digital Ticket Card
+/// Anti-Slop Architecture: Perforated pass aesthetics, tabular typography, high-contrast QR.
 class TicketCard extends StatelessWidget {
   final TicketModel ticket;
   final VoidCallback? onBoostBrightness;
@@ -21,134 +22,180 @@ class TicketCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusSheet),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+        border: Border.all(color: AppTheme.outlineVariant, width: 1),
       ),
       child: Column(
         children: [
-          // Header Banner
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: isCheckedIn ? const Color(0xFF2E7D32) : AppTheme.primary,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(AppTheme.radiusSheet)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ticket.id,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.2,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        isCheckedIn ? 'ĐÃ CHECK-IN TẠI CỔNG' : 'VÉ HỢP LỆ — SẴN SÀNG QUÉT',
-                        style: TextStyle(
-                          color: isCheckedIn ? const Color(0xFFC8E6C9) : AppTheme.onPrimaryContainer,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(
-                  isCheckedIn ? Icons.verified : Icons.qr_code_2_rounded,
-                  color: Colors.white,
-                  size: 32,
-                ),
-              ],
-            ),
-          ),
-
-          // Event & Student Details
+          // Header: Event Title and Status Pill
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Monospace Ticket ID
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
+                          ),
+                          child: Text(
+                            ticket.id,
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5,
+                              color: AppTheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Status Pill
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isCheckedIn ? AppTheme.successSoft : AppTheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
+                        border: Border.all(
+                          color: isCheckedIn
+                              ? AppTheme.success.withOpacity(0.3)
+                              : AppTheme.primary.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isCheckedIn ? Icons.check_circle : Icons.sensors,
+                            size: 13,
+                            color: isCheckedIn ? AppTheme.successInk : AppTheme.onPrimaryContainer,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            isCheckedIn ? 'ĐÃ CHECK-IN' : 'VÉ HỢP LỆ',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: isCheckedIn ? AppTheme.successInk : AppTheme.onPrimaryContainer,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
                 Text(
                   ticket.eventTitle,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
+                    letterSpacing: -0.4,
+                    height: 1.3,
                     color: AppTheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today, size: 14, color: AppTheme.outline),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '${ticket.eventDate} · ${ticket.eventTime}',
-                        style: const TextStyle(fontSize: 13),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
+                // Metadata Rows
+                _buildMetaRow(Icons.schedule, '${ticket.eventDate} · ${ticket.eventTime}'),
                 const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, size: 14, color: AppTheme.outline),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        ticket.eventLocation,
-                        style: const TextStyle(fontSize: 13),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
+                _buildMetaRow(Icons.place_outlined, ticket.eventLocation),
                 const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.person, size: 14, color: AppTheme.outline),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        ticket.studentName,
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                _buildMetaRow(Icons.person_outline, ticket.studentName),
+              ],
+            ),
+          ),
+
+          // Perforated Divider
+          Row(
+            children: [
+              // Left Notch Cutout
+              Container(
+                width: 12,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: AppTheme.background,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  border: Border(
+                    top: BorderSide(color: AppTheme.outlineVariant),
+                    right: BorderSide(color: AppTheme.outlineVariant),
+                    bottom: BorderSide(color: AppTheme.outlineVariant),
+                  ),
                 ),
+              ),
+              // Dashed separator line
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final boxWidth = constraints.constrainWidth();
+                    const dashWidth = 6.0;
+                    const dashSpace = 4.0;
+                    final dashCount = (boxWidth / (dashWidth + dashSpace)).floor();
+                    return Flex(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      direction: Axis.horizontal,
+                      children: List.generate(dashCount, (_) {
+                        return const SizedBox(
+                          width: dashWidth,
+                          height: 1,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(color: AppTheme.outlineVariant),
+                          ),
+                        );
+                      }),
+                    );
+                  },
+                ),
+              ),
+              // Right Notch Cutout
+              Container(
+                width: 12,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: AppTheme.background,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    bottomLeft: Radius.circular(12),
+                  ),
+                  border: Border(
+                    top: BorderSide(color: AppTheme.outlineVariant),
+                    left: BorderSide(color: AppTheme.outlineVariant),
+                    bottom: BorderSide(color: AppTheme.outlineVariant),
+                  ),
+                ),
+              ),
+            ],
+          ),
 
-                const SizedBox(height: 20),
-                const Divider(height: 1, thickness: 1, color: AppTheme.surfaceContainer),
-                const SizedBox(height: 20),
-
-                // QR View
+          // Lower Segment: QR Matrix View
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
                 Center(
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppTheme.surface,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                       border: Border.all(color: AppTheme.outlineVariant, width: 1.5),
                     ),
                     child: QrImageView(
@@ -157,25 +204,24 @@ class TicketCard extends StatelessWidget {
                       size: 190.0,
                       eyeStyle: const QrEyeStyle(
                         eyeShape: QrEyeShape.square,
-                        color: AppTheme.primary,
+                        color: AppTheme.secondary,
                       ),
                       dataModuleStyle: const QrDataModuleStyle(
                         dataModuleShape: QrDataModuleShape.square,
-                        color: AppTheme.onSurface,
+                        color: AppTheme.secondary,
                       ),
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 14),
-                Center(
-                  child: Text(
-                    'Mã vé Dynamic QR được lưu trữ ngoại tuyến',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade600,
-                    ),
+                const SizedBox(height: 12),
+                const Text(
+                  'VÉ OFFLINE TỰ ĐỘNG LƯU TRỮ TRÊN THIẾT BỊ',
+                  style: TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textMuted,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ],
@@ -183,6 +229,26 @@ class TicketCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMetaRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 15, color: AppTheme.textMuted),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.onSurfaceVariant,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../widgets/error_view.dart';
 import 'digital_ticket_screen.dart';
 
 /// S19: My Events & Tickets Hub Screen
+/// Anti-slop Editorial Pass Wallet: flat hairline containers, monospace ticket codes, tabular dates.
 class MyTicketsScreen extends StatelessWidget {
   const MyTicketsScreen({super.key});
 
@@ -24,16 +25,24 @@ class MyTicketsScreen extends StatelessWidget {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Vé sự kiện của tôi'),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, thickness: 1, color: AppTheme.hairline),
+        ),
       ),
       body: Column(
         children: [
           // Segmented Tabs Header
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: AppTheme.spacingScreenPadding, vertical: 8),
-            padding: const EdgeInsets.all(4),
+            margin: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spacingScreenPadding,
+              vertical: 12,
+            ),
+            padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(14),
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+              border: Border.all(color: AppTheme.hairline, width: 1),
             ),
             child: Row(
               children: [
@@ -42,11 +51,12 @@ class MyTicketsScreen extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
 
           // Tickets List View
           Expanded(
             child: RefreshIndicator(
+              color: AppTheme.primary,
+              backgroundColor: AppTheme.surface,
               onRefresh: () async {
                 if (user != null) {
                   await ticketVM.loadUserTickets(user.id);
@@ -55,20 +65,25 @@ class MyTicketsScreen extends StatelessWidget {
               child: switch (ticketVM.state) {
                 StateInitial() || StateLoading() => const LoadingView(message: 'Đang tải vé điện tử...'),
                 StateEmpty(message: final msg) => EmptyView(
+                    title: 'Chưa có vé sự kiện',
                     message: msg,
-                    actionLabel: 'Làm mới',
+                    actionLabel: 'Tải lại danh sách',
                     onAction: () {
                       if (user != null) ticketVM.loadUserTickets(user.id);
                     },
                   ),
                 StateError(error: final err) => ErrorView(
+                    title: 'Lỗi đồng bộ vé',
                     errorMessage: err,
                     onRetry: () {
                       if (user != null) ticketVM.loadUserTickets(user.id);
                     },
                   ),
                 StateData(data: final tickets) => ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingScreenPadding, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppTheme.spacingScreenPadding,
+                      vertical: 6,
+                    ),
                     itemCount: tickets.length,
                     itemBuilder: (context, index) {
                       final ticket = tickets[index];
@@ -83,33 +98,31 @@ class MyTicketsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTabItem(BuildContext context, MyTicketsViewModel vm, {required int index, required String label}) {
+  Widget _buildTabItem(
+    BuildContext context,
+    MyTicketsViewModel vm, {
+    required int index,
+    required String label,
+  }) {
     final isSelected = vm.selectedTabIndex == index;
     return Expanded(
       child: InkWell(
         onTap: () => vm.selectTab(index),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(6),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 9),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : null,
+            color: isSelected ? AppTheme.surface : Colors.transparent,
+            borderRadius: BorderRadius.circular(6),
+            border: isSelected ? Border.all(color: AppTheme.hairline, width: 1) : null,
           ),
           child: Text(
             label,
             style: TextStyle(
               fontSize: 13,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? AppTheme.primary : AppTheme.onSurfaceVariant,
+              color: isSelected ? AppTheme.obsidian : AppTheme.textMuted,
+              letterSpacing: 0.1,
             ),
             textAlign: TextAlign.center,
           ),
@@ -122,9 +135,9 @@ class MyTicketsScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.surface,
         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-        border: Border.all(color: AppTheme.outlineVariant),
+        border: Border.all(color: AppTheme.hairline, width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -134,7 +147,7 @@ class MyTicketsScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => DigitalTicketScreen(ticket: ticket),
+                builder: (ctx) => DigitalTicketScreen(ticket: ticket),
               ),
             );
           },
@@ -143,16 +156,20 @@ class MyTicketsScreen extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 52,
-                  height: 52,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: ticket.isCheckedIn ? const Color(0xFFE8F5E9) : AppTheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(12),
+                    color: ticket.isCheckedIn ? AppTheme.successSoft : AppTheme.surfaceSubtle,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                    border: Border.all(
+                      color: ticket.isCheckedIn ? AppTheme.successBorder : AppTheme.hairline,
+                      width: 1,
+                    ),
                   ),
                   child: Icon(
-                    ticket.isCheckedIn ? Icons.verified_rounded : Icons.qr_code_2_rounded,
-                    color: ticket.isCheckedIn ? AppTheme.success : AppTheme.primary,
-                    size: 28,
+                    ticket.isCheckedIn ? Icons.verified_outlined : Icons.qr_code_2_rounded,
+                    color: ticket.isCheckedIn ? AppTheme.successInk : AppTheme.obsidian,
+                    size: 24,
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -167,48 +184,70 @@ class MyTicketsScreen extends StatelessWidget {
                             child: Text(
                               ticket.id,
                               style: const TextStyle(
-                                fontSize: 12,
+                                fontFamily: 'monospace',
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700,
                                 color: AppTheme.primary,
+                                letterSpacing: 0.5,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: ticket.isCheckedIn ? const Color(0xFFE8F5E9) : AppTheme.surfaceContainer,
-                              borderRadius: BorderRadius.circular(8),
+                              color: ticket.isCheckedIn ? AppTheme.successSoft : AppTheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: ticket.isCheckedIn ? AppTheme.successBorder : AppTheme.outlineVariant,
+                                width: 0.5,
+                              ),
                             ),
                             child: Text(
                               ticket.isCheckedIn ? 'ĐÃ ĐIỂM DANH' : 'CHỜ CHECK-IN',
                               style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w800,
-                                color: ticket.isCheckedIn ? AppTheme.success : AppTheme.primary,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                                color: ticket.isCheckedIn ? AppTheme.successInk : AppTheme.onPrimaryContainer,
+                                letterSpacing: 0.4,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         ticket.eventTitle,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.onSurface,
+                          height: 1.25,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '${ticket.eventTime} · ${ticket.eventDate}',
-                        style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      Row(
+                        children: [
+                          const Icon(Icons.schedule, size: 12, color: AppTheme.textMuted),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${ticket.eventTime} · ${ticket.eventDate}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontFeatures: [FontFeature.tabularFigures()],
+                              color: AppTheme.textMuted,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Icon(Icons.chevron_right, color: AppTheme.outline),
+                const Icon(Icons.chevron_right, size: 18, color: AppTheme.textMuted),
               ],
             ),
           ),

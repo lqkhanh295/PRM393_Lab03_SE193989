@@ -9,6 +9,7 @@ import '../../widgets/app_button.dart';
 import 'registration_result_screen.dart';
 
 /// S15: 1-Tap Registration Bottom Sheet Modal
+/// Anti-slop Editorial Sheet: flat hairline surfaces, high-contrast verified student details.
 class RegistrationModal extends StatelessWidget {
   final EventModel event;
   final UserModel user;
@@ -27,7 +28,7 @@ class RegistrationModal extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.surface,
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppTheme.radiusSheet)),
       ),
       child: SafeArea(
@@ -40,24 +41,29 @@ class RegistrationModal extends StatelessWidget {
               // Drag handle
               Center(
                 child: Container(
-                  width: 44,
+                  width: 36,
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: AppTheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(4),
+                    color: AppTheme.hairline,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
 
-              Text(
+              const Text(
                 'Xác nhận đăng ký giữ chỗ',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.obsidian,
+                  letterSpacing: -0.3,
+                ),
               ),
               const SizedBox(height: 6),
               const Text(
                 'Hệ thống tự động sử dụng thông tin tài khoản FPT có sẵn của bạn để cấp vé.',
-                style: TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant),
+                style: TextStyle(fontSize: 13, color: AppTheme.textMuted, height: 1.4),
               ),
               const SizedBox(height: 16),
 
@@ -65,44 +71,50 @@ class RegistrationModal extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(AppTheme.radiusButton),
+                  color: AppTheme.surfaceSubtle,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                  border: Border.all(color: AppTheme.hairline, width: 1),
                 ),
                 child: Column(
                   children: [
                     _buildInfoRow('Họ và tên:', user.name),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     _buildInfoRow('Email FPT:', user.email),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     _buildInfoRow('Chuyên ngành:', user.major),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               // Event Summary
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  border: Border.all(color: AppTheme.outlineVariant),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusButton),
+                  color: AppTheme.surface,
+                  border: Border.all(color: AppTheme.hairline, width: 1),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusInput),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       event.title,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${event.time} · ${event.date} · ${event.location}',
-                      style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                      style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // Action Buttons
               AppPrimaryButton(
@@ -116,7 +128,7 @@ class RegistrationModal extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => RegistrationResultScreen(ticket: ticket),
+                        builder: (ctx) => RegistrationResultScreen(ticket: ticket),
                       ),
                     );
                   } else if (regVM.state is StateError && context.mounted) {
@@ -124,17 +136,17 @@ class RegistrationModal extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(err),
-                        backgroundColor: AppTheme.error,
+                        backgroundColor: AppTheme.errorInk,
                       ),
                     );
                   }
                 },
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Center(
                 child: TextButton(
                   onPressed: isLoading ? null : () => Navigator.pop(context),
-                  child: const Text('Hủy bỏ', style: TextStyle(color: AppTheme.onSurfaceVariant)),
+                  child: const Text('Hủy bỏ', style: TextStyle(color: AppTheme.textMuted)),
                 ),
               ),
             ],
@@ -148,12 +160,16 @@ class RegistrationModal extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant)),
+        Text(label, style: const TextStyle(fontSize: 13, color: AppTheme.textMuted)),
         const SizedBox(width: 8),
         Flexible(
           child: Text(
             value,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.onSurface,
+            ),
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
           ),

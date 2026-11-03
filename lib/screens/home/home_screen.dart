@@ -13,6 +13,7 @@ import '../../widgets/app_icon_button.dart';
 import '../events/event_detail_screen.dart';
 
 /// S07: Home Campus Pulse Screen
+/// Anti-Slop Architecture: High typographic contrast, hairline rules, zero fuzzy blur.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -28,9 +29,16 @@ class HomeScreen extends StatelessWidget {
         titleSpacing: AppTheme.spacingScreenPadding,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundImage: NetworkImage(user?.avatarUrl ?? 'https://i.pravatar.cc/100'),
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppTheme.outlineVariant, width: 1.5),
+              ),
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: AppTheme.surfaceContainer,
+                backgroundImage: NetworkImage(user?.avatarUrl ?? 'https://i.pravatar.cc/100'),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -39,13 +47,22 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     user != null ? 'Chào ${user.name.split(' ').last} 👋' : 'Chào bạn!',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -0.3,
+                      color: AppTheme.onSurface,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     user?.major ?? 'Kỹ thuật Phần mềm (SE)',
-                    style: const TextStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.textMuted,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -73,6 +90,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
+        color: AppTheme.primary,
         onRefresh: () => homeVM.loadHomeScreenData(),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -82,60 +100,65 @@ class HomeScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 12),
 
-              // Remote Config Dynamic Banner
+              // Remote Config Dynamic Broadcast Banner (Flat, High Contrast)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppTheme.primary, AppTheme.primaryContainer],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: AppTheme.secondary,
                   borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.primary.withOpacity(0.2),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  border: Border.all(color: const Color(0xFF1E293B), width: 1),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'TIN NÓNG CAMPUS',
-                      style: TextStyle(
-                        color: Color(0xFFD8CFFF),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.0,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: AppTheme.primary,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'TIN NÓNG CAMPUS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E293B),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'TOP ${homeVM.maxFeatured} NỔI BẬT',
+                            style: const TextStyle(
+                              color: AppTheme.textSubtle,
+                              fontSize: 10,
+                              fontFamily: 'monospace',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 10),
                     Text(
                       homeVM.bannerTitle,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
+                        letterSpacing: -0.3,
                         height: 1.3,
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(Icons.stars, color: Colors.amber, size: 16),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            'Đang hiển thị top ${homeVM.maxFeatured} sự kiện nổi bật',
-                            style: const TextStyle(color: Colors.white70, fontSize: 12),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -145,19 +168,33 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Sự kiện nổi bật',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                      color: AppTheme.onSurface,
+                    ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      homeVM.loadHomeScreenData();
-                    },
-                    child: const Text('Làm mới'),
+                  InkWell(
+                    onTap: () => homeVM.loadHomeScreenData(),
+                    borderRadius: BorderRadius.circular(4),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Text(
+                        'Làm mới',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.primary,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
 
               // Explicit States Rendering
               switch (homeVM.state) {

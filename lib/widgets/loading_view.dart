@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Explicit Loading State View
+/// Explicit Loading State View (Anti-slop Editorial)
 class LoadingView extends StatelessWidget {
   final String? message;
 
@@ -13,13 +13,14 @@ class LoadingView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
-              width: 38,
-              height: 38,
+              width: 32,
+              height: 32,
               child: CircularProgressIndicator(
-                strokeWidth: 3.0,
+                strokeWidth: 2.5,
                 valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
               ),
             ),
@@ -27,9 +28,10 @@ class LoadingView extends StatelessWidget {
             Text(
               message ?? 'Đang tải dữ liệu...',
               style: const TextStyle(
-                fontSize: 14,
-                color: AppTheme.onSurfaceVariant,
+                fontSize: 13,
+                color: AppTheme.textMuted,
                 fontWeight: FontWeight.w500,
+                letterSpacing: 0.1,
               ),
               textAlign: TextAlign.center,
             ),

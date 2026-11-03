@@ -3,7 +3,11 @@ import '../models/certificate_model.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 
-/// Digital Certificate Card
+/// Digital Academic Certificate Card
+/// Designed with Anti-slop Academic Credential aesthetics:
+/// - 1px hairline slate border
+/// - Monospace verification stamp
+/// - High-contrast editorial typography
 class CertificateCard extends StatelessWidget {
   final CertificateModel certificate;
   final VoidCallback onDownload;
@@ -20,52 +24,66 @@ class CertificateCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(AppTheme.spacingCardPadding),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.surface,
         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-        border: Border.all(color: const Color(0xFFD4AF37), width: 1.5), // Gold border
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFD4AF37).withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: AppTheme.hairline, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFF8E1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppTheme.surfaceSubtle,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                  border: Border.all(color: AppTheme.hairline, width: 1),
                 ),
-                child: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFB78103), size: 28),
+                alignment: Alignment.center,
+                child: const Icon(
+                  Icons.verified_outlined,
+                  color: AppTheme.successInk,
+                  size: 24,
+                ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'CHỨNG NHẬN SỐ HOÀN THÀNH',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFFB78103),
-                        letterSpacing: 0.8,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppTheme.successSoft,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'CHỨNG NHẬN ĐIỆN TỬ FPTU',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.successInk,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 6),
                     Text(
                       certificate.eventTitle,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
+                        height: 1.3,
                         color: AppTheme.onSurface,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -73,14 +91,73 @@ class CertificateCard extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 14),
+          const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
           const SizedBox(height: 12),
-          Text(
-            'Học viên: ${certificate.studentName}',
-            style: const TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Sinh viên thụ hưởng',
+                style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+              ),
+              Text(
+                certificate.studentName,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.onSurface,
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Ngày cấp: ${certificate.issueDate} · Mã: ${certificate.verificationHash}',
-            style: const TextStyle(fontSize: 11, color: AppTheme.outline),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Ngày phát hành',
+                style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+              ),
+              Text(
+                certificate.issueDate,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontFeatures: [FontFeature.tabularFigures()],
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppTheme.hairline, width: 1),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.fingerprint, size: 14, color: AppTheme.textMuted),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'HASH: ${certificate.verificationHash}',
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 11,
+                      color: AppTheme.textMuted,
+                      letterSpacing: 0.5,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 14),
           AppOutlinedButton(

@@ -6,6 +6,7 @@ class SpeakerQuestionModel {
   final String question;
   final int upvotes;
   final DateTime timestamp;
+  final bool isAnswered;
 
   const SpeakerQuestionModel({
     required this.id,
@@ -15,6 +16,7 @@ class SpeakerQuestionModel {
     required this.question,
     required this.upvotes,
     required this.timestamp,
+    this.isAnswered = false,
   });
 
   factory SpeakerQuestionModel.fromMap(Map<String, dynamic> map, String id) {
@@ -28,6 +30,7 @@ class SpeakerQuestionModel {
       timestamp: map['timestamp'] != null
           ? DateTime.tryParse(map['timestamp'] as String) ?? DateTime.now()
           : DateTime.now(),
+      isAnswered: map['isAnswered'] as bool? ?? false,
     );
   }
 
@@ -39,6 +42,7 @@ class SpeakerQuestionModel {
       'question': question,
       'upvotes': upvotes,
       'timestamp': timestamp.toIso8601String(),
+      'isAnswered': isAnswered,
     };
   }
 }

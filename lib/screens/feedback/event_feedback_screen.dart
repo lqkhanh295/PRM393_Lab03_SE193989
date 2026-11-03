@@ -11,6 +11,7 @@ import '../../widgets/app_text_field.dart';
 import '../../widgets/certificate_card.dart';
 
 /// S23: Event Feedback & Rating Screen
+/// Anti-slop Editorial Survey: flat hairline surfaces, high-contrast star ratings, verified academic credential output.
 class EventFeedbackScreen extends StatefulWidget {
   final TicketModel ticket;
 
@@ -40,40 +41,72 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Đánh giá sự kiện'),
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(1),
+          child: Divider(height: 1, thickness: 1, color: AppTheme.hairline),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryContainer,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                'PHIẾU KHẢO SÁT CHẤT LƯỢNG',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.onPrimaryContainer,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
             const SizedBox(height: 10),
             Text(
               widget.ticket.eventTitle,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.obsidian,
+                height: 1.3,
+                letterSpacing: -0.3,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 6),
             const Text(
               'Ý kiến đóng góp của bạn giúp BTC và CLB cải thiện chất lượng các chương trình tiếp theo.',
-              style: TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant),
+              style: TextStyle(fontSize: 13, color: AppTheme.textMuted, height: 1.4),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             if (!isSubmitted) ...[
               // 5-Star Rating Card
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppTheme.surface,
                   borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-                  border: Border.all(color: AppTheme.outlineVariant),
+                  border: Border.all(color: AppTheme.hairline, width: 1),
                 ),
                 child: Column(
                   children: [
                     const Text(
                       'Bạn cảm thấy sự kiện thế nào?',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     StarRatingBar(
@@ -83,12 +116,17 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                     const SizedBox(height: 12),
                     Text(
                       _getRatingDescription(feedbackVM.rating),
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.primary),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               // Comment Input
               AppTextField(
@@ -96,7 +134,7 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                 label: 'Cảm nghĩ và nhận xét của bạn...',
                 hintText: 'Nội dung chia sẻ của diễn giả rất hữu ích...',
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // Submit Button
               AppPrimaryButton(
@@ -117,31 +155,45 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
             ] else ...[
               // Unlocked Certificate Result Card
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE8F5E9),
-                  borderRadius: BorderRadius.circular(16),
+                  color: AppTheme.successSoft,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                  border: Border.all(color: AppTheme.successBorder, width: 1),
                 ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.stars_rounded, color: AppTheme.success, size: 28),
+                child: const Row(
+                  children: [
+                    Icon(Icons.verified_rounded, color: AppTheme.successInk, size: 24),
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'Cảm ơn bạn! Đã cộng +5 Điểm rèn luyện vào hồ sơ sinh viên FPTU.',
-                        style: TextStyle(fontWeight: FontWeight.w700, color: AppTheme.success),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: AppTheme.successInk,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-              Text(
-                'Chứng nhận số của bạn đã sẵn sàng',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'CHỨNG NHẬN ĐIỆN TỬ SẴN SÀNG',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.textMuted,
+                    letterSpacing: 0.8,
+                  ),
+                ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 10),
 
               CertificateCard(
                 certificate: (feedbackVM.state as StateData).data,
@@ -154,7 +206,7 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               AppOutlinedButton(
                 label: 'Quay lại màn hình vé',

@@ -11,7 +11,8 @@ import 'tickets/my_tickets_screen.dart';
 import 'calendar/calendar_screen.dart';
 import 'profile/profile_screen.dart';
 
-/// Main Navigation Destination with Material 3 Bottom Navigation Bar
+/// Main Navigation Destination with Anti-slop Accent Navigation Bar
+/// Clean 1px hairline top rule, zero elevation, crisp typography.
 class MainNavigationScreen extends StatefulWidget {
   final int initialIndex;
 
@@ -55,40 +56,52 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         index: _currentIndex,
         children: _screens,
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded, color: AppTheme.primary),
-            label: 'Trang chủ',
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: AppTheme.surface,
+          border: Border(
+            top: BorderSide(color: AppTheme.hairline, width: 1),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore_rounded, color: AppTheme.primary),
-            label: 'Khám phá',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.confirmation_number_outlined),
-            selectedIcon: Icon(Icons.confirmation_number_rounded, color: AppTheme.primary),
-            label: 'Vé của tôi',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month_rounded, color: AppTheme.primary),
-            label: 'Lịch biểu',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person_rounded, color: AppTheme.primary),
-            label: 'Cá nhân',
-          ),
-        ],
+        ),
+        child: NavigationBar(
+          elevation: 0,
+          backgroundColor: AppTheme.surface,
+          selectedIndex: _currentIndex,
+          indicatorColor: AppTheme.surfaceSubtle,
+          height: 64,
+          onDestinationSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined, size: 22),
+              selectedIcon: Icon(Icons.home_rounded, color: AppTheme.primary, size: 22),
+              label: 'Trang chủ',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.search_outlined, size: 22),
+              selectedIcon: Icon(Icons.search_rounded, color: AppTheme.primary, size: 22),
+              label: 'Khám phá',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.confirmation_number_outlined, size: 22),
+              selectedIcon: Icon(Icons.confirmation_number_rounded, color: AppTheme.primary, size: 22),
+              label: 'Vé của tôi',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.calendar_today_outlined, size: 20),
+              selectedIcon: Icon(Icons.calendar_month_rounded, color: AppTheme.primary, size: 20),
+              label: 'Lịch biểu',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outline, size: 22),
+              selectedIcon: Icon(Icons.person_rounded, color: AppTheme.primary, size: 22),
+              label: 'Cá nhân',
+            ),
+          ],
+        ),
       ),
     );
   }

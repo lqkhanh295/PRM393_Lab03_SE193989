@@ -11,6 +11,7 @@ import '../../widgets/empty_view.dart';
 import '../../widgets/app_button.dart';
 
 /// S21 & S22: Live Event Companion & Speaker Q&A Screen
+/// Anti-slop Live Conference Companion: flat hairline cards, crisp live badge, tactile Q&A input.
 class LiveCompanionScreen extends StatefulWidget {
   final TicketModel ticket;
 
@@ -51,29 +52,64 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
       appBar: AppBar(
         title: Column(
           children: [
-            const Text('Live Companion', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            const Text(
+              'Live Companion',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 2),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                  width: 7,
+                  height: 7,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.primary,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-                const SizedBox(width: 6),
-                const Text('ĐANG DIỄN RA TRỰC TIẾP', style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.w800)),
+                const SizedBox(width: 5),
+                const Text(
+                  'TRỰC TIẾP HỘI TRƯỜNG',
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: AppTheme.primary,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                  ),
+                ),
               ],
             ),
           ],
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: AppTheme.primary,
-          indicatorColor: AppTheme.primary,
-          tabs: const [
-            Tab(icon: Icon(Icons.timeline_rounded), text: 'Lịch trình trực tiếp'),
-            Tab(icon: Icon(Icons.question_answer_rounded), text: 'Hỏi đáp diễn giả'),
-          ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: AppTheme.hairline, width: 1),
+                bottom: BorderSide(color: AppTheme.hairline, width: 1),
+              ),
+              color: AppTheme.surface,
+            ),
+            child: TabBar(
+              controller: _tabController,
+              labelColor: AppTheme.obsidian,
+              unselectedLabelColor: AppTheme.textMuted,
+              indicatorColor: AppTheme.primary,
+              indicatorWeight: 2,
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.timeline_rounded, size: 18),
+                  text: 'Lịch trình trực tiếp',
+                ),
+                Tab(
+                  icon: Icon(Icons.chat_bubble_outline_rounded, size: 18),
+                  text: 'Hỏi đáp diễn giả',
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       body: TabBarView(
@@ -99,16 +135,9 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.surface,
               borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-              border: Border.all(color: AppTheme.primary, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primary.withOpacity(0.12),
-                  blurRadius: 14,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              border: Border.all(color: AppTheme.primary, width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,36 +145,41 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade50,
-                          borderRadius: BorderRadius.circular(AppTheme.radiusChip),
-                        ),
-                        child: const Text(
-                          'PHIÊN ĐANG DIỄN RA (14:00 - 15:15)',
-                          style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.w800),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'ĐANG DIỄN RA · 14:00 - 15:15',
+                        style: TextStyle(
+                          color: AppTheme.onPrimaryContainer,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.sensors_rounded, color: Colors.red, size: 20),
+                    const Icon(Icons.sensors, color: AppTheme.primary, size: 18),
                   ],
                 ),
                 const SizedBox(height: 12),
                 const Text(
                   'Keynote: Kỷ nguyên Autonomous Coding Agents & AI Pair Programming',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.onSurface,
+                    height: 1.3,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 const Text(
                   'Diễn giả: TS. Nguyễn Văn Hùng (FPT Software AI Lab)',
-                  style: TextStyle(fontSize: 13, color: AppTheme.onSurfaceVariant),
+                  style: TextStyle(fontSize: 13, color: AppTheme.textMuted),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 AppOutlinedButton(
                   label: 'Tải Slide Báo Cáo Của Diễn Giả (PDF)',
                   icon: Icons.download_rounded,
@@ -160,13 +194,26 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
           ),
           const SizedBox(height: 24),
 
-          Text(
-            'Các phiên tiếp theo trong buổi chiều',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          const Text(
+            'CÁC PHIÊN TIẾP THEO',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: AppTheme.textMuted,
+              letterSpacing: 0.8,
+            ),
           ),
-          const SizedBox(height: 12),
-          _buildNextSessionTile('15:15 - 16:30', 'Workshop: Xây dựng Mobile App với Flutter & Firebase', 'ThS. Trần Thu Hà'),
-          _buildNextSessionTile('16:30 - 17:30', 'Hỏi đáp Q&A toàn thể diễn giả & Trao giải', 'Toàn ban tổ chức'),
+          const SizedBox(height: 10),
+          _buildNextSessionTile(
+            '15:15 - 16:30',
+            'Workshop: Xây dựng Mobile App với Flutter & Firebase',
+            'ThS. Trần Thu Hà (Google Developer Expert)',
+          ),
+          _buildNextSessionTile(
+            '16:30 - 17:30',
+            'Hỏi đáp Q&A toàn thể diễn giả & Bế mạc',
+            'Toàn thể diễn giả & Ban tổ chức FPTU',
+          ),
         ],
       ),
     );
@@ -177,9 +224,9 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.outlineVariant),
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+        border: Border.all(color: AppTheme.hairline, width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,18 +234,38 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(6),
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppTheme.hairline, width: 1),
             ),
-            child: Text(time, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppTheme.primary)),
+            child: Text(
+              time,
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.obsidian,
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                Text(speaker, style: const TextStyle(fontSize: 11, color: AppTheme.onSurfaceVariant)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  speaker,
+                  style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                ),
               ],
             ),
           ),
@@ -213,9 +280,17 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
         // Question list
         Expanded(
           child: switch (liveVM.questionsState) {
-            StateInitial() || StateLoading() => const LoadingView(message: 'Đang tải câu hỏi...'),
-            StateEmpty(message: final msg) => EmptyView(message: msg),
-            StateError(error: final err) => Center(child: Text(err)),
+            StateInitial() || StateLoading() => const LoadingView(message: 'Đang tải câu hỏi trực tiếp...'),
+            StateEmpty(message: final msg) => EmptyView(
+                title: 'Chưa có câu hỏi nào',
+                message: msg,
+              ),
+            StateError(error: final err) => Center(
+                child: Text(
+                  err,
+                  style: const TextStyle(color: AppTheme.errorInk),
+                ),
+              ),
             StateData(data: final questions) => ListView.builder(
                 padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
                 itemCount: questions.length,
@@ -235,38 +310,47 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
         // Bottom Ask Question Input Field
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: const Border(top: BorderSide(color: AppTheme.outlineVariant)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
+          decoration: const BoxDecoration(
+            color: AppTheme.surface,
+            border: Border(
+              top: BorderSide(color: AppTheme.hairline, width: 1),
+            ),
           ),
           child: SafeArea(
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _questionController,
-                    decoration: InputDecoration(
-                      hintText: 'Đặt câu hỏi trực tiếp cho diễn giả...',
-                      filled: true,
-                      fillColor: AppTheme.surfaceContainer,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppTheme.radiusButton),
-                        borderSide: BorderSide.none,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceSubtle,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                      border: Border.all(color: AppTheme.hairline, width: 1),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: TextField(
+                      controller: _questionController,
+                      decoration: const InputDecoration(
+                        hintText: 'Đặt câu hỏi trực tiếp cho diễn giả...',
+                        hintStyle: TextStyle(fontSize: 13, color: AppTheme.textMuted),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 12),
+                        isDense: true,
                       ),
+                      style: const TextStyle(fontSize: 14, color: AppTheme.onSurface),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send_rounded, color: AppTheme.primary),
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppTheme.obsidian,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                    ),
+                  ),
+                  icon: const Icon(Icons.arrow_upward_rounded, size: 20),
+                  tooltip: 'Gửi câu hỏi',
                   onPressed: () {
                     if (user != null && _questionController.text.trim().isNotEmpty) {
                       liveVM.askQuestion(

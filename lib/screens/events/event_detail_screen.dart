@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
@@ -12,7 +11,8 @@ import '../../widgets/error_view.dart';
 import '../../widgets/empty_view.dart';
 import 'registration_modal.dart';
 
-/// S13: Event Detail Screen with Floating Action Bar
+/// S13: Event Detail Screen
+/// Anti-Slop Architecture: Clear timeline, clean speaker badges, fixed bottom bar.
 class EventDetailScreen extends StatefulWidget {
   final String eventId;
 
@@ -64,12 +64,13 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           slivers: [
             // Sliver App Bar with Banner
             SliverAppBar(
-              expandedHeight: 250.0,
+              expandedHeight: 240.0,
               pinned: true,
+              backgroundColor: AppTheme.secondary,
               leading: Container(
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
+                  color: AppTheme.secondary.withOpacity(0.6),
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
@@ -82,8 +83,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   event.bannerUrl,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    color: AppTheme.primary,
-                    child: const Icon(Icons.event, color: Colors.white, size: 64),
+                    color: AppTheme.secondary,
+                    child: const Center(
+                      child: Icon(Icons.event, color: AppTheme.textSubtle, size: 56),
+                    ),
                   ),
                 ),
               ),
@@ -96,29 +99,34 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category & Club Tag
+                    // Category & Club attribution
                     Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.surfaceContainer,
-                            borderRadius: BorderRadius.circular(AppTheme.radiusChip),
+                            color: AppTheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
                           ),
                           child: Text(
-                            event.category,
+                            event.category.toUpperCase(),
                             style: const TextStyle(
-                              color: AppTheme.primary,
-                              fontSize: 12,
+                              color: AppTheme.onPrimaryContainer,
+                              fontSize: 11,
                               fontWeight: FontWeight.w700,
+                              letterSpacing: 0.3,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            'Được tổ chức bởi ${event.clubName}',
-                            style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                            'Tổ chức bởi ${event.clubName}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: AppTheme.textMuted,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -129,45 +137,55 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                     // Event Title
                     Text(
                       event.title,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            height: 1.3,
-                          ),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.4,
+                        height: 1.25,
+                        color: AppTheme.onSurface,
+                      ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
 
-                    // Time & Location Card
+                    // Time & Location Box (Flat, 1px hairline border)
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppTheme.surface,
                         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-                        border: Border.all(color: AppTheme.outlineVariant),
+                        border: Border.all(color: AppTheme.outlineVariant, width: 1),
                       ),
                       child: Column(
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.calendar_today_rounded, size: 18, color: AppTheme.primary),
+                              const Icon(Icons.schedule, size: 18, color: AppTheme.primary),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
                                   '${event.time} · Ngày ${event.date}',
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.onSurface,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const Divider(height: 20, thickness: 0.8),
+                          const Divider(height: 20, thickness: 1, color: AppTheme.outlineVariant),
                           Row(
                             children: [
-                              const Icon(Icons.location_on_rounded, size: 18, color: AppTheme.primary),
+                              const Icon(Icons.place_outlined, size: 18, color: AppTheme.primary),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
                                   event.location,
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppTheme.onSurface,
+                                  ),
                                 ),
                               ),
                             ],
@@ -177,41 +195,53 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                     ),
                     const SizedBox(height: 22),
 
-                    // Description
-                    Text(
+                    // Description Section
+                    const Text(
                       'Giới thiệu sự kiện',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.2,
+                        color: AppTheme.onSurface,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       event.description,
                       style: const TextStyle(
-                        fontSize: 15,
-                        color: AppTheme.onSurface,
-                        height: 1.5,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        height: 1.55,
+                        color: AppTheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 24),
 
                     // Speakers Section
                     if (event.speakers.isNotEmpty) ...[
-                      Text(
+                      const Text(
                         'Diễn giả khách mời',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.2,
+                          color: AppTheme.onSurface,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       ...event.speakers.map((spk) => Container(
                             margin: const EdgeInsets.only(bottom: 10),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppTheme.outlineVariant),
+                              color: AppTheme.surface,
+                              borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                              border: Border.all(color: AppTheme.outlineVariant, width: 1),
                             ),
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  radius: 22,
+                                  radius: 20,
+                                  backgroundColor: AppTheme.surfaceContainer,
                                   backgroundImage: NetworkImage(spk.avatarUrl),
                                 ),
                                 const SizedBox(width: 12),
@@ -221,11 +251,18 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                     children: [
                                       Text(
                                         spk.name,
-                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppTheme.onSurface,
+                                        ),
                                       ),
                                       Text(
                                         spk.role,
-                                        style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: AppTheme.textMuted,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -238,13 +275,24 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
                     // Sessions Timeline
                     if (event.sessions.isNotEmpty) ...[
-                      Text(
+                      const Text(
                         'Lịch trình chi tiết',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.2,
+                          color: AppTheme.onSurface,
+                        ),
                       ),
                       const SizedBox(height: 12),
-                      ...event.sessions.map((sess) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12.0),
+                      ...event.sessions.map((sess) => Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: AppTheme.surface,
+                              borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                              border: Border.all(color: AppTheme.outlineVariant, width: 1),
+                            ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -252,14 +300,15 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: AppTheme.surfaceContainer,
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
                                   ),
                                   child: Text(
                                     sess.time,
                                     style: const TextStyle(
+                                      fontFamily: 'monospace',
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700,
-                                      color: AppTheme.primary,
+                                      color: AppTheme.secondary,
                                     ),
                                   ),
                                 ),
@@ -270,11 +319,19 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                     children: [
                                       Text(
                                         sess.title,
-                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppTheme.onSurface,
+                                        ),
                                       ),
+                                      const SizedBox(height: 2),
                                       Text(
                                         'Diễn giả: ${sess.speakerName}',
-                                        style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: AppTheme.textMuted,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -282,7 +339,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                               ],
                             ),
                           )),
-                      const SizedBox(height: 90), // Space for floating bottom bar
+                      const SizedBox(height: 80),
                     ],
                   ],
                 ),
@@ -291,73 +348,65 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           ],
         ),
 
-        // Floating Action Bar (Decision 1 from design-decisions.md)
+        // Docked Action Bar
         Positioned(
           left: 0,
           right: 0,
           bottom: 0,
-          child: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.88),
-                  border: const Border(top: BorderSide(color: AppTheme.outlineVariant, width: 0.8)),
-                ),
-                child: Row(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: const BoxDecoration(
+              color: AppTheme.surface,
+              border: Border(top: BorderSide(color: AppTheme.outlineVariant, width: 1)),
+            ),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            event.isFull ? 'HẾT VÉ' : 'Còn ${event.spotsRemaining} chỗ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: event.isFull ? AppTheme.error : AppTheme.primary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const Text(
-                            'Miễn phí vé tham gia',
-                            style: TextStyle(fontSize: 11, color: AppTheme.onSurfaceVariant),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                    Text(
+                      event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.3,
+                        color: event.isFull ? AppTheme.error : AppTheme.success,
                       ),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      flex: 2,
-                      child: AppPrimaryButton(
-                        label: event.isFull ? 'Đã hết chỗ' : 'Đăng ký tham gia',
-                        onPressed: event.isFull
-                            ? null
-                            : () {
-                                final user = context.read<AuthViewModel>().currentUser;
-                                if (user != null) {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (_) => RegistrationModal(event: event, user: user),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Vui lòng đăng nhập để đăng ký sự kiện')),
-                                  );
-                                }
-                              },
+                    const Text(
+                      'Miễn phí tham gia',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppTheme.textMuted,
                       ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: AppPrimaryButton(
+                    label: event.isFull ? 'Đã hết chỗ' : 'Đăng ký tham gia',
+                    onPressed: event.isFull
+                        ? null
+                        : () {
+                            final user = context.read<AuthViewModel>().currentUser;
+                            if (user != null) {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => RegistrationModal(event: event, user: user),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Vui lòng đăng nhập để đăng ký sự kiện')),
+                              );
+                            }
+                          },
+                  ),
+                ),
+              ],
             ),
           ),
         ),
