@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Event Lab 2 Setup</title>
+  <style>
+    :root {
+      --primary: #463C75;
+      --primary-dark: #322A56;
+      --primary-container: #5E548E;
+      --bg: #F8F6FA;
+      --surface: #FFFFFF;
+      --text: #1D1A23;
+      --text-sub: #5E5A66;
+      --border: #E5E1EA;
+      --success: #4E8B65;
+      --error: #C65B5B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+      color: white;
+      padding: 16px 18px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(70, 60, 117, 0.15);
+    }
+
+    .header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 11.5px;
+      opacity: 0.9;
+    }
+
+    .magic-card {
+      background: #FFFFFF;
+      border: 2px solid var(--primary);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 16px rgba(70, 60, 117, 0.12);
+    }
+
+    .magic-card h3 {
+      font-size: 14px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .btn-magic {
+      width: 100%;
+      background: linear-gradient(135deg, #463C75 0%, #6857A8 100%);
+      color: white;
+      border: none;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(70, 60, 117, 0.3);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-magic:hover {
+      background: linear-gradient(135deg, #372E61 0%, #584795 100%);
+      transform: translateY(-1px);
+    }
+
+    .btn-magic:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .status-box {
+      background: #F4F0F9;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 10px;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .manual-toggle {
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--text-sub);
+      cursor: pointer;
+      margin: 12px 0 6px 0;
+      text-decoration: underline;
+    }
+
+    .manual-section {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .dropzone {
+      border: 2px dashed #C9C4D0;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      background: #FAFAFD;
+      margin-top: 8px;
+      font-size: 11.5px;
+    }
+
+    .tip-box {
+      background: #F0F7F3;
+      border-left: 3px solid var(--success);
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 11px;
+      color: #235237;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>🎯 Campus Event — Lab 2 Setup</h2>
+    <p>Tự động hóa hoàn toàn 6 Pages & Prototype theo chuẩn FPTU</p>
+  </div>
+
+  <!-- MAGIC 1-CLICK ALL -->
+  <div class="magic-card">
+    <h3>✨ Tự Động Hoá 1-Click Toàn Diện</h3>
+    <p style="font-size: 12px; color: var(--text-sub);">
+      Chỉ cần bấm nút dưới đây, hệ thống sẽ tự động:
+      <br>1. Tạo đúng <b>6 Pages</b> chuẩn rubric.
+      <br>2. Tự tải <b>40 ảnh màn hình</b> từ máy tính vào trang Final UI.
+      <br>3. Tạo Design Tokens & 9 nhóm Components.
+      <br>4. Nối sẵn toàn bộ dây <b>Interactive Prototype</b> cho 3 flows!
+    </p>
+
+    <button class="btn-magic" id="btnAutoAll">
+      🚀 BẤM ĐÂY: TỰ ĐỘNG THIẾT LẬP TẤT CẢ
+    </button>
+
+    <div class="status-box" id="statusBox">
+      Sẵn sàng! Bấm nút bên trên để bắt đầu.
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div class="tip-box">
+    <b>🎯 Cách trải nghiệm Prototype ngay sau khi nạp:</b><br>
+    1. Plugin sẽ tự động focus ngay vào màn hình <b>16 - Login</b>.<br>
+    2. <b>Phím tắt nhanh:</b> Bấm <b>Shift + Space</b> để mở ngay màn hình iPhone bấm thử trực tiếp!<br>
+    3. <b>Hoặc:</b> Bấm nút <b>Play (▶️ Present)</b> ở góc trên bên phải thanh công cụ Figma.<br>
+    4. <b>Xem dây nối xanh:</b> Bấm tab <b>"Prototype"</b> ở cột bên phải (hoặc phím <b>Shift + E</b>).
+  </div>
+
+  <!-- MANUAL FALLBACK -->
+  <div class="manual-toggle" id="manualToggle">
+    Tùy chọn thủ công (Nếu bạn muốn tự chọn file)
+  </div>
+
+  <div class="manual-section" id="manualSection">
+    <button class="btn" id="btnSetupOnly" style="margin-bottom: 8px;">
+      1️⃣ Chỉ tạo khung 6 Pages
+    </button>
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" multiple accept="image/png" style="display: none;">
+      📁 <b>Chọn 40 file ảnh thủ công</b>
+      <p style="color: var(--text-sub); margin-top: 2px;">tại thư mục <code>figma_screens</code></p>
+    </div>
+    <button class="btn" id="btnImportOnly" disabled style="margin-top: 8px; background: white; color: var(--primary); border: 1.5px solid var(--primary);">
+      2️⃣ Nạp các ảnh đã chọn
+    </button>
+  </div>
+
+  <script>
+    const btnAutoAll = document.getElementById('btnAutoAll');
+    const statusBox = document.getElementById('statusBox');
+    const manualToggle = document.getElementById('manualToggle');
+    const manualSection = document.getElementById('manualSection');
+    const btnSetupOnly = document.getElementById('btnSetupOnly');
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const btnImportOnly = document.getElementById('btnImportOnly');
+
+    const FILE_NAMES = [
+      "01_home_campus_pulse.png",
+      "02_explore_events.png",
+      "03_search_results.png",
+      "04_event_map.png",
+      "05_event_detail.png",
+      "06_event_schedule.png",
+      "07_registration_confirmation.png",
+      "08_registration_loading.png",
+      "09_registration_success.png",
+      "10_registration_error.png",
+      "11_my_events.png",
+      "12_digital_event_ticket.png",
+      "13_campus_calendar.png",
+      "14_notifications.png",
+      "15_profile.png",
+      "16_login.png",
+      "17_login_loading.png",
+      "18_login_error.png",
+      "19_forgot_password.png",
+      "20_reset_password.png",
+      "21_role_resolution.png",
+      "22_event_management_dashboard.png",
+      "23_my_created_events.png",
+      "24_create_event.png",
+      "25_edit_event.png",
+      "26_event_draft.png",
+      "27_submit_event.png",
+      "28_event_approval_status.png",
+      "29_event_participants.png",
+      "30_event_check_in_management.png",
+      "31_check_in_staff_management.png",
+      "32_event_qr_check_in.png",
+      "33_check_in_result.png",
+      "34_event_statistics.png",
+      "35_admin_dashboard.png",
+      "36_user_management.png",
+      "37_user_detail_permission.png",
+      "38_event_approval_center.png",
+      "39_admin_event_review.png",
+      "40_admin_check_in_monitoring.png"
+    ];
+
+    // 1-CLICK MAGIC HANDLER
+    btnAutoAll.addEventListener('click', async () => {
+      btnAutoAll.disabled = true;
+      btnAutoAll.textContent = '⏳ Đang tự động xử lý...';
+      statusBox.textContent = '⏳ Đang tải 40 ảnh màn hình từ máy tính...';
+
+      const imagesData = [];
+      try {
+        for (let i = 0; i < FILE_NAMES.length; i++) {
+          const fn = FILE_NAMES[i];
+          statusBox.textContent = `⏳ Đang nạp ảnh ${i + 1}/40: ${fn}...`;
+          const res = await fetch(`http://127.0.0.1:8080/${fn}`);
+          if (!res.ok) throw new Error(`Không đọc được file ${fn}`);
+          const buf = await res.arrayBuffer();
+          imagesData.push({
+            name: fn,
+            index: i,
+            buffer: buf
+          });
+        }
+
+        statusBox.textContent = '⏳ Đang dựng 6 Pages, 40 Frames & Prototype trong Figma...';
+        parent.postMessage({
+          pluginMessage: {
+            type: 'auto-all',
+            images: imagesData
+          }
+        }, '*');
+
+        setTimeout(() => {
+          btnAutoAll.disabled = false;
+          btnAutoAll.textContent = '🎉 ĐÃ THIẾT LẬP XONG 100%!';
+          statusBox.textContent = '✅ Xong! Bạn có thể đóng popup và bấm nút Play (▶️) để xem Prototype!';
+          statusBox.style.color = '#4E8B65';
+        }, 3000);
+
+      } catch (err) {
+        console.error("Auto fetch error:", err);
+        statusBox.textContent = '⚠️ ' + err.message + '. Hãy bấm nút thủ công bên dưới!';
+        btnAutoAll.disabled = false;
+        btnAutoAll.textContent = 'Thử lại';
+        manualSection.style.display = 'block';
+      }
+    });
+
+    // Toggle Manual
+    manualToggle.addEventListener('click', () => {
+      manualSection.style.display = manualSection.style.display === 'block' ? 'none' : 'block';
+    });
+
+    btnSetupOnly.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'setup-all' } }, '*');
+    });
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    let manualFiles = [];
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files) {
+        manualFiles = Array.from(e.target.files);
+        manualFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+        btnImportOnly.disabled = manualFiles.length === 0;
+        btnImportOnly.textContent = `📥 Nạp ${manualFiles.length} ảnh đã chọn`;
+      }
+    });
+
+    btnImportOnly.addEventListener('click', async () => {
+      const imagesData = [];
+      for (let i = 0; i < manualFiles.length; i++) {
+        const file = manualFiles[i];
+        const buffer = await file.arrayBuffer();
+        imagesData.push({ name: file.name, index: i, buffer: buffer });
+      }
+      parent.postMessage({ pluginMessage: { type: 'import-images', images: imagesData } }, '*');
+    });
+  </script>
+</body>
+</html>

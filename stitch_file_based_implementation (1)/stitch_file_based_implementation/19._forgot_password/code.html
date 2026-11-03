@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;min-height:100vh;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-on-surface": "#f5eefb", "surface-tint": "#605691", "border": "#E7E3EB", "inverse-primary": "#cabeff", "primary": "#463c75", "on-primary": "#ffffff", "tertiary-container": "#685187", "surface-container-low": "#f8f1fe", "surface": "#FFFFFF", "accent": "#BE95C4", "on-primary-fixed-variant": "#483f77", "secondary-fixed": "#e8deff", "outline": "#797580", "on-tertiary": "#ffffff", "tertiary": "#4f3a6e", "on-primary-container": "#d8cfff", "on-secondary": "#ffffff", "success": "#4E8B65", "on-error": "#ffffff", "on-background": "#1d1a23", "surface-container-highest": "#e7e0ed", "background": "#F8F6FA", "on-tertiary-fixed-variant": "#523c71", "light-accent": "#E0B1CB", "primary-fixed": "#e6deff", "on-surface-variant": "#48454f", "on-tertiary-container": "#e2caff", "secondary": "#625885", "surface-variant": "#e7e0ed", "on-error-container": "#93000a", "on-secondary-fixed": "#1e143d", "on-primary-fixed": "#1c1149", "surface-container-lowest": "#ffffff", "secondary-container": "#d8cafe", "tertiary-fixed": "#eddcff", "surface-container-high": "#ede5f2", "primary-fixed-dim": "#cabeff", "secondary-text": "#706B78", "inverse-surface": "#322f38", "error": "#C65B5B", "tertiary-fixed-dim": "#d6bbf9", "error-container": "#ffdad6", "on-secondary-fixed-variant": "#4a406b", "surface-container": "#f3ebf8", "outline-variant": "#c9c4d0", "secondary-fixed-dim": "#ccbff3", "surface-bright": "#fef7ff", "on-secondary-container": "#5e5380", "primary-container": "#5e548e", "surface-dim": "#ded7e4", "on-tertiary-fixed": "#250f42", "on-surface": "#1d1a23" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-sm": "0.75rem", "space-xs": "0.375rem", "margin-lg": "1.5rem", "space-lg": "1rem", "space-2xl": "2rem", "space-2xs": "0.25rem", "gutter": "1rem", "space-sm": "0.5rem", "margin": "1.25rem", "space-3xl": "3rem", "space-xl": "1.5rem", "space-md": "0.75rem" }, "fontFamily": { "display": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"] }, "fontSize": { "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "headline-sm": ["17px", { "lineHeight": "22px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "600" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "code": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "display-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen relative overflow-x-hidden flex flex-col selection:bg-accent/20"><div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden"><div class="absolute -top-[14%] -left-[10%] w-[380px] h-[380px] rounded-full bg-light-accent/20 blur-3xl"></div><div class="absolute top-[48%] -right-[16%] w-[320px] h-[320px] rounded-full bg-accent/20 blur-3xl"></div><div class="absolute -bottom-[8%] left-[20%] w-[300px] h-[300px] rounded-full bg-secondary-fixed/30 blur-3xl"></div></div><header class="fixed top-0 inset-x-0 z-50 bg-surface/75 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Quay lại" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-all active:scale-95" onclick="history.back()"><span class="material-symbols-outlined text-[22px]">arrow_back_ios_new</span></button><img alt="Brand logo. - Primary color: #5e548e
+- Font: beVietnamPro
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1USscNBGgUyQdo4rGl2gIAWpHgPdhbGbnfyiRgoG2z4-D_2jtzImvpALeS7AJy5XmmwMq3ZfKdKh_5__P-Hu62mNK9cXMhtKgH7xG7mllaKIdNkKqgizadRYDfmrOnhQjHbRQELvQZA9SQjGANhJi8Q_w9Ldne0EwtGJni5rlMTlgW5h8AYk0UZn-0JIHY4wAoySCo_rl16zKPiY3SgKXOaATsNrQZoHXLtKmqYOd7gIPozxLnUk8gwLPk"/><span class="font-headline-sm text-headline-sm text-on-surface ml-space-2xs">Forgot Password</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex-1 flex flex-col relative w-full px-margin pt-16 pb-safe bg-transparent"><div class="flex flex-col w-full pb-16">
+<!-- Interactive Form & Feedback Container -->
+<div class="w-full flex flex-col items-center">
+<!-- Hero Icon Badge: Liquid Glass Disc with Key/Shield -->
+<div class="relative mt-space-md mb-space-lg flex items-center justify-center">
+<!-- Ambient aura glow -->
+<div class="absolute w-28 h-28 rounded-full bg-light-accent/30 blur-2xl pointer-events-none"></div>
+<div class="absolute w-20 h-20 rounded-full bg-primary-container/20 blur-xl pointer-events-none"></div>
+<!-- Spatial Liquid Glass Capsule -->
+<div class="relative w-24 h-24 rounded-full bg-surface/75 backdrop-blur-xl shadow-lg shadow-primary/10 flex items-center justify-center transition-transform hover:scale-105 duration-300">
+<!-- Inner subtle gradient ring -->
+<div class="absolute inset-1 rounded-full bg-gradient-to-b from-surface to-surface-container/60 opacity-90 flex items-center justify-center">
+<!-- Multi-layered Key/Shield iconography -->
+<div class="relative flex items-center justify-center">
+<span class="material-symbols-outlined text-accent text-[42px] select-none" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="material-symbols-outlined text-primary-container text-[24px] absolute select-none translate-y-[1px]" style="font-variation-settings: 'FILL' 1;">key</span>
+</div>
+</div>
+<!-- Light refraction shine dot -->
+<div class="absolute top-2.5 left-5 w-3.5 h-1.5 rounded-full bg-surface/90 rotate-[-25deg] blur-[0.5px]"></div>
+</div>
+</div>
+<!-- Editorial Header Block -->
+<div class="w-full text-center px-space-xs mb-space-xl">
+<div class="inline-flex items-center gap-space-2xs px-space-md py-space-2xs rounded-full bg-surface-container-high/80 text-primary mb-space-sm shadow-sm">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">lock_reset</span>
+<span class="font-eyebrow text-eyebrow tracking-wider uppercase">Bảo mật sinh viên</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-space-xs">
+        Quên mật khẩu?
+      </h1>
+<p class="font-body-md text-body-md text-secondary-text max-w-[340px] mx-auto leading-relaxed">
+        Nhập địa chỉ email trường cấp <span class="font-label-md text-primary">(@fpt.edu.vn)</span> của bạn để nhận liên kết và mã xác thực đặt lại mật khẩu.
+      </p>
+</div>
+<!-- Interactive Card: Form Inputs -->
+<div class="w-full bg-surface rounded-xl shadow-sm p-margin flex flex-col gap-space-lg transition-all duration-300" id="reset-card">
+<!-- Input Group -->
+<div class="flex flex-col gap-space-2xs">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="campus-email-input">
+<span>Email FPT</span>
+<span class="font-label-sm text-label-sm text-secondary-text">Định dạng Gmail trường</span>
+</label>
+<div class="relative flex items-center">
+<div class="absolute left-space-md flex items-center pointer-events-none text-secondary-text">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</div>
+<input autocomplete="email" class="w-full h-12 pl-11 pr-10 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-lg shadow-sm focus:outline-none focus:bg-surface transition-all placeholder:text-outline" id="campus-email-input" name="email" placeholder="mssv@fpt.edu.vn" type="email" value="khanhle.se170248@fpt.edu.vn"/>
+<button aria-label="Xóa nội dung email" class="absolute right-space-sm w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors" id="clear-input-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+<p class="hidden font-body-sm text-body-sm text-error mt-space-2xs flex items-center gap-space-2xs" id="email-error-msg">
+<span class="material-symbols-outlined text-[16px]">error</span>
+          Vui lòng nhập đúng địa chỉ email FPT (@fpt.edu.vn hoặc @fe.edu.vn).
+        </p>
+</div>
+<!-- Informational / Guidance Card -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md flex items-start gap-space-md shadow-sm">
+<div class="w-9 h-9 rounded-full bg-surface flex items-center justify-center shrink-0 shadow-sm text-primary">
+<span class="material-symbols-outlined text-[20px]">mark_email_unread</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface mb-0.5">Thời gian gửi thư</span>
+<p class="font-body-sm text-body-sm text-secondary-text leading-relaxed">
+            Mã OTP hoặc liên kết bảo mật sẽ được gửi về hộp thư sinh viên FPT Gmail trong vòng <span class="font-label-md text-primary">60 giây</span>. Vui lòng kiểm tra cả hòm thư Spam/Quảng cáo.
+          </p>
+</div>
+</div>
+<!-- Action Buttons Block -->
+<div class="flex flex-col gap-space-md pt-space-xs">
+<!-- Primary Action Button with Fluid Morphing Support -->
+<button class="relative w-full h-12 rounded-full bg-gradient-to-r from-primary-container to-primary text-on-primary font-label-md text-label-md tracking-wide shadow-md shadow-primary/20 flex items-center justify-center gap-space-xs transition-all active:scale-[0.98] hover:opacity-95" id="submit-reset-btn" type="button">
+<span class="material-symbols-outlined text-[18px]" id="btn-icon">send</span>
+<span id="btn-text">Gửi hướng dẫn đặt lại</span>
+<div class="hidden w-5 h-5 rounded-full border-2 border-on-primary border-t-transparent animate-spin" id="btn-spinner"></div>
+</button>
+<!-- Secondary Action: Return to Login -->
+<button class="w-full h-11 rounded-full bg-surface-container-high/60 text-secondary font-label-md text-label-md flex items-center justify-center gap-space-xs hover:bg-surface-container-high active:scale-[0.98] transition-all" onclick="history.back()" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Quay lại đăng nhập</span>
+</button>
+</div>
+</div>
+<!-- Success State Toast / Banner (Dynamic replacement container) -->
+<div class="hidden w-full bg-surface rounded-xl shadow-md p-margin flex-col items-center text-center gap-space-md animate-in fade-in zoom-in-95 duration-300" id="success-state">
+<div class="w-14 h-14 rounded-full bg-success/15 text-success flex items-center justify-center mb-space-2xs">
+<span class="material-symbols-outlined text-[32px]">check_circle</span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Đã gửi liên kết thành công!</h3>
+<p class="font-body-md text-body-md text-secondary-text">
+          Chúng tôi đã gửi đường dẫn đặt lại mật khẩu đến <br/><span class="font-label-md text-on-surface" id="confirmed-email">khanhle.se170248@fpt.edu.vn</span>.
+        </p>
+</div>
+<div class="w-full bg-surface-container p-space-md rounded-lg flex items-center justify-between text-left">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-primary text-[22px]">timer</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary-text">Gửi lại mã sau</span>
+<span class="font-code text-code text-primary font-semibold" id="countdown-timer">00:59</span>
+</div>
+</div>
+<button class="px-space-md py-space-xs rounded-full bg-surface text-secondary-text opacity-50 font-label-sm text-label-sm cursor-not-allowed" disabled="" id="resend-btn">
+          Gửi lại
+        </button>
+</div>
+<button class="w-full h-11 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all active:scale-[0.98] mt-space-xs" onclick="history.back()" type="button">
+        Mở ứng dụng FPT Mail &amp; Đăng nhập
+      </button>
+</div>
+<!-- Support Desk Clarification Footer -->
+<div class="w-full mt-space-xl px-space-xs">
+<div class="rounded-xl bg-surface/60 backdrop-blur-md p-space-md flex gap-space-md items-start shadow-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center shrink-0 text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface mb-0.5">Cần hỗ trợ trực tiếp?</span>
+<p class="font-body-sm text-body-sm text-secondary-text leading-relaxed">
+            Nếu tài khoản của bạn bị khóa hoặc đổi số điện thoại liên kết, vui lòng đến <span class="font-label-md text-on-surface">Phòng Dịch vụ sinh viên (Tòa Alpha)</span> để được hỗ trợ trực tiếp.
+          </p>
+<div class="flex items-center gap-space-lg mt-space-sm pt-space-xs border-t-0">
+<a class="inline-flex items-center gap-space-2xs text-primary font-label-sm text-label-sm hover:underline" href="tel:02873005588">
+<span class="material-symbols-outlined text-[16px]">call</span>
+              (028) 7300 5588
+            </a>
+<span class="text-outline-variant">•</span>
+<span class="inline-flex items-center gap-space-2xs text-secondary-text font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+              08:00 - 17:00 (T2 - T6)
+            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const input = document.getElementById('campus-email-input');
+    const clearBtn = document.getElementById('clear-input-btn');
+    const submitBtn = document.getElementById('submit-reset-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const errorMsg = document.getElementById('email-error-msg');
+    const resetCard = document.getElementById('reset-card');
+    const successCard = document.getElementById('success-state');
+    const confirmedEmail = document.getElementById('confirmed-email');
+    const countdownEl = document.getElementById('countdown-timer');
+    const resendBtn = document.getElementById('resend-btn');
+
+    // Clear input handler
+    if (clearBtn && input) {
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        input.focus();
+        clearBtn.classList.add('opacity-0');
+      });
+
+      input.addEventListener('input', () => {
+        if (input.value.trim().length > 0) {
+          clearBtn.classList.remove('opacity-0');
+        } else {
+          clearBtn.classList.add('opacity-0');
+        }
+        if (errorMsg) errorMsg.classList.add('hidden');
+      });
+    }
+
+    // Submit Action Validation & Micro-interaction
+    if (submitBtn && input) {
+      submitBtn.addEventListener('click', () => {
+        const val = input.value.trim().toLowerCase();
+        const isValidFptEmail = val.endsWith('@fpt.edu.vn') || val.endsWith('@fe.edu.vn') || val.includes('@');
+
+        if (!val || !isValidFptEmail) {
+          if (errorMsg) errorMsg.classList.remove('hidden');
+          input.focus();
+          return;
+        }
+
+        // Show spinner state on button
+        btnIcon.classList.add('hidden');
+        btnText.textContent = 'Đang gửi...';
+        btnSpinner.classList.remove('hidden');
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+          btnSpinner.classList.add('hidden');
+          btnIcon.classList.remove('hidden');
+          btnText.textContent = 'Gửi hướng dẫn đặt lại';
+          submitBtn.disabled = false;
+
+          // Swap form with success feedback state
+          if (confirmedEmail) confirmedEmail.textContent = val;
+          resetCard.classList.add('hidden');
+          successCard.classList.remove('hidden');
+          successCard.classList.add('flex');
+
+          // Trigger countdown
+          let seconds = 59;
+          const timer = setInterval(() => {
+            seconds--;
+            if (countdownEl) {
+              countdownEl.textContent = '00:' + (seconds < 10 ? '0' + seconds : seconds);
+            }
+            if (seconds <= 0) {
+              clearInterval(timer);
+              if (resendBtn) {
+                resendBtn.disabled = false;
+                resendBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'text-secondary-text');
+                resendBtn.classList.add('text-primary', 'font-semibold', 'hover:bg-surface-container-high');
+              }
+            }
+          }, 1000);
+        }, 900);
+      });
+    }
+
+    if (resendBtn) {
+      resendBtn.addEventListener('click', () => {
+        resendBtn.textContent = 'Đã gửi lại';
+        resendBtn.disabled = true;
+        resendBtn.classList.add('opacity-50');
+      });
+    }
+  })();
+</script></main></body></html>

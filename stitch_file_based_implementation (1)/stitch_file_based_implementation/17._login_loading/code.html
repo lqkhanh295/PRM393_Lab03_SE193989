@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_blank" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;min-height:100vh;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-on-surface": "#f5eefb", "surface-tint": "#605691", "border": "#E7E3EB", "inverse-primary": "#cabeff", "primary": "#463c75", "on-primary": "#ffffff", "tertiary-container": "#685187", "surface-container-low": "#f8f1fe", "surface": "#FFFFFF", "accent": "#BE95C4", "on-primary-fixed-variant": "#483f77", "secondary-fixed": "#e8deff", "outline": "#797580", "on-tertiary": "#ffffff", "tertiary": "#4f3a6e", "on-primary-container": "#d8cfff", "on-secondary": "#ffffff", "success": "#4E8B65", "on-error": "#ffffff", "on-background": "#1d1a23", "surface-container-highest": "#e7e0ed", "background": "#F8F6FA", "on-tertiary-fixed-variant": "#523c71", "light-accent": "#E0B1CB", "primary-fixed": "#e6deff", "on-surface-variant": "#48454f", "on-tertiary-container": "#e2caff", "secondary": "#625885", "surface-variant": "#e7e0ed", "on-error-container": "#93000a", "on-secondary-fixed": "#1e143d", "on-primary-fixed": "#1c1149", "surface-container-lowest": "#ffffff", "secondary-container": "#d8cafe", "tertiary-fixed": "#eddcff", "surface-container-high": "#ede5f2", "primary-fixed-dim": "#cabeff", "secondary-text": "#706B78", "inverse-surface": "#322f38", "error": "#C65B5B", "tertiary-fixed-dim": "#d6bbf9", "error-container": "#ffdad6", "on-secondary-fixed-variant": "#4a406b", "surface-container": "#f3ebf8", "outline-variant": "#c9c4d0", "secondary-fixed-dim": "#ccbff3", "surface-bright": "#fef7ff", "on-secondary-container": "#5e5380", "primary-container": "#5e548e", "surface-dim": "#ded7e4", "on-tertiary-fixed": "#250f42", "on-surface": "#1d1a23" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-sm": "0.75rem", "space-xs": "0.375rem", "margin-lg": "1.5rem", "space-lg": "1rem", "space-2xl": "2rem", "space-2xs": "0.25rem", "gutter": "1rem", "space-sm": "0.5rem", "margin": "1.25rem", "space-3xl": "3rem", "space-xl": "1.5rem", "space-md": "0.75rem" }, "fontFamily": { "display": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"] }, "fontSize": { "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "headline-sm": ["17px", { "lineHeight": "22px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "600" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "code": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "display-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-accent/20"><div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden"><div class="absolute -top-[18%] -left-[14%] w-[380px] h-[380px] rounded-full bg-light-accent/25 blur-3xl"></div><div class="absolute top-[42%] -right-[20%] w-[340px] h-[340px] rounded-full bg-accent/20 blur-3xl"></div><div class="absolute -bottom-[12%] left-[10%] w-[320px] h-[320px] rounded-full bg-secondary-fixed/35 blur-3xl"></div></div><div class="w-full pt-safe h-11 flex items-center justify-between px-margin select-none text-on-surface-variant z-10"><span class="font-label-sm text-label-sm text-secondary-text">9:41</span><div class="flex items-center gap-space-xs text-secondary-text"><span class="material-symbols-outlined text-[15px]">signal_cellular_alt</span><span class="material-symbols-outlined text-[15px]">wifi</span><span class="material-symbols-outlined text-[17px]">battery_full</span></div></div><main class="flex-1 flex flex-col relative w-full px-margin pb-safe bg-transparent"><div class="flex flex-col w-full items-center justify-between pb-10 min-h-[calc(100vh-5rem)]">
+<!-- Dynamic Ambient Refraction Background Overlays -->
+<div class="relative w-full max-w-sm flex flex-col items-center my-auto pt-6 pb-4">
+<!-- Liquid Glass Modal Container -->
+<div class="w-full relative overflow-hidden rounded-3xl bg-surface/75 backdrop-blur-2xl shadow-xl shadow-primary-container/10 p-6 flex flex-col items-center">
+<!-- Top Subtle Light Edge Glow -->
+<div class="absolute -top-12 inset-x-0 h-24 bg-gradient-to-b from-light-accent/30 via-accent/15 to-transparent pointer-events-none"></div>
+<!-- Campus Event Institutional Watermark Micro-Tag -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high/80 backdrop-blur-md mb-6 shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-eyebrow text-eyebrow text-primary tracking-widest uppercase">FPTU HCMC ID GATE</span>
+</div>
+<!-- Central Progress Ring Visual Delight -->
+<div class="relative w-28 h-28 flex items-center justify-center my-2">
+<!-- Ambient Pulse Glow behind ring -->
+<div class="absolute inset-2 rounded-full bg-gradient-to-tr from-primary-container/30 to-light-accent/35 blur-xl animate-pulse"></div>
+<!-- SVG Dual Layered Rotating Ring -->
+<svg class="w-28 h-28 -rotate-90 transform" viewbox="0 0 100 100">
+<!-- Background Track -->
+<circle class="text-surface-container-highest/70" cx="50" cy="50" fill="none" r="42" stroke="currentColor" stroke-width="5"></circle>
+<!-- Outer Indeterminate Glowing Arc -->
+<circle class="origin-center animate-[spin_1.6s_cubic-bezier(0.4,0,0.2,1)_infinite]" cx="50" cy="50" fill="none" r="42" stroke="url(#purpleGlowGradient)" stroke-dasharray="264" stroke-dashoffset="130" stroke-linecap="round" stroke-width="5.5"></circle>
+<!-- Secondary Orbiting Accent Arc -->
+<circle class="origin-center animate-[spin_2.4s_linear_infinite_reverse]" cx="50" cy="50" fill="none" r="34" stroke="url(#accentGlowGradient)" stroke-dasharray="213" stroke-dashoffset="160" stroke-linecap="round" stroke-width="3"></circle>
+<defs>
+<lineargradient id="purpleGlowGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#463C75"></stop>
+<stop offset="60%" stop-color="#5E548E"></stop>
+<stop offset="100%" stop-color="#BE95C4"></stop>
+</lineargradient>
+<lineargradient id="accentGlowGradient" x1="100%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#E0B1CB"></stop>
+<stop offset="100%" stop-color="#5E548E"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Center Frosted Icon Emblem -->
+<div class="absolute w-14 h-14 rounded-2xl bg-surface/90 shadow-md shadow-primary/10 flex items-center justify-center backdrop-blur-md">
+<span class="material-symbols-outlined text-primary text-[28px] animate-pulse">lock_open</span>
+</div>
+</div>
+<!-- Editorial Typography Lockup -->
+<div class="text-center mt-5 mb-6 px-1">
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">
+          Đang xác thực thông tin...
+        </h2>
+<p class="font-body-sm text-body-sm text-secondary-text mt-1.5 leading-relaxed max-w-[270px] mx-auto">
+          Kết nối hệ thống xác thực sinh viên FAP &amp; FPT Edu Portal...
+        </p>
+</div>
+<!-- Verification Steps Dynamic Glass Card -->
+<div class="w-full bg-surface-container-low/80 backdrop-blur-md rounded-2xl p-3.5 space-y-2.5">
+<!-- Step 1: Hoàn tất -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface/80 shadow-sm transition-all duration-300" id="step-1">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-7 h-7 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-success text-[17px] font-bold">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Kiểm tra tài khoản FPT</span>
+<span class="font-code text-[11px] text-secondary-text">s***@fpt.edu.vn</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-success bg-success/10 px-2 py-0.5 rounded-full flex-shrink-0">
+            Hợp lệ
+          </span>
+</div>
+<!-- Step 2: Đang xử lý -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface/90 shadow-sm transition-all duration-300" id="step-2">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-7 h-7 rounded-full bg-primary-container/15 flex items-center justify-center flex-shrink-0 relative">
+<span class="material-symbols-outlined text-primary-container text-[16px] animate-[spin_1.2s_linear_infinite]">sync</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-primary font-semibold truncate">Đồng bộ quyền &amp; MSSV</span>
+<span class="font-body-sm text-[11px] text-secondary-text">Tra cứu FAP database...</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-primary-fixed/60 px-2.5 py-0.5 rounded-full flex-shrink-0">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+<span class="font-label-sm text-label-sm text-primary">Đang xử lý</span>
+</div>
+</div>
+<!-- Step 3: Chờ hàng đợi -->
+<div class="flex items-center justify-between p-2.5 rounded-xl bg-surface/40 transition-all duration-300 opacity-60" id="step-3">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-7 h-7 rounded-full bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-outline text-[16px]">hourglass_empty</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-secondary-text truncate">Tải phân quyền &amp; vai trò</span>
+<span class="font-body-sm text-[11px] text-outline">Vé sự kiện &amp; CLB phụ trách</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-secondary-text px-2 py-0.5 rounded-full">
+            Chờ...
+          </span>
+</div>
+</div>
+<!-- Campus Live Feed Micro Card -->
+<div class="w-full mt-3.5 pt-3 border-t-0 flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+<span class="font-body-sm text-[12px] text-secondary-text">Máy chủ Q9 Campus:</span>
+</div>
+<span class="font-code text-code text-primary font-semibold">Ping 18ms • Ổn định</span>
+</div>
+</div>
+<!-- Security Gateway Credential Badge -->
+<div class="mt-6 flex flex-col items-center gap-2 px-4 text-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/60 backdrop-blur-md shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[15px]">verified_user</span>
+<span class="font-eyebrow text-eyebrow text-secondary tracking-wider uppercase">FPT.EDU.VN • 256-BIT SSL ENCRYPTED GATEWAY</span>
+</div>
+<p class="font-body-sm text-[11px] text-outline leading-tight">
+        Dữ liệu phiên làm việc được bảo vệ bởi FPT Software Information Security Policy
+      </p>
+</div>
+</div>
+<!-- Interactive Cancellation Option -->
+<div class="w-full max-w-xs flex flex-col items-center gap-3 mt-4">
+<button class="w-full py-2.5 px-4 rounded-full bg-surface/70 hover:bg-surface active:scale-95 transition-all text-secondary-text font-label-md text-label-md backdrop-blur-md shadow-sm flex items-center justify-center gap-2" id="btn-cancel" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>Hủy phiên xác thực</span>
+</button>
+</div>
+</div>
+<script>
+  // Micro-interaction simulation: step-by-step progress transition
+  (function () {
+    const step2 = document.getElementById('step-2');
+    const step3 = document.getElementById('step-3');
+    const cancelBtn = document.getElementById('btn-cancel');
+
+    // Simulate completion of step 2 and activation of step 3 after 2.8s
+    setTimeout(() => {
+      if (!step2 || !step3) return;
+      
+      // Update step 2 to complete
+      step2.className = "flex items-center justify-between p-2.5 rounded-xl bg-surface/80 shadow-sm transition-all duration-300";
+      step2.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-7 h-7 rounded-full bg-success/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-success text-[17px] font-bold">check</span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="font-label-md text-label-md text-on-surface truncate">Đồng bộ MSSV thành công</span>
+            <span class="font-code text-[11px] text-secondary-text">SE184291 • K18 KTPM</span>
+          </div>
+        </div>
+        <span class="font-label-sm text-label-sm text-success bg-success/10 px-2 py-0.5 rounded-full flex-shrink-0">
+          Đã xong
+        </span>
+      `;
+
+      // Promote step 3 to in-progress
+      step3.className = "flex items-center justify-between p-2.5 rounded-xl bg-surface/90 shadow-sm transition-all duration-300 opacity-100";
+      step3.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-7 h-7 rounded-full bg-primary-container/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary-container text-[16px] animate-[spin_1.2s_linear_infinite]">sync</span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="font-label-md text-label-md text-primary font-semibold truncate">Tải phân quyền & vai trò</span>
+            <span class="font-body-sm text-[11px] text-secondary-text">Khởi tạo vé cá nhân...</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 bg-primary-fixed/60 px-2.5 py-0.5 rounded-full flex-shrink-0">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+          <span class="font-label-sm text-label-sm text-primary">Đang tải</span>
+        </div>
+      `;
+    }, 2800);
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        cancelBtn.innerText = 'Đang quay lại đăng nhập...';
+        cancelBtn.classList.add('opacity-50', 'pointer-events-none');
+      });
+    }
+  })();
+</script></main></body></html>

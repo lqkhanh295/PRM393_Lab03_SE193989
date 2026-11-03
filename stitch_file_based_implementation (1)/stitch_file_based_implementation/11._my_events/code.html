@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-on-surface": "#f5eefb", "tertiary-fixed-dim": "#d6bbf9", "surface-dim": "#ded7e4", "on-surface-variant": "#48454f", "on-surface": "#1d1a23", "on-secondary-fixed": "#1e143d", "on-tertiary-fixed": "#250f42", "tertiary": "#4f3a6e", "border": "#E7E3EB", "tertiary-fixed": "#eddcff", "success": "#4E8B65", "surface-container-lowest": "#ffffff", "outline": "#797580", "background": "#F8F6FA", "on-secondary": "#ffffff", "light-accent": "#E0B1CB", "surface-container-low": "#f8f1fe", "secondary-container": "#d8cafe", "primary": "#463c75", "outline-variant": "#c9c4d0", "on-secondary-fixed-variant": "#4a406b", "inverse-surface": "#322f38", "surface-container-high": "#ede5f2", "surface": "#FFFFFF", "primary-fixed": "#e6deff", "error-container": "#ffdad6", "surface-container-highest": "#e7e0ed", "on-error": "#ffffff", "inverse-primary": "#cabeff", "secondary-text": "#706B78", "primary-fixed-dim": "#cabeff", "tertiary-container": "#685187", "on-tertiary": "#ffffff", "surface-container": "#f3ebf8", "surface-tint": "#605691", "surface-bright": "#fef7ff", "secondary-fixed": "#e8deff", "on-tertiary-fixed-variant": "#523c71", "on-error-container": "#93000a", "on-background": "#1d1a23", "secondary-fixed-dim": "#ccbff3", "primary-container": "#5e548e", "surface-variant": "#e7e0ed", "on-secondary-container": "#5e5380", "accent": "#BE95C4", "on-primary-fixed": "#1c1149", "secondary": "#625885", "error": "#C65B5B", "on-primary": "#ffffff", "on-primary-fixed-variant": "#483f77", "on-primary-container": "#d8cfff", "on-tertiary-container": "#e2caff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-sm": "0.75rem", "gutter": "1rem", "margin": "1.25rem", "space-lg": "1rem", "space-md": "0.75rem", "space-xs": "0.375rem", "space-sm": "0.5rem", "space-3xl": "3rem", "margin-lg": "1.5rem", "space-2xs": "0.25rem", "space-2xl": "2rem", "space-xl": "1.5rem" }, fontFamily: { "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"] }, fontSize: { "headline-sm": ["17px", { lineHeight: "22px", fontWeight: "600" }], "label-md": ["13px", { lineHeight: "16px", fontWeight: "600" }], "display": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "display-mobile": ["28px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "eyebrow": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "700" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", fontWeight: "600" }], "code": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }], "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.005em", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;background-color:#F8F6FA;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(35,25,66,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="Campus Event FPTU Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WXmOFTA_2WDt9P5GDZe5gLP5hBY_JqBF9cyxZUOsDY7ymFV535EsCv6jZLCVzXU4VfcYD48bjz-WTcgfxuwGosGPO2a8Fp6knUO8volUaneN2h3Vie1QnA3ft9mgzpFjye1lUNs3AkOusgBnO8q2HIrS4MabEt8v8w5phfwLz7j1e_B0Sn2TEl8K59pSpzXyiKK2O8DieoqXz0Amk6JLzW4Z5TfvIgPhJ4Aimi4j4iOdriTu36xu4TH-E"/><div class="flex flex-col min-w-0"><span class="font-eyebrow text-eyebrow text-secondary-text uppercase tracking-wider truncate">FPT University HCMC</span><span class="font-headline-sm text-headline-sm text-on-surface truncate">11. My Events</span></div></div><div class="flex items-center gap-space-2xs flex-shrink-0"><a class="w-11 h-11 flex items-center justify-center rounded-full text-secondary-text hover:text-on-surface transition-colors" data-path="14.-notifications" href="#"><span class="material-symbols-outlined text-[22px]">notifications</span></a><a class="w-11 h-11 flex items-center justify-center rounded-full text-secondary-text hover:text-on-surface transition-colors" data-path="04.-event-map" href="#"><span class="material-symbols-outlined text-[22px]">map</span></a><a class="w-11 h-11 flex items-center justify-center ml-space-2xs" data-path="15.-profile" href="#"><img alt="Khánh Lê Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(35,25,66,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmId_oyLWDmKsrGfW4IIeDi_8BqAHjDsXY_KGCiKqlkNEwtsJX2bkjHPZm1FKmwlDOxK85EjzC5_P-f6kL4KlEy3Vju4H37X8KzC2-kypXpOPa2dpUOD219iaKQ3pLyOum7WCVWNEPTUj10US9vCLC1EvIIbiQSU1DQkULbKZlSTKZrND6ay_TFG-qoCChLIGDZqQz8QGHiWFvV35yjppgd4lFuGvvIm9IEYFW6JB2Am7gTrhT5m4u"/></a></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Ticket Bottom Sheet Modal (Hidden by default) -->
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="ticketModal">
+<div class="w-full max-w-[420px] bg-surface rounded-t-[28px] p-margin pb-10 shadow-2xl transform translate-y-full transition-transform duration-300 ease-out flex flex-col items-center">
+<div class="w-10 h-1 bg-outline-variant/60 rounded-full mb-space-md"></div>
+<!-- Modal Header -->
+<div class="w-full flex items-center justify-between mb-space-md">
+<span class="font-headline-sm text-headline-sm text-on-surface">Thẻ vào cửa điện tử</span>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-secondary-text hover:text-on-surface transition-colors" onclick="closeTicketModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Ticket Visual Stub -->
+<div class="w-full bg-surface-container-low rounded-2xl p-space-md shadow-sm relative overflow-hidden flex flex-col items-center">
+<!-- Top Half -->
+<div class="w-full text-center pb-space-md">
+<span class="font-eyebrow text-eyebrow text-primary uppercase tracking-widest" id="modalCategory">HỌC THUẬT &amp; CÔNG NGHỆ</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mt-space-2xs" id="modalTitle">Campus Innovation Day 2026</h3>
+<p class="font-body-sm text-body-sm text-secondary-text mt-space-2xs flex items-center justify-center gap-space-2xs" id="modalVenue">
+<span class="material-symbols-outlined text-[15px] text-primary">location_on</span>
+            Hội trường A, Tòa Alpha
+          </p>
+</div>
+<!-- Perforation Divider -->
+<div class="w-full relative flex items-center justify-between my-space-2xs">
+<div class="w-5 h-5 rounded-full bg-surface -ml-6"></div>
+<div class="flex-1 border-b-2 border-dashed border-outline-variant/40 mx-2"></div>
+<div class="w-5 h-5 rounded-full bg-surface -mr-6"></div>
+</div>
+<!-- Bottom QR Half -->
+<div class="w-full pt-space-md flex flex-col items-center">
+<div class="bg-surface p-space-sm rounded-xl shadow-inner mb-space-sm">
+<svg class="w-36 h-36" fill="none" viewbox="0 0 140 140">
+<!-- Crisp Simulated QR Code -->
+<rect fill="white" height="140" width="140"></rect>
+<!-- Top Left Anchor -->
+<rect fill="#463c75" height="36" rx="4" width="36" x="10" y="10"></rect>
+<rect fill="white" height="24" rx="2" width="24" x="16" y="16"></rect>
+<rect fill="#463c75" height="12" rx="1" width="12" x="22" y="22"></rect>
+<!-- Top Right Anchor -->
+<rect fill="#463c75" height="36" rx="4" width="36" x="94" y="10"></rect>
+<rect fill="white" height="24" rx="2" width="24" x="100" y="16"></rect>
+<rect fill="#463c75" height="12" rx="1" width="12" x="106" y="22"></rect>
+<!-- Bottom Left Anchor -->
+<rect fill="#463c75" height="36" rx="4" width="36" x="10" y="94"></rect>
+<rect fill="white" height="24" rx="2" width="24" x="16" y="100"></rect>
+<rect fill="#463c75" height="12" rx="1" width="12" x="22" y="106"></rect>
+<!-- Pattern Data Dots -->
+<rect fill="#5e548e" height="8" rx="1" width="8" x="54" y="14"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="8" x="70" y="14"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="54" y="30"></rect>
+<rect fill="#5e548e" height="16" rx="1" width="8" x="78" y="22"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="14" y="54"></rect>
+<rect fill="#5e548e" height="16" rx="1" width="8" x="38" y="54"></rect>
+<rect fill="#463c75" height="8" rx="1" width="32" x="54" y="54"></rect>
+<rect fill="#5e548e" height="24" rx="1" width="8" x="94" y="54"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="110" y="54"></rect>
+<rect fill="#5e548e" height="16" rx="1" width="8" x="54" y="70"></rect>
+<rect fill="#463c75" height="8" rx="1" width="16" x="70" y="70"></rect>
+<rect fill="#5e548e" height="16" rx="1" width="8" x="110" y="70"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="14" y="78"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="8" x="38" y="78"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="54" y="94"></rect>
+<rect fill="#5e548e" height="24" rx="1" width="8" x="78" y="94"></rect>
+<rect fill="#463c75" height="8" rx="1" width="16" x="94" y="86"></rect>
+<rect fill="#5e548e" height="16" rx="1" width="8" x="118" y="94"></rect>
+<rect fill="#463c75" height="16" rx="1" width="16" x="54" y="110"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="94" y="110"></rect>
+<rect fill="#5e548e" height="8" rx="1" width="16" x="110" y="118"></rect>
+</svg>
+</div>
+<span class="font-code text-code text-on-surface font-semibold tracking-widest" id="modalTicketCode">FPTU-TKT-2026-9942</span>
+<span class="font-body-sm text-body-sm text-secondary-text mt-1">Xuất trình mã này tại quầy lễ tân check-in</span>
+</div>
+</div>
+<!-- Action -->
+<button class="w-full mt-space-lg h-12 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-2xs shadow-md active:scale-95 transition-transform" onclick="closeTicketModal()">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span>Xác nhận &amp; Đóng</span>
+</button>
+</div>
+</div>
+<!-- Main Personal Schedule Container -->
+<div class="px-margin flex flex-col w-full">
+<!-- Header Block: Personal Identity & Title -->
+<div class="pt-space-md pb-space-sm flex items-center justify-between">
+<div>
+<span class="font-eyebrow text-eyebrow text-primary uppercase tracking-widest">Lịch Trình Sinh Viên</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mt-space-2xs">Sự kiện của tôi</h1>
+</div>
+<!-- Subtle quick sync indicator -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container shadow-sm">
+<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-secondary-text">Đã đồng bộ</span>
+</div>
+</div>
+<!-- Personal Overview Metrics Strip (delightful micro-dashboard) -->
+<div class="grid grid-cols-3 gap-space-xs mt-space-xs mb-space-lg">
+<div class="bg-surface rounded-2xl p-space-sm shadow-[0_2px_8px_rgba(35,25,66,0.03)] flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-primary font-bold">3</span>
+<span class="font-label-sm text-label-sm text-secondary-text mt-0.5">Sắp tới</span>
+</div>
+<div class="bg-surface rounded-2xl p-space-sm shadow-[0_2px_8px_rgba(35,25,66,0.03)] flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">12</span>
+<span class="font-label-sm text-label-sm text-secondary-text mt-0.5">Đã tham gia</span>
+</div>
+<div class="bg-surface rounded-2xl p-space-sm shadow-[0_2px_8px_rgba(35,25,66,0.03)] flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-success font-bold">100%</span>
+<span class="font-label-sm text-label-sm text-secondary-text mt-0.5">Check-in</span>
+</div>
+</div>
+<!-- Timeline Toggle Pill Container -->
+<div class="w-full bg-surface-container-high/60 p-1 rounded-full flex items-center mb-space-xl shadow-inner">
+<button class="flex-1 h-10 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-2xs shadow-sm transition-all duration-200" id="tabUpcoming" onclick="switchTimelineTab('upcoming')">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Sắp diễn ra (3)</span>
+</button>
+<button class="flex-1 h-10 rounded-full text-secondary-text font-label-md text-label-md flex items-center justify-center gap-space-2xs transition-all duration-200 hover:text-on-surface" id="tabPast" onclick="switchTimelineTab('past')">
+<span class="material-symbols-outlined text-[18px]">cloud_upload</span>
+<span>Đã tham gia (12)</span>
+</button>
+</div>
+<!-- CHRONOLOGICAL PERSONAL AGENDA CONTAINER -->
+<div class="flex flex-col w-full space-y-space-xl" id="upcomingSection">
+<!-- ================= DATE GROUP 1 ================= -->
+<div class="flex flex-col w-full">
+<!-- Prominent Date Header Anchor -->
+<div class="flex items-center gap-space-sm mb-space-md">
+<div class="w-9 h-9 rounded-xl bg-primary-fixed flex flex-col items-center justify-center text-on-primary-fixed shadow-sm flex-shrink-0">
+<span class="font-label-sm text-[10px] leading-tight font-bold uppercase">T2</span>
+<span class="font-headline-sm text-[15px] leading-none font-bold">12</span>
+</div>
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-primary uppercase tracking-wider">Lịch trình sắp tới</span>
+<span class="font-label-md text-label-md text-on-surface font-bold uppercase tracking-wide">THỨ HAI, 12 THÁNG 10, 2026</span>
+</div>
+</div>
+<!-- Vertical Timeline Track with Cards -->
+<div class="relative pl-5 ml-4 space-y-space-lg">
+<!-- Continuous Timeline Vertical Guideline -->
+<div class="absolute left-0 top-3 bottom-4 w-[2px] bg-gradient-to-b from-primary-container via-accent/40 to-transparent"></div>
+<!-- EVENT CARD 1: Campus Innovation Day 2026 -->
+<div class="relative bg-surface rounded-2xl p-space-md shadow-[0_4px_16px_rgba(35,25,66,0.06)] flex flex-col gap-space-sm">
+<!-- Timeline Pin Anchor Node -->
+<div class="absolute -left-[27px] top-5 w-4 h-4 rounded-full bg-surface flex items-center justify-center shadow-md">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+</div>
+<!-- Top Row: Time & Priority Badge -->
+<div class="flex items-center justify-between gap-space-2xs">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-[17px]">schedule</span>
+<span class="font-label-md text-label-md font-bold">08:30 – 17:00</span>
+</div>
+<!-- Check-in status badge -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success/10 text-success font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Đã có vé • Ghế A-14</span>
+</span>
+</div>
+<!-- Event Card Body with Thumbnail Pair -->
+<div class="flex items-start gap-space-sm pt-space-2xs">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">Campus Innovation Day 2026</h3>
+<div class="flex items-center gap-1.5 mt-1.5 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">apartment</span>
+<span class="font-body-sm text-body-sm truncate">Hội trường A, Tòa Alpha</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">confirmation_number</span>
+<span class="font-code text-code text-[12px] truncate">Mã vé: FPTU-CID-8841</span>
+</div>
+</div>
+<!-- Visual Thumbnail -->
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm flex-shrink-0" data-alt="Futuristic campus robotics and technology showcase booth at FPT University Ho Chi Minh, high tech glass hall, purple and warm lighting, modern students presenting projects, professional editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwv_1UDUySnmJxgtpyhRBBHkwfaixSXtTjWVAcdSls5qb4WYHNofT2n1jcUeu-FlKCknKbxGh2nTY1Jve2TxXCqSWcuHPmn3_vqhxxQhNWegBADTFfNaGaVxVtrVBf-jBaqwdty-VAemxz8LXnPxuhp7S_ZsedgiFbZ5Qtp3jmD59IKwU8fQuEDqCAl8yAvTpI1cnpxUv-Q-4nqO38mpHV4R7aLL2ztnYwb-AK7sITK5qPaU-HFl-U"/>
+</div>
+<!-- Card Bottom Bar: Ticket Action -->
+<div class="pt-space-2xs mt-space-2xs flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary-text">Cần có mặt trước 15 phút</span>
+<button class="h-10 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1.5 shadow-[0_2px_8px_rgba(94,84,142,0.25)] hover:bg-primary active:scale-95 transition-all" onclick="openTicketModal('Campus Innovation Day 2026', 'Hội trường A, Tòa Alpha (Ghế A-14)', 'HỌC THUẬT &amp; CÔNG NGHỆ', 'FPTU-CID-8841')">
+<span class="material-symbols-outlined text-[18px]">qr_code_2</span>
+<span>Xem vé</span>
+</button>
+</div>
+</div>
+<!-- EVENT CARD 2: Music Night: Campus Sessions -->
+<div class="relative bg-surface rounded-2xl p-space-md shadow-[0_4px_16px_rgba(35,25,66,0.06)] flex flex-col gap-space-sm">
+<!-- Timeline Pin Anchor Node -->
+<div class="absolute -left-[27px] top-5 w-4 h-4 rounded-full bg-surface flex items-center justify-center shadow-md">
+<div class="w-2.5 h-2.5 rounded-full bg-accent"></div>
+</div>
+<!-- Top Row: Time & Registered Badge -->
+<div class="flex items-center justify-between gap-space-2xs">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[17px]">schedule</span>
+<span class="font-label-md text-label-md font-bold">18:00 – 20:30</span>
+</div>
+<!-- Status: Đã đăng ký -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span>Đã đăng ký</span>
+</span>
+</div>
+<!-- Event Card Body with Thumbnail Pair -->
+<div class="flex items-start gap-space-sm pt-space-2xs">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">Music Night: Campus Sessions</h3>
+<div class="flex items-center gap-1.5 mt-1.5 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">deck</span>
+<span class="font-body-sm text-body-sm truncate">Hồ Sen FPTU</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">groups</span>
+<span class="font-body-sm text-body-sm truncate">CLB Âm Nhạc &amp; Guitar</span>
+</div>
+</div>
+<!-- Visual Thumbnail -->
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm flex-shrink-0" data-alt="Acoustic outdoor music concert at night near an illuminated university lotus pond, students sitting together, fairy lights, warm ambient glows, acoustic guitars, cinematic candid shot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD54y9MrAXfuvsiw0BXdI-phr960bkIfr-_Z1a1UU72L4v9n8c2g2gPMTt5Rb1yQs2sy9Uv1c2XOmo9nx49LcsAkJXY5ZyP1f-IISST0i-pHZfcz64RLp-w4x5xmJjDBeeIdZzgR5Sze4xfkAiQWac7FXSfTDuCahvg2q4iL_vLxLhY1HVxbjcI5rnawtF9MBLZjNFTxk5BCHSFVQkxYiHoux8RukM8_Ffz0Yg6I-yVZjvP2qz9CQx"/>
+</div>
+<!-- Card Bottom Bar: Ticket Action -->
+<div class="pt-space-2xs mt-space-2xs flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary-text">Vé vào cửa tự do theo khu vực</span>
+<button class="h-10 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1.5 shadow-[0_2px_8px_rgba(94,84,142,0.25)] hover:bg-primary active:scale-95 transition-all" onclick="openTicketModal('Music Night: Campus Sessions', 'Hồ Sen FPTU (Khu vực C)', 'NGHỆ THUẬT &amp; CỘNG ĐỒNG', 'FPTU-MNC-4402')">
+<span class="material-symbols-outlined text-[18px]">qr_code_2</span>
+<span>Xem vé</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= DATE GROUP 2 ================= -->
+<div class="flex flex-col w-full">
+<!-- Prominent Date Header Anchor -->
+<div class="flex items-center gap-space-sm mb-space-md">
+<div class="w-9 h-9 rounded-xl bg-surface-container-high flex flex-col items-center justify-center text-on-surface shadow-sm flex-shrink-0">
+<span class="font-label-sm text-[10px] leading-tight font-bold uppercase text-secondary-text">T6</span>
+<span class="font-headline-sm text-[15px] leading-none font-bold">18</span>
+</div>
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase tracking-wider">Tuần kế tiếp</span>
+<span class="font-label-md text-label-md text-on-surface font-bold uppercase tracking-wide">THỨ SÁU, 18 THÁNG 10, 2026</span>
+</div>
+</div>
+<!-- Vertical Timeline Track with Cards -->
+<div class="relative pl-5 ml-4 space-y-space-lg">
+<!-- Continuous Timeline Vertical Guideline -->
+<div class="absolute left-0 top-3 bottom-4 w-[2px] bg-gradient-to-b from-primary-container to-transparent"></div>
+<!-- EVENT CARD 3: Tech Talk: Building with AI & LLM -->
+<div class="relative bg-surface rounded-2xl p-space-md shadow-[0_4px_16px_rgba(35,25,66,0.06)] flex flex-col gap-space-sm">
+<!-- Timeline Pin Anchor Node -->
+<div class="absolute -left-[27px] top-5 w-4 h-4 rounded-full bg-surface flex items-center justify-center shadow-md">
+<div class="w-2.5 h-2.5 rounded-full bg-primary-container"></div>
+</div>
+<!-- Top Row: Time & Registered Badge -->
+<div class="flex items-center justify-between gap-space-2xs">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-[17px]">schedule</span>
+<span class="font-label-md text-label-md font-bold">09:00 – 11:30</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-light-accent/20 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span>Chờ xác nhận vị trí</span>
+</span>
+</div>
+<!-- Event Card Body with Thumbnail Pair -->
+<div class="flex items-start gap-space-sm pt-space-2xs">
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">Tech Talk: Building with AI &amp; LLM</h3>
+<div class="flex items-center gap-1.5 mt-1.5 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">terminal</span>
+<span class="font-body-sm text-body-sm truncate">Innovation Lab (Tầng 5)</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-secondary-text">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">mic</span>
+<span class="font-body-sm text-body-sm truncate">Diễn giả: Google Developer Expert</span>
+</div>
+</div>
+<!-- Visual Thumbnail -->
+<img class="w-16 h-16 rounded-xl object-cover shadow-sm flex-shrink-0" data-alt="Modern artificial intelligence workshop lecture room with glowing code screens, developer presentations, enthusiastic university students, ambient purple and lavender university hall lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEiOaBs83inO_Ei7PLC2e-sEkhLaL2sAJYIAAXb2SnnHe4CtjhCJcR_mm8PNHocfGmu91mDpGZ0Kr4klkOim7bWhHdBSQ8Wo2IKLu7QKQUu3BmlKpgf8CNzUX3hmz_7GskblmnMdnmem5WvnfbMjdUVnSBj5QtxmqSQInEdf3oCzfQClWZDE-LWvFPLNRCQNYuJsI-qzzaeASetcIfvcSJSteR2Qq02jCy2dFgne0ENqGzK5b8FIwQ"/>
+</div>
+<!-- Card Bottom Bar: Ticket Action -->
+<div class="pt-space-2xs mt-space-2xs flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary-text">Mã vé sẽ kích hoạt trước 24h</span>
+<button class="h-10 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center gap-1.5 shadow-[0_2px_8px_rgba(94,84,142,0.25)] hover:bg-primary active:scale-95 transition-all" onclick="openTicketModal('Tech Talk: Building with AI &amp; LLM', 'Innovation Lab (Tầng 5)', 'CÔNG NGHỆ CHUYÊN ĐỀ', 'FPTU-AIT-7319')">
+<span class="material-symbols-outlined text-[18px]">qr_code_2</span>
+<span>Xem vé</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- PAST EVENTS VIEW (Hidden initially, toggled by tab) -->
+<div class="hidden flex-col w-full space-y-space-md" id="pastSection">
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-secondary-text flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-eyebrow text-eyebrow text-success">ĐÃ THAM DỰ • 25 THÁNG 09</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface truncate">FPT Edu Hackathon 2026</h4>
+<p class="font-body-sm text-body-sm text-secondary-text">Hội trường Trịnh Công Sơn</p>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-secondary-text">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-secondary-text flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-eyebrow text-eyebrow text-success">ĐÃ THAM DỰ • 14 THÁNG 09</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface truncate">Workshop: UI/UX Masterclass</h4>
+<p class="font-body-sm text-body-sm text-secondary-text">Phòng Lab 304, Alpha</p>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-secondary-text">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="bg-surface rounded-2xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-secondary-text flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-eyebrow text-eyebrow text-success">ĐÃ THAM DỰ • 02 THÁNG 09</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface truncate">Orientation Week: Khóa K18 Chào Bạn</h4>
+<p class="font-body-sm text-body-sm text-secondary-text">Sân bóng đá FPTU HCMC</p>
+</div>
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-secondary-text">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<!-- Historical record badge -->
+<div class="p-space-md rounded-2xl bg-surface-container/60 text-center flex flex-col items-center">
+<span class="font-body-sm text-body-sm text-secondary-text">Bạn đã hoàn thành 12/12 sự kiện đã đăng ký trong năm 2026.</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold mt-1">Tải chứng nhận tham gia (.PDF)</span>
+</div>
+</div>
+<!-- Personal Timeline End Micro-illustration / Warm Footer -->
+<div class="w-full py-space-xl flex flex-col items-center justify-center text-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-high/70 flex items-center justify-center text-primary-container mb-space-xs">
+<span class="material-symbols-outlined text-[24px]">bookmark_added</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Bạn đã nắm trọn nhịp sống campus!</span>
+<span class="font-body-sm text-body-sm text-secondary-text mt-0.5 max-w-[260px]">Hãy bật thông báo để nhận lời nhắc 30 phút trước khi sự kiện bắt đầu.</span>
+</div>
+</div>
+</div>
+<script>
+  // Simple tab switcher for Upcoming vs Past personal agenda
+  function switchTimelineTab(tab) {
+    const upcomingBtn = document.getElementById('tabUpcoming');
+    const pastBtn = document.getElementById('tabPast');
+    const upcomingSection = document.getElementById('upcomingSection');
+    const pastSection = document.getElementById('pastSection');
+
+    if (tab === 'upcoming') {
+      upcomingBtn.className = "flex-1 h-10 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-2xs shadow-sm transition-all duration-200";
+      pastBtn.className = "flex-1 h-10 rounded-full text-secondary-text font-label-md text-label-md flex items-center justify-center gap-space-2xs transition-all duration-200 hover:text-on-surface";
+      upcomingSection.classList.remove('hidden');
+      pastSection.classList.add('hidden');
+    } else {
+      pastBtn.className = "flex-1 h-10 rounded-full bg-primary-container text-on-primary font-label-md text-label-md flex items-center justify-center gap-space-2xs shadow-sm transition-all duration-200";
+      upcomingBtn.className = "flex-1 h-10 rounded-full text-secondary-text font-label-md text-label-md flex items-center justify-center gap-space-2xs transition-all duration-200 hover:text-on-surface";
+      upcomingSection.classList.add('hidden');
+      pastSection.classList.remove('hidden');
+    }
+  }
+
+  // Interactive Ticket Modal handlers
+  function openTicketModal(title, venue, category, code) {
+    const modal = document.getElementById('ticketModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalVenue = document.getElementById('modalVenue');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalTicketCode = document.getElementById('modalTicketCode');
+
+    if (modalTitle) modalTitle.innerText = title;
+    if (modalVenue) modalVenue.innerHTML = '<span class="material-symbols-outlined text-[15px] text-primary">location_on</span> ' + venue;
+    if (modalCategory) modalCategory.innerText = category;
+    if (modalTicketCode) modalTicketCode.innerText = code;
+
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    const sheet = modal.firstElementChild;
+    sheet.classList.remove('translate-y-full');
+  }
+
+  function closeTicketModal() {
+    const modal = document.getElementById('ticketModal');
+    const sheet = modal.firstElementChild;
+    sheet.classList.add('translate-y-full');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+  }
+
+  // Update shell active navigation state to "Sự kiện"
+  document.addEventListener('DOMContentLoaded', function() {
+    const navItems = document.querySelectorAll('nav a');
+    navItems.forEach(item => {
+      const label = item.querySelector('span:nth-child(2)');
+      const indicator = item.querySelector('.indicator');
+      if (label && label.textContent.trim() === 'Sự kiện') {
+        item.classList.remove('text-secondary-text');
+        item.classList.add('text-primary-container', 'font-label-md');
+        if (indicator) indicator.classList.remove('opacity-0');
+      } else if (indicator) {
+        indicator.classList.add('opacity-0');
+      }
+    });
+  });
+</script></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none flex justify-center pb-safe mb-space-md"><nav class="pointer-events-auto w-[350px] max-w-[calc(100vw-2.5rem)] h-[68px] rounded-[24px] bg-white/75 backdrop-blur-2xl shadow-[0_12px_32px_-4px_rgba(35,25,66,0.12),0_2px_8px_-2px_rgba(35,25,66,0.04)] px-space-sm flex items-center justify-between" data-active-classes="text-primary-container font-label-md [&amp;_span.indicator]:opacity-100"><a class="flex-1 flex flex-col items-center justify-center min-h-[44px] py-1 text-secondary-text transition-all group" data-path="01.-home-/-campus-pulse" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:scale-105">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Home</span><span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-opacity"></span></a><a class="flex-1 flex flex-col items-center justify-center min-h-[44px] py-1 text-secondary-text transition-all group" data-path="02.-explore-events" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:scale-105">explore</span><span class="font-label-sm text-label-sm mt-0.5">Khám phá</span><span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-opacity"></span></a><a aria-current="page" class="flex-1 flex flex-col items-center justify-center min-h-[44px] py-1 transition-all group text-primary-container font-label-md [&amp;_span.indicator]:opacity-100" data-path="11.-my-events" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:scale-105">confirmation_number</span><span class="font-label-sm text-label-sm mt-0.5">Sự kiện</span><span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-opacity"></span></a><a class="flex-1 flex flex-col items-center justify-center min-h-[44px] py-1 text-secondary-text transition-all group" data-path="15.-profile" href="#"><span class="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:scale-105">person</span><span class="font-label-sm text-label-sm mt-0.5">Cá nhân</span><span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-opacity"></span></a></nav></div></body></html>

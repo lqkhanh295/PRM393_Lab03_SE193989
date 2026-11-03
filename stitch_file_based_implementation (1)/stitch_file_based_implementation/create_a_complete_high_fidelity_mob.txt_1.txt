@@ -1,0 +1,1347 @@
+CONTINUE AND EXPAND THE EXISTING CAMPUS EVENT PROTOTYPE.
+
+IMPORTANT:
+Do NOT redesign or replace the existing 15 primary student screens.
+Keep the existing visual language, brand identity, Apple-inspired Liquid Glass system, purple palette, typography, spacing and interaction language.
+
+This is an EXPANSION of the existing Campus Event product.
+
+The existing application currently contains:
+- Home / Campus Pulse
+- Explore Events
+- Search Results
+- Event Map
+- Event Detail
+- Event Schedule
+- Registration Confirmation
+- Registration Loading
+- Registration Success
+- Registration Error
+- My Events
+- Digital Event Ticket
+- Campus Calendar
+- Notifications
+- Profile
+
+Now add authentication, role-based access control, event management, event approval, event creation permissions and QR-based event check-in.
+
+============================================================
+01. NEW SYSTEM CONCEPT
+============================================================
+
+Campus Event has three main user roles:
+
+1. USER
+2. EVENT LEADER
+3. ADMIN
+
+There must also be an explicit permission system.
+
+USER:
+- Can browse events.
+- Can register for events.
+- Can view registered events.
+- Can receive digital tickets.
+- Can use QR ticket for check-in.
+- Cannot create events by default.
+- Cannot manage other users.
+- Cannot approve events.
+
+EVENT LEADER:
+An Event Leader is a user who has been granted event-management permission by an Admin.
+
+Event Leader can:
+- Create events.
+- Edit their own events.
+- Submit events for approval.
+- View approval status.
+- Manage event information.
+- View registered participants.
+- Generate event QR check-in.
+- View check-in status.
+- Assign selected users as CHECK-IN STAFF for their event.
+- Revoke check-in permission from those users.
+- Perform QR check-in.
+
+ADMIN:
+Admin has system-level management permissions.
+
+Admin can:
+- View system dashboard.
+- Manage users.
+- Search users.
+- View user details.
+- Grant or revoke Event Leader permission.
+- Grant or revoke Check-in Staff permission where appropriate.
+- Review submitted events.
+- Approve events.
+- Reject events.
+- Request changes.
+- Manage published events.
+- View event statistics.
+- Monitor check-in activity.
+
+IMPORTANT:
+Do NOT make Admin simply a visually different Profile page.
+
+Admin must have a dedicated management experience.
+
+============================================================
+02. ROLE AND PERMISSION MODEL
+============================================================
+
+Use a clear permission hierarchy.
+
+ROLE:
+
+USER
+↓
+EVENT LEADER
+↓
+ADMIN
+
+But permissions should be explicit.
+
+Example:
+
+USER
+- VIEW_EVENTS
+- REGISTER_EVENT
+- VIEW_TICKET
+- CHECKIN_AS_PARTICIPANT
+
+EVENT LEADER
+inherits USER permissions
++
+CREATE_EVENT
+EDIT_OWN_EVENT
+SUBMIT_EVENT
+VIEW_OWN_EVENT_PARTICIPANTS
+GENERATE_EVENT_QR
+MANAGE_EVENT_CHECKIN
+ASSIGN_CHECKIN_STAFF
+
+ADMIN
+inherits all management capabilities
++
+MANAGE_USERS
+GRANT_EVENT_LEADER
+REVOKE_EVENT_LEADER
+REVIEW_EVENTS
+APPROVE_EVENT
+REJECT_EVENT
+REQUEST_EVENT_CHANGES
+VIEW_ALL_EVENTS
+VIEW_ALL_CHECKINS
+VIEW_SYSTEM_STATISTICS
+
+Do not expose UI actions that the current user does not have permission to perform.
+
+============================================================
+03. AUTHENTICATION
+============================================================
+
+Add a complete authentication flow before the existing Home screen.
+
+NEW AUTHENTICATION SCREENS:
+
+16. Login
+17. Login Loading
+18. Login Error
+19. Forgot Password
+20. Reset Password
+21. Account / Role Loading
+
+LOGIN SCREEN:
+
+Title:
+“Đăng nhập”
+
+Subtitle:
+“Đăng nhập để tiếp tục với Campus Event”
+
+Fields:
+Email
+Mật khẩu
+
+Primary button:
+“Đăng nhập”
+
+Secondary:
+“Quên mật khẩu?”
+
+Optional:
+“Ghi nhớ đăng nhập”
+
+Use FPT University HCMC visual identity.
+
+Do not make the login screen look like a generic SaaS login.
+
+Use subtle campus photography or a restrained editorial visual.
+
+============================================================
+04. LOGIN FLOW
+============================================================
+
+LOGIN
+↓
+Validate credentials
+↓
+LOGIN LOADING
+↓
+ROLE RESOLUTION
+↓
+Route according to permission
+
+USER:
+→ Home
+
+EVENT LEADER:
+→ Home
+with additional event-management entry point
+
+ADMIN:
+→ Admin Dashboard
+
+If login fails:
+
+LOGIN
+↓
+LOGIN ERROR
+↓
+“Email hoặc mật khẩu không chính xác.”
+↓
+Try again
+
+============================================================
+05. ROLE-AWARE HOME
+============================================================
+
+The existing Home remains the same for normal users.
+
+However, Event Leaders receive an additional contextual action:
+
+“Quản lý sự kiện”
+
+This must NOT completely change the student experience.
+
+Example:
+
+USER:
+Home
+Explore
+My Events
+Profile
+
+EVENT LEADER:
+Home
+Explore
+My Events
+Profile
+
+plus:
+floating/contextual
+“Quản lý sự kiện”
+
+ADMIN:
+Home remains accessible,
+but Admin also has:
+“Quản trị hệ thống”
+
+Do not put Admin functionality into the normal student navigation.
+
+============================================================
+06. EVENT LEADER AREA
+============================================================
+
+Create a dedicated Event Management area.
+
+NEW SCREENS:
+
+22. Event Management Dashboard
+23. My Created Events
+24. Create Event
+25. Edit Event
+26. Event Draft
+27. Submit Event
+28. Event Approval Status
+29. Event Participants
+30. Event Check-in Management
+31. Check-in Staff Management
+32. Event QR Check-in
+33. Check-in Result
+34. Event Statistics
+
+============================================================
+07. EVENT MANAGEMENT DASHBOARD
+============================================================
+
+Screen:
+“Quản lý sự kiện”
+
+This is the Event Leader's workspace.
+
+Show summary:
+
+Sự kiện của tôi
+Đang chờ duyệt
+Đã duyệt
+Đang diễn ra
+Đã kết thúc
+
+Example statistics:
+
+3
+Sự kiện
+
+1
+Chờ duyệt
+
+1
+Đang diễn ra
+
+1
+Đã kết thúc
+
+Use a clean operational layout.
+
+Do NOT copy the student Home layout.
+
+This screen can be denser because it is a management workspace.
+
+============================================================
+08. MY CREATED EVENTS
+============================================================
+
+Title:
+“Sự kiện của tôi”
+
+Tabs or filters:
+
+Tất cả
+Bản nháp
+Chờ duyệt
+Đã duyệt
+Từ chối
+Đã kết thúc
+
+Each event shows:
+
+Event title
+Date
+Location
+Status
+Number of registrations
+
+Status examples:
+
+Bản nháp
+Chờ duyệt
+Đã duyệt
+Cần chỉnh sửa
+Từ chối
+Đang diễn ra
+Đã kết thúc
+
+Click event:
+→ Event Management Detail
+
+============================================================
+09. CREATE EVENT
+============================================================
+
+Create a proper event creation workflow.
+
+Screen:
+“Tạo sự kiện”
+
+Do NOT create a giant single-page form.
+
+Use a multi-step creation flow.
+
+STEP 1:
+Thông tin cơ bản
+
+Fields:
+Tên sự kiện
+Danh mục
+Mô tả
+Ảnh sự kiện
+
+STEP 2:
+Thời gian & địa điểm
+
+Ngày
+Giờ bắt đầu
+Giờ kết thúc
+Địa điểm
+
+STEP 3:
+Đăng ký
+
+Số lượng người tham gia
+Cho phép đăng ký
+Thời gian mở đăng ký
+Thời gian đóng đăng ký
+
+STEP 4:
+Kiểm tra
+
+Preview the event exactly as students will see it.
+
+Actions:
+“Lưu bản nháp”
+“Gửi xét duyệt”
+
+============================================================
+10. EVENT DRAFT
+============================================================
+
+Event Leaders can save unfinished events.
+
+Draft status:
+“Bản nháp”
+
+Actions:
+“Tiếp tục chỉnh sửa”
+“Xóa bản nháp”
+“Gửi xét duyệt”
+
+Do not allow a draft to appear publicly.
+
+============================================================
+11. SUBMIT EVENT FOR APPROVAL
+============================================================
+
+Before submitting:
+
+Show a confirmation sheet:
+
+“Gửi sự kiện xét duyệt?”
+
+Explain:
+
+“Sau khi gửi, sự kiện sẽ được chuyển đến Admin để kiểm tra trước khi công khai.”
+
+Actions:
+“Gửi xét duyệt”
+“Quay lại”
+
+After submission:
+Status becomes:
+“Chờ duyệt”
+
+============================================================
+12. EVENT APPROVAL STATUS
+============================================================
+
+Event Leader can see:
+
+Bản nháp
+↓
+Đã gửi
+↓
+Đang xét duyệt
+↓
+Đã duyệt / Cần chỉnh sửa / Từ chối
+↓
+Đã công khai
+
+Use a visual status timeline.
+
+Example:
+
+✓ Bản nháp
+✓ Đã gửi
+● Đang xét duyệt
+○ Chờ Admin
+
+If Admin requests changes:
+
+Status:
+“Cần chỉnh sửa”
+
+Show Admin feedback.
+
+Example:
+“Vui lòng bổ sung thông tin địa điểm và thời gian check-in.”
+
+Button:
+“Chỉnh sửa sự kiện”
+
+============================================================
+13. ADMIN DASHBOARD
+============================================================
+
+Create a dedicated Admin experience.
+
+Screen:
+“Quản trị hệ thống”
+
+This is NOT the same as student Home.
+
+Show operational overview:
+
+Tổng người dùng
+Event Leader
+Sự kiện chờ duyệt
+Sự kiện đang diễn ra
+Lượt đăng ký
+Lượt check-in
+
+Example:
+
+1,284
+Người dùng
+
+46
+Event Leader
+
+8
+Chờ duyệt
+
+23
+Đang diễn ra
+
+Use a clean admin information hierarchy.
+
+Avoid excessive decorative cards.
+
+Use data tables, lists, status indicators and compact summaries where appropriate.
+
+============================================================
+14. ADMIN USER MANAGEMENT
+============================================================
+
+Screen:
+“Quản lý người dùng”
+
+Features:
+
+Search user
+Filter role
+Filter status
+
+List:
+
+Avatar
+Name
+Email
+Role
+Status
+Actions
+
+Example:
+
+Khánh Lê
+khanh@example.com
+USER
+Hoạt động
+
+Actions:
+Xem
+Cấp quyền
+Thu hồi quyền
+
+============================================================
+15. USER DETAIL / PERMISSION MANAGEMENT
+============================================================
+
+Screen:
+“Thông tin người dùng”
+
+Show:
+
+Avatar
+Khánh Lê
+Email
+Software Engineering
+FPT University HCMC
+
+Current role:
+USER
+
+Permission section:
+
+Event Leader
+OFF
+
+Check-in Staff
+Managed per event
+
+Admin can:
+“Cấp quyền Event Leader”
+
+When granted:
+
+Role becomes:
+EVENT LEADER
+
+Show confirmation:
+
+“Đã cấp quyền quản lý sự kiện cho Khánh Lê.”
+
+Admin can also:
+“Thu hồi quyền Event Leader”
+
+Use confirmation before destructive actions.
+
+============================================================
+16. EVENT APPROVAL CENTER
+============================================================
+
+Screen:
+“Duyệt sự kiện”
+
+Show events awaiting review.
+
+Each item:
+
+Event title
+Creator
+Created date
+Category
+Date
+Location
+Status
+
+Example:
+
+Campus Innovation Day 2026
+Người tạo: Khánh Lê
+12.10.2026
+CÔNG NGHỆ
+Chờ duyệt
+
+Action:
+“Xem xét”
+
+============================================================
+17. ADMIN EVENT REVIEW
+============================================================
+
+Screen:
+“Xét duyệt sự kiện”
+
+Admin must see the event exactly as the student will see it.
+
+Sections:
+
+Event image
+Title
+Description
+Schedule
+Location
+Organizer
+Registration capacity
+Registration period
+
+Approval controls:
+
+“Duyệt”
+“Từ chối”
+“Yêu cầu chỉnh sửa”
+
+If rejecting or requesting changes,
+Admin must enter a reason.
+
+Example:
+
+“Vui lòng bổ sung thông tin địa điểm.”
+
+Do not allow rejection without a reason.
+
+============================================================
+18. APPROVAL WORKFLOW
+============================================================
+
+Event Leader:
+Create
+↓
+Draft
+↓
+Submit
+↓
+Pending Review
+
+Admin:
+Review
+↓
+Approve
+OR
+Request Changes
+OR
+Reject
+
+IF APPROVED:
+Event becomes public.
+
+IF REQUEST CHANGES:
+Event Leader edits.
+↓
+Resubmits.
+↓
+Admin reviews again.
+
+IF REJECTED:
+Event remains non-public.
+
+============================================================
+19. EVENT PARTICIPANTS
+============================================================
+
+Event Leader can open:
+
+“Người tham gia”
+
+Show:
+
+Total registrations
+Checked in
+Not checked in
+
+Example:
+
+328 đăng ký
+241 đã check-in
+87 chưa check-in
+
+List participants:
+
+Name
+Student ID
+Registration time
+Check-in status
+
+Statuses:
+
+Chưa check-in
+Đã check-in
+
+Do not expose unnecessary personal data.
+
+============================================================
+20. CHECK-IN SYSTEM
+============================================================
+
+Implement QR-based event check-in.
+
+There are TWO QR concepts:
+
+A. Participant Ticket QR
+B. Event Check-in / Scanner flow
+
+Every confirmed participant receives a unique ticket QR.
+
+The QR must represent the participant's valid registration/ticket.
+
+Do not use the same static QR for every participant.
+
+============================================================
+21. PARTICIPANT CHECK-IN
+============================================================
+
+Participant opens:
+
+Digital Event Ticket
+
+Shows:
+Large QR code
+
+At event:
+Check-in staff scans the participant QR.
+
+After successful scan:
+
+“Check-in thành công”
+
+Show:
+Participant name
+Event
+Time
+Status
+
+Example:
+
+Khánh Lê
+Campus Innovation Day 2026
+08:31
+Đã check-in
+
+If invalid:
+
+“QR không hợp lệ”
+
+If already checked in:
+
+“Người tham gia đã check-in”
+
+If wrong event:
+
+“QR không thuộc sự kiện này”
+
+============================================================
+22. CHECK-IN STAFF
+============================================================
+
+An Event Leader can assign specific users as Check-in Staff for THEIR event.
+
+Create:
+
+“Quản lý nhân sự check-in”
+
+Show:
+
+Current check-in staff
+
+Example:
+
+Nguyễn Minh Anh
+Check-in Staff
+Active
+
+Actions:
+Remove
+
+Button:
+“Thêm nhân sự”
+
+Search users.
+
+Select user:
+→ Confirm
+
+“Thêm Nguyễn Minh Anh vào đội check-in?”
+
+After confirmation:
+User can access the check-in scanner for THIS event only.
+
+IMPORTANT:
+Check-in Staff must NOT gain Event Leader or Admin permissions.
+
+Their permission is scoped to the specific event.
+
+============================================================
+23. CHECK-IN SCANNER
+============================================================
+
+Create:
+
+“Quét QR check-in”
+
+This is a camera/scanner interface.
+
+Use a large central scanning area.
+
+Top:
+Event name
+
+Example:
+Campus Innovation Day 2026
+
+Scanner frame.
+
+Bottom:
+“Đưa mã QR của vé vào khung”
+
+Actions:
+“Nhập mã thủ công”
+
+After scanning:
+→ Check-in Result
+
+This screen should feel operational and fast.
+
+============================================================
+24. CHECK-IN RESULT
+============================================================
+
+SUCCESS:
+
+Large check icon.
+
+“Check-in thành công”
+
+Participant:
+Khánh Lê
+
+Event:
+Campus Innovation Day 2026
+
+Time:
+08:31
+
+Button:
+“Quét người tiếp theo”
+
+ERROR STATES:
+
+Invalid QR:
+“QR không hợp lệ”
+
+Already checked in:
+“Đã check-in”
+
+Wrong event:
+“QR không thuộc sự kiện này”
+
+Expired ticket:
+“Vé đã hết hiệu lực”
+
+Each error has:
+“Quét lại”
+
+============================================================
+25. EVENT CHECK-IN MANAGEMENT
+============================================================
+
+Event Leader screen:
+
+“Check-in”
+
+Show live statistics:
+
+328
+Đăng ký
+
+241
+Đã check-in
+
+87
+Chưa check-in
+
+73%
+Tỷ lệ check-in
+
+Show recent check-ins:
+
+08:31
+Khánh Lê
+Đã check-in
+
+08:32
+Nguyễn Minh Anh
+Đã check-in
+
+Use live operational information.
+
+Include:
+“Quét QR”
+
+and:
+“Quản lý nhân sự”
+
+============================================================
+26. EVENT STATISTICS
+============================================================
+
+Event Leader can view:
+
+Registration count
+Check-in count
+Check-in rate
+Registration timeline
+Check-in timeline
+
+Keep charts simple and readable.
+
+Do not turn this into a huge analytics dashboard.
+
+============================================================
+27. ADMIN CHECK-IN MONITORING
+============================================================
+
+Admin can view system-wide check-in information.
+
+Admin:
+Event
+Organizer
+Registrations
+Check-ins
+Status
+
+Admin can open an event and see its check-in statistics.
+
+Do not allow Admin to accidentally modify event data through statistics screens.
+
+============================================================
+28. ROLE-BASED NAVIGATION
+============================================================
+
+NORMAL USER:
+
+Home
+Khám phá
+Sự kiện
+Cá nhân
+
+EVENT LEADER:
+
+Home
+Khám phá
+Sự kiện
+Cá nhân
+
+PLUS:
+Quản lý sự kiện
+
+ADMIN:
+
+Student application remains accessible.
+
+PLUS:
+Quản trị hệ thống
+
+Do NOT put all admin functionality into bottom navigation.
+
+Use a contextual management entry point.
+
+============================================================
+29. PERMISSION RULES
+============================================================
+
+Implement these rules throughout the prototype.
+
+USER:
+Can:
+- Browse
+- Search
+- Filter
+- Register
+- View ticket
+- View own events
+- Receive notifications
+
+Cannot:
+- Create event
+- Edit event
+- Approve event
+- Manage users
+- Scan event tickets unless explicitly assigned as Check-in Staff
+
+EVENT LEADER:
+Can do everything USER can do.
+
+Additionally:
+- Create events
+- Edit own events
+- Submit events
+- View approval status
+- View own event participants
+- Generate/manage event check-in
+- Assign Check-in Staff to own events
+- Scan tickets for own events
+
+Cannot:
+- Approve own events
+- Approve other events
+- Manage global users
+- Grant Event Leader permissions
+
+ADMIN:
+Can:
+- Manage users
+- Grant/revoke Event Leader
+- Review events
+- Approve/reject/request changes
+- View all events
+- View all registrations
+- View all check-ins
+- View system statistics
+
+IMPORTANT:
+An Event Leader must NEVER be able to approve their own event.
+
+============================================================
+30. NEW COMPLETE FLOW
+============================================================
+
+AUTHENTICATION:
+
+OPEN APP
+↓
+LOGIN
+↓
+LOGIN LOADING
+↓
+ROLE RESOLUTION
+
+USER
+↓
+HOME
+
+EVENT LEADER
+↓
+HOME
++
+EVENT MANAGEMENT
+
+ADMIN
+↓
+ADMIN DASHBOARD
+
+============================================================
+31. EVENT CREATION FLOW
+============================================================
+
+EVENT LEADER
+↓
+EVENT MANAGEMENT
+↓
+CREATE EVENT
+↓
+STEP 1: BASIC INFORMATION
+↓
+STEP 2: DATE & LOCATION
+↓
+STEP 3: REGISTRATION
+↓
+STEP 4: PREVIEW
+↓
+SAVE DRAFT
+OR
+SUBMIT FOR APPROVAL
+↓
+PENDING REVIEW
+↓
+ADMIN REVIEW
+↓
+APPROVED
+↓
+PUBLIC EVENT
+↓
+STUDENTS REGISTER
+↓
+DIGITAL TICKET
+↓
+EVENT DAY
+↓
+QR CHECK-IN
+
+============================================================
+32. ADMIN APPROVAL FLOW
+============================================================
+
+ADMIN DASHBOARD
+↓
+PENDING EVENTS
+↓
+EVENT REVIEW
+↓
+APPROVE
+OR
+REQUEST CHANGES
+OR
+REJECT
+
+APPROVE
+↓
+PUBLIC
+
+REQUEST CHANGES
+↓
+EVENT LEADER
+↓
+EDIT
+↓
+RESUBMIT
+↓
+ADMIN REVIEW
+
+REJECT
+↓
+NON-PUBLIC
+↓
+EVENT LEADER SEES REASON
+
+============================================================
+33. CHECK-IN FLOW
+============================================================
+
+EVENT LEADER
+↓
+EVENT MANAGEMENT
+↓
+CHECK-IN MANAGEMENT
+↓
+ADD CHECK-IN STAFF
+↓
+STAFF OPENS CHECK-IN SCANNER
+↓
+SCAN PARTICIPANT QR
+↓
+VALIDATE
+↓
+SUCCESS / ERROR
+↓
+UPDATE CHECK-IN STATISTICS
+
+PARTICIPANT:
+MY EVENTS
+↓
+DIGITAL TICKET
+↓
+QR CODE
+↓
+SCAN
+↓
+CHECK-IN SUCCESS
+
+============================================================
+34. NEW SCREENS SUMMARY
+============================================================
+
+Add these screens to the existing prototype:
+
+16. Login
+17. Login Loading
+18. Login Error
+19. Forgot Password
+20. Reset Password
+21. Role Resolution
+
+22. Event Management Dashboard
+23. My Created Events
+24. Create Event
+25. Edit Event
+26. Event Draft
+27. Submit Event
+28. Event Approval Status
+29. Event Participants
+30. Event Check-in Management
+31. Check-in Staff Management
+32. Event QR Check-in / Scanner
+33. Check-in Result
+34. Event Statistics
+
+35. Admin Dashboard
+36. User Management
+37. User Detail / Permission Management
+38. Event Approval Center
+39. Admin Event Review
+40. Admin Check-in Monitoring
+
+This brings the full prototype to approximately 40 primary screens/states.
+
+Do NOT delete or replace the original 15 screens.
+
+============================================================
+35. UI/UX DIRECTION FOR MANAGEMENT SCREENS
+============================================================
+
+Student screens:
+More editorial.
+More visual.
+More photography.
+More spacious.
+
+Event Leader screens:
+More operational.
+Clear status.
+Clear actions.
+Compact information hierarchy.
+
+Admin screens:
+More information-dense.
+Tables/lists/status indicators.
+Clear permission controls.
+Clear approval workflow.
+
+All three experiences must still feel like the SAME PRODUCT.
+
+Do not make Admin look like a completely unrelated SaaS template.
+
+============================================================
+36. LIQUID GLASS USAGE FOR NEW SCREENS
+============================================================
+
+Continue the existing Liquid Glass system.
+
+Use Liquid Glass for:
+- login contextual controls
+- floating management actions
+- approval confirmation sheets
+- permission confirmation sheets
+- QR scanner controls
+- check-in result overlays
+- contextual filters
+- bottom sheets
+
+Do NOT turn management dashboards into glass-card grids.
+
+Management interfaces should prioritize clarity over decoration.
+
+============================================================
+37. IMPORTANT SECURITY / UX PRINCIPLE
+============================================================
+
+The UI must communicate that permissions are scoped.
+
+Examples:
+
+Event Leader:
+“Bạn đang quản lý 3 sự kiện.”
+
+Check-in Staff:
+“Bạn có quyền check-in cho:
+Campus Innovation Day 2026”
+
+Do NOT imply that a Check-in Staff member can scan tickets for every event.
+
+Do NOT imply that an Event Leader can approve events.
+
+Do NOT expose Admin functions to normal users.
+
+============================================================
+38. FINAL PROTOTYPE TARGET
+============================================================
+
+The final Campus Event prototype should now represent a complete event lifecycle:
+
+AUTHENTICATION
+↓
+ROLE & PERMISSION
+↓
+DISCOVERY
+↓
+EVENT CREATION
+↓
+EVENT APPROVAL
+↓
+PUBLICATION
+↓
+REGISTRATION
+↓
+DIGITAL TICKET
+↓
+EVENT MANAGEMENT
+↓
+CHECK-IN STAFF
+↓
+QR CHECK-IN
+↓
+ATTENDANCE DATA
+↓
+EVENT STATISTICS
+↓
+NOTIFICATIONS
+↓
+PERSONAL EVENT HISTORY
+
+The final result must feel like a real university event management ecosystem, not merely an event browsing application.
+
+Maintain the existing:
+- FPT University HCMC identity
+- purple Campus Event palette
+- Be Vietnam Pro
+- Apple-inspired Liquid Glass
+- purposeful motion
+- accessibility
+- anti-AI-slop design principles
+- varied information architecture
+- clickable prototype behavior
+
+DO NOT REDESIGN THE ORIGINAL 15 SCREENS.
+EXTEND THEM WITH THE NEW AUTHENTICATION, ROLE, EVENT MANAGEMENT, APPROVAL AND QR CHECK-IN SYSTEM.
+"""
+print(prompt)

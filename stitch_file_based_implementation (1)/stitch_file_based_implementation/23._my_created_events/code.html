@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><title>FPTU Event Leader Portal</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;min-height:100%;margin:0;padding:0;font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container": "#f3ebf8", "surface-dim": "#ded7e4", "error-container": "#ffdad6", "on-secondary-container": "#5e5380", "on-primary-container": "#d8cfff", "on-background": "#1d1a23", "tertiary-fixed-dim": "#d6bbf9", "primary-fixed": "#e6deff", "on-secondary-fixed-variant": "#4a406b", "secondary-fixed": "#e8deff", "on-error-container": "#93000a", "surface-tint": "#605691", "on-surface": "#1d1a23", "surface": "#FFFFFF", "tertiary-container": "#685187", "on-tertiary-fixed-variant": "#523c71", "on-primary-fixed-variant": "#483f77", "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary": "#463c75", "tertiary": "#4f3a6e", "on-tertiary-container": "#e2caff", "on-error": "#ffffff", "on-surface-variant": "#48454f", "tertiary-fixed": "#eddcff", "on-secondary-fixed": "#1e143d", "surface-container-highest": "#e7e0ed", "surface-variant": "#e7e0ed", "secondary-fixed-dim": "#ccbff3", "surface-container-low": "#f8f1fe", "secondary-text": "#706B78", "secondary": "#625885", "success": "#4E8B65", "accent": "#BE95C4", "outline": "#797580", "surface-bright": "#fef7ff", "secondary-container": "#d8cafe", "inverse-surface": "#322f38", "inverse-primary": "#cabeff", "outline-variant": "#c9c4d0", "light-accent": "#E0B1CB", "surface-container-high": "#ede5f2", "on-primary": "#ffffff", "on-secondary": "#ffffff", "on-primary-fixed": "#1c1149", "background": "#F8F6FA", "on-tertiary-fixed": "#250f42", "border": "#E7E3EB", "inverse-on-surface": "#f5eefb", "error": "#C65B5B", "primary-container": "#5e548e", "primary-fixed-dim": "#cabeff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.375rem", "space-lg": "1rem", "gutter-sm": "0.75rem", "margin": "1.25rem", "gutter": "1rem", "space-xl": "1.5rem", "space-3xl": "3rem", "space-2xl": "2rem", "space-2xs": "0.25rem", "margin-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "0.75rem" }, fontFamily: { "display-mobile": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"] }, fontSize: { "display-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-sm": ["17px", { "lineHeight": "22px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "code": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(35,25,66,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="Brand logo. - Primary color: #5e548e - Font: beVietnamPro - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1USscNBGgUyQdo4rGl2gIAWpHgPdhbGbnfyiRgoG2z4-D_2jtzImvpALeS7AJy5XmmwMq3ZfKdKh_5__P-Hu62mNK9cXMhtKgH7xG7mllaKIdNkKqgizadRYDfmrOnhQjHbRQELvQZA9SQjGANhJi8Q_w9Ldne0EwtGJni5rlMTlgW5h8AYk0UZn-0JIHY4wAoySCo_rl16zKPiY3SgKXOaATsNrQZoHXLtKmqYOd7gIPozxLnUk8gwLPk"/><div class="flex flex-col min-w-0"><span class="text-eyebrow font-eyebrow uppercase text-primary tracking-wider">Leader Workspace</span><h1 class="text-headline-sm font-headline-sm text-on-surface truncate">Attendee Management</h1></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-secondary hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_8px_rgba(35,25,66,0.08)]" src="https://lh3.googleusercontent.com/aida/AEtjO1W0l8ZttpDyGuTTvm_SN22zbXZVSAVdiVK3epOS2mPCirC2HqMpWm_sx4XStQSeTXJrulO5nSyj0xoElmflDyiAr_fWNluIxMhGWKYdm20RUXOFLA9dr1PW7GS-TkSGFEOwQ8OQ9FmykHwSsw1P4MwW-RU8RUAaBT2Di1xESTdQAcfO-KXZiOHTrOErBCUYnxmx03nRWIYErLZduQCI2xlGmp5MpZOv7TEOwQU3cpJl6GPMjUM7s4w4pBM"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-[5.5rem] bg-background"><div class="flex flex-col w-full">
+<!-- Search & Quick Action Toolbar -->
+<div class="px-margin pt-space-md pb-space-sm flex items-center gap-space-sm">
+<div class="flex-1 flex items-center h-12 px-space-md rounded-full bg-surface shadow-[0_2px_12px_rgba(35,25,66,0.04)]">
+<span class="material-symbols-outlined text-[20px] text-secondary-text mr-space-xs">search</span>
+<input class="w-full bg-transparent text-body-md font-body-md text-on-surface placeholder:text-secondary-text focus:outline-none" id="eventSearchInput" placeholder="Tìm tên sự kiện, địa điểm, mã số..." type="text"/>
+<button aria-label="Bộ lọc nâng cao" class="w-7 h-7 flex items-center justify-center rounded-full text-secondary-text hover:text-primary active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<button aria-label="Tạo sự kiện mới" class="w-12 h-12 flex-shrink-0 rounded-full bg-primary-container text-on-primary shadow-[0_4px_16px_rgba(94,84,142,0.25)] flex items-center justify-center active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+</div>
+<!-- Micro Metrics Strip -->
+<div class="px-margin py-space-xs flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span class="text-eyebrow font-eyebrow uppercase text-secondary-text tracking-wider">Không gian tổ chức: 3 Sự kiện</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary">Học kỳ Fall 2026</span>
+</div>
+<!-- Horizontal Liquid Glass Filter Tabs -->
+<div class="w-full overflow-x-auto no-scrollbar py-space-xs px-margin flex items-center gap-space-xs">
+<button class="filter-tab active-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-primary-container text-on-primary shadow-sm text-label-sm font-label-sm transition-all" data-filter="all" type="button">
+      Tất cả (3)
+    </button>
+<button class="filter-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-surface text-secondary-text shadow-[0_1px_6px_rgba(35,25,66,0.03)] text-label-sm font-label-sm hover:text-primary transition-all" data-filter="approved" type="button">
+      Đã duyệt / Đang diễn ra (1)
+    </button>
+<button class="filter-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-surface text-secondary-text shadow-[0_1px_6px_rgba(35,25,66,0.03)] text-label-sm font-label-sm hover:text-primary transition-all" data-filter="pending" type="button">
+      Chờ duyệt (1)
+    </button>
+<button class="filter-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-surface text-secondary-text shadow-[0_1px_6px_rgba(35,25,66,0.03)] text-label-sm font-label-sm hover:text-primary transition-all" data-filter="draft" type="button">
+      Bản nháp (1)
+    </button>
+<button class="filter-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-surface text-secondary-text shadow-[0_1px_6px_rgba(35,25,66,0.03)] text-label-sm font-label-sm hover:text-primary transition-all opacity-60" data-filter="rejected" type="button">
+      Từ chối (0)
+    </button>
+<button class="filter-tab flex-shrink-0 px-space-md py-space-xs rounded-full bg-surface text-secondary-text shadow-[0_1px_6px_rgba(35,25,66,0.03)] text-label-sm font-label-sm hover:text-primary transition-all opacity-60" data-filter="ended" type="button">
+      Đã kết thúc (1)
+    </button>
+</div>
+<!-- Events Stream Container -->
+<div class="px-margin pt-space-sm pb-space-3xl flex flex-col gap-space-lg" id="eventsContainer">
+<!-- CARD 1: Campus Innovation Day 2026 (Live & Active) -->
+<article class="event-card w-full rounded-xl bg-surface shadow-[0_8px_24px_rgba(35,25,66,0.06)] overflow-hidden flex flex-col" data-status="approved">
+<!-- Media Header with Ambient Overlay -->
+<div class="relative w-full h-44 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern university campus indoor auditorium filled with energetic students, soft purple and warm amber stage lighting, professional tech conference banners for Campus Innovation Day, cinematic atmospheric focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGuZ32GXFFODbtjryoJqqL-0SlEkn2nViOHU7haUZJ9G4GSOScoPWIClMVJstIY5jw4KB25_6RT4Y0sALY4WikxpxftPqzBRdFiFvFt2deHBg0cCSGDhSjJJG2DHildBxlwyskWlQzipT-YmuYjLl7nXPZPUzXbRJGGbX8a02YcHPS5utJV50jahvN2-td1aEmsGtw80eKUrdgf1zU3JYKJecFrScQTqq82tdnIZNIjicIHhGI2SQJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 via-on-background/30 to-transparent"></div>
+<!-- Status Indicator Pill (Liquid Glass style) -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface/90 backdrop-blur-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+<span class="text-eyebrow font-eyebrow uppercase text-success tracking-wide">Đang diễn ra • Đã duyệt</span>
+</div>
+<!-- Quick Menu Dots -->
+<button aria-label="Thao tác nhanh" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-on-background/40 backdrop-blur-md text-surface flex items-center justify-center hover:bg-on-background/60 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+<!-- Overlaid Title Block -->
+<div class="absolute bottom-3 left-3 right-3 flex flex-col">
+<span class="text-eyebrow font-eyebrow uppercase text-light-accent tracking-wider mb-0.5">Sự kiện Học thuật &amp; Đổi mới</span>
+<h2 class="text-headline-sm font-headline-sm text-surface truncate">Campus Innovation Day 2026</h2>
+</div>
+</div>
+<!-- Card Core Information -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Logistics Info Rows -->
+<div class="grid grid-cols-1 gap-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-primary">calendar_today</span>
+<span class="font-medium text-on-surface">12.10.2026 • 08:30 - 17:00</span>
+<span class="text-eyebrow font-eyebrow px-1.5 py-0.5 rounded bg-surface-container text-primary ml-auto">Hôm nay</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-secondary">location_on</span>
+<span class="truncate">Hội trường A, Tòa Alpha, FPTU HCM</span>
+</div>
+</div>
+<!-- Attendance & Check-in Progress Bar Card -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-space-2xs">
+<div class="flex items-center justify-between text-label-sm font-label-sm">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-primary">how_to_reg</span>
+<span>Tiến độ Check-in</span>
+</div>
+<div class="text-right">
+<span class="text-primary font-bold text-headline-sm">241</span>
+<span class="text-secondary-text text-label-sm font-normal"> / 328 sinh viên (73%)</span>
+</div>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-gradient-to-r from-primary to-accent" style="width: 73.5%;"></div>
+</div>
+<div class="flex items-center justify-between text-eyebrow font-eyebrow text-secondary-text pt-0.5">
+<span>Còn lại 87 vé chưa quét</span>
+<span class="text-success font-semibold">Tốc độ: ~14 lượt/phút</span>
+</div>
+</div>
+<!-- Smart Action Grid -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-2xs">
+<button class="h-11 px-space-sm rounded-full bg-primary text-on-primary shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+<span class="text-label-md font-label-md truncate">Quản lý Check-in</span>
+</button>
+<button class="h-11 px-space-sm rounded-full bg-surface-container text-primary hover:bg-surface-container-high active:scale-95 transition-transform flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span class="text-label-md font-label-md truncate">DS Người tham gia</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 2: FPTU AI Hackathon 2026 (Pending Approval) -->
+<article class="event-card w-full rounded-xl bg-surface shadow-[0_4px_20px_rgba(35,25,66,0.05)] overflow-hidden flex flex-col" data-status="pending">
+<!-- Media Header with Warm Accent Framing -->
+<div class="relative w-full h-40 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Futuristic neon programming hackathon at university lab, young Vietnamese engineering students collaborating with multiple monitors showing AI algorithms, moody deep purple and amber glows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrP7bmTiijr1agMr0YkNSDprgAtPQrEIP4jc5Shdq1XW9fR2evQeS1msNOCR6nbH4uHP7EarU_nlLJN0Xsg2pyj5QLejR4N0KcA7fFJvA_uQ867dor718jkx0m-61SY4yXrRxGNtKUTj3IaMBZobY7t0V4EjAqlqNksCrHYMHfsiI7YTJJmqHC7IwbAVmHDAMN8_z98K0Y_ZLza1JKh8pQ0ZpkfbMj4Zde-qHmu2SS25W9zHPvdIHa"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/85 via-on-background/30 to-transparent"></div>
+<!-- Status Indicator Pill (Amber Pending State) -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50/95 backdrop-blur-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-eyebrow font-eyebrow uppercase text-amber-800 tracking-wide">Chờ duyệt (Admin P.CTSV)</span>
+</div>
+<button aria-label="Thao tác nhanh" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-on-background/40 backdrop-blur-md text-surface flex items-center justify-center hover:bg-on-background/60 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+<div class="absolute bottom-3 left-3 right-3 flex flex-col">
+<span class="text-eyebrow font-eyebrow uppercase text-light-accent tracking-wider mb-0.5">Cuộc thi Công nghệ</span>
+<h2 class="text-headline-sm font-headline-sm text-surface truncate">FPTU AI Hackathon 2026: GenAI</h2>
+</div>
+</div>
+<!-- Information & Approval Details -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="grid grid-cols-1 gap-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-primary">send</span>
+<span>Ngày gửi duyệt: <strong class="text-on-surface">Hôm qua, 16:40</strong></span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-secondary">location_on</span>
+<span class="truncate">Hall B &amp; Innovation Lab Tầng 5</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-secondary">groups</span>
+<span>Dự kiến tham dự: <strong class="text-on-surface">120 sinh viên</strong></span>
+</div>
+</div>
+<!-- Approval Timeline Micro Bar -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-700">
+<span class="material-symbols-outlined text-[16px]">hourglass_top</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface">P.CTSV đang thẩm định cơ sở vật chất</span>
+<span class="text-eyebrow font-eyebrow text-secondary-text">Ước tính phản hồi: Trong 24h tới</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[18px] text-secondary-text">chevron_right</span>
+</div>
+<!-- Action Triggers -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-2xs">
+<button class="h-11 px-space-sm rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center gap-1.5 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">timeline</span>
+<span class="text-label-md font-label-md truncate">Tiến độ duyệt</span>
+</button>
+<button class="h-11 px-space-sm rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface active:scale-95 transition-transform flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+<span class="text-label-md font-label-md truncate">Xem trước</span>
+</button>
+</div>
+</div>
+</article>
+<!-- CARD 3: Acoustic Sunset (Draft State) -->
+<article class="event-card w-full rounded-xl bg-surface shadow-[0_4px_20px_rgba(35,25,66,0.04)] overflow-hidden flex flex-col opacity-95" data-status="draft">
+<div class="relative w-full h-36 bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[30%]" data-alt="Peaceful outdoor campus lotus pond lake at golden hour sunset, acoustic wooden guitars on lawn chairs, cozy college club live performance setup, serene purple and golden reflections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmaRaZTJp_uWaaZpIWrGg_8oJfjA_NHGjGEUTPmYzufnWhyisrZRfC7yqB5Nbe8RYrzF406iDzBueTNm1WCp7YSfuG-FoLbB6P64AjwrtPle3C39WPDI6sCI5LXHCKAdTngln5CxC7uBOW9_ohhRb8HvufCmbxTtfGOqC_FH2DlyfvMiNET7crLgWKzmKRmHE5XNMPGHOwKGQIMm9pSMLyEQXc1upe7sHvKgBC-CemaJWY6bntqtPS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/85 via-on-background/25 to-transparent"></div>
+<!-- Status Indicator Pill (Muted Slate / Purple) -->
+<div class="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface/90 backdrop-blur-md shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-text"></span>
+<span class="text-eyebrow font-eyebrow uppercase text-secondary-text tracking-wide">Bản nháp (Chưa hoàn tất)</span>
+</div>
+<button aria-label="Thao tác nhanh" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-on-background/40 backdrop-blur-md text-surface flex items-center justify-center hover:bg-on-background/60 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+<div class="absolute bottom-3 left-3 right-3 flex flex-col">
+<span class="text-eyebrow font-eyebrow uppercase text-light-accent tracking-wider mb-0.5">Văn hóa Nghệ thuật</span>
+<h2 class="text-headline-sm font-headline-sm text-surface truncate">Acoustic Sunset: Fall Campus Sessions</h2>
+</div>
+</div>
+<!-- Draft Body Details -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[17px] text-secondary">location_on</span>
+<span>Hồ sen FPTU (Khuôn viên ngoài trời)</span>
+</div>
+<span class="text-eyebrow font-eyebrow text-secondary-text">Lưu tự động 11:15</span>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">edit_note</span>
+<span class="text-body-sm font-body-sm text-on-surface">Còn thiếu: Danh sách diễn viên &amp; Kịch bản MC</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-semibold">60%</span>
+</div>
+<!-- Action Group (Edit & Delete Draft) -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-2xs">
+<button class="h-11 px-space-sm rounded-full bg-primary-container text-on-primary shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span class="text-label-md font-label-md truncate">Tiếp tục sửa</span>
+</button>
+<button class="h-11 px-space-sm rounded-full bg-error-container text-on-error-container hover:bg-error-container/80 active:scale-95 transition-transform flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">delete_outline</span>
+<span class="text-label-md font-label-md truncate">Xóa nháp</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Empty State Fallback (Toggled dynamically if filter yields 0) -->
+<div class="hidden flex-col items-center justify-center py-space-3xl px-space-lg text-center rounded-xl bg-surface" id="emptyStateDisplay">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-primary mb-space-sm">
+<span class="material-symbols-outlined text-[32px]">event_busy</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-1">Không tìm thấy sự kiện</h3>
+<p class="text-body-sm font-body-sm text-secondary-text max-w-[260px] mb-space-lg">
+        Không có sự kiện nào khớp với bộ lọc hoặc từ khóa tìm kiếm hiện tại của bạn.
+      </p>
+<button class="h-10 px-space-lg rounded-full bg-surface-container text-primary text-label-md font-label-md hover:bg-surface-container-high transition-colors" id="resetFilterBtn" type="button">
+        Đặt lại bộ lọc
+      </button>
+</div>
+</div>
+<!-- Persistent Floating Liquid Glass Primary Button -->
+<div class="fixed bottom-24 left-0 right-0 z-40 px-margin flex justify-center pointer-events-none">
+<button aria-label="Tạo sự kiện mới" class="pointer-events-auto h-[52px] px-space-xl rounded-full bg-primary-container text-on-primary shadow-[0_8px_30px_rgba(94,84,142,0.35)] flex items-center justify-center gap-2 active:scale-95 transition-transform backdrop-blur-md" type="button">
+<span class="material-symbols-outlined text-[22px]">add_circle</span>
+<span class="text-label-md font-label-md tracking-wide">Tạo sự kiện mới</span>
+</button>
+</div>
+</div>
+<script>
+  (function() {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('.event-card');
+    const searchInput = document.getElementById('eventSearchInput');
+    const emptyState = document.getElementById('emptyStateDisplay');
+    const resetBtn = document.getElementById('resetFilterBtn');
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function applyFilterAndSearch() {
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        const textContent = card.innerText.toLowerCase();
+
+        const matchesTab = (currentFilter === 'all') || (cardStatus === currentFilter);
+        const matchesSearch = searchQuery === '' || textContent.includes(searchQuery);
+
+        if (matchesTab && matchesSearch) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+      } else {
+        emptyState.classList.add('hidden');
+        emptyState.classList.remove('flex');
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+          t.classList.add('bg-surface', 'text-secondary-text');
+        });
+
+        tab.classList.remove('bg-surface', 'text-secondary-text');
+        tab.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+
+        currentFilter = tab.getAttribute('data-filter');
+        applyFilterAndSearch();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value.trim().toLowerCase();
+        applyFilterAndSearch();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        searchQuery = '';
+        if (tabs[0]) tabs[0].click();
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none" data-active-classes="text-primary-container font-semibold"><div class="flex items-center justify-center px-margin pb-space-lg"><div class="pointer-events-auto w-full max-w-[360px] h-[68px] px-space-md rounded-full bg-white/80 backdrop-blur-2xl shadow-[0_8px_32px_-4px_rgba(35,25,66,0.12),0_2px_8px_-2px_rgba(35,25,66,0.04)] flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-2xs text-secondary-text hover:text-primary transition-all" data-path="event-dashboard" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="text-label-sm font-label-sm">Tổng quan</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-2xs transition-all text-primary-container font-semibold" data-path="attendee-management" href="#"><span class="material-symbols-outlined text-[24px]">group</span><span class="text-label-sm font-label-sm">Tham dự</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-2xs text-secondary-text hover:text-primary transition-all" data-path="event-agenda-runsheet" href="#"><span class="material-symbols-outlined text-[24px]">schedule</span><span class="text-label-sm font-label-sm">Lịch trình</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-space-2xs text-secondary-text hover:text-primary transition-all" data-path="leader-profile-settings" href="#"><span class="material-symbols-outlined text-[24px]">account_circle</span><span class="text-label-sm font-label-sm">Hồ sơ</span></a></div></div></nav></body></html>

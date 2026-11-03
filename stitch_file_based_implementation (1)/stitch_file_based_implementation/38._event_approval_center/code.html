@@ -1,0 +1,413 @@
+<!DOCTYPE html><html lang="vi" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container": "#f3ebf8", "tertiary-container": "#685187", "outline-variant": "#c9c4d0", "surface-variant": "#e7e0ed", "tertiary-fixed": "#eddcff", "secondary-fixed-dim": "#ccbff3", "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#1c1149", "inverse-surface": "#322f38", "on-secondary-container": "#5e5380", "surface": "#FFFFFF", "primary-container": "#5e548e", "inverse-primary": "#cabeff", "border": "#E7E3EB", "on-tertiary-container": "#e2caff", "success": "#4E8B65", "on-tertiary-fixed": "#250f42", "surface-container-high": "#ede5f2", "on-error": "#ffffff", "light-accent": "#E0B1CB", "primary-fixed-dim": "#cabeff", "on-surface": "#1d1a23", "error": "#C65B5B", "primary-fixed": "#e6deff", "on-primary-fixed-variant": "#483f77", "on-surface-variant": "#48454f", "surface-container-low": "#f8f1fe", "secondary": "#625885", "on-error-container": "#93000a", "secondary-container": "#d8cafe", "on-tertiary-fixed-variant": "#523c71", "surface-container-highest": "#e7e0ed", "secondary-fixed": "#e8deff", "on-background": "#1d1a23", "primary": "#463c75", "on-secondary": "#ffffff", "error-container": "#ffdad6", "outline": "#797580", "surface-dim": "#ded7e4", "surface-bright": "#fef7ff", "on-secondary-fixed-variant": "#4a406b", "accent": "#BE95C4", "tertiary-fixed-dim": "#d6bbf9", "surface-tint": "#605691", "on-secondary-fixed": "#1e143d", "on-primary-container": "#d8cfff", "tertiary": "#4f3a6e", "secondary-text": "#706B78", "background": "#F8F6FA", "inverse-on-surface": "#f5eefb", "on-primary": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-3xl": "3rem", "gutter": "1rem", "space-2xs": "0.25rem", "space-xl": "1.5rem", "space-lg": "1rem", "gutter-sm": "0.75rem", "space-sm": "0.5rem", "space-md": "0.75rem", "space-2xl": "2rem", "margin-lg": "1.5rem", "space-xs": "0.375rem", "margin": "1.25rem" }, fontFamily: { "label-sm": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"] }, fontSize: { "label-sm": ["11px", { lineHeight: "14px", fontWeight: "600" }], "headline-sm": ["17px", { lineHeight: "22px", fontWeight: "600" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.005em", fontWeight: "600" }], "eyebrow": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "700" }], "label-md": ["13px", { lineHeight: "16px", fontWeight: "600" }], "display": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "display-mobile": ["28px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "code": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#F8F6FA;}body{overscroll-behavior:none;font-family:"Be Vietnam Pro",sans-serif;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #5e548e
+- Font: beVietnamPro
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1USscNBGgUyQdo4rGl2gIAWpHgPdhbGbnfyiRgoG2z4-D_2jtzImvpALeS7AJy5XmmwMq3ZfKdKh_5__P-Hu62mNK9cXMhtKgH7xG7mllaKIdNkKqgizadRYDfmrOnhQjHbRQELvQZA9SQjGANhJi8Q_w9Ldne0EwtGJni5rlMTlgW5h8AYk0UZn-0JIHY4wAoySCo_rl16zKPiY3SgKXOaATsNrQZoHXLtKmqYOd7gIPozxLnUk8gwLPk"><div class="flex flex-col"><div class="flex items-center gap-space-2xs"><span class="font-eyebrow text-eyebrow uppercase text-primary tracking-wider">CTSV WORKSPACE</span><span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-success/15 text-success">ONLINE</span></div><span class="font-headline-sm text-headline-sm text-on-surface truncate">Duyệt Đơn</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Thông báo quản trị" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors relative"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span></button><div class="flex items-center gap-space-xs pl-space-2xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20" src="https://lh3.googleusercontent.com/aida/AEtjO1W0l8ZttpDyGuTTvm_SN22zbXZVSAVdiVK3epOS2mPCirC2HqMpWm_sx4XStQSeTXJrulO5nSyj0xoElmflDyiAr_fWNluIxMhGWKYdm20RUXOFLA9dr1PW7GS-TkSGFEOwQ8OQ9FmykHwSsw1P4MwW-RU8RUAaBT2Di1xESTdQAcfO-KXZiOHTrOErBCUYnxmx03nRWIYErLZduQCI2xlGmp5MpZOv7TEOwQU3cpJl6GPMjUM7s4w4pBM"><div class="hidden sm:flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface leading-none">ThS. N. H. Quân</span><span class="font-eyebrow text-[10px] text-secondary-text">Ban CTSV</span></div></div></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-background min-h-screen px-gutter"><div class="flex flex-col w-full">
+<!-- Top Workspace Context Metric Bar -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md shadow-sm mb-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: &quot;FILL&quot; 1;">inbox_customize</span>
+</div>
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow uppercase text-primary tracking-wider">HỘP THƯ HÀNH CHÍNH CTSV</span>
+<span class="font-label-md text-label-md text-on-surface">37 Hồ sơ tổng tiếp nhận</span>
+</div>
+</div>
+<div class="flex items-center gap-space-2xs bg-surface px-space-xs py-1 rounded-full shadow-sm">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-error">8 đơn gấp</span>
+</div>
+</div>
+<!-- Horizontal Workflow Status Tabs -->
+<div class="w-full overflow-x-auto pb-space-2xs -mx-gutter px-gutter no-scrollbar mb-space-md">
+<div class="flex items-center gap-space-xs min-w-max" id="statusTabs">
+<button class="tab-item active flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-primary text-on-primary shadow-sm transition-all text-left">
+<span class="font-label-md text-label-md">Chờ duyệt</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface/20 text-on-primary font-code text-[11px]">8</span>
+</button>
+<button class="tab-item flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container text-on-surface-variant hover:text-primary transition-all text-left">
+<span class="font-label-md text-label-md">Cần bổ sung</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary font-code text-[11px]">3</span>
+</button>
+<button class="tab-item flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container text-on-surface-variant hover:text-primary transition-all text-left">
+<span class="font-label-md text-label-md">Đã phê duyệt</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary font-code text-[11px]">24</span>
+</button>
+<button class="tab-item flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container text-on-surface-variant hover:text-primary transition-all text-left">
+<span class="font-label-md text-label-md">Đã từ chối</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-secondary font-code text-[11px]">2</span>
+</button>
+</div>
+</div>
+<!-- Category Filter Chips (Liquid Glass / Capsule Design) -->
+<div class="w-full overflow-x-auto pb-space-2xs -mx-gutter px-gutter no-scrollbar mb-space-lg">
+<div class="flex items-center gap-space-xs min-w-max" id="filterChips">
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface shadow-sm text-primary flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: &quot;FILL&quot; 1;">tune</span>
+<span class="">Tất cả danh mục</span>
+</button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md shadow-sm text-secondary-text hover:text-primary flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]">psychology</span>
+<span class="">Học thuật &amp; AI</span>
+</button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md shadow-sm text-secondary-text hover:text-primary flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]">palette</span>
+<span class="">Văn hóa nghệ thuật</span>
+</button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md shadow-sm text-secondary-text hover:text-primary flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]">sports_soccer</span>
+<span class="">Thể thao</span>
+</button>
+<button class="filter-chip px-3 py-1.5 rounded-full bg-surface/80 backdrop-blur-md shadow-sm text-secondary-text hover:text-primary flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span class="">Gửi gần nhất</span>
+</button>
+</div>
+</div>
+<!-- Approval Queue Section Header -->
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Danh sách chờ thẩm định</span>
+<span class="font-label-sm text-label-sm text-secondary-text font-normal">(Ưu tiên theo thời hạn tổ chức)</span>
+</div>
+<button class="text-primary hover:text-tertiary flex items-center gap-0.5 font-label-sm text-label-sm" onclick="toggleBatchMode()">
+<span class="material-symbols-outlined text-[16px]">select_check_box</span>
+<span class="">Chọn nhiều</span>
+</button>
+</div>
+<!-- EVENT QUEUE CARDS CONTAINER -->
+<div class="flex flex-col gap-space-lg w-full">
+<!-- Card 1: URGENT / HIGHLIGHTED (AI Hackathon) -->
+<div class="w-full bg-surface rounded-xl shadow-md overflow-hidden relative transition-all duration-200 hover:shadow-lg">
+<!-- Top Urgency Indicator Strip -->
+<div class="w-full bg-gradient-to-r from-primary via-tertiary to-accent h-1.5"></div>
+<div class="p-space-md flex flex-col gap-space-sm">
+<!-- Badge row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-eyebrow text-eyebrow uppercase tracking-wide">
+              CÔNG NGHỆ &amp; HỌC THUẬT
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-eyebrow text-eyebrow uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+              GẤP: &lt; 10 NGÀY
+            </span>
+</div>
+<span class="font-code text-code text-secondary-text text-right flex-shrink-0">
+            2 giờ trước
+          </span>
+</div>
+<!-- Title & Submitter -->
+<div class="flex gap-space-sm items-start">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex-shrink-0 overflow-hidden shadow-inner">
+<img class="w-full h-full object-cover" data-alt="FPT University modern tech hackathon banner poster showing violet neural network nodes glowing neon data circuits and coding students collaborating on laptops in a high-tech alpha campus glass hall with soft purple atmospheric lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzLJ7-ZdDLrEGq9cHFsz1XYnNV_qq9Gw-ASXXgET-PIKKX1IFs8ADwIr5A8y5FMgG-w0xn_9fesl5qDh_p42dWbivceUuud26Q5b3fxaKXwKggFfOftSLbSAvYDT0MwoASqB8QpNxU8ZhRCfvaHFMTH65YDtFrX5OGCLY4p_Wjp-TNcz_mDgL8z2MOIfgenzYbJW0b5lPCZR7bSGnKQzQMir_rcyYUcerD5oV-_Hy8cDpXJWbNQKkb">
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+              Tuần lễ văn hóa Chi Chi Chành Chành 2026</h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[15px] text-secondary-text">account_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<span class="font-label-sm text-on-surface">Khánh Lê</span> • CLB Truyền thông Cóc Sài Gòn</span>
+</div>
+</div>
+</div>
+<!-- Meta Grid -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-primary">event</span>
+<span class="font-label-md text-on-surface">25.10.2026</span>
+<span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[17px] text-primary">meeting_room</span>
+<span class="truncate">Hall A &amp; Innovation Lab Tòa Alpha</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-secondary">groups</span>
+<span class="">120 Sinh viên</span>
+<span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[17px] text-success">stars</span>
+<span class="text-success font-label-md">+5 Điểm rèn luyện đề xuất</span>
+</div>
+</div>
+<!-- Review Step Tracker -->
+<div class="flex flex-col gap-1 pt-1">
+<div class="flex justify-between items-center text-secondary-text">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary animate-spin">sync</span>
+              Chờ thẩm định cơ sở vật chất
+            </span>
+<span class="font-code text-code text-primary font-semibold">Giai đoạn 3/4</span>
+</div>
+<!-- Progress bar track -->
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden flex">
+<div class="bg-success h-full w-1/4"></div>
+<div class="bg-success h-full w-1/4 ml-0.5"></div>
+<div class="bg-primary h-full w-1/4 ml-0.5 animate-pulse"></div>
+<div class="bg-surface-variant h-full w-1/4 ml-0.5"></div>
+</div>
+</div>
+<!-- Action CTA buttons -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs mt-1">
+<button class="w-full h-11 rounded-full bg-surface-container text-primary font-label-md text-label-md hover:bg-surface-container-high transition-colors flex items-center justify-center gap-1" onclick="openSummaryModal('FPTU AI Hackathon 2026')">
+<span class="material-symbols-outlined text-[18px]">quick_reference</span>
+<span class="">Tóm tắt hồ sơ</span>
+</button>
+<button class="w-full h-11 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md shadow-sm hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-1" onclick="approveEvent('FPTU AI Hackathon 2026')">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: &quot;FILL&quot; 1;">assignment_turned_in</span>
+<span class="">Xét duyệt ngay</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Acoustic Sunset (Cultural / Safety Pending) -->
+<div class="w-full bg-surface rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm transition-all duration-200 hover:shadow-md">
+<!-- Badge row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-eyebrow text-eyebrow uppercase tracking-wide">
+            VĂN HÓA NGHỆ THUẬT
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-eyebrow text-eyebrow uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            NGOÀI TRỜI
+          </span>
+</div>
+<span class="font-code text-code text-secondary-text text-right flex-shrink-0">
+          Hôm qua 14:32
+        </span>
+</div>
+<!-- Title & Submitter -->
+<div class="flex gap-space-sm items-start">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex-shrink-0 overflow-hidden shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Acoustic music evening session at tropical campus lakeside courtyard at sunset, student musicians with acoustic guitars and cajon drum, warm fairy string lights illuminating enthusiastic audience sitting on beanbags." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmCm9ma5k3HOT38p06M0k5kXX_eT_r9wgDRe-InfCASQOTuUp27K1vUe-cXQrol-IV9UxHH24pUlYJ4H69aFtmiDNeQwODwpLHsId_WMB0tDvYBhWnKEcJB9d-ayqCW4SSlcllAXtyZeZyw7Rk60fg5OVP6zCj7m_liIEysD0gg4zY00SXzyR4OqPcxO-1sPOC_fD6q3sU2I6zKVQEI6pDEtpznfGFVEnxNHlxSIiS6ONyNvNKHl8t">
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+            Acoustic Sunset: Fall Campus Sessions 2026
+          </h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[15px] text-secondary-text">account_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<span class="font-label-sm text-on-surface">Đỗ Thảo Vy</span> • CLB Âm nhạc &amp; Guitar FPTU
+            </span>
+</div>
+</div>
+</div>
+<!-- Meta Grid -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-primary">event</span>
+<span class="font-label-md text-on-surface">24.10.2026</span>
+<span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[17px] text-primary">pin_drop</span>
+<span class="truncate">Khuôn viên Hồ sen FPTU</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-secondary">chair</span>
+<span class="">150 chỗ ngồi</span>
+<span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[17px] text-primary">qr_code_scanner</span>
+<span class="">Check-in QR FPTU Pass</span>
+</div>
+</div>
+<!-- Compliance alert pill -->
+<div class="bg-surface-container px-space-sm py-2 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[18px] text-error flex-shrink-0">warning</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+            Chờ duyệt văn bản cam kết PCCC &amp; Vệ sinh
+          </span>
+</div>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-error/15 text-error flex-shrink-0">Thiếu 1 file</span>
+</div>
+<!-- Action buttons -->
+<div class="flex items-center justify-end gap-space-sm pt-space-2xs">
+<button class="px-3 h-10 rounded-full text-secondary-text hover:text-error font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[17px]">assignment_return</span>
+<span class="">Yêu cầu bổ sung</span>
+</button>
+<button class="px-5 h-10 rounded-full bg-surface-container-high text-primary font-label-md text-label-md hover:bg-primary hover:text-on-primary active:scale-95 transition-all flex items-center gap-1.5" onclick="openReviewSheet('Acoustic Sunset')">
+<span class="">Xem xét hồ sơ</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Sports Football Championship -->
+<div class="w-full bg-surface rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm transition-all duration-200 hover:shadow-md">
+<!-- Badge row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary font-eyebrow text-eyebrow uppercase tracking-wide">
+            THỂ THAO &amp; THỂ CHẤT
+          </span>
+<span class="px-2 py-0.5 rounded-full bg-success/15 text-success font-eyebrow text-eyebrow uppercase">
+            HỘI THAO TOÀN TRƯỜNG
+          </span>
+</div>
+<span class="font-code text-code text-secondary-text text-right flex-shrink-0">
+          13.10.2026
+        </span>
+</div>
+<!-- Title & Submitter -->
+<div class="flex gap-space-sm items-start">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex-shrink-0 overflow-hidden shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Vibrant campus football match taking place under bright afternoon sunlight on lush green synthetic turf stadium of FPT University, university athletes in sports kits cheering together in dynamic team action." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTSaB56bQ-_3ZjNSqHK_7JQOJjcT2kBQfGVxsiHLPce740p7LHSUcWK7dwUXjgEni35VmlV1s-ZEfNdvraNSDmtxi9gvgS6xOA7wRLYQMNC7sec-4ygHvcXaKmG4BjtLIdtGrPt0NM2T5VlNlF0LzMKWre-f_nWXXAZW7RXM25YBaMv6oQm6f4O0bo95J6BDkSKS1D4N_VJNTNJulQiYBTEyRiwRrs0bCNy39gk_w4M9uf4_FFLc6U">
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+            FPTU Football Championship 2026 - Vòng bảng
+          </h3>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-[15px] text-secondary-text">account_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<span class="font-label-sm text-on-surface">Lê Tuấn Kiệt</span> • Ban Chủ nhiệm CLB Thể thao
+            </span>
+</div>
+</div>
+</div>
+<!-- Meta Grid -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-primary">event_repeat</span>
+<span class="font-label-md text-on-surface">28.10 - 05.11.2026</span>
+<span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[17px] text-primary">stadium</span>
+<span class="truncate">Sân bóng đá FPTU Park</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-secondary">groups_2</span>
+<span class="">16 Đội bóng tranh tài (320 VĐV)</span>
+</div>
+</div>
+<!-- Medical status checkpoint -->
+<div class="bg-surface-container-high/60 px-space-sm py-2 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0">medical_services</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+            Chờ phòng Y tế phê duyệt trực sân bãi
+          </span>
+</div>
+<span class="font-label-sm text-label-sm text-primary flex-shrink-0">Tiến độ 2/3</span>
+</div>
+<!-- Action buttons -->
+<div class="flex items-center justify-end gap-space-sm pt-space-2xs">
+<button class="px-3 h-10 rounded-full text-secondary-text hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[17px]">chat_bubble_outline</span>
+<span class="">Ghi chú nội bộ</span>
+</button>
+<button class="px-5 h-10 rounded-full bg-surface-container-high text-primary font-label-md text-label-md hover:bg-primary hover:text-on-primary active:scale-95 transition-all flex items-center gap-1.5" onclick="openReviewSheet('FPTU Football Championship')">
+<span class="">Xem xét hồ sơ</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SLA & Processing Assurance Banner -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md mt-space-lg shadow-sm flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface">Cam kết xử lý hồ sơ hành chính</span>
+<p class="font-body-sm text-body-sm text-secondary-text leading-relaxed">
+        Thời gian xử lý cam kết: Trong vòng <strong>24h - 48h</strong> làm việc kể từ lúc nhận đủ hồ sơ hợp lệ từ Ban tổ chức sự kiện sinh viên.
+      </p>
+</div>
+</div>
+<!-- Interactive Quick Approval Toast/Modal (Micro-interaction) -->
+<div class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-gutter" id="quickModal">
+<div class="w-full max-w-md bg-surface rounded-2xl p-space-lg shadow-2xl flex flex-col gap-space-md animate-in fade-in slide-in-from-bottom-6 duration-200">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">task_alt</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Phê duyệt cấp phép sự kiện</h4>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" onclick="closeModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col gap-1">
+<span class="font-eyebrow text-eyebrow uppercase text-secondary">Tên sự kiện thẩm định:</span>
+<span class="font-label-md text-label-md text-primary" id="modalEventTitle">...</span>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Ý kiến chỉ đạo từ Ban CTSV (Gửi thông báo đến BTC):</label>
+<textarea class="w-full bg-surface-container rounded-lg p-space-sm font-body-sm text-body-sm text-on-surface placeholder-secondary-text outline-none focus:ring-2 focus:ring-primary/40 resize-none" placeholder="Đồng ý chủ trương tổ chức. Đề nghị BTC liên hệ phòng IT trước 24h để cấu hình hệ thống mạng Hall A..." rows="3"></textarea>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 h-11 rounded-full bg-surface-container text-secondary-text font-label-md text-label-md hover:bg-surface-variant transition-colors" onclick="closeModal()">
+          Để sau
+        </button>
+<button class="flex-1 h-11 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:opacity-95 shadow-md flex items-center justify-center gap-1.5" onclick="confirmApproval()">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="">Xác nhận duyệt</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function openSummaryModal(title) {
+    const modal = document.getElementById('quickModal');
+    const titleEl = document.getElementById('modalEventTitle');
+    titleEl.innerText = title;
+    modal.classList.remove('hidden');
+  }
+
+  function approveEvent(title) {
+    openSummaryModal(title);
+  }
+
+  function openReviewSheet(title) {
+    openSummaryModal(title);
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('quickModal');
+    modal.classList.add('hidden');
+  }
+
+  function confirmApproval() {
+    alert('Hồ sơ sự kiện đã được phê duyệt thành công. Thông báo đã được gửi tới Ban Tổ Chức!');
+    closeModal();
+  }
+
+  function toggleBatchMode() {
+    alert('Đã kích hoạt chế độ chọn duyệt hàng loạt (Batch approval mode).');
+  }
+
+  // Active Tab Toggling
+  const tabButtons = document.querySelectorAll('#statusTabs .tab-item');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => {
+        b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+        b.classList.add('bg-surface-container', 'text-on-surface-variant');
+      });
+      btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+      btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+    });
+  });
+
+  // Filter Chips Active Toggling
+  const chips = document.querySelectorAll('#filterChips .filter-chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => {
+        c.classList.remove('bg-surface', 'text-primary');
+        c.classList.add('bg-surface/80', 'text-secondary-text');
+      });
+      chip.classList.remove('bg-surface/80', 'text-secondary-text');
+      chip.classList.add('bg-surface', 'text-primary');
+    });
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(35,25,66,0.06)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 max-w-lg mx-auto px-space-sm"><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-all" data-path="tong-quan" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Tổng quan</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-all relative" data-path="duyet-don" href="#"><span class="material-symbols-outlined text-[24px]">fact_check</span><span class="font-label-sm text-label-sm mt-0.5">Duyệt đơn</span><span class="absolute top-1 right-3 px-1.5 py-0.2 rounded-full bg-primary text-on-primary text-[9px] font-bold">5</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-all" data-path="giam-sat-su-kien" href="#"><span class="material-symbols-outlined text-[24px]">farsight_digital</span><span class="font-label-sm text-label-sm mt-0.5">Giám sát</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[44px] text-on-surface-variant transition-all" data-path="quan-tri-nguoi-dung" href="#"><span class="material-symbols-outlined text-[24px]">manage_accounts</span><span class="font-label-sm text-label-sm mt-0.5">Người dùng</span></a></div></nav>
+
+</body></html>

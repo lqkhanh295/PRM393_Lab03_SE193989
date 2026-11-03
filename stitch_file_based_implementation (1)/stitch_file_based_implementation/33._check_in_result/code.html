@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><title>FPTU Event Leader Operations</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;min-height:100%;margin:0;padding:0;font-family:'Be Vietnam Pro',sans-serif;-webkit-font-smoothing:antialiased;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container": "#f3ebf8", "surface-dim": "#ded7e4", "error-container": "#ffdad6", "on-secondary-container": "#5e5380", "on-primary-container": "#d8cfff", "on-background": "#1d1a23", "tertiary-fixed-dim": "#d6bbf9", "primary-fixed": "#e6deff", "on-secondary-fixed-variant": "#4a406b", "secondary-fixed": "#e8deff", "on-error-container": "#93000a", "surface-tint": "#605691", "on-surface": "#1d1a23", "surface": "#FFFFFF", "tertiary-container": "#685187", "on-tertiary-fixed-variant": "#523c71", "on-primary-fixed-variant": "#483f77", "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary": "#463c75", "tertiary": "#4f3a6e", "on-tertiary-container": "#e2caff", "on-error": "#ffffff", "on-surface-variant": "#48454f", "tertiary-fixed": "#eddcff", "on-secondary-fixed": "#1e143d", "surface-container-highest": "#e7e0ed", "surface-variant": "#e7e0ed", "secondary-fixed-dim": "#ccbff3", "surface-container-low": "#f8f1fe", "secondary-text": "#706B78", "secondary": "#625885", "success": "#4E8B65", "accent": "#BE95C4", "outline": "#797580", "surface-bright": "#fef7ff", "secondary-container": "#d8cafe", "inverse-surface": "#322f38", "inverse-primary": "#cabeff", "outline-variant": "#c9c4d0", "light-accent": "#E0B1CB", "surface-container-high": "#ede5f2", "on-primary": "#ffffff", "on-secondary": "#ffffff", "on-primary-fixed": "#1c1149", "background": "#F8F6FA", "on-tertiary-fixed": "#250f42", "border": "#E7E3EB", "inverse-on-surface": "#f5eefb", "error": "#C65B5B", "primary-container": "#5e548e", "primary-fixed-dim": "#cabeff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.375rem", "space-lg": "1rem", "gutter-sm": "0.75rem", "margin": "1.25rem", "gutter": "1rem", "space-xl": "1.5rem", "space-3xl": "3rem", "space-2xl": "2rem", "space-2xs": "0.25rem", "margin-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "0.75rem" }, fontFamily: { "display-mobile": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"] }, fontSize: { "display-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "600" }], "headline-sm": ["17px", { "lineHeight": "22px", "fontWeight": "600" }], "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "code": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }], "eyebrow": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(35,25,66,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Quay lại" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:text-primary active:scale-95 transition-all" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[22px]">arrow_back_ios_new</span></button><img alt="Brand logo. - Primary color: #5e548e - Font: beVietnamPro - Mode: light - Roundness: rounded-md" class="h-7 w-auto object-contain flex-shrink-0 hidden sm:block" src="https://lh3.googleusercontent.com/aida/AEtjO1USscNBGgUyQdo4rGl2gIAWpHgPdhbGbnfyiRgoG2z4-D_2jtzImvpALeS7AJy5XmmwMq3ZfKdKh_5__P-Hu62mNK9cXMhtKgH7xG7mllaKIdNkKqgizadRYDfmrOnhQjHbRQELvQZA9SQjGANhJi8Q_w9Ldne0EwtGJni5rlMTlgW5h8AYk0UZn-0JIHY4wAoySCo_rl16zKPiY3SgKXOaATsNrQZoHXLtKmqYOd7gIPozxLnUk8gwLPk"/><div class="flex flex-col min-w-0"><span class="text-eyebrow font-eyebrow uppercase text-primary tracking-wider">Điều hành sự kiện</span><h1 class="text-headline-sm font-headline-sm text-on-surface truncate">Check In Detail Modal</h1></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><a aria-label="Quét mã QR" class="w-11 h-11 flex items-center justify-center rounded-full text-secondary hover:text-primary transition-colors" data-path="live-check-in-scanner" href="#"><span class="material-symbols-outlined text-[22px]">qr_code_scanner</span></a><button aria-label="Thông báo" class="w-11 h-11 flex items-center justify-center rounded-full text-secondary hover:text-primary transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_8px_rgba(35,25,66,0.08)]" src="https://lh3.googleusercontent.com/aida/AEtjO1W0l8ZttpDyGuTTvm_SN22zbXZVSAVdiVK3epOS2mPCirC2HqMpWm_sx4XStQSeTXJrulO5nSyj0xoElmflDyiAr_fWNluIxMhGWKYdm20RUXOFLA9dr1PW7GS-TkSGFEOwQ8OQ9FmykHwSsw1P4MwW-RU8RUAaBT2Di1xESTdQAcfO-KXZiOHTrOErBCUYnxmx03nRWIYErLZduQCI2xlGmp5MpZOv7TEOwQU3cpJl6GPMjUM7s4w4pBM"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-background"><div class="flex flex-col w-full">
+<div class="px-margin pt-space-md pb-space-3xl flex flex-col gap-space-lg max-w-md mx-auto w-full">
+<!-- Mode Selector Tabs (Staff Simulation & QA Demo) -->
+<div class="bg-surface-container rounded-full p-space-2xs flex items-center shadow-sm">
+<button class="flex-1 py-space-xs px-space-sm rounded-full bg-surface text-primary font-label-md text-label-md shadow-sm transition-all flex items-center justify-center gap-space-xs" id="btn-tab-success" onclick="switchState('success')">
+<span class="material-symbols-outlined text-[16px] text-success" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Hợp lệ</span>
+</button>
+<button class="flex-1 py-space-xs px-space-sm rounded-full text-secondary font-label-md text-label-md transition-all flex items-center justify-center gap-space-xs" id="btn-tab-duplicate" onclick="switchState('duplicate')">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Trùng lặp</span>
+</button>
+<button class="flex-1 py-space-xs px-space-sm rounded-full text-secondary font-label-md text-label-md transition-all flex items-center justify-center gap-space-xs" id="btn-tab-invalid" onclick="switchState('invalid')">
+<span class="material-symbols-outlined text-[16px]">gpp_bad</span>
+<span>Không hợp lệ</span>
+</button>
+<button class="flex-1 py-space-xs px-space-sm rounded-full text-secondary font-label-md text-label-md transition-all flex items-center justify-center gap-space-xs" id="btn-tab-wrong" onclick="switchState('wrong')">
+<span class="material-symbols-outlined text-[16px]">wrong_location</span>
+<span>Sai sự kiện</span>
+</button>
+</div>
+<!-- MAIN CARD CONTAINER -->
+<div class="relative" id="result-card-wrapper">
+<!-- STATE 1: SUCCESS (Default) -->
+<div class="flex flex-col gap-space-md" id="state-success">
+<!-- Liquid Glass Verification Ticket Card -->
+<div class="relative rounded-2xl bg-surface/90 backdrop-blur-xl p-space-xl shadow-xl overflow-hidden">
+<!-- Ambient Glow Blobs -->
+<div class="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-success/10 blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -left-20 w-44 h-44 rounded-full bg-primary/10 blur-2xl pointer-events-none"></div>
+<!-- Top Badge & Header -->
+<div class="flex items-center justify-between relative z-10 mb-space-sm">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-success/10 text-success font-eyebrow text-eyebrow uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>
+              Xác thực tức thì
+            </span>
+<span class="font-code text-code text-secondary-text">TICKET #FPT-CID-84920</span>
+</div>
+<!-- Hero Icon with Spatial Ripple Effect -->
+<div class="flex flex-col items-center text-center my-space-sm relative z-10">
+<div class="relative flex items-center justify-center w-20 h-20 mb-space-sm">
+<div class="absolute inset-0 rounded-full bg-success/15 animate-ping opacity-60"></div>
+<div class="w-16 h-16 rounded-full bg-gradient-to-tr from-success to-emerald-400 flex items-center justify-center shadow-lg shadow-success/30 text-surface">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Check-in thành công!</h2>
+<p class="font-body-sm text-body-sm text-secondary-text mt-0.5">Sinh viên đủ điều kiện tham dự phiên trực tiếp</p>
+</div>
+<!-- Attendee Editorial Identity Card -->
+<div class="rounded-xl bg-surface-container-low p-space-md my-space-xs relative z-10">
+<div class="flex items-center gap-space-md">
+<img class="w-14 h-14 rounded-full object-cover shadow-sm flex-shrink-0" data-alt="Chân dung sinh viên đại học FPT nam trẻ trung, áo thun cam sự kiện, ánh sáng tự nhiên studio hiện đại, phong cách ảnh thẻ đại học chỉn chu sắc nét, phông nền tím nhạt đồng bộ tone ứng dụng" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAj8BYB_R5awrWOX6AE2L7Ng7VwYR9kDHIasE0cCIpSsGjPuha819Pu4dd5v1BB-nR56zJl8JYoX5S92qWYg5Fn5ZylT5PkrxJtwh0c39lnyPNZ09gcVZwi1nk98JfK9yrBSChAVoFtsCA2l2_2je-li4lrZYG-4KrAkVZ_EtHOCowoLiOAgdOZUvXVsEgcDM2rvT-HQza0QH0LuhljMIiAXfHuDt-jnrUA8R4QIjfs9mnc-cMVI6ui"/>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<h3 class="font-headline-md text-headline-md text-on-surface truncate">Khánh Lê</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-space-xs mt-0.5">
+<span class="font-code text-code font-bold text-primary bg-primary-fixed px-1.5 py-0.5 rounded">MSSV: SE170248</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary-text truncate mt-1">Kỹ thuật phần mềm (SE) • FPTU HCMC</p>
+</div>
+</div>
+</div>
+<!-- Seat & Arena Spatial Highlight -->
+<div class="grid grid-cols-2 gap-space-sm my-space-xs relative z-10">
+<div class="rounded-xl bg-surface-container p-space-md flex flex-col justify-center">
+<div class="flex items-center gap-1 text-secondary-text font-eyebrow text-eyebrow uppercase">
+<span class="material-symbols-outlined text-[15px]">event_seat</span>
+                Vị trí ghế ngồi
+              </div>
+<span class="font-headline-sm text-headline-sm text-primary mt-1">Khu A - Ghế 14</span>
+<span class="font-body-sm text-body-sm text-secondary-text">Tầng trệt • Sảnh Trống Đồng</span>
+</div>
+<div class="rounded-xl bg-surface-container p-space-md flex flex-col justify-center">
+<div class="flex items-center gap-1 text-secondary-text font-eyebrow text-eyebrow uppercase">
+<span class="material-symbols-outlined text-[15px]">sensor_door</span>
+                Cổng kiểm soát
+              </div>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-1">Cửa Alpha 01</span>
+<span class="font-body-sm text-body-sm text-secondary-text truncate">Staff Minh Anh (STF-04)</span>
+</div>
+</div>
+<!-- Perforation Notch Line Visual -->
+<div class="relative my-space-md flex items-center justify-between">
+<div class="w-5 h-5 rounded-full bg-background -ml-7 shadow-inner"></div>
+<div class="flex-1 mx-2 flex items-center justify-between overflow-hidden">
+<div class="w-full border-t border-dashed border-outline-variant/60"></div>
+</div>
+<div class="w-5 h-5 rounded-full bg-background -mr-7 shadow-inner"></div>
+</div>
+<!-- Event Log Details -->
+<div class="space-y-space-sm relative z-10">
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary-text font-body-sm">Sự kiện chính</span>
+<span class="font-label-md text-label-md text-on-surface text-right truncate ml-4">Campus Innovation Day 2026</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary-text font-body-sm">Thời gian ghi nhận</span>
+<span class="font-code text-code text-on-surface font-semibold">08:31:42 (12.10.2026)</span>
+</div>
+<div class="flex items-center justify-between text-body-sm">
+<span class="text-secondary-text font-body-sm">Loại vé</span>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-primary font-label-sm text-label-sm">Standard Attendee</span>
+</div>
+</div>
+<!-- Gamified Delight: DRL Grant Pill -->
+<div class="mt-space-md rounded-xl bg-gradient-to-r from-success/15 via-accent/20 to-primary/10 p-space-md flex items-center gap-space-md relative z-10">
+<div class="w-10 h-10 rounded-full bg-success text-surface flex items-center justify-center shadow-md flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span>+5 Điểm rèn luyện (ĐRL)</span>
+<span class="material-symbols-outlined text-success text-[16px]">check</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary-text truncate">Đã ghi nhận tự động vào hệ thống FAP</p>
+</div>
+</div>
+</div>
+<!-- Primary Scan Action -->
+<button class="w-full h-12 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md shadow-lg shadow-primary/25 flex items-center justify-center gap-space-xs active:scale-[0.98] transition-all" onclick="triggerNextScanAnimation()" type="button">
+<span class="material-symbols-outlined text-[20px]">qr_code_scanner</span>
+<span>Quét người tiếp theo (Next Scan)</span>
+</button>
+</div>
+<!-- STATE 2: DUPLICATE CHECK-IN ERROR -->
+<div class="hidden flex flex-col gap-space-md" id="state-duplicate">
+<div class="relative rounded-2xl bg-surface/90 backdrop-blur-xl p-space-xl shadow-xl overflow-hidden">
+<div class="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-error/10 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-error-container text-on-error-container font-eyebrow text-eyebrow uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+              Cảnh báo bảo mật
+            </span>
+<span class="font-code text-code text-secondary-text">DUPLICATE DETECTED</span>
+</div>
+<div class="flex flex-col items-center text-center my-space-sm">
+<div class="w-16 h-16 rounded-full bg-error-container text-error flex items-center justify-center mb-space-sm shadow-md">
+<span class="material-symbols-outlined text-[36px]">history_toggle_off</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-error">Đã check-in lúc 08:15</h2>
+<p class="font-body-sm text-body-sm text-secondary-text mt-1 max-w-xs">Mã QR này đã qua cổng trước đó 16 phút. Không cho phép quét lần 2 nhằm chống gian lận vé.</p>
+</div>
+<!-- Previous Entrance Details -->
+<div class="rounded-xl bg-surface-container p-space-md space-y-space-xs my-space-sm">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Chủ sở hữu vé:</span>
+<span class="font-label-md text-on-surface">Võ Minh Triết (SE160911)</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Thời gian check-in đầu:</span>
+<span class="font-code text-code text-error font-semibold">08:15:22 (12.10.2026)</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Vị trí đã vào:</span>
+<span class="font-label-md text-on-surface">Cửa Beta 02 • Staff Hoàng Long</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Thiết bị quét:</span>
+<span class="font-label-md text-on-surface">Scanner PDA Terminal #03</span>
+</div>
+</div>
+<div class="rounded-xl bg-error-container/50 p-space-sm flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-error text-[18px] mt-0.5">policy</span>
+<p class="font-body-sm text-body-sm text-on-surface">Yêu cầu giữ sinh viên lại bàn đối soát bảo mật nếu phát hiện dấu hiệu chia sẻ vé chụp màn hình.</p>
+</div>
+</div>
+<div class="flex gap-space-sm">
+<button class="flex-1 h-12 rounded-full bg-surface-container text-on-surface font-label-md text-label-md shadow-sm flex items-center justify-center gap-space-xs active:scale-[0.98] transition-all" onclick="switchState('success')" type="button">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>Xác minh thủ công</span>
+</button>
+<button class="flex-1 h-12 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-lg shadow-primary/25 flex items-center justify-center gap-space-xs active:scale-[0.98] transition-all" onclick="switchState('success')" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+<span>Quét lại</span>
+</button>
+</div>
+</div>
+<!-- STATE 3: INVALID QR CODE ERROR -->
+<div class="hidden flex flex-col gap-space-md" id="state-invalid">
+<div class="relative rounded-2xl bg-surface/90 backdrop-blur-xl p-space-xl shadow-xl overflow-hidden">
+<div class="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-error/15 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-error-container text-on-error-container font-eyebrow text-eyebrow uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+              Lỗi xác thực
+            </span>
+<span class="font-code text-code text-secondary-text">SIGNATURE INVALID</span>
+</div>
+<div class="flex flex-col items-center text-center my-space-sm">
+<div class="w-16 h-16 rounded-full bg-error-container text-error flex items-center justify-center mb-space-sm shadow-md">
+<span class="material-symbols-outlined text-[36px]">no_encryption</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-error">QR không hợp lệ</h2>
+<p class="font-body-sm text-body-sm text-secondary-text mt-1 max-w-xs">Chữ ký số (Digital Cryptographic Token) không khớp hoặc mã QR bị làm giả mạo ngoài hệ thống FPTU Event Cloud.</p>
+</div>
+<!-- Payload Inspect -->
+<div class="rounded-xl bg-surface-container p-space-md space-y-space-xs my-space-sm">
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Chuỗi thô quét được:</span>
+<span class="font-code text-code text-on-surface truncate ml-2">fptu://hack_pass_2910...</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Thuật toán khóa:</span>
+<span class="font-label-md text-error">ED25519 Rejection</span>
+</div>
+<div class="flex justify-between items-center text-body-sm">
+<span class="text-secondary-text">Khuyến nghị xử lý:</span>
+<span class="font-label-md text-on-surface">Yêu cầu mở App chính thức</span>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-high p-space-md flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">smartphone</span>
+<p class="font-body-sm text-body-sm text-secondary-text">Hướng dẫn người tham dự vào mục <strong class="text-on-surface">"Vé của tôi"</strong> trên ứng dụng FPTU Life để lấy mã động mới nhất.</p>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-lg shadow-primary/25 flex items-center justify-center gap-space-xs active:scale-[0.98] transition-all" onclick="switchState('success')" type="button">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>Quét lại QR khác</span>
+</button>
+</div>
+<!-- STATE 4: WRONG EVENT ERROR -->
+<div class="hidden flex flex-col gap-space-md" id="state-wrong">
+<div class="relative rounded-2xl bg-surface/90 backdrop-blur-xl p-space-xl shadow-xl overflow-hidden">
+<div class="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-accent/20 blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-eyebrow text-eyebrow uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Sai địa điểm / ca
+            </span>
+<span class="font-code text-code text-secondary-text">MISMATCH EVENT</span>
+</div>
+<div class="flex flex-col items-center text-center my-space-sm">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-primary flex items-center justify-center mb-space-sm shadow-md">
+<span class="material-symbols-outlined text-[36px]">wrong_location</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Vé không thuộc sự kiện này</h2>
+<p class="font-body-sm text-body-sm text-secondary-text mt-1 max-w-xs">Vé hợp lệ nhưng đăng ký cho chương trình khác hoặc diễn ra vào khung giờ khác trong ngày.</p>
+</div>
+<!-- Comparison Grid -->
+<div class="rounded-xl bg-surface-container p-space-md space-y-space-sm my-space-sm">
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase">Sự kiện trên vé sinh viên</span>
+<span class="font-headline-sm text-headline-sm text-error mt-0.5">Workshop AI &amp; Game Design 2026</span>
+<span class="font-body-sm text-body-sm text-secondary-text">Phòng Hội thảo NVH Sinh Viên • 14:00 Chiều nay</span>
+</div>
+<div class="border-t border-dashed border-outline-variant/60 my-space-xs"></div>
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase">Sự kiện hiện tại ở cửa này</span>
+<span class="font-headline-sm text-headline-sm text-success mt-0.5">Campus Innovation Day 2026</span>
+<span class="font-body-sm text-body-sm text-secondary-text">Hội trường A • 08:00 - 12:00 Sáng</span>
+</div>
+</div>
+<div class="rounded-xl bg-primary-fixed p-space-sm flex items-center gap-space-xs text-on-primary-fixed">
+<span class="material-symbols-outlined text-primary text-[18px]">map</span>
+<p class="font-body-sm text-body-sm">Điều phối sinh viên sang <strong class="text-primary font-semibold">Tòa Beta - Tầng 3</strong> để tham dự đúng sự kiện.</p>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-lg shadow-primary/25 flex items-center justify-center gap-space-xs active:scale-[0.98] transition-all" onclick="switchState('success')" type="button">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>Quét lại</span>
+</button>
+</div>
+</div>
+<!-- Security Handshake & Terminal Info Footer -->
+<div class="flex items-center justify-between text-secondary-text font-body-sm px-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span>Online • Sync 0.12s</span>
+</div>
+<div class="font-code text-code">DEVICE: FPTU-STATION-ALPHA01</div>
+</div>
+</div>
+</div>
+<script>
+  function switchState(stateName) {
+    const states = ['success', 'duplicate', 'invalid', 'wrong'];
+    states.forEach(s => {
+      const el = document.getElementById('state-' + s);
+      const tab = document.getElementById('btn-tab-' + s);
+      if (el) {
+        if (s === stateName) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      }
+      if (tab) {
+        if (s === stateName) {
+          tab.className = "flex-1 py-space-xs px-space-sm rounded-full bg-surface text-primary font-label-md text-label-md shadow-sm transition-all flex items-center justify-center gap-space-xs";
+        } else {
+          tab.className = "flex-1 py-space-xs px-space-sm rounded-full text-secondary font-label-md text-label-md transition-all flex items-center justify-center gap-space-xs";
+        }
+      }
+    });
+  }
+
+  function triggerNextScanAnimation() {
+    const card = document.getElementById('result-card-wrapper');
+    if (card) {
+      card.classList.add('opacity-40', 'scale-[0.97]');
+      setTimeout(() => {
+        card.classList.remove('opacity-40', 'scale-[0.97]');
+      }, 250);
+    }
+  }
+</script></main></body></html>

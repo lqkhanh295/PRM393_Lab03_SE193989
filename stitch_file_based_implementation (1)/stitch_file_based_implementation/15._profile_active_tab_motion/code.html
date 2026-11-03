@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-on-surface": "#f5eefb", "tertiary-fixed-dim": "#d6bbf9", "surface-dim": "#ded7e4", "on-surface-variant": "#48454f", "on-surface": "#1d1a23", "on-secondary-fixed": "#1e143d", "on-tertiary-fixed": "#250f42", "tertiary": "#4f3a6e", "border": "#E7E3EB", "tertiary-fixed": "#eddcff", "success": "#4E8B65", "surface-container-lowest": "#ffffff", "outline": "#797580", "background": "#F8F6FA", "on-secondary": "#ffffff", "light-accent": "#E0B1CB", "surface-container-low": "#f8f1fe", "secondary-container": "#d8cafe", "primary": "#463c75", "outline-variant": "#c9c4d0", "on-secondary-fixed-variant": "#4a406b", "inverse-surface": "#322f38", "surface-container-high": "#ede5f2", "surface": "#FFFFFF", "primary-fixed": "#e6deff", "error-container": "#ffdad6", "surface-container-highest": "#e7e0ed", "on-error": "#ffffff", "inverse-primary": "#cabeff", "secondary-text": "#706B78", "primary-fixed-dim": "#cabeff", "tertiary-container": "#685187", "on-tertiary": "#ffffff", "surface-container": "#f3ebf8", "surface-tint": "#605691", "surface-bright": "#fef7ff", "secondary-fixed": "#e8deff", "on-tertiary-fixed-variant": "#523c71", "on-error-container": "#93000a", "on-background": "#1d1a23", "secondary-fixed-dim": "#ccbff3", "primary-container": "#5e548e", "surface-variant": "#e7e0ed", "on-secondary-container": "#5e5380", "accent": "#BE95C4", "on-primary-fixed": "#1c1149", "secondary": "#625885", "error": "#C65B5B", "on-primary": "#ffffff", "on-primary-fixed-variant": "#483f77", "on-primary-container": "#d8cfff", "on-tertiary-container": "#e2caff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter-sm": "0.75rem", "gutter": "1rem", "margin": "1.25rem", "space-lg": "1rem", "space-md": "0.75rem", "space-xs": "0.375rem", "space-sm": "0.5rem", "space-3xl": "3rem", "margin-lg": "1.5rem", "space-2xs": "0.25rem", "space-2xl": "2rem", "space-xl": "1.5rem" }, fontFamily: { "headline-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "display": ["Be Vietnam Pro"], "display-mobile": ["Be Vietnam Pro"], "eyebrow": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "code": ["Be Vietnam Pro"], "headline-lg": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"] }, fontSize: { "headline-sm": ["17px", { lineHeight: "22px", fontWeight: "600" }], "label-md": ["13px", { lineHeight: "16px", fontWeight: "600" }], "display": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "display-mobile": ["28px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "eyebrow": ["11px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "700" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", fontWeight: "600" }], "code": ["13px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500" }], "headline-lg": ["24px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }], "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.005em", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;background-color:#F8F6FA;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen antialiased"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(35,25,66,0.04)]"><div class="h-16 px-margin flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0 flex-1"><img alt="Campus Event FPTU Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WXmOFTA_2WDt9P5GDZe5gLP5hBY_JqBF9cyxZUOsDY7ymFV535EsCv6jZLCVzXU4VfcYD48bjz-WTcgfxuwGosGPO2a8Fp6knUO8volUaneN2h3Vie1QnA3ft9mgzpFjye1lUNs3AkOusgBnO8q2HIrS4MabEt8v8w5phfwLz7j1e_B0Sn2TEl8K59pSpzXyiKK2O8DieoqXz0Amk6JLzW4Z5TfvIgPhJ4Aimi4j4iOdriTu36xu4TH-E"/><div class="flex flex-col min-w-0"><span class="font-eyebrow text-eyebrow text-secondary-text uppercase tracking-wider truncate">FPT University HCMC</span><span class="font-headline-sm text-headline-sm text-on-surface truncate">15. Profile</span></div></div><div class="flex items-center gap-space-2xs flex-shrink-0"><a class="w-11 h-11 flex items-center justify-center rounded-full text-secondary-text hover:text-on-surface transition-colors" data-path="14.-notifications" href="#"><span class="material-symbols-outlined text-[22px]">notifications</span></a><a class="w-11 h-11 flex items-center justify-center rounded-full text-secondary-text hover:text-on-surface transition-colors" data-path="04.-event-map" href="#"><span class="material-symbols-outlined text-[22px]">map</span></a><a class="w-11 h-11 flex items-center justify-center ml-space-2xs" data-path="15.-profile" href="#"><img alt="Khánh Lê Profile" class="w-8 h-8 rounded-full object-cover shadow-[0_2px_6px_rgba(35,25,66,0.1)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmId_oyLWDmKsrGfW4IIeDi_8BqAHjDsXY_KGCiKqlkNEwtsJX2bkjHPZm1FKmwlDOxK85EjzC5_P-f6kL4KlEy3Vju4H37X8KzC2-kypXpOPa2dpUOD219iaKQ3pLyOum7WCVWNEPTUj10US9vCLC1EvIIbiQSU1DQkULbKZlSTKZrND6ay_TFG-qoCChLIGDZqQz8QGHiWFvV35yjppgd4lFuGvvIm9IEYFW6JB2Am7gTrhT5m4u"/></a></div></div></header><main class="flex flex-col relative w-full pt-16 pb-28 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Profile Header Canvas -->
+<div class="px-margin pt-space-md pb-space-lg flex flex-col items-center text-center relative overflow-hidden">
+<!-- Ambient glow decorative aura -->
+<div class="absolute -top-12 inset-x-0 mx-auto w-48 h-48 bg-gradient-to-b from-primary-fixed/40 to-transparent blur-3xl pointer-events-none -z-10"></div>
+<!-- Student Avatar with Gradient Ring Frame -->
+<div class="relative p-1 rounded-full bg-gradient-to-tr from-primary-container via-accent to-light-accent shadow-[0_10px_25px_-5px_rgba(94,84,142,0.25)]">
+<div class="p-0.5 rounded-full bg-surface">
+<img alt="Khánh Lê" class="w-24 h-24 rounded-full object-cover shadow-inner" src="https://lh3.googleusercontent.com/aida/AEtjO1W0l8ZttpDyGuTTvm_SN22zbXZVSAVdiVK3epOS2mPCirC2HqMpWm_sx4XStQSeTXJrulO5nSyj0xoElmflDyiAr_fWNluIxMhGWKYdm20RUXOFLA9dr1PW7GS-TkSGFEOwQ8OQ9FmykHwSsw1P4MwW-RU8RUAaBT2Di1xESTdQAcfO-KXZiOHTrOErBCUYnxmx03nRWIYErLZduQCI2xlGmp5MpZOv7TEOwQU3cpJl6GPMjUM7s4w4pBM"/>
+</div>
+<!-- Verified Badge Accent on Avatar -->
+<div class="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[15px]" style='font-variation-settings: "FILL" 1;'>verified</span>
+</div>
+</div>
+<!-- Student Identity Block -->
+<div class="mt-space-md flex flex-col items-center">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Khánh Lê</h1>
+<p class="font-body-md text-body-md text-secondary-text mt-0.5 font-medium">Kỹ thuật phần mềm (Software Engineering)</p>
+<p class="font-body-sm text-body-sm text-secondary-text">K17 • FPT University HCMC</p>
+<!-- Badges Row: MSSV & FAP Verified -->
+<div class="flex items-center gap-space-xs mt-space-sm">
+<div class="inline-flex items-center px-2.5 py-1 rounded-full bg-surface-container text-on-surface">
+<span class="font-code text-code font-semibold tracking-wider">SE170248</span>
+</div>
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-success">
+<span class="material-symbols-outlined text-[14px]" style='font-variation-settings: "FILL" 1;'>verified_user</span>
+<span class="font-label-sm text-label-sm">FAP Verified</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Summary (Horizontal Clean Metrics Row) -->
+<div class="px-margin mb-space-lg">
+<div class="w-full bg-surface rounded-2xl shadow-[0_4px_16px_-2px_rgba(35,25,66,0.04)] px-space-md py-space-md flex items-center justify-around">
+<!-- Participated -->
+<div class="flex flex-col items-center text-center flex-1 px-1">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg text-headline-lg text-primary-container">12</span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary-text mt-0.5">Đã tham gia</span>
+</div>
+<!-- Vertical Spacer Dot -->
+<div class="w-1.5 h-1.5 rounded-full bg-surface-variant flex-shrink-0"></div>
+<!-- Upcoming -->
+<div class="flex flex-col items-center text-center flex-1 px-1">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg text-headline-lg text-primary-container">5</span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary-text mt-0.5">Sắp tới</span>
+</div>
+<!-- Vertical Spacer Dot -->
+<div class="w-1.5 h-1.5 rounded-full bg-surface-variant flex-shrink-0"></div>
+<!-- Student Activity Score -->
+<div class="flex flex-col items-center text-center flex-1 px-1">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline-lg text-headline-lg text-success">+35</span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary-text mt-0.5">Điểm rèn luyện</span>
+</div>
+</div>
+</div>
+<!-- Grouped Lists Container (Clean iOS-inspired, separated by background contrast) -->
+<div class="px-margin flex flex-col gap-space-lg mb-space-xl">
+<!-- Group: TÀI KHOẢN & SỰ KIỆN -->
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase px-space-xs mb-space-xs tracking-wider">Tài khoản &amp; Sự kiện</span>
+<div class="bg-surface rounded-2xl shadow-[0_2px_10px_rgba(35,25,66,0.03)] overflow-hidden flex flex-col">
+<!-- Row: Vé và mã QR của tôi -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" data-path="11.-my-events" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" style='font-variation-settings: "FILL" 1;'>confirmation_number</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Vé và mã QR của tôi</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">3 vé hiệu lực</span>
+<span class="material-symbols-outlined text-secondary-text text-[18px]">chevron_right</span>
+</div>
+</a>
+<!-- Separator -->
+<div class="mx-space-md h-[1px] bg-surface-variant"></div>
+<!-- Row: Câu lạc bộ đang theo dõi -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" style='font-variation-ui: 1; font-variation-settings: "FILL" 1;'>groups</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Câu lạc bộ đang theo dõi</span>
+<span class="font-body-sm text-body-sm text-secondary-text truncate">CLB Truyền Thông Cóc Sài Gòn</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="material-symbols-outlined text-secondary-text text-[18px]">chevron_right</span>
+</div>
+</a>
+<!-- Separator -->
+<div class="mx-space-md h-[1px] bg-surface-variant"></div>
+<!-- Row: Lịch sử điểm rèn luyện -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]" style='font-variation-settings: "FILL" 1;'>military_tech</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Lịch sử điểm rèn luyện</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="font-label-sm text-label-sm text-success font-semibold">+35 pts</span>
+<span class="material-symbols-outlined text-secondary-text text-[18px]">chevron_right</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Group: CÀI ĐẶT ỨNG DỤNG -->
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase px-space-xs mb-space-xs tracking-wider">Cài đặt ứng dụng</span>
+<div class="bg-surface rounded-2xl shadow-[0_2px_10px_rgba(35,25,66,0.03)] overflow-hidden flex flex-col">
+<!-- Row: Thông báo nhắc nhở sự kiện (Toggle ON) -->
+<div class="flex items-center justify-between p-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Thông báo nhắc nhở sự kiện</span>
+<span class="font-body-sm text-body-sm text-secondary-text truncate">Trước giờ G 2 giờ &amp; 30 phút</span>
+</div>
+</div>
+<div class="flex items-center flex-shrink-0">
+<button aria-checked="true" class="w-12 h-7 rounded-full bg-primary-container p-0.5 flex items-center transition-colors focus:outline-none" id="toggle-notif" role="switch">
+<span class="w-6 h-6 rounded-full bg-on-primary shadow-sm transform translate-x-5 transition-transform duration-200 ease-out flex items-center justify-center"></span>
+</button>
+</div>
+</div>
+<!-- Separator -->
+<div class="mx-space-md h-[1px] bg-surface-variant"></div>
+<!-- Row: Đồng bộ Google / Apple Calendar -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">save_as</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Đồng bộ Google / Apple Calendar</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="font-label-sm text-label-sm text-secondary-text">Đã liên kết</span>
+<span class="material-symbols-outlined text-secondary-text text-[18px]">chevron_right</span>
+</div>
+</a>
+<!-- Separator -->
+<div class="mx-space-md h-[1px] bg-surface-variant"></div>
+<!-- Row: Quyền riêng tư & Bảo mật -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface truncate">Quyền riêng tư &amp; Bảo mật</span>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="material-symbols-outlined text-secondary-text text-[18px]">chevron_right</span>
+</div>
+</a>
+</div>
+</div>
+<!-- Group: HỖ TRỢ & LIÊN HỆ -->
+<div class="flex flex-col">
+<span class="font-eyebrow text-eyebrow text-secondary-text uppercase px-space-xs mb-space-xs tracking-wider">Hỗ trợ &amp; Liên hệ</span>
+<div class="bg-surface rounded-2xl shadow-[0_2px_10px_rgba(35,25,66,0.03)] overflow-hidden flex flex-col">
+<!-- Row: Phòng Công tác Sinh viên (CTS) -->
+<a class="flex items-center justify-between p-space-md hover:bg-surface-container-low transition-colors group" href="mailto:ctsfptuhcm@fe.edu.vn">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface truncate">Phòng Công tác Sinh viên (CTS)</span>
+<span class="font-body-sm text-body-sm text-secondary-text truncate">Phòng 202 - Tòa Alpha, Hotline 028 7300 5588</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="material-symbols-outlined text-secondary-text text-[18px]">open_in_new</span>
+</div>
+</a>
+<!-- Separator -->
+<div class="mx-space-md h-[1px] bg-surface-variant"></div>
+<!-- Row: Đăng xuất tài khoản @fpt.edu.vn (Soft muted red text) -->
+<button class="w-full flex items-center justify-between p-space-md hover:bg-error-container/30 transition-colors text-left group" id="logout-btn">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-error-container/40 flex items-center justify-center text-error flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-error font-medium truncate">Đăng xuất tài khoản @fpt.edu.vn</span>
+<span class="font-body-sm text-body-sm text-secondary-text truncate">khanhle.se170248@fpt.edu.vn</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs flex-shrink-0">
+<span class="material-symbols-outlined text-error text-[18px]">chevron_right</span>
+</div>
+</button>
+</div>
+</div>
+<!-- App Version & FPTU Copyright Footer Note -->
+<div class="flex flex-col items-center text-center mt-space-xs mb-space-md">
+<span class="font-label-sm text-label-sm text-secondary-text tracking-wide">Campus Event FPTU • v2.4.0 (Build 202410)</span>
+<span class="font-body-sm text-body-sm text-secondary-text mt-0.5">Designed with care for FPT University HCMC</span>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // Interactive Notification Switcher
+    const notifBtn = document.getElementById('toggle-notif');
+    if (notifBtn) {
+      let isChecked = true;
+      notifBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        isChecked = !isChecked;
+        this.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+        const knob = this.querySelector('span');
+        if (isChecked) {
+          this.classList.remove('bg-surface-variant');
+          this.classList.add('bg-primary-container');
+          knob.classList.remove('translate-x-0.5');
+          knob.classList.add('translate-x-5');
+        } else {
+          this.classList.remove('bg-primary-container');
+          this.classList.add('bg-surface-variant');
+          knob.classList.remove('translate-x-5');
+          knob.classList.add('translate-x-0.5');
+        }
+      });
+    }
+
+    // Gentle logout interaction notice
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function() {
+        const confirmLogout = confirm('Bạn có chắc chắn muốn đăng xuất tài khoản FPT University?');
+        if (confirmLogout) {
+          this.style.opacity = '0.5';
+          setTimeout(() => {
+            window.location.reload();
+          }, 300);
+        }
+      });
+    }
+  })();
+</script></main><div class="fixed bottom-0 inset-x-0 z-50 pointer-events-none flex justify-center pb-safe mb-space-md"><nav class="pointer-events-auto relative w-[350px] max-w-[calc(100vw-2.5rem)] h-[68px] rounded-[24px] bg-white/65 backdrop-blur-2xl backdrop-saturate-[190%] border border-white/50 shadow-[inset_0_1.2px_1.5px_rgba(255,255,255,0.85),inset_0_-1px_1px_rgba(35,25,66,0.05),0_12px_36px_-6px_rgba(35,25,66,0.1)] p-1.5 flex items-center justify-between select-none" id="floating-bottom-nav">
+<!-- Active Spring Motion Pill Indicator -->
+<div class="absolute top-1.5 bottom-1.5 rounded-[18px] bg-white/90 shadow-[0_4px_14px_rgba(70,60,117,0.12),inset_0_1px_1px_rgba(255,255,255,0.9)] pointer-events-none transition-all duration-300" id="nav-active-pill" style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+<!-- Tab 1: Home -->
+<a class="relative z-10 flex-1 flex flex-col items-center justify-center min-h-[48px] py-1 text-secondary-text transition-all duration-200 group active:scale-95" data-nav-index="0" data-path="01.-home-/-campus-pulse" href="#">
+<span class="material-symbols-outlined text-[22px] transition-all duration-300 transform group-hover:scale-110">auto_awesome</span>
+<span class="font-label-sm text-label-sm mt-0.5 transition-colors">Home</span>
+<span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-all duration-300 transform scale-50"></span>
+</a>
+<!-- Tab 2: Khám phá -->
+<a class="relative z-10 flex-1 flex flex-col items-center justify-center min-h-[48px] py-1 text-secondary-text transition-all duration-200 group active:scale-95" data-nav-index="1" data-path="02.-explore-events" href="#">
+<span class="material-symbols-outlined text-[22px] transition-all duration-300 transform group-hover:scale-110">explore</span>
+<span class="font-label-sm text-label-sm mt-0.5 transition-colors">Khám phá</span>
+<span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-all duration-300 transform scale-50"></span>
+</a>
+<!-- Tab 3: Sự kiện -->
+<a class="relative z-10 flex-1 flex flex-col items-center justify-center min-h-[48px] py-1 text-secondary-text transition-all duration-200 group active:scale-95" data-nav-index="2" data-path="11.-my-events" href="#">
+<span class="material-symbols-outlined text-[22px] transition-all duration-300 transform group-hover:scale-110">confirmation_number</span>
+<span class="font-label-sm text-label-sm mt-0.5 transition-colors">Sự kiện</span>
+<span class="indicator opacity-0 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-all duration-300 transform scale-50"></span>
+</a>
+<!-- Tab 4: Cá nhân (Active) -->
+<a aria-current="page" class="relative z-10 flex-1 flex flex-col items-center justify-center min-h-[48px] py-1 text-primary-container font-label-md transition-all duration-200 group active:scale-95" data-nav-index="3" data-path="15.-profile" href="#">
+<span class="material-symbols-outlined text-[22px] transition-all duration-300 transform group-hover:scale-110" style='font-variation-settings: "FILL" 1;'>person</span>
+<span class="font-label-sm text-label-sm mt-0.5 transition-colors font-semibold">Cá nhân</span>
+<span class="indicator opacity-100 w-1 h-1 rounded-full bg-primary-container mt-0.5 transition-all duration-300 transform scale-100"></span>
+</a>
+</nav></div>
+<script>
+  (function() {
+    const nav = document.getElementById('floating-bottom-nav');
+    if (!nav) return;
+    const pill = document.getElementById('nav-active-pill');
+    const links = nav.querySelectorAll('a[data-nav-index]');
+
+    function positionPill(link, animate = true) {
+      if (!pill || !link) return;
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = link.getBoundingClientRect();
+
+      const left = linkRect.left - navRect.left;
+      const width = linkRect.width;
+
+      if (!animate) {
+        pill.style.transition = 'none';
+      } else {
+        pill.style.transition = 'all 320ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+      }
+
+      pill.style.left = `${left}px`;
+      pill.style.width = `${width}px`;
+    }
+
+    function setActiveTab(link) {
+      links.forEach(item => {
+        item.removeAttribute('aria-current');
+        item.classList.remove('text-primary-container', 'font-semibold', 'font-label-md');
+        item.classList.add('text-secondary-text');
+
+        const icon = item.querySelector('.material-symbols-outlined');
+        if (icon) {
+          icon.style.fontVariationSettings = '"FILL" 0';
+        }
+
+        const dot = item.querySelector('.indicator');
+        if (dot) {
+          dot.classList.remove('opacity-100', 'scale-100');
+          dot.classList.add('opacity-0', 'scale-50');
+        }
+      });
+
+      link.setAttribute('aria-current', 'page');
+      link.classList.remove('text-secondary-text');
+      link.classList.add('text-primary-container', 'font-semibold', 'font-label-md');
+
+      const activeIcon = link.querySelector('.material-symbols-outlined');
+      if (activeIcon) {
+        activeIcon.style.fontVariationSettings = '"FILL" 1';
+        // Icon tactile bounce
+        activeIcon.classList.add('scale-125');
+        setTimeout(() => {
+          activeIcon.classList.remove('scale-125');
+        }, 220);
+      }
+
+      const activeDot = link.querySelector('.indicator');
+      if (activeDot) {
+        activeDot.classList.remove('opacity-0', 'scale-50');
+        activeDot.classList.add('opacity-100', 'scale-100');
+      }
+
+      positionPill(link, true);
+    }
+
+    // Initialize pill on the default active tab (Tab 3: Cá nhân)
+    const initialActive = nav.querySelector('a[aria-current="page"]') || links[3];
+    if (initialActive) {
+      setTimeout(() => positionPill(initialActive, false), 50);
+      window.addEventListener('resize', () => {
+        const cur = nav.querySelector('a[aria-current="page"]') || initialActive;
+        positionPill(cur, false);
+      });
+    }
+
+    // Attach spring motion clicks
+    links.forEach(link => {
+      link.addEventListener('click', function(e) {
+        // Smoothly animate within current screen if needed or allow preview transition
+        setActiveTab(this);
+      });
+    });
+  })();
+</script></body></html>

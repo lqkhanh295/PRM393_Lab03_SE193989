@@ -1,0 +1,1560 @@
+Create a complete high-fidelity mobile application prototype called:
+
+CAMPUS EVENT
+for FPT University Ho Chi Minh City (FPT University HCMC).
+
+THIS IS A STRICT PRODUCT + UI + PROTOTYPE SPECIFICATION.
+
+Do not generate a generic event app.
+
+Do not generate a generic university dashboard.
+
+Do not generate a generic AI-generated mobile UI.
+
+Do not repeatedly use the same:
+“header → search → cards → bottom navigation”
+layout pattern.
+
+The application must feel specifically designed for students of
+FPT University Ho Chi Minh City.
+
+The design must use an Apple-inspired Liquid Glass visual language,
+while maintaining the Campus Event brand colors.
+
+============================================================
+01. PRODUCT CONTEXT
+============================================================
+
+Product:
+
+Campus Event
+
+Institution:
+
+FPT University Ho Chi Minh City
+
+Primary users:
+
+FPT University HCMC students.
+
+The application helps students discover and participate in:
+
+- academic events
+- technology events
+- workshops
+- seminars
+- student club activities
+- sports
+- competitions
+- career events
+- music
+- cultural activities
+- community activities
+
+The product should feel like an official campus ecosystem.
+
+The visual identity should subtly reference FPT University without
+becoming an FPT corporate website.
+
+Do NOT create an orange-heavy FPT corporate interface.
+
+Use the Campus Event purple brand palette as the primary visual identity.
+
+============================================================
+02. CORE DESIGN IDEA
+============================================================
+
+The product is built around three layers:
+
+CONTENT
+LIQUID GLASS INTERACTION
+CAMPUS IDENTITY
+
+CONTENT:
+
+Real event photography.
+Event information.
+Schedules.
+Locations.
+Student activity.
+Tickets.
+QR codes.
+
+LIQUID GLASS:
+
+Navigation.
+Floating controls.
+Search.
+Contextual actions.
+Filters.
+Bottom sheets.
+Floating actions.
+
+CAMPUS IDENTITY:
+
+Purple visual identity.
+Vietnamese typography.
+FPT University HCMC event content.
+Campus-specific information.
+
+Liquid Glass must NEVER become the entire interface.
+
+Do NOT turn every card into glass.
+
+Do NOT create glass inside glass.
+
+Do NOT create a screen made entirely of translucent cards.
+
+============================================================
+03. VISUAL DIRECTION
+============================================================
+
+Use:
+
+Apple-inspired Liquid Glass
++
+Editorial event discovery
++
+University campus identity
++
+Photography-led layouts.
+
+The visual result should feel:
+
+modern
+spatial
+calm
+premium
+youthful
+academic
+human
+purposeful
+
+The visual result must NOT feel:
+
+generic
+template-based
+SaaS
+AI-generated
+futuristic
+cyberpunk
+overdecorated
+glassmorphism-heavy
+dashboard-like
+
+============================================================
+04. ANTI AI-SLOP RULE
+============================================================
+
+THIS IS A CRITICAL REQUIREMENT.
+
+Do not generate repetitive UI patterns.
+
+Do not use the same card component for everything.
+
+Do not make every section a rounded rectangle.
+
+Do not make every section a card.
+
+Do not make every screen:
+
+Header
+Search
+Horizontal chips
+Cards
+Bottom navigation
+
+Each screen must have a DIFFERENT INFORMATION ARCHITECTURE based on its purpose.
+
+The interface must demonstrate intentional product design.
+
+Every screen must have a clear visual focal point.
+
+Every screen must have a different composition where appropriate.
+
+Use:
+
+- asymmetric layouts
+- full-bleed imagery
+- editorial typography
+- timeline layouts
+- list layouts
+- ticket layouts
+- profile layouts
+- map/location layouts
+- bottom sheets
+- floating controls
+- contextual actions
+- horizontal content rails
+- immersive detail layouts
+
+Do NOT randomly vary layouts.
+
+Variation must come from the user task.
+
+============================================================
+05. NUMBER OF SCREENS
+============================================================
+
+CREATE EXACTLY 15 PRIMARY PROTOTYPE SCREENS.
+
+Do not create only 5–6 screens.
+
+Do not create dozens of disconnected screens.
+
+The prototype must contain exactly these 15 screens:
+
+01. Home / Campus Pulse
+
+02. Explore Events
+
+03. Search Results
+
+04. Event Map
+
+05. Event Detail
+
+06. Event Schedule
+
+07. Registration Confirmation
+
+08. Registration Loading
+
+09. Registration Success
+
+10. Registration Error
+
+11. My Events
+
+12. Digital Event Ticket
+
+13. Campus Calendar
+
+14. Notifications
+
+15. Profile
+
+Additionally create the necessary interactive overlays/states:
+
+A. Filter Bottom Sheet
+B. Search Active State
+C. Event Share Sheet
+D. Calendar Event Detail Sheet
+
+These overlays are NOT counted as additional primary screens.
+
+============================================================
+06. SCREEN MAP
+============================================================
+
+PRIMARY NAVIGATION:
+
+Home
+Explore
+My Events
+Profile
+
+Secondary access:
+
+Calendar
+Notifications
+Map
+
+The screens must be connected.
+
+No isolated mockups.
+
+============================================================
+07. PROTOTYPE REQUIREMENT
+============================================================
+
+CREATE A FULL CLICKABLE PROTOTYPE.
+
+The prototype must contain REAL interactions.
+
+STARTING POINT 1:
+
+Home
+
+STARTING POINT 2:
+
+Explore Events
+
+STARTING POINT 3:
+
+My Events
+
+------------------------------------------------------------
+FLOW A: DISCOVER AND REGISTER
+------------------------------------------------------------
+
+Home
+→ Campus Pulse
+→ Featured Event
+→ Event Detail
+→ Registration Confirmation
+→ Registration Loading
+→ Registration Success
+→ Digital Event Ticket
+
+------------------------------------------------------------
+FLOW B: SEARCH
+------------------------------------------------------------
+
+Explore Events
+→ Search
+→ Search Results
+→ Event Detail
+
+------------------------------------------------------------
+FLOW C: FILTER
+------------------------------------------------------------
+
+Explore Events
+→ Filter
+→ Filter Bottom Sheet
+→ Apply
+→ Search Results
+
+------------------------------------------------------------
+FLOW D: MAP
+------------------------------------------------------------
+
+Explore Events
+→ Event Map
+→ Select Event Location
+→ Event Detail
+
+------------------------------------------------------------
+FLOW E: CALENDAR
+------------------------------------------------------------
+
+Calendar
+→ Select Event
+→ Calendar Event Detail Sheet
+→ Event Detail
+
+------------------------------------------------------------
+FLOW F: MY EVENTS
+------------------------------------------------------------
+
+My Events
+→ Upcoming Event
+→ Digital Event Ticket
+→ QR Check-in
+
+------------------------------------------------------------
+FLOW G: REGISTRATION ERROR
+------------------------------------------------------------
+
+Event Detail
+→ Register
+→ Confirmation
+→ Loading
+→ Error
+→ Retry
+→ Loading
+→ Success
+
+------------------------------------------------------------
+FLOW H: NOTIFICATIONS
+------------------------------------------------------------
+
+Notifications
+→ Registration reminder
+→ Event Detail
+
+------------------------------------------------------------
+BOTTOM NAVIGATION
+------------------------------------------------------------
+
+Home
+Explore
+My Events
+Profile
+
+Each destination must actually navigate.
+
+============================================================
+08. DESIGN SYSTEM
+============================================================
+
+Font:
+
+Be Vietnam Pro
+
+Primary:
+
+#5E548E
+
+Dark:
+
+#231942
+
+Secondary:
+
+#9F86C0
+
+Accent:
+
+#BE95C4
+
+Light accent:
+
+#E0B1CB
+
+Background:
+
+#F8F6FA
+
+Surface:
+
+#FFFFFF
+
+Text:
+
+#201D26
+
+Secondary text:
+
+#706B78
+
+Border:
+
+#E7E3EB
+
+Success:
+
+#4E8B65
+
+Error:
+
+#C65B5B
+
+Use purple as a brand tint.
+
+Do not use purple as the entire background.
+
+============================================================
+09. LIQUID GLASS SYSTEM
+============================================================
+
+Liquid Glass is used for FUNCTIONAL UI.
+
+Primary Liquid Glass elements:
+
+1. Floating tab bar
+2. Search control
+3. Floating map controls
+4. Top navigation controls
+5. Filter control
+6. Contextual action controls
+7. Bottom sheets
+8. Floating CTA
+
+Do NOT use Liquid Glass for:
+
+- every event card
+- event description
+- schedule rows
+- ticket body
+- profile rows
+- every button
+- every section
+
+Liquid Glass must remain visually lightweight.
+
+Use:
+
+translucency
+adaptive blur
+subtle depth
+soft highlight
+adaptive contrast
+subtle shadow
+optical separation
+
+Avoid:
+
+heavy frosted glass
+large white opacity
+thick borders
+neon glow
+rainbow gradients
+fake 3D glass
+glass-on-glass
+
+============================================================
+10. SCREEN 01: HOME / CAMPUS PULSE
+============================================================
+
+Purpose:
+
+Show what is happening NOW around FPT University HCMC.
+
+This is NOT a conventional event-list home page.
+
+Use an editorial “Campus Pulse” composition.
+
+------------------------------------------------------------
+TOP
+------------------------------------------------------------
+
+Small institutional label:
+
+FPT UNIVERSITY HCMC
+
+Large title:
+
+“Campus Pulse”
+
+Secondary:
+
+“Có gì đang diễn ra hôm nay?”
+
+Do not place a giant search bar immediately below.
+
+------------------------------------------------------------
+MAIN VISUAL
+------------------------------------------------------------
+
+Create one immersive featured event.
+
+Use large photography.
+
+Approximately 350 × 220px.
+
+Event:
+
+“Campus Innovation Day 2026”
+
+Overlay minimal metadata.
+
+Use a small Liquid Glass category badge:
+
+CÔNG NGHỆ
+
+Below image:
+
+Campus Innovation Day 2026
+
+12.10.2026
+08:30 – 17:00
+
+------------------------------------------------------------
+CAMPUS PULSE
+------------------------------------------------------------
+
+Below the feature:
+
+“Đang diễn ra”
+
+Create a horizontal activity rail.
+
+Examples:
+
+Tech Talk
+09:30
+
+Football
+10:00
+
+Design Workshop
+13:30
+
+Music Session
+18:00
+
+This should look like a campus activity timeline.
+
+NOT cards stacked vertically.
+
+------------------------------------------------------------
+NEXT
+------------------------------------------------------------
+
+“Dành cho bạn”
+
+Use two asymmetric event previews.
+
+One large.
+One compact.
+
+Do not make them identical cards.
+
+------------------------------------------------------------
+BOTTOM
+------------------------------------------------------------
+
+Floating Liquid Glass tab bar.
+
+============================================================
+11. SCREEN 02: EXPLORE EVENTS
+============================================================
+
+Purpose:
+
+Browse the complete event catalog.
+
+Layout:
+
+Top:
+
+“Khám phá”
+
+Instead of a conventional search bar immediately below,
+use a large floating search control.
+
+Below:
+
+Category navigation.
+
+Use horizontal categories:
+
+Tất cả
+Công nghệ
+Học thuật
+Thể thao
+CLB
+Nghệ thuật
+
+Then:
+
+“128 sự kiện”
+
+Use a mixed editorial list.
+
+Do NOT use identical cards.
+
+Use:
+
+large horizontal event
+small horizontal event
+compact row
+date-separated event groups
+
+Example:
+
+12 THÁNG 10
+
+Campus Innovation Day
+
+18 THÁNG 10
+
+Tech Talk: Building with AI
+
+22 THÁNG 10
+
+Career Connect
+
+The list should feel like an event journal.
+
+============================================================
+12. SCREEN 03: SEARCH RESULTS
+============================================================
+
+Purpose:
+
+Search.
+
+When search is active:
+
+Top becomes a Liquid Glass search field.
+
+Text:
+
+“AI”
+
+Below:
+
+“24 kết quả”
+
+Show results.
+
+Use compact horizontal results.
+
+Each:
+
+image
+title
+date
+location
+
+Highlight the search term subtly.
+
+Include:
+
+Filter
+Sort
+
+Do not use a huge header.
+
+Search is the main task.
+
+============================================================
+13. SCREEN 04: EVENT MAP
+============================================================
+
+This screen MUST have a completely different layout.
+
+Full-screen campus map.
+
+Do NOT use cards as the primary structure.
+
+Map fills the entire screen.
+
+Use FPT University HCMC campus context.
+
+Floating Liquid Glass controls:
+
+Back
+
+Search
+
+Current location
+
+Filter
+
+At bottom:
+
+A floating event preview.
+
+Example:
+
+“Tech Talk: Building with AI”
+
+18.10
+Building A
+
+Button:
+
+“Xem chi tiết”
+
+This screen should feel spatial.
+
+============================================================
+14. SCREEN 05: EVENT DETAIL
+============================================================
+
+Use immersive full-bleed photography.
+
+Top controls:
+
+Liquid Glass back
+
+Liquid Glass share
+
+Below image:
+
+CÔNG NGHỆ
+
+Campus Innovation Day 2026
+
+12 Tháng 10, 2026
+
+08:30 – 17:00
+
+FPT University HCMC
+
+328 người tham gia
+
+Then:
+
+Giới thiệu
+
+Short description.
+
+Then:
+
+Lịch trình
+
+Use a vertical timeline.
+
+Then:
+
+Địa điểm
+
+Show a small campus map preview.
+
+At bottom:
+
+Floating Liquid Glass CTA:
+
+“Đăng ký tham gia”
+
+Do not put every section inside cards.
+
+============================================================
+15. SCREEN 06: EVENT SCHEDULE
+============================================================
+
+This screen must NOT look like the Event Detail screen.
+
+Purpose:
+
+Focus entirely on schedule.
+
+Top:
+
+“Lịch trình”
+
+Date selector:
+
+12
+13
+14
+15
+
+Selected date has purple tint.
+
+Below:
+
+Vertical timeline.
+
+08:30
+Check-in
+
+09:00
+Opening
+
+09:30
+Tech Talk
+
+11:00
+Networking
+
+13:30
+Project Showcase
+
+16:30
+Closing
+
+Use timeline geometry.
+
+Do not use repeated cards.
+
+============================================================
+16. SCREEN 07: REGISTRATION CONFIRMATION
+============================================================
+
+Use a contextual Liquid Glass bottom sheet.
+
+Background:
+
+Event Detail dimmed behind.
+
+Sheet:
+
+Xác nhận đăng ký
+
+Event summary.
+
+Primary:
+
+Xác nhận đăng ký
+
+Secondary:
+
+Quay lại
+
+The sheet should feel connected to the registration button.
+
+============================================================
+17. SCREEN 08: REGISTRATION LOADING
+============================================================
+
+Do not create a separate decorative loading page.
+
+Keep Event Detail visible.
+
+Change CTA:
+
+spinner
+
+“Đang đăng ký...”
+
+The prototype should represent this state.
+
+============================================================
+18. SCREEN 09: REGISTRATION SUCCESS
+============================================================
+
+Use a clean confirmation composition.
+
+Large check icon.
+
+Title:
+
+“Đăng ký thành công”
+
+Description:
+
+“Bạn đã đăng ký tham gia Campus Innovation Day 2026.”
+
+Primary:
+
+“Xem vé”
+
+Secondary:
+
+“Về trang chủ”
+
+Do not use confetti.
+
+============================================================
+19. SCREEN 10: REGISTRATION ERROR
+============================================================
+
+Keep context.
+
+Title:
+
+“Không thể đăng ký”
+
+Description:
+
+“Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.”
+
+Primary:
+
+“Thử lại”
+
+Secondary:
+
+“Quay lại”
+
+Use restrained error styling.
+
+============================================================
+20. SCREEN 11: MY EVENTS
+============================================================
+
+This screen should feel like a PERSONAL SCHEDULE.
+
+Do NOT make it another event catalog.
+
+Top:
+
+“Sự kiện của tôi”
+
+Large upcoming date:
+
+THỨ HAI
+12 THÁNG 10
+
+Then:
+
+“Lịch sắp tới”
+
+Create a chronological agenda.
+
+08:30
+Campus Innovation Day
+
+18:00
+Music Night
+
+Next date:
+
+18 THÁNG 10
+
+09:00
+Tech Talk
+
+This should feel like a personal event timeline.
+
+Include:
+
+“Xem vé”
+
+for registered events.
+
+============================================================
+21. SCREEN 12: DIGITAL EVENT TICKET
+============================================================
+
+Create a REAL digital ticket.
+
+The ticket should be visually distinct.
+
+White ticket surface.
+
+Event:
+
+Campus Innovation Day 2026
+
+Participant:
+
+Khánh Lê
+
+Date:
+
+12.10.2026
+
+Time:
+
+08:30
+
+Location:
+
+FPT University HCMC
+
+Large QR code.
+
+Ticket ID:
+
+CE2026-083291
+
+Status:
+
+Đã xác nhận
+
+Add subtle ticket perforation geometry.
+
+Do not use glass for the entire ticket.
+
+============================================================
+22. SCREEN 13: CAMPUS CALENDAR
+============================================================
+
+This screen must have a calendar-first layout.
+
+Title:
+
+“Lịch campus”
+
+Month:
+
+THÁNG 10 2026
+
+Calendar grid.
+
+Dates with events use small purple indicators.
+
+Selecting:
+
+12
+
+shows event list below.
+
+Example:
+
+Campus Innovation Day
+
+08:30
+
+FPT University HCMC
+
+Use a contextual Liquid Glass selection control.
+
+============================================================
+23. SCREEN 14: NOTIFICATIONS
+============================================================
+
+Do not make this another card dashboard.
+
+Use a notification timeline.
+
+Title:
+
+“Thông báo”
+
+Sections:
+
+HÔM NAY
+
+“Campus Innovation Day sẽ bắt đầu sau 1 ngày.”
+
+“Bạn đã đăng ký thành công Tech Talk.”
+
+TRƯỚC ĐÓ
+
+“Career Connect 2026 đã mở đăng ký.”
+
+Each notification should have:
+
+icon
+message
+timestamp
+
+Keep it compact.
+
+Unread notification:
+
+small purple indicator.
+
+============================================================
+24. SCREEN 15: PROFILE
+============================================================
+
+Profile should feel personal.
+
+Large profile area.
+
+Avatar.
+
+Khánh Lê
+
+Software Engineering
+
+FPT University HCMC
+
+Below:
+
+Activity summary:
+
+12
+Đã tham gia
+
+5
+Sắp tới
+
+Then grouped settings:
+
+Tài khoản
+
+Thông tin cá nhân
+Thông báo
+
+Ứng dụng
+
+Cài đặt
+Quyền riêng tư
+
+Do not put every item in a giant card.
+
+Use grouped list rows.
+
+============================================================
+25. BOTTOM NAVIGATION
+============================================================
+
+Bottom navigation must be a FLOATING LIQUID GLASS BAR.
+
+It should NOT look like a traditional Android navigation bar.
+
+Width:
+
+approximately 350px
+
+Height:
+
+68–72px
+
+Floating above bottom safe area.
+
+Rounded:
+
+24px
+
+Tabs:
+
+Home
+Khám phá
+Sự kiện
+Cá nhân
+
+Active destination:
+
+purple tint
+
+Inactive:
+
+adaptive neutral
+
+The content must visibly continue behind the navigation.
+
+============================================================
+26. TOP NAVIGATION
+============================================================
+
+Back buttons and contextual actions should also use Liquid Glass.
+
+Examples:
+
+Back
+Share
+Search
+Map controls
+
+Circular:
+
+40–44px
+
+Do not put a large opaque header behind them.
+
+Allow photography/content to extend behind the controls.
+
+============================================================
+27. SEARCH DESIGN
+============================================================
+
+Search should feel like a spatial floating control.
+
+Default:
+
+compact Liquid Glass search field.
+
+When activated:
+
+expand into a focused search state.
+
+The search state should visually transform rather than navigate to an entirely unrelated screen.
+
+Include:
+
+Recent searches
+
+“AI”
+“Football”
+“Career”
+
+Then results.
+
+============================================================
+28. FILTER DESIGN
+============================================================
+
+Filter should open as a bottom sheet.
+
+Use:
+
+Liquid Glass
+
+with background content visible behind.
+
+Options:
+
+Thời gian
+Danh mục
+Địa điểm
+
+Do not create a giant form.
+
+Keep it task-oriented.
+
+============================================================
+29. EVENT SHARING
+============================================================
+
+Create a Share Sheet overlay.
+
+Options:
+
+Chia sẻ với bạn bè
+
+Copy link
+
+Zalo
+
+Messages
+
+More
+
+Keep it compact.
+
+Do not invent unnecessary social features.
+
+============================================================
+30. CAMPUS MAP
+============================================================
+
+The map should feel integrated with the campus.
+
+Use:
+
+Building A
+Building B
+Library
+Innovation Lab
+Sports Complex
+Cafeteria
+
+Events appear as purple location markers.
+
+Selected event creates a floating preview.
+
+Do not make the map look like Google Maps clone.
+
+Use it as a campus event map.
+
+============================================================
+31. CONTENT
+============================================================
+
+Use Vietnamese.
+
+Institution:
+
+FPT University HCMC
+
+Use realistic student event content.
+
+Examples:
+
+Campus Innovation Day 2026
+
+Tech Talk: Building with AI
+
+Career Connect 2026
+
+FPTU Football Championship
+
+Creative Design Workshop
+
+Music Night: Campus Sessions
+
+Do not use:
+
+Lorem ipsum
+
+Event Name
+
+John Doe
+
+Location
+
+Description
+
+============================================================
+32. PHOTOGRAPHY
+============================================================
+
+Use realistic university student photography.
+
+Prioritize:
+
+students
+campus
+technology
+clubs
+sports
+workshops
+career events
+
+Photography should have a consistent visual treatment.
+
+Avoid generic corporate stock photography.
+
+Avoid AI-generated-looking images.
+
+============================================================
+33. LAYOUT INNOVATION REQUIREMENT
+============================================================
+
+The application MUST use at least these different composition types:
+
+1. Editorial hero layout
+2. Horizontal event journal
+3. Search result list
+4. Full-screen map
+5. Immersive event detail
+6. Timeline
+7. Personal agenda
+8. Digital ticket
+9. Calendar grid
+10. Notification timeline
+11. Profile grouped list
+
+Do NOT force all screens into the same card-based system.
+
+The design system provides consistency.
+
+The layout structure provides variation.
+
+============================================================
+34. DESIGN CONSISTENCY
+============================================================
+
+Even though layouts vary, maintain consistency through:
+
+- same typography
+- same purple brand tint
+- same Liquid Glass material
+- same icon family
+- same spacing system
+- same corner language
+- same button behavior
+- same animation language
+
+============================================================
+35. ANTI-TEMPLATE REQUIREMENT
+============================================================
+
+Do NOT generate:
+
+Hero
+Search
+Cards
+Cards
+Cards
+Bottom navigation
+
+on every screen.
+
+Do NOT use:
+
+“glass card + glass card + glass card”.
+
+Do NOT create unnecessary containers.
+
+Do NOT use decorative UI simply to fill empty space.
+
+Whitespace is intentional.
+
+Asymmetry is allowed.
+
+Large photography is allowed.
+
+Content can touch the edge.
+
+Some screens can be visually dense.
+
+Some screens can be visually minimal.
+
+The layout must follow the task.
+
+============================================================
+36. APPLE LIQUID GLASS BEHAVIOR
+============================================================
+
+Liquid Glass should feel:
+
+adaptive
+transparent
+optical
+responsive
+fluid
+
+Use subtle:
+
+blur
+translucency
+highlight
+depth
+reflection
+contrast adaptation
+
+Do not create fake static frosted rectangles.
+
+Controls should visually separate themselves from the content behind them.
+
+Use Liquid Glass most strongly for:
+
+navigation
+search
+floating controls
+sheets
+contextual actions
+
+============================================================
+37. MOTION
+============================================================
+
+Use meaningful transitions.
+
+Home → Event Detail:
+
+image and content should feel spatially connected.
+
+Event Detail → Registration:
+
+CTA morphs into confirmation.
+
+Registration → Success:
+
+contextual transition.
+
+Explore → Map:
+
+spatial transition.
+
+Calendar → Event:
+
+selected date transitions into event information.
+
+Bottom navigation:
+
+subtle active-state transition.
+
+Avoid:
+
+bounce
+particles
+excessive parallax
+random animation
+dramatic effects
+
+============================================================
+38. ACCESSIBILITY
+============================================================
+
+Minimum touch target:
+
+44 × 44px
+
+Strong text contrast.
+
+Readable typography.
+
+No important information should depend only on transparency.
+
+No important information should depend only on color.
+
+============================================================
+39. FINAL QUALITY REQUIREMENT
+============================================================
+
+Before generating the interface, check every screen.
+
+For each screen ask:
+
+What is the user's primary task?
+
+What is the visual focal point?
+
+Why is this layout different from other screens?
+
+Can the user understand it immediately?
+
+Is the Liquid Glass being used because it improves interaction?
+
+Is any card unnecessary?
+
+Is any decorative element unnecessary?
+
+Does the screen feel specific to FPT University HCMC?
+
+Does the screen look intentionally designed by a human product designer?
+
+If not, simplify and redesign.
+
+FINAL TARGET:
+
+A premium FPT University HCMC student event application.
+
+Not a generic event template.
+
+Not a dashboard.
+
+Not a collection of cards.
+
+Not generic glassmorphism.
+
+A coherent product using:
+
+FPT University HCMC context
++
+editorial event design
++
+Apple-inspired Liquid Glass
++
+purple Campus Event identity
++
+purposeful motion
++
+15 connected screens
++
+fully clickable prototype.
+
+The final prototype must feel like a product concept that could realistically be developed into a production mobile application.

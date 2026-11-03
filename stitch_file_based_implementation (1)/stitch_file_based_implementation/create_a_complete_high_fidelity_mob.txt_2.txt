@@ -1,0 +1,96 @@
+ACT AS A SENIOR MOBILE UI/UX ARCHITECT AND FRONTEND DESIGN SYSTEM ENGINEER.
+
+REFOUND AND REFINE ALL SCREENS OF THE "CAMPUS EVENT" FPT UNIVERSITY HCMC PROTOTYPE.
+THIS IS A STRICT BUGFIX, TYPOGRAPHY, SPACING, AND COMPLIANCE OVERHAUL ACCORDING TO DESIGN GUIDELINE V1.0.
+
+============================================================
+01. CRITICAL BUGFIX: VIETNAMESE TYPOGRAPHY & TEXT OVERFLOW
+============================================================
+Vietnamese text with compound tone marks (ê, ư, ơ, dấu hỏi, ngã, nặng) is 20-30% wider and requires taller vertical line clearance than English. Fix all text-clipping and overflow issues immediately:
+
+1. LINE-HEIGHT & VERTICAL CLIPPING:
+- NEVER use `leading-none` or rigid tight line heights on Vietnamese text.
+- Minimum line-height for body/headings must be at least `line-height: 1.35 to 1.5` (e.g., `text-[14px] leading-[20px]`, `text-[16px] leading-[24px]`).
+- Ensure adequate top/bottom padding so diacritics are NEVER clipped by parent containers.
+
+2. HORIZONTAL OVERFLOW & CONTAINER FIT:
+- NEVER use fixed widths (`w-[240px]`, `w-44`) with `whitespace-nowrap` on text containers in a 360px–390px mobile viewport.
+- Any flex child with text MUST include `min-w-0` to allow proper wrapping or controlled truncation.
+- For buttons with long Vietnamese text (e.g., "Đăng ký tham gia", "Nhập mã vé thủ công"): use `flex-wrap` or allow multi-line wrapping, or adjust padding. Text must NEVER bleed outside button borders.
+- Replace arbitrary card heights with auto-expanding layouts: `min-h-[...]` instead of rigid `h-[...]`.
+
+3. STRICT 8-LEVEL TYPE SCALE (RESTORE FROM GUIDELINE V1.0):
+Purge the chaotic 12-size font sprawl. Enforce ONLY these 8 sizes using font 'Be Vietnam Pro':
+- Display: 32px / line-height: 40px / Bold (700)
+- H1: 28px / line-height: 36px / Bold (700)
+- H2: 22px / line-height: 28px / Bold (700)
+- H3: 18px / line-height: 24px / SemiBold (600)
+- Body: 16px / line-height: 24px / Regular (400)
+- Body Medium: 16px / line-height: 24px / Medium (500)
+- Caption: 14px / line-height: 20px / Regular (400)
+- Small: 12px / line-height: 16px / Medium (500)
+Do NOT use 36px, 20px, 17px, 13px, or 11px micro-text.
+
+============================================================
+02. SPACING & TOUCH TARGET ACCESSIBILITY
+============================================================
+1. SPACING SCALE:
+- Screen padding: exactly 20px (`px-5` / 20px).
+- Card padding: exactly 16px (`p-4` / 16px).
+- Section gap: 24px to 32px (`gap-6` or `gap-8`).
+
+2. TOUCH TARGET COMPLIANCE (MINIMUM 48 × 48dp):
+- All clickable icon buttons (`history.back()`, notification bell, search, bookmark, camera switches) MUST have a minimum tap area of 48 × 48px (use `min-w-[48px] min-h-[48px] flex items-center justify-center`).
+- Bottom Navigation items must have at least 48px height with clear vertical centering.
+
+============================================================
+03. STOP "PILL EVERYWHERE" (BORDER RADIUS NORMALIZATION)
+============================================================
+According to Guideline Section 5:
+- Pill shape (`rounded-full`) is RESERVED EXCLUSIVELY for: Category tags, Filter chips, Status indicators, and Small compact counters.
+- Large buttons and Primary CTAs ("Đăng ký tham gia", "Lưu bản nháp", "Gửi duyệt"): Use `rounded-xl` (12px) or `rounded-2xl` (16px). DO NOT make every button a pill.
+- Text inputs and dropdowns: Use `rounded-xl` (12px).
+- Surface cards: Use `rounded-2xl` (16px).
+- Bottom sheets: Use `rounded-t-[24px]`.
+
+============================================================
+04. COLOR PALETTE CORRECTION
+============================================================
+Align strictly with Design Guideline Section 2.1:
+- Primary: #5E548E (Used for main actions, active navigation, active filter chips)
+- Primary Dark: #231942 (Headings, primary text emphasis)
+- Secondary: #9F86C0 (Subtle borders, secondary icons)
+- Accent: #BE95C4 (Gentle highlights, category indicators)
+- Soft Accent: #E0B1CB (Soft badge backgrounds)
+- Background: #F8F6FA (Global page canvas)
+- Surface: #FFFFFF (Clean white cards and sheets)
+- Text Main: #201D26
+- Text Secondary: #706B78
+- Border: #E7E3EB
+- Success: #4E8B65
+- Error: #C65B5B
+Do NOT override Primary with #463c75. Do NOT flood screens with heavy purple backgrounds; purple is an action color.
+
+============================================================
+05. SCREEN-SPECIFIC BUGFIXES & RULES
+============================================================
+1. FIX SCREEN 32 (QR CHECK-IN SCANNER) - REMOVE NASA DASHBOARD:
+- VIOLATION TO FIX: Remove the real-time progress bar (73.5%), the "+18 trong 5p" badge, and the "Vừa quét sinh viên..." dock from the live camera screen.
+- TARGET STATE: Clean, high-focus single-task viewfinder:
+  * Camera reticle with clean scanning crosshair.
+  * Context header: Event Name + "Đang quét: Cổng 1".
+  * Bottom controls: Flashlight toggle (48px) + Lens switch (48px) + "Nhập mã vé thủ công" button.
+  * No clutter, no distraction.
+
+2. FIX SCREEN 24 (CREATE EVENT WIZARD) - APPBAR COPY-PASTE BUG:
+- VIOLATION TO FIX: The header currently displays "Live Check In Scanner" with a QR icon.
+- TARGET STATE: Header title must be "Tạo sự kiện mới", subtitle "Bước 1/4: Thông tin cơ bản", back icon returns to Dashboard.
+
+3. LIQUID GLASS RULES:
+- Liquid Glass (`backdrop-blur-xl bg-surface/80`) is strictly for floating bars (Bottom Nav, Floating CTA, Bottom Sheet header).
+- NEVER nest glass inside glass (no translucent cards inside translucent viewfinders).
+- Content cards must be solid white (`bg-surface`) with crisp borders (`border border-border`) for high contrast readability.
+
+============================================================
+OUTPUT REQUIREMENT:
+Generate clean, production-ready, standards-compliant HTML+Tailwind code for each target screen, ensuring 100% text containment, zero overflow, correct Vietnamese typography, and strict adherence to the rules above.
