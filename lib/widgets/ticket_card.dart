@@ -43,29 +43,35 @@ class TicketCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      ticket.id,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        ticket.id,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      isCheckedIn ? 'ĐÃ CHECK-IN TẠI CỔNG' : 'VÉ HỢP LỆ — SẴN SÀNG QUÉT',
-                      style: TextStyle(
-                        color: isCheckedIn ? const Color(0xFFC8E6C9) : AppTheme.onPrimaryContainer,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      const SizedBox(height: 4),
+                      Text(
+                        isCheckedIn ? 'ĐÃ CHECK-IN TẠI CỔNG' : 'VÉ HỢP LỆ — SẴN SÀNG QUÉT',
+                        style: TextStyle(
+                          color: isCheckedIn ? const Color(0xFFC8E6C9) : AppTheme.onPrimaryContainer,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 8),
                 Icon(
                   isCheckedIn ? Icons.verified : Icons.qr_code_2_rounded,
                   color: Colors.white,
@@ -94,7 +100,13 @@ class TicketCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.calendar_today, size: 14, color: AppTheme.outline),
                     const SizedBox(width: 8),
-                    Text('${ticket.eventDate} · ${ticket.eventTime}', style: const TextStyle(fontSize: 13)),
+                    Expanded(
+                      child: Text(
+                        '${ticket.eventDate} · ${ticket.eventTime}',
+                        style: const TextStyle(fontSize: 13),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -116,7 +128,13 @@ class TicketCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.person, size: 14, color: AppTheme.outline),
                     const SizedBox(width: 8),
-                    Text(ticket.studentName, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                    Expanded(
+                      child: Text(
+                        ticket.studentName,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
 

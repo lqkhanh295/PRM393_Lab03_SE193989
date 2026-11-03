@@ -111,12 +111,16 @@ class EventGlassCard extends StatelessWidget {
                             children: [
                               const Icon(Icons.business, size: 14, color: AppTheme.primary),
                               const SizedBox(width: 6),
-                              Text(
-                                event.clubName,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppTheme.primary,
+                              Expanded(
+                                child: Text(
+                                  event.clubName,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.primary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -136,9 +140,12 @@ class EventGlassCard extends StatelessWidget {
                             children: [
                               const Icon(Icons.access_time, size: 14, color: AppTheme.onSurfaceVariant),
                               const SizedBox(width: 6),
-                              Text(
-                                '${event.time} · ${event.date}',
-                                style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                              Expanded(
+                                child: Text(
+                                  '${event.time} · ${event.date}',
+                                  style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),

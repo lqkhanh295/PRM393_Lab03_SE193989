@@ -165,6 +165,7 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
       context: context,
       isDismissible: true,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (_) {
         return Container(
           padding: const EdgeInsets.all(24),
@@ -172,78 +173,83 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(AppTheme.radiusSheet)),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: result.isValid
-                      ? const Color(0xFFE8F5E9)
-                      : (result.isDuplicate ? const Color(0xFFFFEBEE) : const Color(0xFFFFF3E0)),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  result.isValid
-                      ? Icons.check_circle_rounded
-                      : (result.isDuplicate ? Icons.warning_rounded : Icons.error_outline),
-                  color: result.isValid
-                      ? AppTheme.success
-                      : (result.isDuplicate ? AppTheme.error : Colors.amber.shade900),
-                  size: 38,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                result.isValid
-                    ? 'CHECK-IN THÀNH CÔNG!'
-                    : (result.isDuplicate ? 'CẢNH BÁO VÉ TRÙNG LẶP!' : 'VÉ KHÔNG HỢP LỆ!'),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: result.isValid
-                      ? AppTheme.success
-                      : (result.isDuplicate ? AppTheme.error : Colors.amber.shade900),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                result.message,
-                style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant),
-                textAlign: TextAlign.center,
-              ),
-              if (result.ticket != null) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'Sinh viên: ${result.ticket!.studentName} (${result.ticket!.id})',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-              ],
-              const SizedBox(height: 24),
-              Row(
+          child: SafeArea(
+            top: false,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: AppPrimaryButton(
-                      label: 'Quét người tiếp theo',
-                      onPressed: () => Navigator.pop(context),
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: result.isValid
+                          ? const Color(0xFFE8F5E9)
+                          : (result.isDuplicate ? const Color(0xFFFFEBEE) : const Color(0xFFFFF3E0)),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      result.isValid
+                          ? Icons.check_circle_rounded
+                          : (result.isDuplicate ? Icons.warning_rounded : Icons.error_outline),
+                      color: result.isValid
+                          ? AppTheme.success
+                          : (result.isDuplicate ? AppTheme.error : Colors.amber.shade900),
+                      size: 38,
                     ),
                   ),
-                  if (result.isDuplicate) ...[
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: AppOutlinedButton(
-                        label: 'Nhập mã tay',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _openManualCodeDialog(context);
-                        },
-                      ),
+                  const SizedBox(height: 16),
+                  Text(
+                    result.isValid
+                        ? 'CHECK-IN THÀNH CÔNG!'
+                        : (result.isDuplicate ? 'CẢNH BÁO VÉ TRÙNG LẶP!' : 'VÉ KHÔNG HỢP LỆ!'),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: result.isValid
+                          ? AppTheme.success
+                          : (result.isDuplicate ? AppTheme.error : Colors.amber.shade900),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    result.message,
+                    style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (result.ticket != null) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      'Sinh viên: ${result.ticket!.studentName} (${result.ticket!.id})',
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ],
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: AppPrimaryButton(
+                          label: 'Quét người tiếp theo',
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ),
+                      if (result.isDuplicate) ...[
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppOutlinedButton(
+                            label: 'Nhập mã tay',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _openManualCodeDialog(context);
+                            },
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         );
       },
@@ -257,20 +263,22 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           title: const Text('Nhập mã vé thủ công', style: TextStyle(fontWeight: FontWeight.w700)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Sử dụng khi camera bị mờ hoặc màn hình điện thoại của sinh viên bị nứt vỡ.',
-                style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
-              ),
-              const SizedBox(height: 16),
-              AppTextField(
-                controller: _manualCodeController,
-                label: 'Mã Ticket ID',
-                hintText: 'Ví dụ: CE2026-083291',
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Sử dụng khi camera bị mờ hoặc màn hình điện thoại của sinh viên bị nứt vỡ.',
+                  style: TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant),
+                ),
+                const SizedBox(height: 16),
+                AppTextField(
+                  controller: _manualCodeController,
+                  label: 'Mã Ticket ID',
+                  hintText: 'Ví dụ: CE2026-083291',
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(

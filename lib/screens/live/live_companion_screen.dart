@@ -116,17 +116,22 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(AppTheme.radiusChip),
-                      ),
-                      child: const Text(
-                        'PHIÊN ĐANG DIỄN RA (14:00 - 15:15)',
-                        style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.w800),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          borderRadius: BorderRadius.circular(AppTheme.radiusChip),
+                        ),
+                        child: const Text(
+                          'PHIÊN ĐANG DIỄN RA (14:00 - 15:15)',
+                          style: TextStyle(color: Colors.red, fontSize: 11, fontWeight: FontWeight.w800),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     const Icon(Icons.sensors_rounded, color: Colors.red, size: 20),
                   ],
                 ),

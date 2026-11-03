@@ -104,6 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
+                  const SizedBox(width: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary,
@@ -245,13 +246,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppTheme.primary,
                             side: const BorderSide(color: AppTheme.primary),
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                           ),
                           onPressed: () {
                             if (user != null) {
                               profileVM.triggerHandledErrorDemo(user.id);
                             }
                           },
-                          child: const Text('Gửi Non-fatal', style: TextStyle(fontSize: 12)),
+                          child: const Text(
+                            'Gửi Non-fatal',
+                            style: TextStyle(fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -260,11 +267,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppTheme.error,
                             side: const BorderSide(color: AppTheme.error),
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                           ),
                           onPressed: () {
                             profileVM.triggerTestCrash();
                           },
-                          child: const Text('Kích hoạt Crash', style: TextStyle(fontSize: 12)),
+                          child: const Text(
+                            'Kích hoạt Crash',
+                            style: TextStyle(fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
