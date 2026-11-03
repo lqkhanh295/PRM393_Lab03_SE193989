@@ -69,8 +69,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               backgroundColor: AppTheme.secondary,
               leading: Container(
                 margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppTheme.secondary.withOpacity(0.6),
+                decoration: const BoxDecoration(
+                  color: Color(0x990F172A),
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
@@ -82,7 +82,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 background: Image.network(
                   event.bannerUrl,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (context, error, stackTrace) => Container(
                     color: AppTheme.secondary,
                     child: const Center(
                       child: Icon(Icons.event, color: AppTheme.textSubtle, size: 56),

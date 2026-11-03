@@ -71,8 +71,8 @@ class TicketCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
                         border: Border.all(
                           color: isCheckedIn
-                              ? AppTheme.success.withOpacity(0.3)
-                              : AppTheme.primary.withOpacity(0.3),
+                              ? AppTheme.successBorder
+                              : AppTheme.outlineVariant,
                           width: 1,
                         ),
                       ),

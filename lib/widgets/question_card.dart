@@ -33,7 +33,7 @@ class QuestionCard extends StatelessWidget {
             child: InkWell(
               onTap: onUpvote,
               borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
-              splashColor: AppTheme.primary.withOpacity(0.12),
+              splashColor: AppTheme.primaryContainer,
               child: Container(
                 width: 44,
                 padding: const EdgeInsets.symmetric(vertical: 6),

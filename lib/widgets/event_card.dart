@@ -32,7 +32,7 @@ class EventGlassCard extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: onTap,
-              splashColor: AppTheme.primary.withOpacity(0.08),
+              splashColor: AppTheme.primaryContainer,
               highlightColor: AppTheme.surfaceContainer,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,8 +88,8 @@ class EventGlassCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
                                 border: Border.all(
                                   color: event.isFull
-                                      ? AppTheme.error.withOpacity(0.3)
-                                      : AppTheme.success.withOpacity(0.3),
+                                      ? AppTheme.errorBorder
+                                      : AppTheme.successBorder,
                                   width: 1,
                                 ),
                               ),

@@ -125,11 +125,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     icon: Icons.alternate_email_rounded,
                     isLoading: isLoading,
                     onPressed: () async {
+                      final nav = Navigator.of(context);
                       final success = await authVM.signInWithGoogle();
                       if (!mounted) return;
                       if (success) {
-                        Navigator.pushReplacement(
-                          context,
+                        nav.pushReplacement(
                           MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
                         );
                       }
@@ -142,10 +142,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     label: 'Đăng nhập nhanh (Chế độ Demo Sinh viên)',
                     icon: Icons.person_outline,
                     onPressed: () async {
+                      final nav = Navigator.of(context);
                       await authVM.signInDemoStudent();
                       if (!mounted) return;
-                      Navigator.pushReplacement(
-                        context,
+                      nav.pushReplacement(
                         MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
                       );
                     },
