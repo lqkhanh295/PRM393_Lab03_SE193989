@@ -1,0 +1,14 @@
+[project]
+name = "campus-event-artemis-tests"
+version = "1.0.0"
+description = "Automated E2E Test Suite with Google ARTEMIS for PRM393 Lab 3"
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["e2e_test"]
+python_files = "test_*.py"
