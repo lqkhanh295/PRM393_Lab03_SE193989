@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>PRM323 Lab 2 - Kịch Bản Thuyết Trình & Demo</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 18mm 15mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1D1A23;
+    background: #FFFFFF;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Header Cover Block */
+  .cover-block {
+    background: linear-gradient(135deg, #1A1528 0%, #2D2342 100%);
+    color: #FFFFFF;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .cover-badge {
+    display: inline-block;
+    background: #5E548E;
+    color: #FFFFFF;
+    font-size: 8.5pt;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .cover-title {
+    font-size: 20pt;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+    line-height: 1.25;
+    color: #FFFFFF;
+  }
+  .cover-subtitle {
+    font-size: 11.5pt;
+    color: #CABEFF;
+    margin: 0 0 14px 0;
+  }
+  .cover-meta {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 12px;
+    font-size: 9pt;
+    color: #E7E0ED;
+  }
+
+  /* Section Headings */
+  h2 {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #463C75;
+    border-bottom: 2px solid #5E548E;
+    padding-bottom: 6px;
+    margin: 26px 0 16px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  h3 {
+    font-size: 11.5pt;
+    font-weight: 700;
+    color: #2D2342;
+    margin: 0 0 6px 0;
+  }
+
+  /* Slide Card */
+  .slide-card {
+    background: #FFFFFF;
+    border: 1px solid #E7E0ED;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    page-break-inside: avoid;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #F1EBF5;
+    padding-bottom: 8px;
+  }
+  .slide-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .slide-num {
+    background: #463C75;
+    color: #FFFFFF;
+    font-size: 9pt;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .slide-timing {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #5E548E;
+    background: #EDE5F2;
+    padding: 3px 9px;
+    border-radius: 12px;
+  }
+  .slide-meta-row {
+    font-size: 8.5pt;
+    color: #706B78;
+    margin-bottom: 10px;
+    background: #F8F6FA;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .slide-meta-row b {
+    color: #463C75;
+  }
+  
+  /* Speech Box */
+  .speech-box {
+    background: #F9F7FB;
+    border-left: 3.5px solid #5E548E;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 10pt;
+    color: #1D1A23;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+  .speech-label {
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #5E548E;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* QA Block */
+  .qa-card {
+    background: #FFFFFF;
+    border: 1px solid #E7E0ED;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+  .qa-q {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #463C75;
+    margin-bottom: 8px;
+  }
+  .qa-a {
+    background: #F8F6FA;
+    border-left: 3px solid #4E8B65;
+    padding: 10px 14px;
+    font-size: 9.5pt;
+    color: #221C2B;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.55;
+  }
+
+  /* Checklist Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin-top: 10px;
+  }
+  th, td {
+    border: 1px solid #E7E0ED;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #EDE5F2;
+    color: #463C75;
+    font-weight: 700;
+  }
+  tr:nth-child(even) td {
+    background: #FAF8FC;
+  }
+
+  .highlight-tag {
+    background: #EDE5F2;
+    color: #463C75;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .footer-note {
+    text-align: center;
+    font-size: 8.5pt;
+    color: #706B78;
+    margin-top: 24px;
+    border-top: 1px solid #E7E0ED;
+    padding-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover-block">
+  <span class="cover-badge">PRM323 / PRM393 · LAB 2 · TÀI LIỆU HƯỚNG DẪN BÁO CÁO</span>
+  <h1 class="cover-title">CAMPUS EVENT MOBILE APP</h1>
+  <p class="cover-subtitle">Kịch Bản Thuyết Trình Slide (10 Phút) · Kịch Bản Demo Trực Tiếp (5 Phút) · 7 Câu Hỏi Vấn Đáp Giảng Viên</p>
+  <div class="cover-meta">
+    <span><b>Sinh viên thực hiện:</b> Lê Quốc Khánh</span>
+    <span><b>Đơn vị:</b> Đại học FPT TP.HCM</span>
+    <span><b>Chuẩn tham chiếu:</b> PRM393 Lab 2 Presentation Guideline (2026)</span>
+  </div>
+</div>
+
+<h2>PHẦN 1: KỊCH BẢN THUYẾT TRÌNH SLIDE (10 PHÚT — 12 SLIDES)</h2>
+
+<!-- SLIDE 01 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 01</span>
+      <h3>PROJECT OVERVIEW — TỔNG QUAN DỰ ÁN</h3>
+    </div>
+    <span class="slide-timing">⏱ 0:00 – 0:45 (45s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> GitHub Repository + Figma Link (View mode) | <b>Trọng tâm:</b> Bối cảnh FPTU, Pain points thực tế, Chuỗi giá trị 6 bước.
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Kính chào Thầy/Cô và các bạn! Hôm nay em xin đại diện trình bày bài báo cáo Lab 2 môn PRM323 với đề tài: <b>Thiết kế UI/UX ứng dụng Campus Event cho Đại học FPT TP.HCM có sự hỗ trợ của AI (từ Google Stitch sang Figma)</b>.<br><br>
+    Xuất phát từ thực tế tại trường, thông tin sự kiện của hơn 40 câu lạc bộ hiện đang bị phân mảnh trên mạng xã hội khiến sinh viên dễ bỏ lỡ. Thêm vào đó, khâu điểm danh thủ công bằng giấy hoặc form Excel tại sảnh hội trường Trịnh Công Sơn thường xuyên gây ùn tắc kéo dài từ 15 đến 20 phút và tiềm ẩn gian lận điểm danh hộ.<br><br>
+    Ứng dụng này được thiết kế nhằm số hóa trọn vẹn quy trình: từ khám phá, đăng ký nhận vé điện tử QR offline cho sinh viên, đến công cụ tạo sự kiện wizard cho Ban chủ nhiệm CLB và cổng kiểm duyệt tập trung cho Phòng CTSV. Toàn bộ đồ án tuân thủ nghiêm ngặt chuỗi quyết định thiết kế: <b>Analyze &rarr; Generate &rarr; Critique &rarr; Refine &rarr; Prototype &rarr; Handoff</b>."
+  </div>
+</div>
+
+<!-- SLIDE 02 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 02</span>
+      <h3>PROBLEM STATEMENT & PERSONAS</h3>
+    </div>
+    <span class="slide-timing">⏱ 0:45 – 01:40 (55s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>ux/persona.md</code> (12 trường cốt lõi, JTBD, A11y, 100đ Gate G2)
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Để bài toán thiết kế có căn cứ thực tế vững chắc, nhóm đã xây dựng cấu trúc Persona với trọng tâm tuyệt đối đặt vào người dùng cuối:<br><br>
+    - <b>Primary Persona (85%+ người dùng) — bạn Nguyễn Văn An, 20 tuổi</b>, sinh viên K18 SE. Nỗi đau lớn nhất của An là bài đăng sự kiện bị trôi, thủ tục đăng ký rườm rà, vào sự kiện thụ động và sau sự kiện bị thất lạc điểm rèn luyện. Mục tiêu của An là một vòng đời số hóa khép kín: khám phá CLB &rarr; đăng ký 1 chạm dưới 30 giây &rarr; vé QR offline &rarr; gửi câu hỏi trực tiếp cho diễn giả qua app &rarr; nhận chứng nhận số và cộng điểm rèn luyện tự động.<br>
+    - <b>Secondary Persona (15% di động) — bạn Trần Thị Mai, 21 tuổi</b>, Trưởng ban điều phối tại cửa hội trường. Trên điện thoại, Mai chỉ cần một công cụ duy nhất là <b>Mobile Check-in Desk</b>: máy quét QR nhạy dưới 1.5 giây, cảnh báo vé trùng lặp và hỗ trợ gõ mã tay khi màn hình khách bị nứt vỡ.<br>
+    - <b>Admin CTSV</b> được định vị rõ ràng trên nền tảng <b>Web Admin Portal Desktop</b>, không làm phình to ứng dụng di động của sinh viên.<br><br>
+    Nhóm đã chuyển hóa thành các chỉ số đo lường định lượng: <b>Thời gian đăng ký dưới 30 giây</b>, <b>Tốc độ quét vé tại cửa dưới 2 giây/người</b> và <b>Tự động cấp chứng nhận số cùng điểm rèn luyện 100% trong ngày</b>."
+  </div>
+</div>
+
+<!-- SLIDE 03 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 03</span>
+      <h3>INFORMATION ARCHITECTURE & SITEMAP</h3>
+    </div>
+    <span class="slide-timing">⏱ 01:40 – 02:25 (45s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>ux/user-flow.md</code> & Figma Page <code>01 User Flow</code>
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Dựa trên nhu cầu thực tế, nhóm tổ chức Kiến trúc thông tin gồm <b>40 màn hình chuẩn hóa</b>, phân bổ theo tỷ lệ vàng lấy người dùng làm trung tâm:<br><br>
+    - <b>Phân hệ Sinh viên chiếm áp đảo hơn 80% (28 màn hình):</b> Cấu trúc điều hướng sử dụng <b>Bottom Navigation 5 tab cấp cao</b> (Home Pulse, Explore Events, My Events, Campus Calendar, Student Profile). Phân hệ này bao quát trọn vẹn 3 giai đoạn: Trước sự kiện (Khám phá CLB, 1-tap register, Đồng bộ Google Calendar), Trong sự kiện (Live Agenda, Đặt câu hỏi Q&A diễn giả), và Sau sự kiện (Đánh giá 5 sao, Ví e-Certificate, Tích lũy Điểm rèn luyện).<br>
+    - <b>Phân hệ Mobile Check-in Desk gồm 8 màn hình:</b> Dành riêng cho nhân sự trực tại cửa hội trường với QR Scanner siêu tốc, cơ chế chống gian lận và bộ đếm lưu lượng trực tiếp.<br>
+    - <b>Phân hệ Quản trị trường gồm 4 màn hình cầu nối Web CMS:</b> Giám sát khẩn cấp hội trường và trích xuất dữ liệu trên Desktop.<br><br>
+    Cách tổ chức này triệt tiêu hoàn toàn sự cồng kềnh, giúp sinh viên luôn cảm nhận được sự gần gũi, tiện ích và năng động của môi trường đại học."
+  </div>
+</div>
+
+<!-- SLIDE 04 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 04</span>
+      <h3>THREE CORE USER FLOWS</h3>
+    </div>
+    <span class="slide-timing">⏱ 02:25 – 03:15 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>ux/user-flow.md</code> & Figma Page <code>01 User Flow</code>
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Trên slide 04 là 3 luồng người dùng cốt lõi khép kín hành trình thực tế:<br><br>
+    1. <b>Flow 1 — Happy Path (Sinh viên Đăng ký & Đồng bộ lịch):</b> An chọn Workshop AI của CLB F-Code &rarr; xem lịch trình &rarr; bấm nút nổi Đăng ký 1-chạm &rarr; modal tự động điền hồ sơ FPT &rarr; chuyển tiếp qua màn hình Loading &rarr; nhận vé thành công và đồng bộ ngay vào Google Calendar.<br>
+    2. <b>Flow 2 — Interactive & Reward Path (Trải nghiệm trong & sau sự kiện):</b> Sau khi check-in, app tự kích hoạt chế độ Live Companion. An theo dõi timeline và gõ câu hỏi cho diễn giả tại Live Q&A. Khi sự kiện kết thúc, An gửi đánh giá 5 sao &rarr; Hệ thống tự động mở khóa giấy chứng nhận e-Certificate vào ví và cộng 5 điểm rèn luyện vào Profile.<br>
+    3. <b>Flow 3 — Error & Recovery Path (Quét vé tại cửa & Phục hồi lỗi):</b> Tại cổng sảnh Trịnh Công Sơn, nhân viên quét một mã vé bị trùng. Hệ thống rung haptic, hiện thẻ đỏ chi tiết: 'Vé đã check-in lúc 14:02'. Nhân viên có ngay 2 lối thoát: bấm 'Quét lại' reset camera dưới 1 giây, hoặc bấm 'Nhập mã thủ công' khi màn hình khách bị nứt vỡ &rarr; Hoàn toàn không có ngõ cụt."
+  </div>
+</div>
+
+<!-- SLIDE 05 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 05</span>
+      <h3>AI UI GENERATION PROCESS (GOOGLE STITCH)</h3>
+    </div>
+    <span class="slide-timing">⏱ 03:15 – 04:00 (45s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>ai-design-log.md</code> (Mục 1) & Thư mục Stitch exports
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Để tạo ra bộ UI trên Google Stitch, nhóm không sử dụng prompt ngắn tùy tiện mà áp dụng <b>Khung kỹ thuật Prompting chuẩn 5 yếu tố</b>:<br>
+    - Persona sinh viên FPTU HCMC;<br>
+    - Nhiệm vụ quản lý sự kiện và vé QR;<br>
+    - Nền tảng di động chuẩn 360 và 390dp;<br>
+    - Ràng buộc: không dùng màu cam FPT chói mắt, tối ưu chữ tiếng Việt có dấu, cỡ chữ &ge; 14 sp;<br>
+    - Phong cách thẩm mỹ Apple-inspired Liquid Glass với tone tím Deep Violet.<br><br>
+    Kết quả ban đầu từ Stitch đã dựng rất nhanh 15 màn hình cơ sở với hiệu ứng kính mờ glassmorphism hiện đại. Tuy nhiên, nhóm đánh giá khách quan thấy AI còn nhiều hạn chế lớn: thiếu phân hệ Leader/Admin, chữ tiếng Việt bị cắt dấu và lạm dụng bo tròn nút bấm."
+  </div>
+</div>
+
+<!-- SLIDE 06 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 06</span>
+      <h3>AI ITERATIONS & UX CRITIQUE (3 VÒNG LẶP)</h3>
+    </div>
+    <span class="slide-timing">⏱ 04:00 – 04:50 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>ai-design-log.md</code> (Mục 3 & 4: Before vs After)
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Đây là minh chứng cho tinh thần phản biện AI độc lập của nhóm qua 3 vòng lặp có mục tiêu hoàn toàn khác nhau:<br><br>
+    - <b>Vòng 1 — Mở rộng Nghiệp vụ:</b> Prompt yêu cầu AI sinh thêm 25 màn hình phân hệ Leader, Admin và luồng Check-in để hoàn thiện tổng 40 màn hình.<br>
+    - <b>Vòng 2 — Phản biện UX theo 10 Heuristics của Jakob Nielsen:</b> Nhóm chỉ ra 5 lỗi cụ thể: (1) Vi phạm Heuristic #1: Thiếu loading khi tạo vé; (2) Vi phạm Heuristic #9: Lỗi quét vé chỉ hiện chữ 'Fail' mơ hồ; (3) Vi phạm Accessibility: Nút icon back chỉ có 32dp; (4) Lỗi Font tiếng Việt: Dấu thanh bị chém mất do <code>leading-none</code>; (5) Vi phạm Consistency: Bo tròn Pill tùy tiện mọi nút bấm.<br>
+    - <b>Vòng 3 — Chuẩn hóa Kỹ thuật:</b> Nhóm prompt bộ chỉ thị kỹ thuật nghiêm ngặt: nâng line-height lên 1.4, bọc icon trong khung chạm 48&times;48 dp và chuẩn hóa bo góc 12px cho button, 16px cho card."
+  </div>
+</div>
+
+<!-- SLIDE 07 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 07</span>
+      <h3>DESIGN DECISIONS: ACCEPT, MODIFY & REJECT</h3>
+    </div>
+    <span class="slide-timing">⏱ 04:50 – 05:40 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>design-decisions.md</code> (Mục 1)
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Từ quá trình phản biện, nhóm đưa ra các quyết định thiết kế dứt khoát:<br><br>
+    - <b>[ACCEPT]:</b> Nhóm chấp nhận thanh Floating Action Bar cố định đáy màn hình chi tiết sự kiện giúp tăng tỷ lệ đăng ký; Chấp nhận chiều sâu thị giác Liquid Glass và giải pháp Dynamic QR Token để chống gian lận.<br>
+    - <b>[MODIFY]:</b> Nhóm điều chỉnh khoảng hở dòng tiếng Việt và padding dọc để bảo vệ 100% dấu thanh; Mở rộng vùng chạm tối thiểu &ge; 48&times;48 dp; và phân tầng bo góc chuẩn mực.<br>
+    - <b>[REJECT]:</b> Đặc biệt, nhóm <b>TỪ CHỐI DỨT KHOÁT việc AI dùng màu cam FPT truyền thống khắp màn hình</b> vì gây chói mắt và biến app thành trang hành chính nhàm chán. Nhóm cũng <b>TỪ CHỐI các thông báo lỗi chung chung</b> và <b>TỪ CHỐI cho Leader tự duyệt sự kiện của mình</b> để bảo đảm quy tắc bảo mật <code>BR-011</code>."
+  </div>
+</div>
+
+<!-- SLIDE 08 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 08</span>
+      <h3>WIREFRAME TO FINAL UI EVOLUTION</h3>
+    </div>
+    <span class="slide-timing">⏱ 05:40 – 06:30 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> Figma Page <code>02 Wireframe</code> & Page <code>03 Final UI</code>
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Trên slide 08 là sự tiến hóa từ khung xương bố cục Low-Fi sang giao diện hoàn chỉnh High-Fi:<br><br>
+    - Tại <b>Page 02 Wireframe</b>, nhóm tập trung định hình thứ bậc thị giác theo quy tắc đọc Z-pattern và F-pattern, tối ưu vùng bấm ngón cái và cố định khoảng đệm lề 20px mà không bị phân tâm bởi màu sắc.<br>
+    - Sang <b>Page 03 Final UI</b>, giao diện đạt độ hoàn thiện cao với 40 màn hình đồng nhất. Nhóm bảo đảm <b>100% màn hình đều bao quát đủ 4 trạng thái tương tác</b>: Trạng thái mặc định (Default), Trạng thái tải dữ liệu (Skeleton Shimmer & Spinner), Trạng thái rỗng (Empty State khi chưa có sự kiện) và Trạng thái báo lỗi (Error State kèm hành động khắc phục cụ thể)."
+  </div>
+</div>
+
+<!-- SLIDE 09 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 09</span>
+      <h3>DESIGN SYSTEM & COMPONENT ARCHITECTURE</h3>
+    </div>
+    <span class="slide-timing">⏱ 06:30 – 07:20 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> Figma Page <code>04 Design System</code> & Page <code>05 Components</code>
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Hệ thống Design System của Campus Event được quản lý tập trung và khoa học:<br><br>
+    - Tại <b>Page 04</b>, toàn bộ mã màu Deep Violet (<code>#463C75</code>), bảng chữ Be Vietnam Pro 8 bậc, lưới khoảng cách 8pt grid, bo góc và elevation đều được thiết lập bằng <b>Figma Variables</b>. Khi thay đổi một token màu hoặc spacing, toàn bộ 40 màn hình sẽ tự động cập nhật ngay lập tức.<br>
+    - Tại <b>Page 05</b>, nhóm xây dựng <b>đầy đủ 9 nhóm Component bắt buộc</b>: Button, Text field, Card, Navigation, App bar, Dialog, Loading, Empty và Error. 100% Component đều áp dụng <b>Auto Layout</b> linh hoạt và thiết lập <b>Component Set Variants</b> cho các trạng thái Default, Hover, Pressed, Disabled và Error."
+  </div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 10</span>
+      <h3>ACCESSIBILITY & RESPONSIVE COMPLIANCE</h3>
+    </div>
+    <span class="slide-timing">⏱ 07:20 – 08:10 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>design-decisions.md</code> (Mục 2 & 3: WCAG 2.2 AA audit)
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Về tiêu chuẩn tiếp cận và khả năng tương thích, nhóm tự hào đáp ứng vượt chuẩn quốc tế WCAG 2.2 AA:<br><br>
+    - <b>Độ tương phản màu sắc (Contrast Ratio):</b> Văn bản thông thường <code>#1D1A23</code> trên nền <code>#F8F6FA</code> đạt <b>13.8:1</b> (vượt xa chuẩn 4.5:1); chữ trắng trên nút Primary đạt <b>7.2:1</b>.<br>
+    - <b>Không chỉ dựa vào màu sắc (Not Color Alone):</b> Trạng thái vé luôn kết hợp cả Mã màu + Icon hình học + Nhãn Text rõ ràng, vượt qua hoàn hảo bài kiểm tra Grayscale test.<br>
+    - <b>Công thái học di động:</b> Mọi nút bấm và icon tương tác đều đạt vùng chạm &ge; 48&times;48 dp, font nội dung &ge; 14 sp.<br>
+    - <b>Đáp ứng đa kích thước (Responsive):</b> Nhờ cơ chế Auto Layout với thuộc tính <code>Fill Container</code>, giao diện hiển thị vừa vặn hoàn hảo từ màn hình hẹp <b>360dp</b> đến màn hình lớn <b>412dp</b>, không bao giờ bị tràn viền hay vỡ bố cục."
+  </div>
+</div>
+
+<!-- SLIDE 11 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 11</span>
+      <h3>LIVE PROTOTYPE ARCHITECTURE & DEMO SCRIPT</h3>
+    </div>
+    <span class="slide-timing">⏱ 08:10 – 09:00 (50s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> Figma Page <code>06 Prototype</code>
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Slide 11 tóm lược kịch bản 5 phút demo trực tiếp mà nhóm sẽ trình diễn ngay sau phần slide:<br><br>
+    - <b>Phần 1 (Sinh viên):</b> Tìm sự kiện &rarr; xem chi tiết &rarr; bấm Đăng ký &rarr; Modal Overlay làm mờ nền &rarr; hiệu ứng chuyển cảnh Loading sang Thành công &rarr; mở vé QR offline.<br>
+    - <b>Phần 2 (Leader & Admin):</b> Tạo sự kiện Wizard 4 bước &rarr; Demo nút 'Lưu bản nháp' &rarr; Gửi duyệt &rarr; Admin mở Approval Center phê duyệt &rarr; chuyển trạng thái thành PUBLISHED.<br>
+    - <b>Phần 3 (Khắc phục lỗi Check-in):</b> Quét mã QR bị trùng &rarr; Cảnh báo đỏ &rarr; Demo nút 'Quét lại' và 'Nhập mã vé thủ công' dự phòng.<br><br>
+    Toàn bộ luồng tương tác đều có nút Back hoạt động chuẩn xác và cam kết không có ngõ cụt."
+  </div>
+</div>
+
+<!-- SLIDE 12 -->
+<div class="slide-card">
+  <div class="slide-header">
+    <div class="slide-title-wrap">
+      <span class="slide-num">SLIDE 12</span>
+      <h3>FLUTTER HANDOFF SPECIFICATION & SUMMARY</h3>
+    </div>
+    <span class="slide-timing">⏱ 09:00 – 10:00 (60s)</span>
+  </div>
+  <div class="slide-meta-row">
+    <b>Minh chứng liên kết:</b> <code>flutter-handoff.md</code> & GitHub Repository
+  </div>
+  <div class="speech-box">
+    <span class="speech-label">Lời thoại thuyết trình:</span>
+    "Để chuẩn bị cho giai đoạn lập trình mã nguồn ở Lab 3, nhóm đã biên soạn tài liệu bàn giao <code>flutter-handoff.md</code> hoàn chỉnh:<br><br>
+    - <b>Bảng ánh xạ 1:</b> Chuyển đổi toàn bộ Tokens màu sắc, typography và khoảng cách sang Flutter <code>ThemeData</code> (<code>ColorScheme</code>, <code>TextTheme</code>, <code>BorderRadius</code>).<br>
+    - <b>Bảng ánh xạ 2:</b> Ánh xạ 9 nhóm Component sang các Flutter Widget tương ứng (<code>FilledButton</code>, <code>TextFormField</code>, <code>Card</code> + <code>ClipRRect</code>, <code>mobile_scanner</code>).<br>
+    - Kèm <b>Đặc tả 6 mục chi tiết</b> cho từng màn hình then chốt. Một lập trình viên Flutter chưa biết dự án có thể đọc tài liệu này và lập trình ngay mà không cần phỏng đoán.<br><br>
+    <b>Tổng kết:</b> Nhóm đã hoàn thành trọn vẹn 40 màn hình chuẩn hóa, 6 Page Figma, 7 tệp tài liệu Markdown và slide thuyết trình. Sau đây, em xin phép chuyển sang màn hình Figma để tiến hành <b>5 phút Demo trực tiếp Prototype</b>. Em xin trân trọng cảm ơn Thầy/Cô đã chú ý lắng nghe!"
+  </div>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<h2>PHẦN 2: KỊCH BẢN DEMO TRỰC TIẾP TRÊN FIGMA (5 PHÚT — 7 BƯỚC)</h2>
+
+<div class="slide-card">
+  <h3>Bước 1 (0:00 – 0:30): Mở File Figma & Kiểm tra Cấu trúc 6 Trang</h3>
+  <p><b>Hành động:</b> Mở danh sách Pages bên trái trong Figma.</p>
+  <div class="speech-box">
+    "Em xin phép mở file Figma của dự án. Thầy/Cô có thể thấy file được tổ chức chuẩn xác theo đúng 6 Page theo thứ tự quy định: 01 User Flow, 02 Wireframe, 03 Final UI, 04 Design System, 05 Components, 06 Prototype."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 2 (0:30 – 1:00): Kiểm tra Màn hình Hoàn chỉnh trên 03 Final UI</h3>
+  <p><b>Hành động:</b> Chuyển sang Page 03 Final UI, thu nhỏ view để thấy toàn cảnh.</p>
+  <div class="speech-box">
+    "Tại Page 03 Final UI, đề tài yêu cầu tối thiểu 8 màn hình khác nhau (không tính dialog và biến thể trạng thái). Nhóm em đã hoàn thiện đầy đủ cả 40 màn hình chuẩn hóa, được tái cấu trúc theo mô hình <b>Student-Centric Mobile Architecture</b>: Phân hệ Sinh viên chiếm hơn 80% (28 màn hình) bao quát trọn vẹn vòng đời; Phân hệ Mobile Check-in Desk gồm 8 màn hình tác vụ cơ động tại cổng; và Phân hệ Quản trị trường gồm 4 màn hình cầu nối Web CMS định vị các nghiệp vụ quản trị phức tạp trên máy tính."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 3 (1:00 – 2:30): Chạy Tương tác 3 Luồng trên 06 Prototype</h3>
+  <p><b>Hành động:</b> Bấm Present (Play) mở chế độ Prototype toàn màn hình.</p>
+  <div class="speech-box">
+    <b>1. Flow 1 (Sinh viên Đăng ký & Đồng bộ lịch):</b> "Bắt đầu từ Home Pulse hoặc trang CLB F-Code, em chọn Workshop AI, xem lịch trình và diễn giả. Bấm nút nổi 'Đăng ký tham gia', modal xác nhận 1 chạm tự điền hồ sơ FPT xuất hiện. Em bấm xác nhận, hệ thống chuyển sang màn hình Loading chuyển tiếp trong 1.5 giây, sau đó báo thành công, cấp vé điện tử có Ticket ID kèm QR Token động và đồng bộ ngay vào Google Calendar mà không gặp ngõ cụt nào."<br><br>
+    <b>2. Flow 2 (Trải nghiệm Trong & Sau sự kiện):</b> "Sau khi check-in tại cửa, app tự động chuyển sang chế độ Live Companion. Em theo dõi agenda trực tiếp, mở tab Live Q&A gõ câu hỏi cho diễn giả và upvote câu hỏi hay. Khi sự kiện bế mạc, em gửi đánh giá 5 sao kèm nhận xét, hệ thống lập tức mở khóa Giấy chứng nhận e-Certificate trong ví và cộng 5 Điểm rèn luyện vào hồ sơ sinh viên."<br><br>
+    <b>3. Flow 3 (Check-in Cổng & Phục hồi lỗi):</b> "Cuối cùng là luồng điểm danh cơ động tại cửa. Nhân viên mở Mobile Check-in Desk. Em mô phỏng quét một mã vé đã được check-in lúc 14:02. Giao diện tức thì rung haptic và hiện thẻ đỏ cảnh báo vé trùng lặp. Lúc này nhân viên có 2 phương án phục hồi: bấm 'Quét lại' để reset camera dưới 1 giây, hoặc bấm 'Nhập mã thủ công' khi màn hình khách bị nứt vỡ để hoàn tất thủ công mà không làm tắc nghẽn hàng chờ."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 4 (2:30 – 3:00): Trình diễn Modal Overlay & Loading &rarr; Result</h3>
+  <p><b>Hành động:</b> Chỉ trực tiếp vào tương tác Modal Overlay và chuyển cảnh Loading.</p>
+  <div class="speech-box">
+    "Khi bấm Đăng ký, modal S09 hiện lên dưới dạng Overlay làm mờ hậu cảnh (backdrop-blur). Sau đó chuyển cảnh sang S10 Loading với spinner trước khi hiển thị S11 Success. Mọi phản hồi trạng thái đều đáp ứng Heuristic #1 của Nielsen."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 5 (3:00 – 3:45): Kiểm tra Page 04 Design System & 05 Components</h3>
+  <p><b>Hành động:</b> Mở bảng Variables trên Page 04, chuyển sang Page 05 chỉ Component Auto Layout.</p>
+  <div class="speech-box">
+    "Tại Page 04, toàn bộ Color, Typography (Be Vietnam Pro 8 bậc), Spacing, Radius và Elevation đều quản lý bằng Figma Variables. Sang Page 05 Components, nhóm xây dựng đủ 9 nhóm component. 100% component đều áp dụng Auto Layout và Component Set Variants."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 6 (3:45 – 4:15): Minh chứng Vòng lặp AI trong ai-design-log.md</h3>
+  <p><b>Hành động:</b> Mở tệp ai-design-log.md trên màn hình trình chiếu.</p>
+  <div class="speech-box">
+    "Nhóm ghi lại nhật ký 3 vòng lặp AI có mục tiêu khác nhau: Vòng 1 mở rộng nghiệp vụ, Vòng 2 phản biện 5 lỗi UX cụ thể theo Nielsen, và Vòng 3 chuẩn hóa Design System. Từng vòng lặp đều có ảnh và code Before/After đối chứng."
+  </div>
+</div>
+
+<div class="slide-card">
+  <h3>Bước 7 (4:15 – 5:00): Kiểm tra GitHub Repo & Flutter Handoff</h3>
+  <p><b>Hành động:</b> Mở GitHub Repo, chỉ vào README.md và flutter-handoff.md.</p>
+  <div class="speech-box">
+    "Cuối cùng tại GitHub Repo, nhóm chuẩn bị đầy đủ tài liệu README.md chỉ mục, ux/persona.md, ux/user-flow.md, và flutter-handoff.md với 2 bảng ánh xạ Token sang Flutter ThemeData và Component sang Flutter Widget, kèm đặc tả 6 mục cho từng màn hình."
+  </div>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+<h2>PHẦN 3: BỘ 7 CÂU HỎI VẤN ĐÁP CỦA GIẢNG VIÊN & CÂU TRẢ LỜI MẪU</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 1: Persona có nhu cầu gì khiến nhóm chọn cấu trúc điều hướng này?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Xuất phát từ nhu cầu thực tế của Persona An và Mai: Với sinh viên An, bối cảnh dùng điện thoại 1 tay khi di chuyển nên 5 tác vụ thường nhật (Home, Explore, My Events, Calendar, Profile) đặt cố định ở Bottom Navigation để tối ưu Thumb Zone. Với Event Leader Mai, tác vụ tạo sự kiện hoặc quét QR mang tính quy trình phức tạp nhiều bước nên nhóm dùng điều hướng dạng Modal/Wizard 4 bước để cô lập không gian làm việc, giúp tập trung cao độ.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 2: Flow nào dễ thất bại nhất? Khi xảy ra lỗi người dùng phục hồi ra sao?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Luồng dễ thất bại nhất là Flow 3: Quét QR Check-in tại cổng vì phụ thuộc mạng 4G, camera mờ hoặc sinh viên dùng lại vé cũ. Khi xảy ra lỗi, hệ thống cung cấp ngay 2 cơ chế phục hồi: (1) Nút 'Quét lại' khởi động lại camera stream trong 0.3s; (2) Nút 'Nhập mã thủ công' cho phép gõ mã Ticket ID (ví dụ: CE2026-083291) để điểm danh dự phòng mà không gây nghẽn hàng chờ.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 3: Một đề xuất AI nào đã bị nhóm từ chối? Vì sao?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Đề xuất bị từ chối dứt khoát nhất là AI đề xuất dùng màu cam FPT truyền thống (#F36F21) làm màu chủ đạo toàn bộ app. Nhóm từ chối vì màu cam đậm trên màn hình OLED gây chói mắt (Visual Fatigue) vào ban đêm và làm app giống trang hành chính thô cứng. Nhóm quyết định dùng Deep Violet (#463C75) Liquid Glass thanh lịch, tương phản vượt chuẩn WCAG 2.2 AA (13.8:1). Ngoài ra, nhóm từ chối thông báo lỗi mơ hồ và từ chối cho Leader tự duyệt sự kiện của mình (BR-011).
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 4: Ba vòng lặp chỉnh sửa đã giải quyết ba vấn đề UX khác nhau như thế nào?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Vòng 1 giải quyết vấn đề Nghiệp vụ & Roles (sinh thêm 25 màn Leader, Admin, QR check-in). Vòng 2 giải quyết vấn đề Phản biện Heuristics Nielsen (phát hiện 5 lỗi: thiếu loading, lỗi mơ hồ, nút back 32dp, chữ tiếng Việt mất dấu, lạm dụng bo tròn pill). Vòng 3 giải quyết vấn đề Chuẩn hóa Kỹ thuật (line-height 1.4, vùng chạm 48dp, type scale 8 bậc, phân tầng bo góc 12px/16px/pill).
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 5: Nếu đổi primary color hoặc spacing token, các màn hình nào tự cập nhật?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Toàn bộ 40 màn hình sẽ tự động cập nhật ngay lập tức! Lý do là nhóm không dùng mã màu thô trên từng frame mà 100% màu sắc và khoảng cách đều liên kết qua Figma Variables và Design Tokens. Các nút bấm, card đều là Component Instances trỏ về Main Components tại Page 05.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 6: Làm thế nào chứng minh màn hình rộng 412 dp không vỡ layout?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Nhóm chứng minh bằng kỹ thuật Auto Layout Constraints: Cố định lề ngang 2 bên 20px; Tất cả container con (card, nút CTA, thanh search) đặt Fill Container; Tiêu đề tiếng Việt dài bật Auto Wrap và thẻ đặt Hug Content. Khi chuyển từ 360dp sang 412dp, phần dôi dư 52dp được hấp thụ tự nhiên vào bề ngang, không bao giờ vỡ hay tràn viền.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Câu 7: Một lập trình viên Flutter chưa biết dự án sẽ dựa vào đâu để dựng màn hình và states?</div>
+  <div class="qa-a">
+    <b>Trả lời:</b> Lập trình viên dựa hoàn toàn vào tệp flutter-handoff.md: Tra cứu Bảng ánh xạ 1 để điền màu sắc/font vào ThemeData; Tra cứu Bảng ánh xạ 2 để biết component tương ứng với Widget nào (FilledButton, TextFormField, Card+ClipRRect); Đọc Đặc tả 6 mục cho từng màn hình để nắm cấu trúc Widget tree và danh sách states (Default, Loading, Empty, Error).
+  </div>
+</div>
+
+<div class="footer-note">
+  PRM323 Lab 2 · Đại học FPT TP.HCM · Hoàn thành đúng chuẩn học thuật và sẵn sàng 100% cho buổi bảo vệ!
+</div>
+
+</body>
+</html>
