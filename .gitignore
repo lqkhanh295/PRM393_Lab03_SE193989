@@ -50,5 +50,4 @@ app.*.map.json
 android/app/google-services.json
 android/app/google-services.json.backup
 .taste-skill/
-
-.agents/
+.agents/skills/

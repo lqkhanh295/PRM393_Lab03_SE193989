@@ -91,3 +91,16 @@ pytest -v --tb=short
   1. *Pre-Event (Sinh viên):* Khám phá & Đăng ký sự kiện 1-chạm, đồng bộ Google Calendar.
   2. *In/Post-Event (Sinh viên):* Q&A diễn giả thời gian thực, Đánh giá 5 sao & Nhận e-Certificate lưu trữ Cloud.
   3. *Staff Gate Desk (Hậu cần Cửa):* Quét vé check-in 1.5s tại cửa, cảnh báo thẻ đỏ vé trùng, nhập mã dự phòng thủ công giải tỏa tắc nghẽn hàng chờ.
+
+---
+
+## 5. Quy Định Bắt Buộc Dự Án: Tuyệt Đối Không Dùng Mock Data (Strict Zero-Mock Policy)
+
+* **Chính sách Không Mock Data:** Dự án nghiêm cấm 100% việc lưu trữ hay tiêm (inject) danh sách dữ liệu mẫu, mock data, fake data hoặc fallback tĩnh trong mã nguồn ứng dụng (`lib/`).
+* **Nguồn Dữ Liệu Thực Tế:**
+  * Toàn bộ sự kiện, vé số, CLB, câu hỏi diễn giả, và chứng nhận đều kết nối trực tiếp với **Cloud Firestore** (`campus-event-48443`).
+  * Tài khoản và hồ sơ kết nối với **Firebase Authentication** và **Google SSO FPT**.
+  * File chứng nhận PDF được đẩy trực tiếp lên bucket **Firebase Cloud Storage**.
+  * Thông báo nhận qua token thiết bị **Firebase Cloud Messaging**.
+* **Xử Lý Trạng Thái Rỗng (Empty State):** Khi truy vấn không có dữ liệu, hệ thống trả về mảng rỗng `[]` và hiển thị `EmptyView` chuẩn, tuyệt đối không tự ý hiển thị danh sách mẫu.
+* **Chi tiết quy tắc:** Xem tài liệu cấu hình [`GEMINI.md`](./GEMINI.md), [`AGENTS.md`](./AGENTS.md) và [`.agents/rules/no_mock_data.md`](./.agents/rules/no_mock_data.md).
