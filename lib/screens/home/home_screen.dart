@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    user?.major ?? 'Kỹ thuật Phần mềm (SE)',
+                    user?.major ?? 'Sinh viên FPTU',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

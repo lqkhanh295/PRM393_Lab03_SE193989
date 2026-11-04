@@ -80,25 +80,28 @@ class AuthService {
         final UserCredential userCred = await _firebaseAuth.signInWithCredential(credential);
         final User? user = userCred.user;
         if (user != null) {
+          final prefix = (user.email ?? googleUser.email).split('@').first;
+          final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
           _currentUser = UserModel(
             id: user.uid,
-            name: user.displayName ?? googleUser.displayName ?? 'Nguyễn Văn An',
+            name: user.displayName ?? googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
             email: user.email ?? googleUser.email,
             avatarUrl: user.photoURL ?? googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-            major: 'Kỹ thuật Phần mềm (SE)',
-            activityPoints: 25,
+            major: 'Sinh viên FPTU',
+            activityPoints: 0,
             role: 'student',
           );
         }
       } else {
-        // Standalone / offline demo fallback
+        final prefix = googleUser.email.split('@').first;
+        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
         _currentUser = UserModel(
           id: googleUser.id,
-          name: googleUser.displayName ?? 'Nguyễn Văn An',
+          name: googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
           email: googleUser.email,
           avatarUrl: googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${googleUser.id}',
-          major: 'Kỹ thuật Phần mềm (SE)',
-          activityPoints: 25,
+          major: 'Sinh viên FPTU',
+          activityPoints: 0,
           role: 'student',
         );
       }
@@ -167,13 +170,13 @@ class AuthService {
             name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
             email: user.email ?? cleanEmail,
             avatarUrl: user.photoURL ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-            major: 'Kỹ thuật Phần mềm (SE)',
-            activityPoints: 25,
+            major: 'Sinh viên FPTU',
+            activityPoints: 0,
             role: 'student',
           );
         }
       } else {
-        // Standalone / offline demo fallback
+        // Standalone fallback
         final prefix = cleanEmail.split('@').first;
         final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
 
@@ -182,8 +185,8 @@ class AuthService {
           name: formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU',
           email: cleanEmail,
           avatarUrl: 'https://i.pravatar.cc/150?u=${cleanEmail.hashCode}',
-          major: 'Kỹ thuật Phần mềm (SE)',
-          activityPoints: 25,
+          major: 'Sinh viên FPTU',
+          activityPoints: 0,
           role: 'student',
         );
       }

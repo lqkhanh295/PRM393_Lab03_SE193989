@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../theme/app_theme.dart';
 import '../../viewmodels/mobile_desk_vm.dart';
+import '../../viewmodels/home_viewmodel.dart';
 import '../../services/firestore_service.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
@@ -10,7 +11,8 @@ import '../../widgets/app_text_field.dart';
 /// EL02: Mobile Gate Check-in Desk & QR Scanner Screen
 /// Staff Tooling HUD: high-contrast reticle, tabular figures, instant validation feedback.
 class MobileDeskScreen extends StatefulWidget {
-  const MobileDeskScreen({super.key});
+  final String? eventId;
+  const MobileDeskScreen({super.key, this.eventId});
 
   @override
   State<MobileDeskScreen> createState() => _MobileDeskScreenState();
@@ -25,7 +27,11 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MobileDeskViewModel>().loadEventStats('EVT-2026-01');
+      final homeVM = context.read<HomeViewModel>();
+      final targetId = widget.eventId ?? (homeVM.allEvents.isNotEmpty ? homeVM.allEvents.first.id : '');
+      if (targetId.isNotEmpty) {
+        context.read<MobileDeskViewModel>().loadEventStats(targetId);
+      }
     });
   }
 

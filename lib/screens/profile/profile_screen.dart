@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    user?.name ?? 'Nguyễn Văn An',
+                    user?.name ?? 'Chưa đăng nhập',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
@@ -78,10 +78,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    user?.email ?? 'an.nv@fptu.edu.vn',
-                    style: const TextStyle(fontSize: 13, color: AppTheme.textMuted),
-                  ),
+                  if (user?.email != null && user!.email.isNotEmpty)
+                    Text(
+                      user.email,
+                      style: const TextStyle(fontSize: 13, color: AppTheme.textMuted),
+                    ),
                   const SizedBox(height: 4),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -90,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      user?.major ?? 'Kỹ thuật Phần mềm (SE18)',
+                      user?.major ?? 'Sinh viên FPTU',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -99,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  ActivityPointsBadge(points: user?.activityPoints ?? 25),
+                  ActivityPointsBadge(points: user?.activityPoints ?? 0),
                 ],
               ),
             ),

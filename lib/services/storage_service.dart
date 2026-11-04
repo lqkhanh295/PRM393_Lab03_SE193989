@@ -58,18 +58,7 @@ class StorageService {
           fileSizeBytes: bytes.length,
         );
       } else {
-        // Mock fallback simulation for tests / desktop verification
-        for (int i = 1; i <= 5; i++) {
-          await Future.delayed(const Duration(milliseconds: 60));
-          onProgress?.call(i / 5.0);
-        }
-        final mockUrl = 'https://firebasestorage.googleapis.com/v0/b/campus-event-48443.firebasestorage.app/o/${Uri.encodeComponent(storagePath)}?alt=media';
-        debugPrint('[StorageService] Mock upload completed: $mockUrl');
-        return UploadResult(
-          path: storagePath,
-          downloadUrl: mockUrl,
-          fileSizeBytes: bytes.length,
-        );
+        throw StateError('Firebase Storage chưa được khởi tạo. Vui lòng kết nối dịch vụ Firebase.');
       }
     } catch (e) {
       debugPrint('[StorageService] Upload error: $e');

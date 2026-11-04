@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../models/ticket_model.dart';
+import '../../models/event_model.dart';
 import '../../models/screen_state.dart';
+import '../../services/firestore_service.dart';
 import '../../viewmodels/live_event_vm.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/question_card.dart';
@@ -24,13 +26,22 @@ class LiveCompanionScreen extends StatefulWidget {
 class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _questionController = TextEditingController();
+  EventModel? _event;
+  bool _isLoadingEvent = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<LiveEventViewModel>().loadLiveQuestions(widget.ticket.eventId);
+      final evt = await context.read<FirestoreService>().getEventById(widget.ticket.eventId);
+      if (mounted) {
+        setState(() {
+          _event = evt;
+          _isLoadingEvent = false;
+        });
+      }
     });
   }
 
@@ -126,6 +137,21 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
   }
 
   Widget _buildLiveTimelineTab(BuildContext context) {
+    if (_isLoadingEvent) {
+      return const LoadingView(message: 'Đang tải lịch trình trực tiếp...');
+    }
+
+    final sessions = _event?.sessions ?? [];
+    if (sessions.isEmpty) {
+      return const EmptyView(
+        title: 'Chưa có lịch trình phiên',
+        message: 'Ban tổ chức sự kiện chưa cập nhật lịch trình các phiên chi tiết.',
+      );
+    }
+
+    final currentSession = sessions.first;
+    final nextSessions = sessions.length > 1 ? sessions.sublist(1) : <EventSession>[];
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
       child: Column(
@@ -151,9 +177,9 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                         color: AppTheme.primaryContainer,
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
-                        'ĐANG DIỄN RA · 14:00 - 15:15',
-                        style: TextStyle(
+                      child: Text(
+                        'PHIÊN HIỆN TẠI · ${currentSession.time}',
+                        style: const TextStyle(
                           color: AppTheme.onPrimaryContainer,
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -165,20 +191,22 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                   ],
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Keynote: Kỷ nguyên Autonomous Coding Agents & AI Pair Programming',
-                  style: TextStyle(
+                Text(
+                  currentSession.title,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.onSurface,
                     height: 1.3,
                   ),
                 ),
-                const SizedBox(height: 6),
-                const Text(
-                  'Diễn giả: TS. Nguyễn Văn Hùng (FPT Software AI Lab)',
-                  style: TextStyle(fontSize: 13, color: AppTheme.textMuted),
-                ),
+                if (currentSession.speakerName.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    'Diễn giả: ${currentSession.speakerName}',
+                    style: const TextStyle(fontSize: 13, color: AppTheme.textMuted),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 AppOutlinedButton(
                   label: 'Tải Slide Báo Cáo Của Diễn Giả (PDF)',
@@ -192,28 +220,25 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
               ],
             ),
           ),
-          const SizedBox(height: 24),
-
-          const Text(
-            'CÁC PHIÊN TIẾP THEO',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: AppTheme.textMuted,
-              letterSpacing: 0.8,
+          if (nextSessions.isNotEmpty) ...[
+            const SizedBox(height: 24),
+            const Text(
+              'CÁC PHIÊN TIẾP THEO',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.textMuted,
+                letterSpacing: 0.8,
+              ),
             ),
-          ),
-          const SizedBox(height: 10),
-          _buildNextSessionTile(
-            '15:15 - 16:30',
-            'Workshop: Xây dựng Mobile App với Flutter & Firebase',
-            'ThS. Trần Thu Hà (Google Developer Expert)',
-          ),
-          _buildNextSessionTile(
-            '16:30 - 17:30',
-            'Hỏi đáp Q&A toàn thể diễn giả & Bế mạc',
-            'Toàn thể diễn giả & Ban tổ chức FPTU',
-          ),
+            const SizedBox(height: 10),
+            for (final session in nextSessions)
+              _buildNextSessionTile(
+                session.time,
+                session.title,
+                session.speakerName,
+              ),
+          ],
         ],
       ),
     );
