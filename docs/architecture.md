@@ -160,3 +160,36 @@ sequenceDiagram
    - All ViewModels receive their service dependencies via constructor injection. In production, dependencies are supplied via `MultiProvider` in `lib/main.dart`; in automated tests, fake/mock services are injected without touching real network sockets.
 4. **Business Logic Isolation:**
    - All filtering, data aggregation, eligibility checks, and form validations are implemented inside ViewModels or Services, ensuring `build()` methods in widgets remain strictly declarative and side-effect free.
+
+---
+
+## 6. Phân tách Hệ thống: Mobile App (Student-First) vs. Desktop Web Portal (CTSV)
+
+Để bảo đảm ứng dụng không bị loãng và tối ưu triệt để công thái học theo tiêu chuẩn chuyên nghiệp:
+
+```mermaid
+flowchart LR
+    subgraph Mobile_App [📱 Flutter Mobile Client - 100% Student & Gate Logistics]
+        direction TB
+        An[🎓 Sinh viên An: 85%+ Traffic<br/>Khám phá · Đăng ký · Dynamic QR · Live Q&A · Chứng nhận ĐRL]
+        Mai[⚡ CTV Mai: Hậu cần Cổng<br/>Quét vé 1.5s · Chống nghẽn hàng chờ · Bắt vé trùng]
+    end
+
+    subgraph Web_Portal [💻 Desktop Web Admin CMS - Office Heavy Operations]
+        direction TB
+        Budget[💰 Thẩm định & Phê duyệt Dự toán Ngân sách CLB]
+        PCCC[🚒 Quản lý Hồ sơ An toàn PCCC & Sức chứa Hội trường]
+        Excel[📊 Xử lý Batch Data & Xuất Excel 10.000 Sinh viên]
+    end
+
+    Mobile_App -.->|Bridges & Links| Web_Portal
+```
+
+### Nguyên tắc Phân định:
+1. **Leader (Ban tổ chức cửa):**
+   - **Không phải** là một phân hệ app riêng biệt.
+   - Là một **tính năng hỗ trợ nhỏ ("Bàn điểm danh cổng")** nằm gọn trong trang `ProfileScreen` của CTV.
+   - **Mục đích duy nhất:** Quét mã vé cho sinh viên bước qua cửa trong **1.5 giây** mà không làm tắc nghẽn hàng chờ tại sảnh Trịnh Công Sơn, nhận diện tức thì vé đã check-in (thẻ đỏ duplicate).
+2. **Admin (Phòng CTSV):**
+   - **Được chuyển hẳn lên Web Portal trên máy tính**, vì việc duyệt ngân sách, kiểm tra an toàn PCCC, hay xuất file Excel 10.000 sinh viên là tác vụ văn phòng máy tính đòi hỏi màn hình lớn, bàn phím và chuột. **Hoàn toàn không làm trên màn hình điện thoại 6-inch**.
+   - Trên Mobile chỉ cung cấp thẻ thông tin minh bạch `_showWebPortalInfoModal` dẫn hướng kiến trúc.

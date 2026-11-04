@@ -79,9 +79,9 @@
 
 ### Câu hỏi 1: *"Persona có nhu cầu gì khiến nhóm chọn cấu trúc điều hướng này?"*
 * **Câu trả lời chuẩn:**
-  > *"Dạ thưa Thầy/Cô, nhóm chọn cấu trúc **Student-First Architecture với Bottom Navigation 5 Tab** kết hợp **Floating Action Bar & Mobile Desk** xuất phát từ nhu cầu thực tế của Persona Nguyễn Văn An (chiếm 85%+ người dùng) và Trần Thị Mai:  
+  > *"Dạ thưa Thầy/Cô, nhóm chọn cấu trúc **Student-First Architecture với Bottom Navigation 5 Tab** kết hợp **Bàn điểm danh cổng tại Profile** xuất phát từ nhu cầu thực tế của Persona Nguyễn Văn An (chiếm 85%+ người dùng) và Trần Thị Mai:  
   > 1. Với sinh viên An, bối cảnh là thường xuyên sử dụng điện thoại bằng một tay khi đang di chuyển trong sân trường, nên 5 tác vụ thường nhật nhất (Home Pulse, Explore Events, My Events, Campus Calendar, Student Profile) được đặt cố định ở thanh đáy để tối ưu 'Vùng ngón cái' (Thumb Zone). Toàn bộ vòng đời từ Khám phá, Đăng ký 1 chạm, Điểm danh, Live Q&A đến Đánh giá và nhận Điểm rèn luyện đều nằm trọn vẹn trong luồng của Sinh viên.  
-  > 2. Với Event Leader Mai tại cổng hội trường, Mai không cần các form quản trị dài dòng trên mobile mà chỉ cần một công cụ cơ động: **Mobile Check-in Desk**. Do đó, lối vào bàn điểm danh được nhóm thiết kế dưới dạng phím tắt nhanh trong Profile, cô lập không gian làm việc quét vé tốc độ cao mà không làm loãng giao diện chính của sinh viên."*
+  > 2. Với Leader (Ban tổ chức cửa) như Mai, Mai không phải là một phân hệ app riêng biệt, mà chỉ cần một tính năng hỗ trợ nhỏ (**'Bàn điểm danh cổng'**) nằm gọn trong trang Profile cá nhân của các bạn CTV. Mục đích duy nhất là quét mã vé cho sinh viên bước qua cửa trong **1.5 giây** mà không làm tắc nghẽn hàng chờ, hoàn toàn không làm loãng giao diện chính của sinh viên."*
 
 ---
 
@@ -136,6 +136,18 @@
   > - Để cấu hình giao diện tổng thể: Lập trình viên tra cứu **Bảng ánh xạ 1** để điền mã màu và kiểu chữ trực tiếp vào `ThemeData` (`ColorScheme`, `TextTheme`, `BorderRadius`).  
   > - Để hiện thực từng thành phần: Tra cứu **Bảng ánh xạ 2** để biết component tương ứng với Widget nào (`FilledButton`, `TextFormField`, `Card` + `ClipRRect`, `mobile_scanner`).  
   > - Để code màn hình cụ thể: Đọc phần **Đặc tả 6 mục** của màn hình đó để nắm rõ cấu trúc cây Widget, danh sách các trạng thái (Default, Loading, Empty, Error) và các sự kiện điều hướng mà không cần hỏi lại designer."*
+
+---
+
+### Câu hỏi 8 (Chiến lược): *"Tại sao nhóm không làm phân hệ Leader và Admin thành các Tab riêng trên thanh điều hướng Bottom Navigation của ứng dụng Mobile?"*
+* **Câu trả lời chuẩn (Vũ khí bảo vệ đồ án trước Hội đồng):**
+  > *"Dạ thưa Thầy/Cô, đây là quyết định thiết kế và công thái học chiến lược mà nhóm kiên định bảo vệ nhằm **tránh cho ứng dụng bị loãng và lệch trọng tâm**:  
+  > 
+  > 1. **Leader (Ban tổ chức cửa):** Không phải là một phân hệ app riêng biệt, mà chỉ là một **tính năng hỗ trợ nhỏ ('Bàn điểm danh cổng') nằm gọn trong trang Profile cá nhân của các bạn CTV**. Mục đích duy nhất là quét mã vé cho sinh viên bước qua cửa trong **1.5 giây** mà không làm tắc nghẽn hàng chờ. Việc đưa thành một tab riêng hay phân hệ riêng sẽ làm loãng luồng sinh viên, trong khi CTV chỉ cần mở bàn quét trong 1 thao tác từ Profile khi đến ca trực.  
+  > 
+  > 2. **Admin (Phòng CTSV):** **Được chuyển hẳn lên Web Portal trên máy tính**, vì việc duyệt ngân sách chi tiết hàng chục triệu đồng, kiểm tra hồ sơ an toàn PCCC & sơ đồ thoát hiểm, hay xuất file Excel 10.000 sinh viên là tác vụ văn phòng máy tính đòi hỏi màn hình lớn, chuột và bàn phím. **Hoàn toàn không ai làm các nghiệp vụ bàn giấy phức tạp đó trên màn hình điện thoại 6-inch**.  
+  > 
+  > Nhờ phân định rành mạch này, ứng dụng di động giữ được trọn vẹn 100% tinh thần **Student-Centric**, tải nhanh tức thì, đạt chuẩn Anti-slop sắc nét và vận hành mượt mà!"*
 
 ---
 

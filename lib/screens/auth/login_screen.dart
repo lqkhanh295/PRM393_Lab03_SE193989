@@ -4,10 +4,11 @@ import '../../theme/app_theme.dart';
 import '../../models/screen_state.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/app_text_field.dart';
 import '../main_navigation_screen.dart';
 
 /// S01: Login Screen
-/// Anti-slop Editorial Academic Portal: clean FPT University mark, sharp typography, zero blur.
+/// Supports both Google SSO and FPT University Email/Password Authentication.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -16,6 +17,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController(text: 'an.nv@fpt.edu.vn');
+  final _passwordController = TextEditingController(text: '123456');
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authVM = context.watch<AuthViewModel>();
@@ -92,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 28),
 
                   // Error State Display
                   if (authVM.state is StateError) ...[
@@ -119,21 +132,125 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
 
-                  // Primary Google SSO Button
-                  AppPrimaryButton(
+                  // Email & Password Form for FPT Students
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppTextField(
+                          controller: _emailController,
+                          label: 'Email FPT (@fpt.edu.vn)',
+                          hintText: 'an.nv@fpt.edu.vn',
+                          prefixIcon: Icons.alternate_email_rounded,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) {
+                              return 'Vui lòng nhập địa chỉ email FPT';
+                            }
+                            final clean = val.trim().toLowerCase();
+                            if (!clean.endsWith('@fpt.edu.vn') &&
+                                !clean.endsWith('@fe.edu.vn') &&
+                                !clean.endsWith('@fptu.edu.vn')) {
+                              return 'Email phải có đuôi @fpt.edu.vn, @fe.edu.vn hoặc @fptu.edu.vn';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        AppTextField(
+                          controller: _passwordController,
+                          label: 'Mật khẩu',
+                          hintText: 'Nhập mật khẩu (tối thiểu 6 ký tự)',
+                          prefixIcon: Icons.lock_outline_rounded,
+                          obscureText: _obscurePassword,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                              size: 20,
+                              color: AppTheme.textMuted,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) {
+                              return 'Vui lòng nhập mật khẩu';
+                            }
+                            if (val.trim().length < 6) {
+                              return 'Mật khẩu phải từ 6 ký tự trở lên';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        AppPrimaryButton(
+                          label: 'Đăng nhập với Email FPT',
+                          icon: Icons.login_rounded,
+                          isLoading: isLoading,
+                          onPressed: () async {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              final nav = Navigator.of(context);
+                              final success = await authVM.signInWithEmailPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                              );
+                              if (!mounted) return;
+                              if (success) {
+                                nav.pushReplacement(
+                                  MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Divider with "HOẶC"
+                  Row(
+                    children: const [
+                      Expanded(child: Divider(color: AppTheme.hairline, thickness: 1)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 14),
+                        child: Text(
+                          'HOẶC TIẾP TỤC VỚI',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.textMuted,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Divider(color: AppTheme.hairline, thickness: 1)),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Google SSO Button
+                  AppOutlinedButton(
                     label: 'Đăng nhập với Google FPT (@fpt.edu.vn)',
-                    icon: Icons.alternate_email_rounded,
-                    isLoading: isLoading,
-                    onPressed: () async {
-                      final nav = Navigator.of(context);
-                      final success = await authVM.signInWithGoogle();
-                      if (!mounted) return;
-                      if (success) {
-                        nav.pushReplacement(
-                          MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
-                        );
-                      }
-                    },
+                    icon: Icons.g_mobiledata_rounded,
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            final nav = Navigator.of(context);
+                            final success = await authVM.signInWithGoogle();
+                            if (!mounted) return;
+                            if (success) {
+                              nav.pushReplacement(
+                                MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
+                              );
+                            }
+                          },
                   ),
                   const SizedBox(height: 12),
 
@@ -141,16 +258,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   AppOutlinedButton(
                     label: 'Đăng nhập nhanh (Chế độ Demo Sinh viên)',
                     icon: Icons.person_outline,
-                    onPressed: () async {
-                      final nav = Navigator.of(context);
-                      await authVM.signInDemoStudent();
-                      if (!mounted) return;
-                      nav.pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
-                      );
-                    },
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            final nav = Navigator.of(context);
+                            await authVM.signInDemoStudent();
+                            if (!mounted) return;
+                            nav.pushReplacement(
+                              MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
+                            );
+                          },
                   ),
-                  const SizedBox(height: 36),
+                  const SizedBox(height: 32),
 
                   const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
                   const SizedBox(height: 20),

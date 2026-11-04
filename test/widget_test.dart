@@ -7,6 +7,7 @@ import 'package:campus_event/widgets/ticket_card.dart';
 import 'package:campus_event/widgets/event_card.dart';
 import 'package:campus_event/models/ticket_model.dart';
 import 'package:campus_event/models/event_model.dart';
+import 'package:campus_event/services/auth_service.dart';
 
 void main() {
   testWidgets('AppPrimaryButton renders label and triggers onPressed', (WidgetTester tester) async {
@@ -168,5 +169,35 @@ void main() {
     await tester.tap(find.byIcon(Icons.star_outline_rounded));
     await tester.pump();
     expect(selectedRating, equals(5));
+  });
+
+  test('AuthService.signInWithEmailPassword validates FPT email domains', () async {
+    final authService = AuthService();
+
+    // Valid FPT email
+    final user = await authService.signInWithEmailPassword(
+      email: 'an.nv@fpt.edu.vn',
+      password: 'secretPassword123',
+    );
+    expect(user, isNotNull);
+    expect(user!.email, equals('an.nv@fpt.edu.vn'));
+
+    // Invalid non-FPT email
+    expect(
+      () => authService.signInWithEmailPassword(
+        email: 'attacker@gmail.com',
+        password: 'password123',
+      ),
+      throwsException,
+    );
+
+    // Short password
+    expect(
+      () => authService.signInWithEmailPassword(
+        email: 'an.nv@fe.edu.vn',
+        password: '123',
+      ),
+      throwsException,
+    );
   });
 }

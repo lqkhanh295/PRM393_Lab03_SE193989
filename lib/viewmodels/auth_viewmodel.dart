@@ -61,6 +61,38 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> signInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    _state = const StateLoading('Đang xác thực tài khoản email FPT...');
+    notifyListeners();
+
+    try {
+      final user = await _authService.signInWithEmailPassword(
+        email: email,
+        password: password,
+      );
+      if (user != null) {
+        await _analyticsService.setUserId(user.id);
+        await _analyticsService.logLogin(method: 'email_fpt', role: user.role);
+        await _crashlyticsService.setUserId(user.id);
+        _state = StateData(user);
+        notifyListeners();
+        return true;
+      }
+      _state = const StateInitial();
+      notifyListeners();
+      return false;
+    } catch (e, stack) {
+      debugPrint('[AuthViewModel] Email sign-in error: $e');
+      await _crashlyticsService.recordHandledError(e, stack, reason: 'Email FPT sign-in error');
+      _state = StateError(e.toString().replaceAll('Exception: ', ''));
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<void> signInDemoStudent({String role = 'student'}) async {
     _state = const StateLoading('Đang đăng nhập chế độ Demo...');
     notifyListeners();

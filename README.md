@@ -83,10 +83,11 @@ pytest -v --tb=short
 
 * **Đề tài:** Campus Event — Hệ thống Quản trị & Đồng hành Sự kiện Đại học FPT TP.HCM.
 * **Figma File:** [Figma Campus Event Design](https://www.figma.com/design/campus-event-prm323)
-* **Chân dung Persona:**
-  * **Sinh viên:** Nguyễn Văn An (20 tuổi) — Đăng ký sự kiện 1 chạm, vé Dynamic QR offline, nhận e-Certificate.
-  * **Trưởng bàn Check-in:** Trần Thị Mai (21 tuổi) — Quét vé &lt; 0.5s, nhận diện thẻ đỏ vé trùng.
+* **Chân dung Persona & Định vị Kiến trúc:**
+  * **Sinh viên (Primary - 100% Trọng tâm Mobile):** Nguyễn Văn An (20 tuổi) — Đăng ký sự kiện 1 chạm, vé Dynamic QR offline, Live Q&A diễn giả, nhận e-Certificate và Điểm rèn luyện FPTU.
+  * **Leader (Ban tổ chức cửa):** Trần Thị Mai (21 tuổi) — Không phải phân hệ app riêng biệt gây loãng, mà là **tính năng hỗ trợ nhỏ ("Bàn điểm danh cổng") nằm gọn trong trang Profile cá nhân của CTV**. Mục đích duy nhất: quét mã vé cho sinh viên bước qua cửa trong **1.5 giây** mà không làm tắc nghẽn hàng chờ.
+  * **Admin (Phòng CTSV):** **Được chuyển hẳn lên Web Portal trên máy tính**, vì việc duyệt ngân sách, kiểm tra an toàn PCCC, hay xuất file Excel 10.000 sinh viên là tác vụ văn phòng máy tính, không ai làm trên màn hình điện thoại 6-inch.
 * **3 Luồng Người Dùng:**
-  1. *Pre-Event:* Khám phá & Đăng ký sự kiện, đồng bộ Google Calendar.
-  2. *In/Post-Event:* Q&A diễn giả, Đánh giá 5 sao & Nhận e-Certificate lưu trữ Cloud.
-  3. *Staff Desk:* Quét vé check-in tại cửa, cảnh báo thẻ đỏ, nhập mã dự phòng thủ công.
+  1. *Pre-Event (Sinh viên):* Khám phá & Đăng ký sự kiện 1-chạm, đồng bộ Google Calendar.
+  2. *In/Post-Event (Sinh viên):* Q&A diễn giả thời gian thực, Đánh giá 5 sao & Nhận e-Certificate lưu trữ Cloud.
+  3. *Staff Gate Desk (Hậu cần Cửa):* Quét vé check-in 1.5s tại cửa, cảnh báo thẻ đỏ vé trùng, nhập mã dự phòng thủ công giải tỏa tắc nghẽn hàng chờ.

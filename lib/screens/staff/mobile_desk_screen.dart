@@ -144,11 +144,11 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
                     border: Border.all(color: const Color(0xFF27272A), width: 1),
                   ),
                   child: const Text(
-                    'Hướng camera thẳng vào mã QR vé sinh viên',
+                    'Quét mã QR vé 1.5s — Hậu cần giải tỏa hàng chờ cửa',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

@@ -25,21 +25,21 @@
   > 
   > Xuất phát từ thực tế tại campus FPTU TP.HCM, thông tin sự kiện của hơn 40 câu lạc bộ hiện đang bị phân mảnh trên mạng xã hội khiến sinh viên dễ bỏ lỡ. Thêm vào đó, khâu điểm danh thủ công bằng giấy hoặc form Excel tại sảnh hội trường Trịnh Công Sơn thường xuyên gây ùn tắc kéo dài từ 15 đến 20 phút và tiềm ẩn gian lận.  
   > 
-  > Dự án này được xây dựng nhằm số hóa toàn diện quy trình: từ khám phá, đăng ký nhận vé điện tử QR offline cho sinh viên, đến công cụ tạo sự kiện wizard cho Ban chủ nhiệm CLB và cổng kiểm duyệt tập trung cho Phòng CTSV. Toàn bộ đồ án tuân thủ nghiêm ngặt chuỗi quyết định thiết kế: **Analyze $\rightarrow$ Generate $\rightarrow$ Critique $\rightarrow$ Refine $\rightarrow$ Prototype $\rightarrow$ Handoff**."*
+  > Dự án này được xây dựng với định vị **Student-First tuyệt đối**: Ứng dụng di động số hóa toàn diện hành trình sinh viên từ khám phá, đăng ký nhận vé điện tử QR offline, tương tác Live Q&A trực tiếp đến nhận e-Certificate và Điểm rèn luyện. Đồng thời, app tích hợp công cụ hậu cần cơ động cho CTV quét vé 1.5 giây tại cổng để giải tỏa hàng chờ, còn toàn bộ tác vụ quản trị văn phòng phức tạp của Phòng CTSV được chuyển hẳn lên Web Portal máy tính. Toàn bộ đồ án tuân thủ nghiêm ngặt chuỗi quyết định thiết kế: **Analyze $\rightarrow$ Generate $\rightarrow$ Critique $\rightarrow$ Refine $\rightarrow$ Prototype $\rightarrow$ Handoff**."*
 
 ---
 
 ### SLIDE 02: PROBLEM & PERSONAS (0:45 – 01:40)
-* **Slide chiếu:** Slide 02 — *Problem Statement & Personas (Student-Centric Architecture)*
+* **Slide chiếu:** Slide 02 — *Problem Statement & Personas (Định vị Leader & Admin: Hậu cần phục vụ Sinh viên)*
 * **Minh chứng trỏ tới:** Tệp [`ux/persona.md`](../ux/persona.md) (chuẩn 12 trường cốt lõi)
 * **Lời thoại thuyết trình:**
-  > *"Để bài toán thiết kế có căn cứ thực tế vững chắc, nhóm đã xây dựng cấu trúc Persona với trọng tâm tuyệt đối đặt vào người dùng cuối:  
+  > *"Để bài toán thiết kế có căn cứ thực tế vững chắc và không làm ứng dụng bị loãng, nhóm đã định vị rõ ràng vai trò của từng đối tượng:  
   > 
-  > - **Primary Persona (85%+ người dùng) — bạn Nguyễn Văn An, 20 tuổi**, sinh viên K18 SE. Nỗi đau lớn nhất của An là thông tin sự kiện bị trôi, thủ tục đăng ký rườm rà, vào hội trường chỉ ngồi thụ động và sau sự kiện bị thất lạc điểm rèn luyện. Mục tiêu của An là một vòng đời số hóa khép kín: khám phá CLB $\rightarrow$ đăng ký 1 chạm dưới 30 giây $\rightarrow$ vé QR offline $\rightarrow$ gửi câu hỏi trực tiếp cho diễn giả qua app $\rightarrow$ nhận chứng nhận số và cộng điểm rèn luyện tự động.  
-  > - **Secondary Persona (15% di động) — bạn Trần Thị Mai, 21 tuổi**, Trưởng ban tổ chức tại cửa hội trường. Trên điện thoại, Mai chỉ cần một công cụ duy nhất là **Mobile Check-in Desk**: máy quét QR nhạy dưới 1.5 giây, cảnh báo vé trùng lặp và hỗ trợ gõ mã tay khi màn hình khách bị nứt vỡ.  
-  > - **Admin CTSV** được định vị rõ ràng trên nền tảng **Web Admin Portal Desktop**, không làm phình to ứng dụng di động của sinh viên.  
+  > - **Primary Persona (Trọng tâm 100% ứng dụng di động) — bạn Nguyễn Văn An, 20 tuổi**, sinh viên K18 SE. Mục tiêu của An là một vòng đời số hóa khép kín: khám phá CLB $\rightarrow$ đăng ký 1 chạm dưới 30 giây $\rightarrow$ vé QR offline $\rightarrow$ gửi câu hỏi trực tiếp cho diễn giả qua app $\rightarrow$ nhận chứng nhận số và cộng điểm rèn luyện tự động.  
+  > - **Leader (Ban tổ chức cửa) — bạn Trần Thị Mai, 21 tuổi:** Không phải là một phân hệ app riêng biệt gây rối rắm điều hướng, mà chỉ là một **tính năng hỗ trợ nhỏ ('Bàn điểm danh cổng') nằm gọn trong trang Profile cá nhân của các bạn CTV**. Mục đích duy nhất là quét mã vé cho sinh viên bước qua cửa trong **1.5 giây** mà không làm tắc nghẽn hàng chờ.  
+  > - **Admin (Phòng CTSV):** **Được chuyển hẳn lên Web Portal trên máy tính**, vì việc duyệt ngân sách, kiểm tra an toàn PCCC, hay xuất file Excel 10.000 sinh viên là tác vụ văn phòng máy tính, không ai làm trên màn hình điện thoại 6-inch.  
   > 
-  > Nhóm đã chuyển hóa thành các chỉ số đo lường định lượng: **Thời gian đăng ký dưới 30 giây**, **Tốc độ quét vé tại cửa dưới 2 giây/người**, và **Tự động cấp chứng nhận số cùng điểm rèn luyện 100% trong ngày**."*
+  > Nhóm đã chuyển hóa thành các chỉ số đo lường định lượng: **Thời gian đăng ký dưới 30 giây**, **Tốc độ quét vé tại cửa dưới 1.5 giây/người**, và **Tự động cấp chứng nhận số cùng điểm rèn luyện 100% trong ngày**."*
 
 ---
 
@@ -47,11 +47,11 @@
 * **Slide chiếu:** Slide 03 — *Information Architecture & Sitemap*
 * **Minh chứng trỏ tới:** Tệp [`ux/user-flow.md`](../ux/user-flow.md) & Figma Page `01 User Flow`
 * **Lời thoại thuyết trình:**
-  > *"Dựa trên nhu cầu thực tế, nhóm tổ chức Kiến trúc thông tin gồm **40 màn hình chuẩn hóa**, phân bổ theo tỷ lệ vàng lấy người dùng làm trung tâm:  
+  > *"Dựa trên nhu cầu thực tế, nhóm tổ chức Kiến trúc thông tin phân bổ theo tỷ lệ vàng lấy người dùng làm trung tâm:  
   > 
-  > - **Phân hệ Sinh viên chiếm áp đảo hơn 80% (28 màn hình):** Cấu trúc điều hướng sử dụng **Bottom Navigation 5 tab cấp cao** (Home Pulse, Explore Events, My Events, Campus Calendar, Student Profile). Phân hệ này bao quát trọn vẹn 3 giai đoạn: Trước sự kiện (Khám phá CLB, 1-tap register, Đồng bộ Google Calendar), Trong sự kiện (Live Agenda, Đặt câu hỏi Q&A diễn giả), và Sau sự kiện (Đánh giá 5 sao, Ví e-Certificate, Tích lũy Điểm rèn luyện).  
-  > - **Phân hệ Mobile Check-in Desk gồm 8 màn hình:** Dành riêng cho nhân sự trực tại cửa hội trường với QR Scanner siêu tốc, cơ chế chống gian lận và bộ đếm lưu lượng trực tiếp.  
-  > - **Phân hệ Quản trị trường gồm 4 màn hình cầu nối Web CMS:** Giám sát khẩn cấp hội trường và trích xuất dữ liệu trên Desktop.  
+  > - **Ứng dụng Di động Sinh viên chiếm trọn vẹn trọng tâm (28 màn hình):** Cấu trúc điều hướng sử dụng **Bottom Navigation 5 tab cấp cao** (Home Pulse, Explore Events, My Events, Campus Calendar, Student Profile). Bao quát trọn vẹn 3 giai đoạn: Trước sự kiện (Khám phá CLB, 1-tap register, Đồng bộ Google Calendar), Trong sự kiện (Live Agenda, Đặt câu hỏi Q&A diễn giả), và Sau sự kiện (Đánh giá 5 sao, Ví e-Certificate, Tích lũy Điểm rèn luyện).  
+  > - **Công cụ Hậu cần Bàn Điểm Danh Cổng (8 màn hình):** Nằm gọn trong trang Profile của CTV với QR Scanner siêu tốc 1.5s, nhận diện thẻ đỏ vé trùng lặp và bộ đếm lưu lượng trực tiếp nhằm giải tỏa ách tắc sảnh Trịnh Công Sơn.  
+  > - **Cầu nối Thông tin Web Portal CTSV (4 màn hình bridge):** Minh bạch hóa kiến trúc phân tách công thái học, khẳng định các tác vụ quản trị bàn giấy được giải quyết chuyên nghiệp trên màn hình lớn Desktop Web CMS.  
   > 
   > Cách tổ chức này triệt tiêu hoàn toàn sự cồng kềnh, giúp sinh viên luôn cảm nhận được sự gần gũi, tiện ích và năng động của môi trường đại học."*
 
@@ -150,12 +150,12 @@
 
 ### SLIDE 11: LIVE PROTOTYPE DEMO SCRIPT (08:10 – 09:00)
 * **Slide chiếu:** Slide 11 — *Live Prototype Architecture & Demo Script*
-* **Minh chứng trỏ tới:** Figma Page `06 Prototype`
+* **Minh chứng trỏ tới:** Figma Page `06 Prototype` & Ứng dụng Flutter chạy thật
 * **Lời thoại thuyết trình:**
   > *"Slide 11 tóm lược kịch bản 5 phút demo trực tiếp mà nhóm sẽ trình diễn ngay sau phần slide:  
   > 
-  > - **Phần 1 (Sinh viên):** Tìm sự kiện $\rightarrow$ xem chi tiết $\rightarrow$ bấm Đăng ký $\rightarrow$ Modal Overlay làm mờ nền $\rightarrow$ hiệu ứng chuyển cảnh Loading sang Thành công $\rightarrow$ mở vé QR offline.  
-  > - **Phần 2 (Leader & Admin):** Tạo sự kiện Wizard 4 bước $\rightarrow$ Demo nút 'Lưu bản nháp' $\rightarrow$ Gửi duyệt $\rightarrow$ Admin mở Approval Center phê duyệt $\rightarrow$ chuyển trạng thái thành PUBLISHED.  
+  > - **Phần 1 (Sinh viên):** Tìm sự kiện $\rightarrow$ xem chi tiết $\rightarrow$ bấm Đăng ký $\rightarrow$ Modal Overlay làm mờ nền $\rightarrow$ hiệu ứng chuyển cảnh Loading sang Thành công $\rightarrow$ mở vé Dynamic QR offline.  
+  > - **Phần 2 (Hậu cần Bàn Điểm Danh Cổng 1.5s & Cầu nối Web Portal CTSV):** Mở Profile CTV $\rightarrow$ vào 'Bàn Điểm Danh Cổng' $\rightarrow$ Demo quét vé siêu tốc 1.5s giải tỏa hàng chờ, phát hiện vé trùng lặp thẻ đỏ. Đồng thời bấm 'Xem Cấu Trúc Web Portal CTSV' giải trình thuyết phục về lý do chuyển tác vụ duyệt ngân sách, kiểm tra PCCC và xuất Excel 10.000 sinh viên lên máy tính văn phòng.  
   > - **Phần 3 (Khắc phục lỗi Check-in):** Quét mã QR bị trùng $\rightarrow$ Cảnh báo đỏ $\rightarrow$ Demo nút 'Quét lại' và 'Nhập mã vé thủ công' dự phòng.  
   > Toàn bộ luồng tương tác đều có nút Back hoạt động chuẩn xác và cam kết không có ngõ cụt."*
 

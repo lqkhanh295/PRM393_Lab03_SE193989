@@ -90,6 +90,103 @@ class AuthService {
     }
   }
 
+  /// Sign-in with FPT Email & Password implementation
+  Future<UserModel?> signInWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    final cleanEmail = email.trim().toLowerCase();
+
+    // Domain validation check for FPT University
+    final isFptDomain = cleanEmail.endsWith('@fpt.edu.vn') ||
+        cleanEmail.endsWith('@fe.edu.vn') ||
+        cleanEmail.endsWith('@fptu.edu.vn');
+
+    if (!isFptDomain) {
+      throw Exception('Vui lòng sử dụng địa chỉ email FPT (@fpt.edu.vn, @fe.edu.vn hoặc @fptu.edu.vn)');
+    }
+
+    if (password.trim().length < 6) {
+      throw Exception('Mật khẩu phải chứa ít nhất 6 ký tự.');
+    }
+
+    try {
+      debugPrint('[AuthService] Initiating Email/Password Sign-In: $cleanEmail');
+      if (_firebaseAuth != null) {
+        UserCredential userCred;
+        try {
+          userCred = await _firebaseAuth.signInWithEmailAndPassword(
+            email: cleanEmail,
+            password: password,
+          );
+        } on FirebaseAuthException catch (e) {
+          // If user doesn't exist yet, auto-register seamless onboarding
+          if (e.code == 'user-not-found' || e.code == 'invalid-credential') {
+            try {
+              userCred = await _firebaseAuth.createUserWithEmailAndPassword(
+                email: cleanEmail,
+                password: password,
+              );
+            } catch (_) {
+              rethrow;
+            }
+          } else {
+            rethrow;
+          }
+        }
+
+        final User? user = userCred.user;
+        if (user != null) {
+          final prefix = cleanEmail.split('@').first;
+          final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+
+          _currentUser = UserModel(
+            id: user.uid,
+            name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
+            email: user.email ?? cleanEmail,
+            avatarUrl: user.photoURL ?? 'https://i.pravatar.cc/150?u=${user.uid}',
+            major: 'Kỹ thuật Phần mềm (SE)',
+            activityPoints: 25,
+            role: 'student',
+          );
+        }
+      } else {
+        // Standalone / offline demo fallback
+        final prefix = cleanEmail.split('@').first;
+        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+
+        _currentUser = UserModel(
+          id: 'USR-${cleanEmail.hashCode.abs()}',
+          name: formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU',
+          email: cleanEmail,
+          avatarUrl: 'https://i.pravatar.cc/150?u=${cleanEmail.hashCode}',
+          major: 'Kỹ thuật Phần mềm (SE)',
+          activityPoints: 25,
+          role: 'student',
+        );
+      }
+
+      _authStateController.add(_currentUser);
+      debugPrint('[AuthService] Email Sign-in successful: ${_currentUser?.email}');
+      return _currentUser;
+    } catch (e) {
+      debugPrint('[AuthService] Email Sign-in error: $e');
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'wrong-password':
+            throw Exception('Mật khẩu không chính xác.');
+          case 'user-disabled':
+            throw Exception('Tài khoản sinh viên này đã bị tạm khóa.');
+          case 'too-many-requests':
+            throw Exception('Quá nhiều lần thử thất bại. Vui lòng thử lại sau.');
+          default:
+            throw Exception(e.message ?? 'Đăng nhập không thành công.');
+        }
+      }
+      rethrow;
+    }
+  }
+
   /// Demo quick login helper for emulator / testing
   Future<UserModel> signInDemoStudent({String role = 'student'}) async {
     await Future.delayed(const Duration(milliseconds: 300));
