@@ -16,6 +16,7 @@ class HomeViewModel extends ChangeNotifier {
   ScreenState<List<EventModel>> get state => _state;
 
   List<EventModel> _allEvents = [];
+  List<EventModel> get allEvents => _allEvents;
   String get bannerTitle => _remoteConfigService.featuredBannerTitle;
   int get maxFeatured => _remoteConfigService.maxFeaturedEvents;
 

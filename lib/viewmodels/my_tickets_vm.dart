@@ -11,6 +11,7 @@ class MyTicketsViewModel extends ChangeNotifier {
   ScreenState<List<TicketModel>> get state => _state;
 
   List<TicketModel> _allTickets = [];
+  List<TicketModel> get allTickets => _allTickets;
   int _selectedTabIndex = 0; // 0: Upcoming/Active, 1: History/Checked-in
   int get selectedTabIndex => _selectedTabIndex;
 
