@@ -17,94 +17,15 @@ class CampusCalendarScreen extends StatefulWidget {
 }
 
 class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
-  // Focus defaults to October 2026 (Semester FA26 demo period)
   late DateTime _focusedMonth;
   late DateTime _selectedDate;
-
-  // Fallback demo events to guarantee calendar highlights across months
-  static final List<EventModel> _demoCampusEvents = [
-    const EventModel(
-      id: 'EVT-2026-01',
-      title: 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
-      description: 'Triển lãm công nghệ quy mô 500 sinh viên tại Đại học FPT TP.HCM. Cập nhật xu hướng AI, Generative Agents và cơ hội nghề nghiệp.',
-      category: 'Công nghệ',
-      clubId: 'fcode',
-      clubName: 'CLB F-Code',
-      date: '28/10/2026',
-      time: '13:30 - 17:30',
-      location: 'Hội trường Trịnh Công Sơn',
-      capacity: 400,
-      registeredCount: 342,
-      bannerUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
-      isFeatured: true,
-    ),
-    const EventModel(
-      id: 'EVT-2026-02',
-      title: 'Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động',
-      description: 'Khám phá bí quyết thiết kế UI/UX theo 10 Heuristics của Jakob Nielsen, tối ưu Touch Target và đo lường tương phản WCAG 2.1 AA.',
-      category: 'Thiết kế',
-      clubId: 'media_club',
-      clubName: 'CLB Cóc Sài Gòn',
-      date: '30/10/2026',
-      time: '09:00 - 11:30',
-      location: 'Phòng Hội thảo Alpha Building (Phòng 301)',
-      capacity: 120,
-      registeredCount: 94,
-      bannerUrl: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800',
-      isFeatured: true,
-    ),
-    const EventModel(
-      id: 'EVT-2026-03',
-      title: 'Giải Đấu Thể Thao Điện Tử FPTU Champions League',
-      description: 'Vòng chung kết giải thể thao điện tử sinh viên toàn trường, phát sóng trực tiếp kèm quà tặng áo đấu độc quyền FPTU.',
-      category: 'Giải trí',
-      clubId: 'fcode',
-      clubName: 'CLB F-Code',
-      date: '02/11/2026',
-      time: '18:00 - 21:30',
-      location: 'Sân khấu Hội trường Lớn A2',
-      capacity: 300,
-      registeredCount: 288,
-      bannerUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800',
-      isFeatured: false,
-    ),
-    const EventModel(
-      id: 'EVT-2026-04',
-      title: 'Tech Talk: An toàn Thông tin & Thực chiến Pentest',
-      description: 'Chuyên đề bảo mật ứng dụng di động, phân tích lỗ hổng và phương pháp phòng thủ an ninh mạng.',
-      category: 'Bảo mật',
-      clubId: 'fcode',
-      clubName: 'CLB An toàn Thông tin',
-      date: '05/11/2026',
-      time: '14:00 - 16:30',
-      location: 'Hội trường Trịnh Công Sơn',
-      capacity: 250,
-      registeredCount: 210,
-      bannerUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800',
-      isFeatured: true,
-    ),
-    const EventModel(
-      id: 'EVT-2026-05',
-      title: 'Ngày hội Văn hóa Nhật Bản (Japan Cultural Day)',
-      description: 'Giao lưu văn hóa, ẩm thực, workshop tiếng Nhật và cơ hội thực tập tại doanh nghiệp Tokyo.',
-      category: 'Văn hóa',
-      clubId: 'jsclub',
-      clubName: 'CLB Kỹ sư phần mềm Nhật Bản',
-      date: '15/11/2026',
-      time: '08:30 - 16:00',
-      location: 'Sảnh Tòa nhà Innovation',
-      capacity: 500,
-      registeredCount: 420,
-      bannerUrl: 'https://images.unsplash.com/photo-1528164344705-475426879c0d?w=800',
-      isFeatured: true,
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
-    _focusedMonth = DateTime(2026, 10, 1);
-    _selectedDate = DateTime(2026, 10, 28);
+    final now = DateTime.now();
+    _focusedMonth = DateTime(now.year, now.month, 1);
+    _selectedDate = DateTime(now.year, now.month, now.day);
   }
 
   void _previousMonth() {
@@ -151,15 +72,8 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     final homeVM = context.watch<HomeViewModel>();
     final ticketsVM = context.watch<MyTicketsViewModel>();
 
-    // Merge events from HomeViewModel and fallback demo events
-    final Map<String, EventModel> eventMap = {};
-    for (final e in _demoCampusEvents) {
-      eventMap[e.id] = e;
-    }
-    for (final e in homeVM.allEvents) {
-      eventMap[e.id] = e;
-    }
-    final allEvents = eventMap.values.toList();
+    // Only real Cloud Firestore events
+    final allEvents = homeVM.allEvents;
     final userTickets = ticketsVM.allTickets;
 
     // Build days matrix for the full month
@@ -274,7 +188,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                 final day = allDays[week * 7 + col];
                                 final isCurrentMonth = day.month == _focusedMonth.month;
                                 final isSelected = _isSameDay(day, _selectedDate);
-                                final isToday = _isSameDay(day, DateTime.now()) || _isSameDay(day, DateTime(2026, 10, 28));
+                                final isToday = _isSameDay(day, DateTime.now());
                                 final dayEvents = _getEventsForDay(day, allEvents);
                                 final hasEvent = dayEvents.isNotEmpty;
 
@@ -616,13 +530,14 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                     OutlinedButton.icon(
                       onPressed: () {
                         setState(() {
-                          _focusedMonth = DateTime(2026, 10, 1);
-                          _selectedDate = DateTime(2026, 10, 28);
+                          final now = DateTime.now();
+                          _focusedMonth = DateTime(now.year, now.month, 1);
+                          _selectedDate = DateTime(now.year, now.month, now.day);
                         });
                       },
-                      icon: const Icon(Icons.stars_rounded, size: 16, color: AppTheme.primary),
+                      icon: const Icon(Icons.today_rounded, size: 16, color: AppTheme.primary),
                       label: const Text(
-                        'Xem sự kiện Tech Expo (28/10)',
+                        'Quay về ngày hôm nay',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppTheme.primary,

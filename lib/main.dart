@@ -43,7 +43,7 @@ void main() async {
   }
 
   // Instantiate Cloud & Foundation Services (Native instances on Mobile, graceful fallback on Web)
-  final authService = AuthService(!kIsWeb ? FirebaseAuth.instance : null);
+  final authService = AuthService(!kIsWeb ? FirebaseAuth.instance : null, !kIsWeb ? FirebaseFirestore.instance : null);
   final firestoreService = FirestoreService(!kIsWeb ? FirebaseFirestore.instance : null);
   final storageService = StorageService(!kIsWeb ? FirebaseStorage.instance : null);
   final fcmService = FCMService(!kIsWeb ? FirebaseMessaging.instance : null);
@@ -52,9 +52,10 @@ void main() async {
   final remoteConfigService = RemoteConfigService(!kIsWeb ? FirebaseRemoteConfig.instance : null);
   final pdfExportService = PdfExportService(storageService);
 
-  // Initialize background listeners
+  // Initialize background listeners and ensure real Cloud Firestore data
   await fcmService.initialize();
   await remoteConfigService.initialize();
+  await firestoreService.ensureDatabaseInitialized();
 
   runApp(
     MultiProvider(
@@ -119,6 +120,7 @@ void main() async {
           create: (_) => FeedbackViewModel(
             analyticsService: analyticsService,
             pdfExportService: pdfExportService,
+            firestoreService: firestoreService,
           ),
         ),
         ChangeNotifierProvider(

@@ -24,25 +24,7 @@ class FCMService {
   final List<AppNotificationItem> _notifications = [];
   final _notificationsStreamController = StreamController<List<AppNotificationItem>>.broadcast();
 
-  FCMService([this._messaging]) {
-    // Seed initial notifications for realistic student onboarding experience
-    _notifications.addAll([
-      AppNotificationItem(
-        id: 'notif-01',
-        title: 'Nhắc giờ G: Tech Expo 2026',
-        body: 'Sự kiện sẽ bắt đầu sau 1 tiếng tại Hội trường Trịnh Công Sơn. Đừng quên mở vé QR!',
-        route: '/tickets/TICKET-2026-01',
-        timestamp: DateTime.now().subtract(const Duration(minutes: 45)),
-      ),
-      AppNotificationItem(
-        id: 'notif-02',
-        title: 'CLB F-Code vừa đăng sự kiện mới',
-        body: 'Workshop "Ứng dụng AI thực chiến với Flutter" đã chính thức mở đăng ký.',
-        route: '/events/EVT-2026-01',
-        timestamp: DateTime.now().subtract(const Duration(hours: 3)),
-      ),
-    ]);
-  }
+  FCMService([this._messaging]);
 
   List<AppNotificationItem> get notifications => List.unmodifiable(_notifications);
   Stream<List<AppNotificationItem>> get notificationsStream => _notificationsStreamController.stream;

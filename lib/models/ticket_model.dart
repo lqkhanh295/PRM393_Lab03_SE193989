@@ -39,6 +39,19 @@ class TicketModel {
       return TicketStatus.active;
     }
 
+    DateTime? resolveDateTime(dynamic val) {
+      if (val == null) return null;
+      if (val is DateTime) return val;
+      // Handle Firestore Timestamp or ISO string
+      final str = val.toString();
+      if (val.runtimeType.toString() == 'Timestamp') {
+        try {
+          return (val as dynamic).toDate() as DateTime;
+        } catch (_) {}
+      }
+      return DateTime.tryParse(str);
+    }
+
     return TicketModel(
       id: id,
       eventId: map['eventId'] as String? ?? '',
@@ -51,9 +64,7 @@ class TicketModel {
       studentEmail: map['studentEmail'] as String? ?? '',
       qrToken: map['qrToken'] as String? ?? 'TOKEN-$id',
       status: resolveStatus(map['status'] as String?),
-      checkedInAt: map['checkedInAt'] != null
-          ? DateTime.tryParse(map['checkedInAt'] as String)
-          : null,
+      checkedInAt: resolveDateTime(map['checkedInAt']),
     );
   }
 

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cổng Quản Trị Campus Event FPTU - Phòng CTSV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge">Đại học FPT TP.HCM</div>
+        <div class="brand-title">CAMPUS EVENT PORTAL</div>
+        <div class="brand-subtitle">Hệ Thống Quản Trị & Hậu Cần CTSV</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-label">Điều Hành & Giám Sát</div>
+        <a class="nav-item active" data-view="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Tổng quan & Lưu lượng
+        </a>
+        <a class="nav-item" data-view="telemetry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Trực ban Check-in Cổng
+          <span class="nav-badge" id="sidebar-checkin-count">124</span>
+        </a>
+
+        <div class="nav-group-label">Phê Duyệt & Pháp Lý</div>
+        <a class="nav-item" data-view="budget">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Duyệt Ngân Sách CLB
+          <span class="nav-badge" id="sidebar-pending-budget">2</span>
+        </a>
+        <a class="nav-item" data-view="safety">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          An Toàn PCCC & Sức Chứa
+        </a>
+
+        <div class="nav-group-label">Báo Cáo & Dữ Liệu</div>
+        <a class="nav-item" data-view="export">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Danh Sách & Xuất Excel
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar">VH</div>
+          <div class="user-info">
+            <div class="user-name">Nguyễn Văn Hùng</div>
+            <div class="user-role">Cán bộ Phòng CTSV</div>
+          </div>
+        </div>
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span>Cloud Firestore Đồng Bộ Trực Tiếp</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Canvas -->
+    <main class="canvas">
+      
+      <!-- VIEW 1: OVERVIEW -->
+      <section id="view-overview" class="view-section active">
+        <header class="canvas-header">
+          <div>
+            <h1 class="page-headline">Tổng Quan Sự Kiện Campus</h1>
+            <p class="page-subhead">Giám sát sức chứa, lưu lượng cửa kiểm soát vé và tiến độ giải ngân ngân sách CLB</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshData()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Làm mới dữ liệu
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="app.switchView('export')">
+              Xuất Báo Cáo CTSV (.xlsx)
+            </button>
+          </div>
+        </header>
+
+        <!-- KPI Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Sinh Viên Đã Check-in</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="kpi-checkin-count">124</span>
+              <span class="kpi-unit">/ 200 chỗ</span>
+            </div>
+            <div class="kpi-sub"><span class="pill pill-positive">+62% tỷ lệ lấp đầy</span> hôm nay</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Ngân Sách Đã Phê Duyệt</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="kpi-budget-approved">48.500.000</span>
+              <span class="kpi-unit">VND</span>
+            </div>
+            <div class="kpi-sub">3 dự toán từ quỹ Hoạt động Sinh viên</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Hồ Sơ Chờ CTSV Phê Duyệt</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="kpi-pending-docs">2</span>
+              <span class="kpi-unit">hồ sơ</span>
+            </div>
+            <div class="kpi-sub"><span class="pill pill-warning">Cần xử lý trước 17:00</span></div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Thẩm Định An Toàn PCCC</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value" style="color: var(--positive);">100%</span>
+              <span class="kpi-unit">Đạt Chuẩn</span>
+            </div>
+            <div class="kpi-sub">Biên bản nghiệm thu Hội trường TCS</div>
+          </div>
+        </div>
+
+        <!-- Telemetry & Venues Layout -->
+        <div class="grid-3">
+          <!-- Flow Telemetry Chart -->
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">Lưu Lượng Sinh Viên Qua Cổng (Theo Giờ)</div>
+                <div class="panel-sub">Dữ liệu ghi nhận từ Bàn quét mã QR vé tại Cổng Hội trường TCS</div>
+              </div>
+              <span class="pill pill-accent">Thời gian thực</span>
+            </div>
+            <div class="panel-body">
+              <canvas id="gateChart" height="200" style="width: 100%; display: block;"></canvas>
+            </div>
+          </div>
+
+          <!-- Venues Status -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Hiện Trạng Không Gian Campus</div>
+              <span class="pill pill-positive">Hoạt động bình thường</span>
+            </div>
+            <div class="panel-body">
+              <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                  <span style="font-weight: 600;">Hội trường Trịnh Công Sơn</span>
+                  <span class="num">124 / 200 (62%)</span>
+                </div>
+                <div class="capacity-bar-wrap">
+                  <div class="capacity-bar-fill" style="width: 62%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                  <span style="font-weight: 600;">Sân bóng Thể thao D2</span>
+                  <span class="num">85 / 300 (28%)</span>
+                </div>
+                <div class="capacity-bar-wrap">
+                  <div class="capacity-bar-fill" style="width: 28%; background-color: var(--positive);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                  <span style="font-weight: 600;">Phòng Workshop Lab Alpha</span>
+                  <span class="num">48 / 60 (80%)</span>
+                </div>
+                <div class="capacity-bar-wrap">
+                  <div class="capacity-bar-fill" style="width: 80%; background-color: var(--warning);"></div>
+                </div>
+              </div>
+
+              <div style="font-size: 11.5px; color: var(--muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--rule);">
+                Hệ số an toàn: Đạt chuẩn TCVN 3890 (Tối thiểu 1.25m²/người)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Registrations Preview -->
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Lượt Quét Vé & Điểm Danh Mới Nhất</div>
+              <div class="panel-sub">Đồng bộ tức thời từ tính năng Bàn Check-in Cổng của Ban Tổ Chức</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="app.switchView('export')">Xem toàn bộ danh sách &rarr;</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Vé</th>
+                  <th>Sinh Viên</th>
+                  <th>MSSV</th>
+                  <th>Sự Kiện</th>
+                  <th>Thời Gian Check-in</th>
+                  <th>Điểm Rèn Luyện</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="overview-recent-table">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: TELEMETRY (LIVE GATE DESK) -->
+      <section id="view-telemetry" class="view-section">
+        <header class="canvas-header">
+          <div>
+            <h1 class="page-headline">Trực Ban Điểm Danh & Giám Sát Cổng</h1>
+            <p class="page-subhead">Kiểm soát dòng người, ngăn ngừa quá tải và xác thực vé sinh viên</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary btn-sm" onclick="app.simulateIncomingCheckin()">
+              Mô phỏng 1 lượt quét vé mới
+            </button>
+          </div>
+        </header>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Thông Số Cửa Kiểm Soát Cổng 1 (Main Gate)</div>
+              <span class="pill pill-positive">Đang Mở Điểm Danh</span>
+            </div>
+            <div class="panel-body">
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px;">
+                <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
+                  <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tốc độ xử lý cổng</div>
+                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text); margin-top: 4px;">1.4 giây / vé</div>
+                </div>
+                <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
+                  <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tỷ lệ lỗi / trùng vé</div>
+                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--positive); margin-top: 4px;">0.0%</div>
+                </div>
+              </div>
+              <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
+                Mỗi lượt quét từ thiết bị di động của CTV Bàn trực cổng sẽ gửi xác thực trực tiếp qua Cloud Firestore Security Rules, tự động khóa vé và cấp điểm rèn luyện (+5 điểm) cho sinh viên ngay tại cửa.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Cảnh Báo & Điều Phối An Toàn</div>
+              <span class="pill pill-neutral">Bình Thường</span>
+            </div>
+            <div class="panel-body">
+              <div class="checklist-item" style="border-left: 3px solid var(--positive);">
+                <div>
+                  <div class="checklist-title">Hàng Đợi Cổng Chính: Thông Thoáng</div>
+                  <div class="checklist-desc">Thời gian chờ bình quân dưới 30 giây. Không có hiện tượng ùn tắc trước sảnh.</div>
+                </div>
+              </div>
+              <div class="checklist-item" style="border-left: 3px solid var(--positive);">
+                <div>
+                  <div class="checklist-title">Trực Ban Y Tế & PCCC: Sẵn Sàng</div>
+                  <div class="checklist-desc">2 nhân sự trực tại chốt cửa thoát hiểm số 2 sẵn sàng ứng phó.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: BUDGET APPROVALS -->
+      <section id="view-budget" class="view-section">
+        <header class="canvas-header">
+          <div>
+            <h1 class="page-headline">Thẩm Định & Phê Duyệt Ngân Sách CLB</h1>
+            <p class="page-subhead">Duyệt hồ sơ kinh phí tổ chức sự kiện từ Quỹ Hoạt Động Sinh Viên và Tài Trợ Doanh Nghiệp</p>
+          </div>
+        </header>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Danh Sách Hồ Sơ Đề Xuất Kinh Phí Sự Kiện</div>
+            <div style="font-size: 12px; color: var(--muted);">Phòng Chăm Sóc & Quản Lý Đời Sống Sinh Viên (CTSV)</div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Dự Án</th>
+                  <th>Tên Sự Kiện</th>
+                  <th>CLB Đề Xuất</th>
+                  <th class="num">Kinh Phí Đề Xuất</th>
+                  <th>Nguồn Kinh Phí</th>
+                  <th>Trạng Thái</th>
+                  <th style="text-align: right;">Hành Động CTSV</th>
+                </tr>
+              </thead>
+              <tbody id="budget-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: SAFETY & FIRE COMPLIANCE -->
+      <section id="view-safety" class="view-section">
+        <header class="canvas-header">
+          <div>
+            <h1 class="page-headline">Thẩm Định An Toàn PCCC & Cơ Sở Vật Chất</h1>
+            <p class="page-subhead">Quy chuẩn TCVN 3890:2023 & Thông tư 149/2020/TT-BCA cho các sự kiện tập trung đông người</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary btn-sm" onclick="app.issueSafetyCertificate()">
+              Ký & Xuất Giấy Phép PCCC
+            </button>
+          </div>
+        </header>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Hồ Sơ An Toàn: Hội Trường Trịnh Công Sơn</div>
+              <span class="pill pill-positive" id="safety-score-pill">Đạt 100/100 Điểm</span>
+            </div>
+            <div class="panel-body">
+              <div class="checklist-item">
+                <input type="checkbox" id="check-1" checked onchange="app.updateSafetyScore()">
+                <div>
+                  <label for="check-1" class="checklist-title">Hệ Thống Lối Thoát Nạn Khẩn Cấp</label>
+                  <div class="checklist-desc">4 cửa thoát hiểm mở 2 chiều ra ban công và cầu thang bộ, biển Exit phát quang 100% hoạt động.</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
+              </div>
+
+              <div class="checklist-item">
+                <input type="checkbox" id="check-2" checked onchange="app.updateSafetyScore()">
+                <div>
+                  <label for="check-2" class="checklist-title">Trang Bị Bình Chữa Cháy Tại Chỗ</label>
+                  <div class="checklist-desc">8 bình khí CO2 MT3 và bột khô ABC MFZ4 còn hạn kiểm định định kỳ quý 4/2026.</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
+              </div>
+
+              <div class="checklist-item">
+                <input type="checkbox" id="check-3" checked onchange="app.updateSafetyScore()">
+                <div>
+                  <label for="check-3" class="checklist-title">Chuông & Cảm Biến Báo Cháy Tự Động</label>
+                  <div class="checklist-desc">Tủ trung tâm báo cháy tòa nhà Delta kết nối trực tuyến với trung tâm chỉ huy Campus.</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
+              </div>
+
+              <div class="checklist-item">
+                <input type="checkbox" id="check-4" checked onchange="app.updateSafetyScore()">
+                <div>
+                  <label for="check-4" class="checklist-title">Kế Hoạch & Sơ Đồ Thoát Hiểm</label>
+                  <div class="checklist-desc">Đã niêm yết sơ đồ thoát nạn tại 3 vị trí mắt nhìn và phổ biến cho đội ngũ CTV cửa.</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
+              </div>
+
+              <div class="checklist-item">
+                <input type="checkbox" id="check-5" checked onchange="app.updateSafetyScore()">
+                <div>
+                  <label for="check-5" class="checklist-title">Chốt Cứu Thương & Y Tế Hiện Trường</label>
+                  <div class="checklist-desc">2 cán bộ y tế túc trực cùng cơ số thuốc chống choáng, băng gạc tại cửa số 2.</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Quyết Định Thẩm Định Phòng CTSV</div>
+              <span class="pill pill-accent">Chính Thức</span>
+            </div>
+            <div class="panel-body">
+              <div style="background-color: var(--ground); border: 1px dashed var(--control-border); padding: 18px; border-radius: 6px; font-size: 13px; line-height: 1.7;">
+                <div style="font-weight: 700; margin-bottom: 6px; text-transform: uppercase;">BIÊN BẢN NGHIỆM THU AN TOÀN SỐ 108/BB-CTSV</div>
+                <div><strong>Đơn vị tổ chức:</strong> CLB Lập trình F-Code (Đại học FPT)</div>
+                <div><strong>Sự kiện:</strong> FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai</div>
+                <div><strong>Địa điểm:</strong> Hội trường Trịnh Công Sơn (Tòa Delta)</div>
+                <div><strong>Giới hạn an toàn:</strong> Tối đa 200 người có mặt đồng thời</div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+                  <span class="pill pill-positive">KẾT LUẬN: ĐỦ ĐIỀU KIỆN TỔ CHỨC AN TOÀN</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: STUDENT DIRECTORY & EXPORT -->
+      <section id="view-export" class="view-section">
+        <header class="canvas-header">
+          <div>
+            <h1 class="page-headline">Danh Sách Sinh Viên & Xuất Báo Cáo CTSV</h1>
+            <p class="page-subhead">Dữ liệu tham dự sự kiện, giờ quét vé thực tế và cộng điểm rèn luyện tự động</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary btn-sm" onclick="app.exportToCSV()">
+              Xuất File CSV (UTF-8)
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="app.exportToExcel()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Xuất File Excel (.xlsx)
+            </button>
+          </div>
+        </header>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="filter-bar">
+              <input type="text" id="student-search" class="search-input" placeholder="Tìm theo tên hoặc MSSV..." oninput="app.filterStudents()">
+              <select id="event-filter" class="select-input" onchange="app.filterStudents()">
+                <option value="all">Tất cả sự kiện</option>
+                <option value="EVT-2026-01">FPTU Tech Expo 2026</option>
+                <option value="EVT-2026-02">Workshop UI/UX Design</option>
+                <option value="EVT-2026-03">FPTU Champions League</option>
+              </select>
+              <select id="status-filter" class="select-input" onchange="app.filterStudents()">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="checkedIn">Đã Check-in</option>
+                <option value="active">Chưa Đến Cửa</option>
+              </select>
+            </div>
+            <div class="num" style="font-size: 12px; color: var(--muted);" id="students-count-indicator">Hiển thị 8 sinh viên</div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Vé</th>
+                  <th>MSSV</th>
+                  <th>Họ và Tên</th>
+                  <th>Chuyên Ngành</th>
+                  <th>Sự Kiện Tham Dự</th>
+                  <th>Thời Gian Quét Vé</th>
+                  <th class="num">Điểm RL</th>
+                  <th>Trạng Thái</th>
+                  <th>Chứng Nhận</th>
+                </tr>
+              </thead>
+              <tbody id="student-directory-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

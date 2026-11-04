@@ -5,6 +5,8 @@ import '../../models/event_model.dart';
 import '../../models/user_model.dart';
 import '../../models/screen_state.dart';
 import '../../viewmodels/registration_vm.dart';
+import '../../viewmodels/my_tickets_vm.dart';
+import '../../viewmodels/home_viewmodel.dart';
 import '../../widgets/app_button.dart';
 import 'registration_result_screen.dart';
 
@@ -124,6 +126,8 @@ class RegistrationModal extends StatelessWidget {
                   final success = await regVM.register(event: event, user: user);
                   if (success && context.mounted) {
                     final ticket = (regVM.state as StateData).data;
+                    context.read<MyTicketsViewModel>().loadUserTickets(user.id);
+                    context.read<HomeViewModel>().loadHomeScreenData();
                     Navigator.pop(context); // Close bottom sheet
                     Navigator.push(
                       context,

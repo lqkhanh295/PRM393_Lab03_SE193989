@@ -11,10 +11,10 @@ class MobileDeskViewModel extends ChangeNotifier {
   final AnalyticsService _analyticsService;
 
   int _checkedInCount = 342;
-  final int _totalCapacity = 400;
+  int _totalCapacity = 400;
   int get checkedInCount => _checkedInCount;
   int get totalCapacity => _totalCapacity;
-  double get attendanceRate => _checkedInCount / _totalCapacity;
+  double get attendanceRate => _totalCapacity > 0 ? (_checkedInCount / _totalCapacity) : 0.0;
 
   CheckInValidationResult? _lastResult;
   CheckInValidationResult? get lastResult => _lastResult;
@@ -29,6 +29,24 @@ class MobileDeskViewModel extends ChangeNotifier {
   })  : _firestoreService = firestoreService,
         _crashlyticsService = crashlyticsService,
         _analyticsService = analyticsService;
+
+  Future<void> loadEventStats(String eventId) async {
+    try {
+      final event = await _firestoreService.getEventById(eventId);
+      if (event != null) {
+        _totalCapacity = event.capacity;
+        final realChecked = await _firestoreService.getCheckedInCount(eventId);
+        if (realChecked > 0) {
+          _checkedInCount = realChecked;
+        } else {
+          _checkedInCount = event.registeredCount;
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('[MobileDeskViewModel] Load stats note: $e');
+    }
+  }
 
   Future<CheckInValidationResult> processCheckInScan({
     required String qrToken,

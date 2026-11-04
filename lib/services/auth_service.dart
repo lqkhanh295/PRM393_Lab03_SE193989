@@ -1,36 +1,58 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 
 /// Authentication Service Wrapper
-/// Provides Google Sign-In and Auth state routing with session purge.
+/// Provides Google Sign-In, Email/Password, and Real Firestore Profile synchronization.
 class AuthService {
   final FirebaseAuth? _firebaseAuth;
+  final FirebaseFirestore? _firestore;
   final GoogleSignIn _googleSignIn = GoogleSignIn(clientId: kIsWeb ? '1053429994801-campusevent.apps.googleusercontent.com' : null, scopes: ['email', 'profile']);
 
   UserModel? _currentUser;
   final _authStateController = StreamController<UserModel?>.broadcast();
 
-  AuthService([this._firebaseAuth]) {
+  AuthService([this._firebaseAuth, this._firestore]) {
     // If Firebase Auth is provided, listen to its auth state changes
-    _firebaseAuth?.authStateChanges().listen((User? user) {
+    _firebaseAuth?.authStateChanges().listen((User? user) async {
       if (user != null) {
-        _currentUser = UserModel(
+        final prefix = (user.email ?? '').split('@').first;
+        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+        final basicUser = UserModel(
           id: user.uid,
-          name: user.displayName ?? 'Nguyễn Văn An',
-          email: user.email ?? 'an.nv@fptu.edu.vn',
+          name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
+          email: user.email ?? '',
           avatarUrl: user.photoURL ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-          major: 'Kỹ thuật Phần mềm (SE)',
-          activityPoints: 25,
+          major: 'Sinh viên FPTU',
+          activityPoints: 0,
           role: 'student',
         );
+        _currentUser = await _syncUserWithFirestore(basicUser);
       } else {
         _currentUser = null;
       }
       _authStateController.add(_currentUser);
     });
+  }
+
+  Future<UserModel> _syncUserWithFirestore(UserModel basicUser) async {
+    if (_firestore == null) return basicUser;
+    try {
+      final docRef = _firestore.collection('users').doc(basicUser.id);
+      final snap = await docRef.get();
+      if (snap.exists && snap.data() != null) {
+        return UserModel.fromMap(snap.data()!, basicUser.id);
+      } else {
+        await docRef.set(basicUser.toMap(), SetOptions(merge: true));
+        return basicUser;
+      }
+    } catch (e) {
+      debugPrint('[AuthService] Firestore user sync note: $e');
+      return basicUser;
+    }
   }
 
   UserModel? get currentUser => _currentUser;
@@ -187,10 +209,10 @@ class AuthService {
     }
   }
 
-  /// Demo quick login helper for emulator / testing
+  /// Demo quick login helper for emulator / testing with Real Firestore User doc
   Future<UserModel> signInDemoStudent({String role = 'student'}) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    _currentUser = UserModel(
+    final demo = UserModel(
       id: 'USR-FPTU-2026',
       name: 'Nguyễn Văn An',
       email: 'an.nv@fptu.edu.vn',
@@ -198,8 +220,9 @@ class AuthService {
       major: 'Kỹ thuật Phần mềm (SE18)',
       activityPoints: 25,
       role: role,
-      followedClubs: ['fcode', 'media_club'],
+      followedClubs: const ['fcode', 'media_club'],
     );
+    _currentUser = await _syncUserWithFirestore(demo);
     _authStateController.add(_currentUser);
     return _currentUser!;
   }

@@ -18,8 +18,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'an.nv@fpt.edu.vn');
-  final _passwordController = TextEditingController(text: '123456');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
@@ -250,23 +250,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
                               );
                             }
-                          },
-                  ),
-                  const SizedBox(height: 12),
-
-                  // Fast Demo Button for Grading / Reviewers
-                  AppOutlinedButton(
-                    label: 'Đăng nhập nhanh (Chế độ Demo Sinh viên)',
-                    icon: Icons.person_outline,
-                    onPressed: isLoading
-                        ? null
-                        : () async {
-                            final nav = Navigator.of(context);
-                            await authVM.signInDemoStudent();
-                            if (!mounted) return;
-                            nav.pushReplacement(
-                              MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
-                            );
                           },
                   ),
                   const SizedBox(height: 32),

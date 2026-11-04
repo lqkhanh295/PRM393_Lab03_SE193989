@@ -22,6 +22,14 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
   bool _isTorchOn = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MobileDeskViewModel>().loadEventStats('EVT-2026-01');
+    });
+  }
+
+  @override
   void dispose() {
     _scannerController.dispose();
     _manualCodeController.dispose();

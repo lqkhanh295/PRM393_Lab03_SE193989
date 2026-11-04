@@ -1,0 +1,18 @@
+{
+  "name": "fptu-campus-event-admin-portal",
+  "version": "1.0.0",
+  "description": "FPTU Campus Event Admin Web Portal - Phong CTSV Management & Logistics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "fptu",
+    "campus-event",
+    "admin-portal",
+    "ctsv"
+  ],
+  "author": "FPT University PRM391 Team",
+  "license": "MIT"
+}

@@ -70,7 +70,7 @@ class LiveEventViewModel extends ChangeNotifier {
     required String questionId,
   }) async {
     try {
-      await _firestoreService.upvoteSpeakerQuestion(questionId);
+      await _firestoreService.upvoteSpeakerQuestion(eventId, questionId);
       await _analyticsService.logLiveInteract(
         eventId: eventId,
         actionType: 'upvote',
