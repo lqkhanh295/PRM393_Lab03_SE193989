@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -22,12 +23,15 @@ class AppNotificationItem {
 class FCMService {
   final FirebaseMessaging? _messaging;
   final List<AppNotificationItem> _notifications = [];
-  final _notificationsStreamController = StreamController<List<AppNotificationItem>>.broadcast();
+  final _notificationsStreamController =
+      StreamController<List<AppNotificationItem>>.broadcast();
 
   FCMService([this._messaging]);
 
-  List<AppNotificationItem> get notifications => List.unmodifiable(_notifications);
-  Stream<List<AppNotificationItem>> get notificationsStream => _notificationsStreamController.stream;
+  List<AppNotificationItem> get notifications =>
+      List.unmodifiable(_notifications);
+  Stream<List<AppNotificationItem>> get notificationsStream =>
+      _notificationsStreamController.stream;
 
   Future<void> initialize() async {
     try {
@@ -38,7 +42,9 @@ class FCMService {
           badge: true,
           sound: true,
         );
-        debugPrint('[FCMService] Permission authorization status: ${settings.authorizationStatus}');
+        debugPrint(
+          '[FCMService] Permission authorization status: ${settings.authorizationStatus}',
+        );
 
         // Foreground messaging listener
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -47,7 +53,9 @@ class FCMService {
 
         // Background / Terminated launch listener
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          debugPrint('[FCMService] App opened from background notification: ${message.messageId}');
+          debugPrint(
+            '[FCMService] App opened from background notification: ${message.messageId}',
+          );
         });
 
         final fcmToken = await _messaging.getToken();
@@ -69,20 +77,6 @@ class FCMService {
     _notifications.insert(0, notif);
     _notificationsStreamController.add(List.unmodifiable(_notifications));
     debugPrint('[FCMService] Foreground message received: ${notif.title}');
-  }
-
-  /// Demo helper to simulate console push notification during live presentation
-  void simulateConsolePush({required String title, required String body, String? route}) {
-    final notif = AppNotificationItem(
-      id: 'demo-fcm-${DateTime.now().millisecondsSinceEpoch}',
-      title: title,
-      body: body,
-      route: route,
-      timestamp: DateTime.now(),
-    );
-    _notifications.insert(0, notif);
-    _notificationsStreamController.add(List.unmodifiable(_notifications));
-    debugPrint('[FCMService] Simulated console push received: $title');
   }
 
   void dispose() {

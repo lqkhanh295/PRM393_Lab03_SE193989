@@ -1,0 +1,22 @@
+{
+  "parameters": {
+    "max_featured_events": {
+      "defaultValue": {
+        "value": "5"
+      },
+      "valueType": "NUMBER"
+    },
+    "featured_banner_title": {
+      "defaultValue": {
+        "value": "Chào mừng sinh viên FPTU đến với Campus Event 2026"
+      },
+      "valueType": "STRING"
+    },
+    "enable_live_qa": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    }
+  }
+}
