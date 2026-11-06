@@ -8,8 +8,7 @@ class RemoteConfigService {
 
   int _maxFeaturedEvents = 5;
   bool _enableLiveQA = true;
-  String _featuredBannerTitle =
-      'Chào mừng sinh viên FPTU đến với Campus Event 2026';
+  String _featuredBannerTitle = 'Chào mừng đến với FPTU Tech Expo 2026';
 
   RemoteConfigService([this._remoteConfig]);
 
@@ -23,21 +22,18 @@ class RemoteConfigService {
         await _remoteConfig.setConfigSettings(
           RemoteConfigSettings(
             fetchTimeout: const Duration(seconds: 10),
-            minimumFetchInterval: Duration.zero,
+            minimumFetchInterval: const Duration(minutes: 5),
           ),
         );
         await _remoteConfig.setDefaults(<String, dynamic>{
           'max_featured_events': 5,
           'enable_live_qa': true,
-          'featured_banner_title':
-              'Chào mừng sinh viên FPTU đến với Campus Event 2026',
+          'featured_banner_title': 'Chào mừng đến với FPTU Tech Expo 2026',
         });
         await fetchAndActivate();
       }
     } catch (e) {
-      debugPrint(
-        '[RemoteConfigService] Init error, using default fallbacks: $e',
-      );
+      debugPrint('[RemoteConfigService] Init error, using default fallbacks: $e');
     }
   }
 
@@ -45,18 +41,22 @@ class RemoteConfigService {
     try {
       if (_remoteConfig != null) {
         final updated = await _remoteConfig.fetchAndActivate();
-        final maxEvents = _remoteConfig.getInt('max_featured_events');
-        _maxFeaturedEvents = maxEvents < 0 ? 0 : maxEvents;
+        _maxFeaturedEvents = _remoteConfig.getInt('max_featured_events');
         _enableLiveQA = _remoteConfig.getBool('enable_live_qa');
         _featuredBannerTitle = _remoteConfig.getString('featured_banner_title');
-        debugPrint(
-          '[RemoteConfigService] Values activated: maxEvents=$_maxFeaturedEvents, liveQA=$_enableLiveQA',
-        );
+        debugPrint('[RemoteConfigService] Values activated: maxEvents=$_maxFeaturedEvents, liveQA=$_enableLiveQA');
         return updated;
       }
     } catch (e) {
       debugPrint('[RemoteConfigService] Fetch error: $e');
     }
     return false;
+  }
+
+  /// Demo helper to simulate console toggle live in demo area
+  void setSimulatedConfig({int? maxEvents, bool? liveQA, String? banner}) {
+    if (maxEvents != null) _maxFeaturedEvents = maxEvents;
+    if (liveQA != null) _enableLiveQA = liveQA;
+    if (banner != null) _featuredBannerTitle = banner;
   }
 }

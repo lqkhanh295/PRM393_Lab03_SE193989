@@ -9,13 +9,7 @@ service firebase.storage {
     // Strict Per-User Storage Rules for Lab 3
     // Each user can read and write only files within their dedicated folder: reports/{uid}/...
     match /reports/{userId}/{allPaths=**} {
-      allow read, delete: if request.auth != null && request.auth.uid == userId;
-      allow create, update: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.contentType == 'application/pdf'
-        && request.resource.size > 0
-        && request.resource.size <= 10 * 1024 * 1024
-        && request.resource.name.matches('.*[.]pdf');
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
     match /certificates/{userId}/{allPaths=**} {
