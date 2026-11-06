@@ -5,10 +5,15 @@ import '../../models/event_model.dart';
 import '../../models/ticket_model.dart';
 import '../../viewmodels/home_viewmodel.dart';
 import '../../viewmodels/my_tickets_vm.dart';
+import '../../viewmodels/auth_viewmodel.dart';
 import '../events/event_detail_screen.dart';
 
-/// S25: Campus Calendar Screen
-/// Full Monthly Interactive Calendar with event day markers and daily agenda.
+enum CalendarViewMode { month, week }
+
+/// S25: Campus Calendar Screen (Lịch biểu Campus)
+/// Supports Full Month Grid View and 7-day Week View.
+/// Dynamically queries real Cloud Firestore events and tickets.
+/// Strictly enforces Zero-Mock Data Policy.
 class CampusCalendarScreen extends StatefulWidget {
   const CampusCalendarScreen({super.key});
 
@@ -19,6 +24,7 @@ class CampusCalendarScreen extends StatefulWidget {
 class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
   late DateTime _focusedMonth;
   late DateTime _selectedDate;
+  CalendarViewMode _viewMode = CalendarViewMode.month;
 
   @override
   void initState() {
@@ -26,6 +32,19 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     final now = DateTime.now();
     _focusedMonth = DateTime(now.year, now.month, 1);
     _selectedDate = DateTime(now.year, now.month, now.day);
+
+    // Ensure real Firestore data is loaded if not already in memory
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeVM = context.read<HomeViewModel>();
+      if (homeVM.allEvents.isEmpty) {
+        homeVM.loadHomeScreenData();
+      }
+      final authVM = context.read<AuthViewModel>();
+      final user = authVM.currentUser;
+      if (user != null) {
+        context.read<MyTicketsViewModel>().loadUserTickets(user.id);
+      }
+    });
   }
 
   void _previousMonth() {
@@ -40,15 +59,37 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     });
   }
 
+  /// Bulletproof event date parser supporting DD/MM/YYYY, YYYY-MM-DD, and ISO strings
   DateTime? _parseEventDate(String dateStr) {
     try {
-      final parts = dateStr.trim().split('/');
-      if (parts.length == 3) {
-        final day = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final year = int.parse(parts[2]);
-        return DateTime(year, month, day);
+      final trimmed = dateStr.trim();
+      if (trimmed.contains('/')) {
+        final parts = trimmed.split('/');
+        if (parts.length == 3) {
+          final p0 = int.parse(parts[0]);
+          final p1 = int.parse(parts[1]);
+          final p2 = int.parse(parts[2]);
+          if (p0 > 1000) {
+            return DateTime(p0, p1, p2);
+          } else {
+            return DateTime(p2, p1, p0);
+          }
+        }
       }
+      if (trimmed.contains('-')) {
+        final parts = trimmed.split('-');
+        if (parts.length == 3) {
+          final p0 = int.parse(parts[0]);
+          final p1 = int.parse(parts[1]);
+          final p2 = int.parse(parts[2]);
+          if (p0 > 1000) {
+            return DateTime(p0, p1, p2);
+          } else {
+            return DateTime(p2, p1, p0);
+          }
+        }
+      }
+      return DateTime.tryParse(trimmed);
     } catch (_) {}
     return null;
   }
@@ -67,44 +108,61 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     }).toList();
   }
 
+  /// Get 7 days of the week containing the currently selected date (Monday to Sunday)
+  List<DateTime> _getDaysForWeek(DateTime referenceDate) {
+    final monday = referenceDate.subtract(Duration(days: referenceDate.weekday - 1));
+    return List.generate(7, (i) => monday.add(Duration(days: i)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final homeVM = context.watch<HomeViewModel>();
     final ticketsVM = context.watch<MyTicketsViewModel>();
 
-    // Only real Cloud Firestore events
+    // 100% Real Cloud Firestore data
     final allEvents = homeVM.allEvents;
     final userTickets = ticketsVM.allTickets;
 
-    // Build days matrix for the full month
+    // Build matrix for full month
     final firstDay = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
     final lastDay = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0);
     final totalDaysInMonth = lastDay.day;
-    final leadingDays = firstDay.weekday - 1; // 1 = Monday (0 leading), 7 = Sunday (6 leading)
+    final leadingDays = firstDay.weekday - 1; // 1 = Mon (0 leading)
 
-    final List<DateTime> allDays = [];
+    final List<DateTime> monthDays = [];
     final prevMonthLastDay = DateTime(_focusedMonth.year, _focusedMonth.month, 0);
     for (int i = leadingDays - 1; i >= 0; i--) {
-      allDays.add(DateTime(_focusedMonth.year, _focusedMonth.month - 1, prevMonthLastDay.day - i));
+      monthDays.add(DateTime(_focusedMonth.year, _focusedMonth.month - 1, prevMonthLastDay.day - i));
     }
     for (int i = 1; i <= totalDaysInMonth; i++) {
-      allDays.add(DateTime(_focusedMonth.year, _focusedMonth.month, i));
+      monthDays.add(DateTime(_focusedMonth.year, _focusedMonth.month, i));
     }
-    final remaining = 7 - (allDays.length % 7);
+    final remaining = 7 - (monthDays.length % 7);
     if (remaining < 7) {
       for (int i = 1; i <= remaining; i++) {
-        allDays.add(DateTime(_focusedMonth.year, _focusedMonth.month + 1, i));
+        monthDays.add(DateTime(_focusedMonth.year, _focusedMonth.month + 1, i));
       }
     }
-    final numWeeks = allDays.length ~/ 7;
+    final numWeeks = monthDays.length ~/ 7;
 
-    // Events happening on currently selected day
+    final weekDays = _getDaysForWeek(_selectedDate);
+
+    // Selected day events
     final selectedDayEvents = _getEventsForDay(_selectedDate, allEvents);
+    final isToday = _isSameDay(_selectedDate, DateTime.now());
+
+    // Check if another month has events (for quick navigation hint)
+    final eventsInFocusedMonth = allEvents.where((e) {
+      final d = _parseEventDate(e.date);
+      return d != null && d.year == _focusedMonth.year && d.month == _focusedMonth.month;
+    }).length;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
         title: const Text('Lịch biểu Campus'),
+        elevation: 0,
+        backgroundColor: AppTheme.surface,
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(1),
           child: Divider(height: 1, thickness: 1, color: AppTheme.hairline),
@@ -115,17 +173,24 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Calendar Month Card
+            // Calendar Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppTheme.surface,
                 borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                 border: Border.all(color: AppTheme.hairline, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
-                  // Month navigation row
+                  // Month navigation row + View Toggle (Tháng / Tuần)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -140,55 +205,113 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                       ),
                       Row(
                         children: [
+                          // View Switcher (Tháng / Tuần)
+                          Container(
+                            height: 28,
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: AppTheme.surfaceContainer,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              children: [
+                                _buildModeToggle('Tháng', CalendarViewMode.month),
+                                _buildModeToggle('Tuần', CalendarViewMode.week),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          // Nav buttons
                           IconButton(
                             icon: const Icon(Icons.chevron_left_rounded, size: 22),
                             onPressed: _previousMonth,
                             tooltip: 'Tháng trước',
                             padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                           ),
-                          const SizedBox(width: 4),
                           IconButton(
                             icon: const Icon(Icons.chevron_right_rounded, size: 22),
                             onPressed: _nextMonth,
                             tooltip: 'Tháng sau',
                             padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            constraints: const BoxConstraints(minWidth: 28, minHeight: 28),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
                   const SizedBox(height: 12),
 
                   // Weekdays header row (T2 -> CN)
+                  // The weekday matching currently selected date is dynamically highlighted in primary orange!
                   Row(
-                    children: const [
-                      Expanded(child: Center(child: Text('T2', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
-                      Expanded(child: Center(child: Text('T3', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
-                      Expanded(child: Center(child: Text('T4', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.primary)))),
-                      Expanded(child: Center(child: Text('T5', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
-                      Expanded(child: Center(child: Text('T6', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
-                      Expanded(child: Center(child: Text('T7', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
-                      Expanded(child: Center(child: Text('CN', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: AppTheme.textMuted)))),
+                    children: [
+                      _buildWeekdayHeader('T2', 1),
+                      _buildWeekdayHeader('T3', 2),
+                      _buildWeekdayHeader('T4', 3),
+                      _buildWeekdayHeader('T5', 4),
+                      _buildWeekdayHeader('T6', 5),
+                      _buildWeekdayHeader('T7', 6),
+                      _buildWeekdayHeader('CN', 7),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
 
-                  // Full Month Grid Rows
-                  for (int week = 0; week < numWeeks; week++) ...[
+                  // Grid: Either Full Month Grid or Single Week Row
+                  if (_viewMode == CalendarViewMode.month) ...[
+                    // Full Month Grid Rows
+                    for (int week = 0; week < numWeeks; week++) ...[
+                      Row(
+                        children: [
+                          for (int col = 0; col < 7; col++) ...[
+                            Expanded(
+                              child: Builder(
+                                builder: (context) {
+                                  final day = monthDays[week * 7 + col];
+                                  final isCurrentMonth = day.month == _focusedMonth.month;
+                                  final isSelected = _isSameDay(day, _selectedDate);
+                                  final isDayToday = _isSameDay(day, DateTime.now());
+                                  final dayEvents = _getEventsForDay(day, allEvents);
+                                  final hasEvent = dayEvents.isNotEmpty;
+
+                                  return _buildDateCell(
+                                    day: day,
+                                    isCurrentMonth: isCurrentMonth,
+                                    isSelected: isSelected,
+                                    isToday: isDayToday,
+                                    hasEvent: hasEvent,
+                                    eventCount: dayEvents.length,
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedDate = day;
+                                        if (!isCurrentMonth) {
+                                          _focusedMonth = DateTime(day.year, day.month, 1);
+                                        }
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      if (week < numWeeks - 1) const SizedBox(height: 6),
+                    ],
+                  ] else ...[
+                    // Single Week Row (matching original 7-day strip)
                     Row(
                       children: [
                         for (int col = 0; col < 7; col++) ...[
                           Expanded(
                             child: Builder(
                               builder: (context) {
-                                final day = allDays[week * 7 + col];
+                                final day = weekDays[col];
                                 final isCurrentMonth = day.month == _focusedMonth.month;
                                 final isSelected = _isSameDay(day, _selectedDate);
-                                final isToday = _isSameDay(day, DateTime.now());
+                                final isDayToday = _isSameDay(day, DateTime.now());
                                 final dayEvents = _getEventsForDay(day, allEvents);
                                 final hasEvent = dayEvents.isNotEmpty;
 
@@ -196,7 +319,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                   day: day,
                                   isCurrentMonth: isCurrentMonth,
                                   isSelected: isSelected,
-                                  isToday: isToday,
+                                  isToday: isDayToday,
                                   hasEvent: hasEvent,
                                   eventCount: dayEvents.length,
                                   onTap: () {
@@ -214,7 +337,6 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                         ],
                       ],
                     ),
-                    if (week < numWeeks - 1) const SizedBox(height: 6),
                   ],
 
                   const SizedBox(height: 14),
@@ -249,7 +371,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                           ),
                           const SizedBox(width: 6),
                           const Text(
-                            'Ngày có sự kiện',
+                            'Có sự kiện',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppTheme.textMuted),
                           ),
                         ],
@@ -262,7 +384,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                             width: 14,
                             height: 14,
                             decoration: BoxDecoration(
-                              color: AppTheme.primary,
+                              color: AppTheme.obsidian,
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -273,6 +395,29 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(width: 20),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            final now = DateTime.now();
+                            _focusedMonth = DateTime(now.year, now.month, 1);
+                            _selectedDate = DateTime(now.year, now.month, now.day);
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(4),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          child: Text(
+                            'Hôm nay',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.primary,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -280,13 +425,15 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Daily Agenda Header
+            // Daily Agenda Header (Matching "LỊCH TRÌNH HÔM NAY · 28/10/2026")
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
-                    'LỊCH TRÌNH · ${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
+                    isToday
+                        ? 'LỊCH TRÌNH HÔM NAY · ${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}'
+                        : 'LỊCH TRÌNH · ${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
@@ -357,6 +504,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // Top pill row: Time/Location on left, status on right
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -422,6 +570,8 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                 ],
                               ),
                               const SizedBox(height: 10),
+
+                              // Title
                               Text(
                                 event.title,
                                 style: const TextStyle(
@@ -432,6 +582,8 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                 ),
                               ),
                               const SizedBox(height: 6),
+
+                              // Organizer row
                               Row(
                                 children: [
                                   const Icon(Icons.people_outline_rounded, size: 13, color: AppTheme.textMuted),
@@ -450,6 +602,8 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                   const Icon(Icons.chevron_right_rounded, size: 16, color: AppTheme.textMuted),
                                 ],
                               ),
+
+                              // Ticket Code row if registered (Matching screenshot's "🎫 Mã vé: CE2026-083291")
                               if (hasTicket && ticket.id.isNotEmpty) ...[
                                 const SizedBox(height: 8),
                                 Container(
@@ -486,7 +640,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                 ),
               ],
             ] else ...[
-              // Empty State for days without events
+              // Empty State for days without events (Zero-Mock compliant)
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
@@ -517,9 +671,11 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Chạm vào các ngày có chấm cam (●) trên lịch để xem lịch trình sự kiện chi tiết!',
-                      style: TextStyle(
+                    Text(
+                      eventsInFocusedMonth > 0
+                          ? 'Tháng ${_focusedMonth.month}/${_focusedMonth.year} có $eventsInFocusedMonth sự kiện. Chạm vào ngày có chấm cam (●) để xem!'
+                          : 'Chạm vào các ngày có chấm cam (●) trên lịch để xem lịch trình sự kiện chi tiết!',
+                      style: const TextStyle(
                         fontSize: 12,
                         color: AppTheme.textMuted,
                         height: 1.4,
@@ -537,7 +693,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                       },
                       icon: const Icon(Icons.today_rounded, size: 16, color: AppTheme.primary),
                       label: const Text(
-                        'Quay về ngày hôm nay',
+                        'Quay về hôm nay',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppTheme.primary,
@@ -560,6 +716,57 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     );
   }
 
+  Widget _buildModeToggle(String label, CalendarViewMode mode) {
+    final isActive = _viewMode == mode;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _viewMode = mode;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: isActive ? AppTheme.surface : Colors.transparent,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 3,
+                    offset: const Offset(0, 1),
+                  )
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: isActive ? FontWeight.w800 : FontWeight.w500,
+            color: isActive ? AppTheme.primary : AppTheme.textMuted,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWeekdayHeader(String label, int weekday) {
+    final isSelectedWeekday = _selectedDate.weekday == weekday;
+    return Expanded(
+      child: Center(
+        child: Text(
+          label,
+          style: TextStyle(
+            fontWeight: isSelectedWeekday ? FontWeight.w800 : FontWeight.w600,
+            fontSize: 12,
+            color: isSelectedWeekday ? AppTheme.primary : AppTheme.textMuted,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildDateCell({
     required DateTime day,
     required bool isCurrentMonth,
@@ -575,18 +782,18 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
     if (isSelected) {
       textColor = Colors.white;
       boxDecoration = BoxDecoration(
-        color: hasEvent ? AppTheme.primary : AppTheme.obsidian,
+        color: AppTheme.obsidian,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: (hasEvent ? AppTheme.primary : AppTheme.obsidian).withOpacity(0.35),
+            color: AppTheme.obsidian.withOpacity(0.35),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       );
     } else if (hasEvent && isCurrentMonth) {
-      // Days with events are clearly distinguished!
+      // Days with events are distinct and highlighted
       textColor = AppTheme.primary;
       boxDecoration = BoxDecoration(
         color: const Color(0xFFFFF4EB),
@@ -607,13 +814,14 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
       );
     }
 
+    // Dot indicator for days with events
     Widget indicator;
     if (hasEvent) {
       indicator = Container(
         width: 5,
         height: 5,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : AppTheme.primary,
+          color: isSelected ? AppTheme.primary : AppTheme.primary,
           shape: BoxShape.circle,
         ),
       );
