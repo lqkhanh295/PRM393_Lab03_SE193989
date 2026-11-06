@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/profile_viewmodel.dart';
-import '../../viewmodels/home_viewmodel.dart';
-import '../../services/fcm_service.dart';
+import '../../models/screen_state.dart';
+import '../../models/certificate_model.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/points_badge.dart';
 import '../auth/login_screen.dart';
@@ -35,8 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final authVM = context.watch<AuthViewModel>();
     final profileVM = context.watch<ProfileViewModel>();
-    final homeVM = context.read<HomeViewModel>();
-    final fcmService = context.watch<FCMService>();
     final user = authVM.currentUser;
 
     return Scaffold(
@@ -364,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // ==========================================
-            // FIREBASE DEMO AREA (LAB 3 SECTION 3)
+            // CHỨNG NHẬN & HOẠT ĐỘNG CỦA TÔI
             // ==========================================
             Container(
               padding: const EdgeInsets.all(18),
@@ -381,238 +379,179 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryContainer,
+                          color: AppTheme.surfaceSubtle,
                           borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: AppTheme.hairline, width: 1),
                         ),
                         child: const Text(
-                          'FIREBASE LAB 3 TERMINAL',
+                          'CHỨNG NHẬN E-CERTIFICATE',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: AppTheme.onPrimaryContainer,
-                            letterSpacing: 0.8,
+                            color: AppTheme.obsidian,
+                            letterSpacing: 0.6,
                           ),
                         ),
                       ),
+                      const Spacer(),
+                      const Icon(Icons.verified_rounded, size: 16, color: AppTheme.primary),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Kiểm thử trực tiếp 6 dịch vụ Firebase theo tiêu chí đánh giá Mục 3.',
-                    style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
-                  ),
-                  const SizedBox(height: 14),
-                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
-                  const SizedBox(height: 14),
-
-                  // 1. Cloud Storage Export & Upload
-                  const Text(
-                    '1. Cloud Storage File Upload (reports/{uid}/...)',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.onSurface),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPrimaryButton(
-                    label: 'Xuất chứng nhận PDF & Upload Cloud Storage',
-                    icon: Icons.upload_file_rounded,
-                    isLoading: profileVM.isUploading,
-                    onPressed: () {
-                      if (user != null) {
-                        profileVM.generateAndUploadPdfSummary(user);
+                  const SizedBox(height: 12),
+                  Builder(
+                    builder: (context) {
+                      final certState = profileVM.certificatesState;
+                      if (certState is StateLoading) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
                       }
-                    },
-                  ),
-                  if (profileVM.isUploading) ...[
-                    const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      value: profileVM.uploadProgress,
-                      backgroundColor: AppTheme.surfaceSubtle,
-                      valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primary),
-                    ),
-                  ],
-                  if (profileVM.lastUploadedUrl != null) ...[
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppTheme.successSoft,
-                        borderRadius: BorderRadius.circular(AppTheme.radiusInput),
-                        border: Border.all(color: AppTheme.successBorder, width: 1),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Download URL (Storage):',
-                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.successInk),
-                          ),
-                          const SizedBox(height: 2),
-                          SelectableText(
-                            profileVM.lastUploadedUrl!,
-                            style: const TextStyle(
-                              fontFamily: 'monospace',
-                              fontSize: 10,
-                              color: AppTheme.successInk,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 16),
-                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
-                  const SizedBox(height: 14),
-
-                  // 2. Cloud Messaging (FCM)
-                  const Text(
-                    '2. Cloud Messaging (FCM Foreground Test)',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.onSurface),
-                  ),
-                  const SizedBox(height: 8),
-                  AppOutlinedButton(
-                    label: 'Mô phỏng nhận Push Notification (FCM)',
-                    icon: Icons.notifications_none_rounded,
-                    onPressed: () {
-                      profileVM.triggerDemoPushNotification();
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Thông báo gần đây (${fcmService.notifications.length}):',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.textMuted),
-                  ),
-                  const SizedBox(height: 4),
-                  ...fcmService.notifications.take(2).map(
-                        (n) => Container(
-                          margin: const EdgeInsets.only(bottom: 6),
-                          padding: const EdgeInsets.all(8),
+                      final certs = certState is StateData<List<CertificateModel>> ? certState.data : <CertificateModel>[];
+                      if (certs.isEmpty) {
+                        return Container(
+                          padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: AppTheme.surfaceSubtle,
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                          ),
+                          child: Row(
+                            children: const [
+                              Icon(Icons.workspace_premium_outlined, color: AppTheme.textMuted, size: 24),
+                              SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Chưa có e-Certificate. Hãy tham gia sự kiện và gửi đánh giá để nhận chứng nhận có chữ ký số!',
+                                  style: TextStyle(fontSize: 12, color: AppTheme.textMuted, height: 1.35),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: certs.map((c) => Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppTheme.surfaceSubtle,
+                            borderRadius: BorderRadius.circular(AppTheme.radiusInput),
                             border: Border.all(color: AppTheme.hairline, width: 1),
                           ),
-                          child: Text(
-                            '• ${n.title}: ${n.body}',
-                            style: const TextStyle(fontSize: 11, color: AppTheme.onSurface),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: AppTheme.hairline, width: 1),
+                                ),
+                                child: const Icon(Icons.workspace_premium_rounded, color: AppTheme.primary, size: 22),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      c.eventTitle,
+                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppTheme.obsidian),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      'Mã số: ${c.verificationHash.length > 16 ? c.verificationHash.substring(0, 16) : c.verificationHash} · ${c.issueDate}',
+                                      style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              IconButton(
+                                icon: const Icon(Icons.download_rounded, size: 20, color: AppTheme.obsidian),
+                                tooltip: 'Tải chứng nhận PDF',
+                                onPressed: () {
+                                  if (user != null) {
+                                    profileVM.generateAndUploadPdfSummary(user);
+                                  }
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                  const SizedBox(height: 14),
-                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
-                  const SizedBox(height: 14),
-
-                  // 3. Remote Config Toggles
-                  const Text(
-                    '3. Remote Config (max_featured_events & Banner)',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.onSurface),
-                  ),
-                  const SizedBox(height: 8),
-                  AppOutlinedButton(
-                    label: 'Chuyển đổi Remote Config (5 <-> 2 sự kiện)',
-                    icon: Icons.tune_rounded,
-                    onPressed: () async {
-                      await profileVM.toggleRemoteConfigDemo();
-                      homeVM.refreshRemoteConfig();
+                        )).toList(),
+                      );
                     },
                   ),
-                  const SizedBox(height: 14),
-                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
-                  const SizedBox(height: 14),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
 
-                  // 4. Crashlytics Error Handling & Crash
-                  const Text(
-                    '4. Crashlytics (Handled Non-fatal & Test Crash)',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.onSurface),
-                  ),
-                  const SizedBox(height: 8),
+            // Câu lạc bộ đang theo dõi
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: AppTheme.surface,
+                borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                border: Border.all(color: AppTheme.hairline, width: 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Row(
                     children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppTheme.obsidian,
-                            side: const BorderSide(color: AppTheme.hairline),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.radiusInput),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-                          ),
-                          onPressed: () {
-                            if (user != null) {
-                              profileVM.triggerHandledErrorDemo(user.id);
-                            }
-                          },
-                          child: const Text(
-                            'Gửi Non-fatal',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surfaceSubtle,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: AppTheme.hairline, width: 1),
+                        ),
+                        child: const Text(
+                          'CLB ĐANG THEO DÕI',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.obsidian,
+                            letterSpacing: 0.6,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppTheme.errorInk,
-                            side: const BorderSide(color: AppTheme.errorBorder),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppTheme.radiusInput),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-                          ),
-                          onPressed: () {
-                            profileVM.triggerTestCrash();
-                          },
-                          child: const Text(
-                            'Kích hoạt Crash',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
+                      const Spacer(),
+                      const Text(
+                        '2 CLB',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppTheme.textMuted),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
-                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
-                  const SizedBox(height: 14),
-
-                  // 5. Cloud Firestore
-                  const Text(
-                    '5. Cloud Firestore (Khởi tạo & Đồng bộ dữ liệu)',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppTheme.onSurface),
-                  ),
-                  const SizedBox(height: 8),
-                  AppOutlinedButton(
-                    label: 'Khởi tạo & Đồng bộ Collections Firestore',
-                    icon: Icons.cloud_upload_outlined,
-                    onPressed: () async {
-                      await profileVM.seedFirestoreCollectionsDemo();
-                      homeVM.loadHomeScreenData();
-                    },
-                  ),
-
-                  // Status feedback message
-                  if (profileVM.statusMessage != null) ...[
-                    const SizedBox(height: 14),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppTheme.surfaceSubtle,
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AppTheme.hairline, width: 1),
-                      ),
-                      child: Text(
-                        profileVM.statusMessage!,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.obsidian,
-                        ),
-                      ),
+                  const SizedBox(height: 12),
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      backgroundColor: AppTheme.surfaceSubtle,
+                      child: Text('FC', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppTheme.obsidian)),
                     ),
-                  ],
+                    title: Text('CLB Học thuật F-Code', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                    subtitle: Text('2.450 thành viên · Công nghệ & Thuật toán', style: TextStyle(fontSize: 11, color: AppTheme.textMuted)),
+                    trailing: Icon(Icons.check_circle_rounded, size: 18, color: AppTheme.primary),
+                  ),
+                  const Divider(height: 1, thickness: 1, color: AppTheme.hairline),
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      backgroundColor: AppTheme.surfaceSubtle,
+                      child: Text('CSG', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppTheme.obsidian)),
+                    ),
+                    title: Text('CLB Truyền thông Cóc Sài Gòn', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                    subtitle: Text('3.890 thành viên · Truyền thông & Văn hóa', style: TextStyle(fontSize: 11, color: AppTheme.textMuted)),
+                    trailing: Icon(Icons.check_circle_rounded, size: 18, color: AppTheme.primary),
+                  ),
                 ],
               ),
             ),

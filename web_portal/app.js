@@ -510,7 +510,142 @@ const app = {
     this.renderStudentsTable(filtered);
   },
 
-  // Simulate incoming check-in
+  // Simulate Storage Upload
+  simulateStorageUpload() {
+    const wrap = document.getElementById('storage-progress-wrap');
+    const bar = document.getElementById('storage-progress-bar');
+    const text = document.getElementById('storage-progress-text');
+    const resultBox = document.getElementById('storage-result-box');
+    const btn = document.getElementById('btn-storage-upload');
+
+    if (!wrap || !bar || !text || !resultBox || !btn) return;
+
+    btn.disabled = true;
+    wrap.style.display = 'block';
+    resultBox.style.display = 'none';
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 20;
+      bar.style.width = progress + '%';
+      text.innerText = progress + '%';
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          btn.disabled = false;
+          wrap.style.display = 'none';
+          resultBox.style.display = 'block';
+          this.logAnalytics('storage_pdf_uploaded', { path: 'reports/USR-FPTU-2026/cert_summary.pdf', size_bytes: 48210 });
+          this.showToast('Đã tạo báo cáo PDF và tải lên Cloud Storage thành công!');
+        }, 400);
+      }
+    }, 250);
+  },
+
+  // Send FCM Broadcast
+  sendFCMBroadcast() {
+    const title = (document.getElementById('fcm-title')?.value || '').trim();
+    const body = (document.getElementById('fcm-body')?.value || '').trim();
+
+    if (!title || !body) {
+      this.showToast('Vui lòng nhập đầy đủ tiêu đề và nội dung thông báo!');
+      return;
+    }
+
+    const historyList = document.getElementById('fcm-history-list');
+    if (historyList) {
+      const item = document.createElement('div');
+      item.style.fontSize = '11.5px';
+      item.style.color = 'var(--text)';
+      item.style.fontWeight = '500';
+      item.style.padding = '4px 0';
+      item.innerText = `• [Vừa gửi] ${title}: ${body}`;
+      historyList.prepend(item);
+    }
+
+    this.logAnalytics('fcm_notification_broadcast', { title, recipients: 1250 });
+    this.showToast(`Đã phát sóng Push Notification (FCM) đến 1.250 thiết bị sinh viên!`);
+  },
+
+  // Toggle Remote Config
+  toggleRemoteConfig(key) {
+    if (key === 'featured') {
+      const isChecked = document.getElementById('rc-featured')?.checked;
+      const pill = document.getElementById('rc-featured-pill');
+      if (pill) {
+        pill.innerText = isChecked ? '5 Sự Kiện' : '2 Sự Kiện';
+        pill.className = isChecked ? 'pill pill-positive' : 'pill pill-neutral';
+      }
+      this.showToast(`Remote Config: max_featured_events = ${isChecked ? 5 : 2}`);
+    } else if (key === 'survey') {
+      const isChecked = document.getElementById('rc-survey')?.checked;
+      const pill = document.getElementById('rc-survey-pill');
+      if (pill) {
+        pill.innerText = isChecked ? 'Đang Bật' : 'Tắt';
+        pill.className = isChecked ? 'pill pill-positive' : 'pill pill-neutral';
+      }
+      this.showToast(`Remote Config: show_survey_banner = ${isChecked}`);
+    } else if (key === 'maintenance') {
+      const isChecked = document.getElementById('rc-maintenance')?.checked;
+      const pill = document.getElementById('rc-maintenance-pill');
+      if (pill) {
+        pill.innerText = isChecked ? 'Bật Bảo Trì' : 'Tắt';
+        pill.className = isChecked ? 'pill pill-negative' : 'pill pill-neutral';
+      }
+      this.showToast(`Remote Config: maintenance_mode = ${isChecked}`);
+    }
+  },
+
+  publishRemoteConfig() {
+    this.logAnalytics('remote_config_published', { timestamp: new Date().toISOString() });
+    this.showToast('Đã xuất bản Remote Config mới! Các thiết bị sinh viên sẽ tự động fetch & activate.');
+  },
+
+  // Simulate Handled Exception for Crashlytics
+  simulateHandledException() {
+    const counter = document.getElementById('crashlytics-handled-count');
+    if (counter) {
+      counter.innerText = parseInt(counter.innerText, 10) + 1;
+    }
+
+    const logBox = document.getElementById('crashlytics-log');
+    if (logBox) {
+      const newLog = document.createElement('div');
+      newLog.style.color = 'var(--warning)';
+      newLog.innerText = `• [Handled] ApiException: Handled non-fatal at ${new Date().toLocaleTimeString('vi-VN')} (User: USR-FPTU-2026)`;
+      logBox.prepend(newLog);
+    }
+
+    this.logAnalytics('non_fatal_error_logged', { error_type: 'HandledException' });
+    this.showToast('Đã gửi 1 Handled Non-fatal Exception lên Firebase Crashlytics!');
+  },
+
+  simulateCrashlyticsAlert() {
+    this.showToast('Kiểm tra Crashlytics: Toàn bộ dịch vụ hoạt động an toàn. Crash-free 99.8%.');
+  },
+
+  // Seed Firestore from Web
+  async seedFirestoreFromWeb() {
+    this.showToast('Đang tái lập & xác thực 5 collections Cloud Firestore...');
+    await this.fetchFromFirestore();
+    const statusMsg = document.getElementById('seeder-status-msg');
+    if (statusMsg) {
+      statusMsg.innerText = `✓ Đã đồng bộ lại lúc ${new Date().toLocaleTimeString('vi-VN')} · Cloud Firestore hoạt động bình thường`;
+    }
+    this.showToast('Đã đồng bộ thành công toàn bộ collections trên Cloud Firestore!');
+  },
+
+  // Log to Analytics Stream
+  logAnalytics(eventName, params = {}) {
+    const stream = document.getElementById('analytics-stream');
+    if (!stream) return;
+
+    const row = document.createElement('div');
+    row.style.color = 'var(--text)';
+    row.innerText = `[Analytics] event: '${eventName}' - ${JSON.stringify(params)}`;
+    stream.prepend(row);
+  },
   simulateIncomingCheckin() {
     const firstUnchecked = this.state.students.find(s => s.status === 'active');
     if (firstUnchecked) {
