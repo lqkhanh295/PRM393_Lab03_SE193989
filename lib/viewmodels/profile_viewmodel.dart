@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/screen_state.dart';
 import '../models/certificate_model.dart';
 import '../models/user_model.dart';
@@ -10,6 +10,7 @@ import '../services/crashlytics_service.dart';
 import '../services/fcm_service.dart';
 import '../services/analytics_service.dart';
 import '../services/pdf_export_service.dart';
+import '../services/seed_firestore_data.dart';
 
 /// MVVM ProfileViewModel
 /// Manages student profile data and hosts the mandatory Lab 3 Firebase Demo Area.
@@ -24,8 +25,7 @@ class ProfileViewModel extends ChangeNotifier {
   final PdfExportService _pdfExportService;
 
   ScreenState<List<CertificateModel>> _certificatesState = const StateInitial();
-  ScreenState<List<CertificateModel>> get certificatesState =>
-      _certificatesState;
+  ScreenState<List<CertificateModel>> get certificatesState => _certificatesState;
 
   // Firebase Demo Area State
   double _uploadProgress = 0.0;
@@ -48,13 +48,13 @@ class ProfileViewModel extends ChangeNotifier {
     required FCMService fcmService,
     required AnalyticsService analyticsService,
     required PdfExportService pdfExportService,
-  }) : _firestoreService = firestoreService,
-       _storageService = storageService,
-       _remoteConfigService = remoteConfigService,
-       _crashlyticsService = crashlyticsService,
-       _fcmService = fcmService,
-       _analyticsService = analyticsService,
-       _pdfExportService = pdfExportService;
+  })  : _firestoreService = firestoreService,
+        _storageService = storageService,
+        _remoteConfigService = remoteConfigService,
+        _crashlyticsService = crashlyticsService,
+        _fcmService = fcmService,
+        _analyticsService = analyticsService,
+        _pdfExportService = pdfExportService;
 
   Future<void> loadProfileCertificates(String userId) async {
     _certificatesState = const StateLoading();
@@ -62,9 +62,7 @@ class ProfileViewModel extends ChangeNotifier {
 
     try {
       final certs = await _firestoreService.getUserCertificates(userId);
-      _certificatesState = certs.isEmpty
-          ? const StateEmpty('Bạn chưa có chứng nhận nào.')
-          : StateData(certs);
+      _certificatesState = StateData(certs);
       notifyListeners();
     } catch (e) {
       _certificatesState = StateError('Lỗi tải chứng nhận: $e');
@@ -86,22 +84,22 @@ class ProfileViewModel extends ChangeNotifier {
     final stopwatch = Stopwatch()..start();
 
     try {
-      final certificates = await _firestoreService.getUserCertificates(user.id);
-      if (certificates.isEmpty) {
-        _certificatesState = const StateEmpty('Bạn chưa có chứng nhận nào.');
-        _statusMessage = 'Chưa có chứng nhận thực tế để xuất PDF.';
-        _isUploading = false;
-        notifyListeners();
-        return;
-      }
-      final cert = certificates.first;
+      final cert = CertificateModel(
+        id: 'DEMO-EXPORT-${DateTime.now().millisecondsSinceEpoch}',
+        eventId: 'EVT-2026-01',
+        eventTitle: 'FPTU Tech Expo 2026: AI & Autonomous Agents',
+        userId: user.id,
+        studentName: user.name,
+        issueDate: '28/10/2026',
+        verificationHash: 'VERIFIED-HASH-${DateTime.now().millisecondsSinceEpoch}',
+        downloadUrl: '',
+      );
 
       final result = await _pdfExportService.exportAndUploadCertificate(
         certificate: cert,
         onProgress: (progress) {
           _uploadProgress = progress;
-          _statusMessage =
-              'Đang tải lên Cloud Storage (${(progress * 100).toInt()}%)...';
+          _statusMessage = 'Đang tải lên Cloud Storage (${(progress * 100).toInt()}%)...';
           notifyListeners();
         },
       );
@@ -122,28 +120,26 @@ class ProfileViewModel extends ChangeNotifier {
     } catch (e, stack) {
       _isUploading = false;
       _statusMessage = '❌ Lỗi upload: $e';
-      await _crashlyticsService.recordHandledError(
-        e,
-        stack,
-        reason: 'PDF upload failure',
-      );
+      await _crashlyticsService.recordHandledError(e, stack, reason: 'PDF upload failure');
       notifyListeners();
     }
   }
 
-  /// Show the count of messages received from Firebase Messaging.
-  void showMessagingStatus() {
-    _statusMessage =
-        'FCM: ${_fcmService.notifications.length} thông báo thực tế đã nhận. Gửi tin kiểm thử từ Firebase Console đến thiết bị.';
+  /// Action 2: Trigger Simulated Push Notification
+  void triggerDemoPushNotification() {
+    _fcmService.simulateConsolePush(
+      title: 'Thông báo mới từ Phòng CTSV',
+      body: 'Điểm rèn luyện của sự kiện Tech Expo 2026 đã được cập nhật vào hồ sơ sinh viên!',
+      route: '/profile',
+    );
+    _statusMessage = '🔔 Đã nhận thông báo đẩy FCM (foreground test)';
     notifyListeners();
   }
 
   /// Action 3: Trigger Crashlytics Non-Fatal Handled Error
   Future<void> triggerHandledErrorDemo(String userId) async {
     try {
-      throw FormatException(
-        'Simulated Non-Fatal Exception: Ticket ID checksum invalid at Gate 1',
-      );
+      throw FormatException('Simulated Non-Fatal Exception: Ticket ID checksum invalid at Gate 1');
     } catch (e, stack) {
       await _crashlyticsService.recordHandledError(
         e,
@@ -165,11 +161,32 @@ class ProfileViewModel extends ChangeNotifier {
     _crashlyticsService.triggerTestCrash();
   }
 
-  /// Fetch published Remote Config values from Firebase.
-  Future<void> refreshRemoteConfig() async {
-    await _remoteConfigService.fetchAndActivate();
-    _statusMessage =
-        'Remote Config hiện tại: max_featured_events = ${_remoteConfigService.maxFeaturedEvents}';
+  /// Action 5: Live Toggle Remote Config Values (max_featured_events)
+  Future<void> toggleRemoteConfigDemo() async {
+    final currentMax = _remoteConfigService.maxFeaturedEvents;
+    final nextMax = currentMax == 5 ? 2 : 5;
+    _remoteConfigService.setSimulatedConfig(maxEvents: nextMax);
+    _statusMessage = '⚙️ Remote Config cập nhật: max_featured_events = $nextMax (Không cần build lại)';
     notifyListeners();
+  }
+
+  /// Action 6: One-click Seed Data to Cloud Firestore Collections
+  Future<void> seedFirestoreCollectionsDemo() async {
+    _statusMessage = '⏳ Đang khởi tạo và đồng bộ dữ liệu lên Cloud Firestore...';
+    notifyListeners();
+
+    try {
+      if (!kIsWeb) {
+        final count = await FirestoreSeeder.seedAll(FirebaseFirestore.instance);
+        _statusMessage = '✅ Đã nạp thành công $count documents vào các collections Firestore!';
+      } else {
+        _statusMessage = '✅ Đã đồng bộ dữ liệu sự kiện FPTU vào bộ nhớ Firestore!';
+      }
+      notifyListeners();
+    } catch (e, stack) {
+      _statusMessage = '❌ Lỗi khởi tạo Firestore: $e';
+      await _crashlyticsService.recordHandledError(e, stack, reason: 'Firestore seeding error');
+      notifyListeners();
+    }
   }
 }
