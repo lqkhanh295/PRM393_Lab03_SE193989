@@ -200,6 +200,61 @@ class FirestoreSeeder {
     }, SetOptions(merge: true));
     count++;
 
+    // 7. Seed Announcements Collection (Final Assignment Inbox)
+    final announcements = [
+      {
+        'id': 'ANN-2026-01',
+        'title': 'Chào mừng Lễ hội Công nghệ FPTU Tech Expo 2026! 🚀',
+        'content': 'Sự kiện công nghệ thường niên quy mô 500 sinh viên tại Đại học FPT TP.HCM đã chính thức mở cổng đăng ký. Hãy ghé thăm các gian hàng triển lãm và khu vực trải nghiệm AI.',
+        'category': 'general',
+        'authorRole': 'organizer',
+        'eventId': 'EVT-2026-01',
+        'isPinned': true,
+        'createdAt': FieldValue.serverTimestamp(),
+      },
+      {
+        'id': 'ANN-2026-02',
+        'title': 'Hướng dẫn quét mã vé QR tại bàn Check-in Cổng 1',
+        'content': 'Sinh viên vui lòng mở sẵn màn hình "Vé của tôi" hoặc vé điện tử tại Cổng 1 trước 15 phút giờ khai mạc để cán bộ bàn check-in quét mã QR nhanh chóng.',
+        'category': 'reminder',
+        'authorRole': 'staff',
+        'eventId': 'EVT-2026-01',
+        'isPinned': false,
+        'createdAt': FieldValue.serverTimestamp(),
+      },
+      {
+        'id': 'ANN-2026-03',
+        'title': 'Đơn đăng ký Workshop UI/UX đã được Ban Tổ Chức duyệt! 🎉',
+        'content': 'Chúc mừng bạn! Hồ sơ tham dự workshop Thiết kế UI/UX Chuẩn Công Thái Học đã được phê duyệt. Vé tham gia đã được cấp tự động trong tài khoản của bạn.',
+        'category': 'ticket_approved',
+        'authorRole': 'organizer',
+        'eventId': 'EVT-2026-02',
+        'isPinned': false,
+        'createdAt': FieldValue.serverTimestamp(),
+      },
+    ];
+
+    for (final ann in announcements) {
+      final docRef = firestore.collection('announcements').doc(ann['id'] as String);
+      batch.set(docRef, ann, SetOptions(merge: true));
+      count++;
+    }
+
+    // 8. Seed Registrations Collection (Final Assignment Cross-Role Flow)
+    final regRef = firestore.collection('registrations').doc('REG-2026-01');
+    batch.set(regRef, {
+      'id': 'REG-2026-01',
+      'eventId': 'EVT-2026-02',
+      'eventTitle': 'Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động',
+      'userId': 'USR-FPTU-2026',
+      'uid': 'USR-FPTU-2026',
+      'studentName': 'Nguyễn Văn An',
+      'studentEmail': 'an.nv@fptu.edu.vn',
+      'status': 'pending',
+      'createdAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+    count++;
+
     await batch.commit();
     debugPrint('[FirestoreSeeder] Successfully seeded $count documents into Cloud Firestore!');
     return count;

@@ -1,0 +1,578 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Application: Campus Event - FPT University Mobile App
+// Package: com.fptu.campusevent.campus_event
+//
+// 1. Collection: users/{userId}
+//    Document ID: Firebase Auth UID (e.g. "USR-FPTU-2026" or auth.uid)
+//    Fields:
+//      - id: string (optional, matches docId, <= 100 chars)
+//      - name: string (required, 1..100 chars) - Student/Staff full name
+//      - email: string (required, valid email, <= 100 chars) - FPT mail
+//      - avatarUrl: string (optional, URL, <= 1000 chars)
+//      - major: string (optional, <= 100 chars) - e.g. "Kỹ thuật Phần mềm (SE)"
+//      - activityPoints: int (optional, 0..100000) - Điểm rèn luyện
+//      - role: string (required, in ['student', 'staff', 'leader', 'admin'])
+//      - followedClubs: list of strings (optional, max 50 items)
+//      - createdAt: timestamp (optional, immutable)
+//      - updatedAt: timestamp (optional)
+//
+// 2. Collection: events/{eventId}
+//    Document ID: Event identifier (e.g. "EVT-2026-01")
+//    Fields:
+//      - id: string (optional, matches docId, <= 100 chars)
+//      - title: string (required, 1..200 chars)
+//      - description: string (optional, <= 2000 chars)
+//      - category: string (required, <= 100 chars) - Technology, Design, Sports,...
+//      - clubId: string (optional, <= 100 chars)
+//      - clubName: string (optional, <= 100 chars)
+//      - date: string (optional, <= 50 chars)
+//      - time: string (optional, <= 50 chars)
+//      - location: string (required, <= 200 chars)
+//      - capacity: int (required, 1..100000)
+//      - registeredCount: int (required, 0..100000)
+//      - bannerUrl: string (optional, <= 1000 chars)
+//      - isFeatured: bool (optional)
+//      - speakers: list of maps (optional, max 20 items)
+//      - sessions: list of maps (optional, max 50 items)
+//      - createdAt: timestamp (optional, immutable)
+//      - updatedAt: timestamp (optional)
+//
+// 3. Subcollection: events/{eventId}/questions/{questionId}
+//    Document ID: Unique question ID (e.g. "Q-01" or timestamp-based)
+//    Fields:
+//      - id: string (optional, <= 100 chars)
+//      - eventId: string (optional, matches parent eventId, <= 100 chars)
+//      - userId: string (optional, <= 100 chars, author UID)
+//      - authorId: string (optional, <= 100 chars, author UID)
+//      - studentName: string (optional, <= 100 chars)
+//      - question: string (required, 1..500 chars)
+//      - upvotes: int (optional, 0..100000)
+//      - upvoters: list of strings (optional, max 1000 items)
+//      - timestamp: string or timestamp (optional)
+//      - createdAt: string or timestamp (optional, immutable)
+//
+// 4. Collection: tickets/{ticketId}
+//    Document ID: Ticket code/ID (e.g. "CE2026-083291" or "TICKET-2026-01")
+//    Fields:
+//      - id: string (optional, <= 100 chars)
+//      - eventId: string (required, <= 100 chars)
+//      - eventTitle: string (optional, <= 200 chars)
+//      - eventDate: string (optional, <= 50 chars)
+//      - eventTime: string (optional, <= 50 chars)
+//      - eventLocation: string (optional, <= 200 chars)
+//      - userId: string (required, <= 100 chars, ticket owner auth UID)
+//      - studentName: string (optional, <= 100 chars)
+//      - studentEmail: string (optional, <= 100 chars)
+//      - studentId: string (optional, <= 50 chars)
+//      - ticketCode: string (optional, <= 100 chars)
+//      - qrToken: string (optional, <= 500 chars)
+//      - qrData: string (optional, <= 500 chars)
+//      - status: string (required, in ['active', 'checkedIn', 'expired', 'confirmed', 'cancelled'])
+//      - checkInStatus: bool (optional)
+//      - checkedInAt: string or timestamp (optional)
+//      - createdAt: string or timestamp (optional, immutable)
+//
+// 5. Collection: feedbacks/{feedbackId}
+//    Document ID: Feedback ID (e.g. "FB-01" or timestamp-based)
+//    Fields:
+//      - id: string (optional, <= 100 chars)
+//      - eventId: string (required, <= 100 chars)
+//      - eventTitle: string (optional, <= 200 chars)
+//      - userId: string (required, <= 100 chars, student UID)
+//      - studentName: string (optional, <= 100 chars)
+//      - rating: int (required, 1..5)
+//      - comment: string (optional, <= 1000 chars)
+//      - createdAt: string or timestamp (optional)
+//      - timestamp: string or timestamp (optional)
+//
+// 6. Collection: certificates/{certId}
+//    Document ID: Certificate ID (e.g. "CERT-2026-9901")
+//    Fields:
+//      - id: string (optional, <= 100 chars)
+//      - eventId: string (required, <= 100 chars)
+//      - eventTitle: string (optional, <= 200 chars)
+//      - userId: string (required, <= 100 chars, owner UID)
+//      - studentName: string (optional, <= 100 chars)
+//      - issueDate: string (optional, <= 50 chars)
+//      - verificationHash: string (required, 1..256 chars)
+//      - downloadUrl: string (optional, <= 1000 chars)
+//      - createdAt: string or timestamp (optional, immutable)
+//
+// 7. Collection: clubs/{clubId}
+//    Document ID: Club slug / ID (e.g. "fcode", "media_club")
+//    Fields:
+//      - id: string (optional, <= 100 chars)
+//      - name: string (required, 1..100 chars)
+//      - category: string (required, <= 100 chars)
+//      - description: string (optional, <= 2000 chars)
+//      - followerCount: int (optional, 0..1000000)
+//      - logoUrl: string (optional, <= 1000 chars)
+//      - createdAt: string or timestamp (optional)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Global Helper Functions
+    // ===============================================================
+
+    // Check if request is made by an authenticated Firebase user
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the authenticated user is the resource owner by UID
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Read user document for RBAC role verification
+    function hasUserDoc() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function getUserRole() {
+      return hasUserDoc() && ('role' in getUserData()) ? getUserData().role : '';
+    }
+
+    // Check if user has administrative or staff privileges
+    function isStaffOrAdmin() {
+      return isAuthenticated() && (
+        (request.auth.token != null && (
+          request.auth.token.admin == true ||
+          request.auth.token.role in ['staff', 'leader', 'admin']
+        )) ||
+        (hasUserDoc() && getUserRole() in ['staff', 'leader', 'admin'])
+      );
+    }
+
+    // Check if user is system administrator
+    function isAdmin() {
+      return isAuthenticated() && (
+        (request.auth.token != null && (
+          request.auth.token.admin == true ||
+          request.auth.token.role == 'admin'
+        )) ||
+        (hasUserDoc() && getUserRole() == 'admin')
+      );
+    }
+
+    // Validate that required fields exist in request data
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that document contains only allowed fields (no schema pollution)
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate that immutable fields remain untouched on update
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() <= 100 &&
+        email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    // Validate URL format (http/https)
+    function isValidUrl(url) {
+      return url is string &&
+        url.size() <= 1000 &&
+        (url.matches('^https?://.*') || url == '');
+    }
+
+    // ===============================================================
+    // Domain Validator Functions (MANDATORY Validator Pattern)
+    // ===============================================================
+
+    // Domain validator for users/{userId}
+    function isValidUser(data) {
+      let allowed = [
+        'id', 'name', 'email', 'avatarUrl', 'major',
+        'activityPoints', 'role', 'followedClubs', 'createdAt', 'updatedAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['name', 'email', 'role']) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        isValidEmail(data.email) &&
+        data.role is string && data.role in ['student', 'staff', 'leader', 'admin'] &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('avatarUrl' in data) || (data.avatarUrl is string && data.avatarUrl.size() <= 1000)) &&
+        (!('major' in data) || (data.major is string && data.major.size() <= 100)) &&
+        (!('activityPoints' in data) || (data.activityPoints is int && data.activityPoints >= 0 && data.activityPoints <= 100000)) &&
+        (!('followedClubs' in data) || (data.followedClubs is list && data.followedClubs.size() <= 50)) &&
+        (!('createdAt' in data) || data.createdAt is timestamp || data.createdAt is string) &&
+        (!('updatedAt' in data) || data.updatedAt is timestamp || data.updatedAt is string);
+    }
+
+    // Domain validator for events/{eventId}
+    function isValidEvent(data) {
+      let allowed = [
+        'id', 'title', 'description', 'category', 'clubId', 'clubName',
+        'date', 'time', 'location', 'capacity', 'registeredCount',
+        'bannerUrl', 'isFeatured', 'speakers', 'sessions', 'createdAt', 'updatedAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['title', 'category', 'location', 'capacity', 'registeredCount']) &&
+        data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+        data.category is string && data.category.size() <= 100 &&
+        data.location is string && data.location.size() <= 200 &&
+        data.capacity is int && data.capacity >= 1 && data.capacity <= 100000 &&
+        data.registeredCount is int && data.registeredCount >= 0 && data.registeredCount <= 100000 &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        (!('clubId' in data) || (data.clubId is string && data.clubId.size() <= 100)) &&
+        (!('clubName' in data) || (data.clubName is string && data.clubName.size() <= 100)) &&
+        (!('date' in data) || (data.date is string && data.date.size() <= 50)) &&
+        (!('time' in data) || (data.time is string && data.time.size() <= 50)) &&
+        (!('bannerUrl' in data) || (data.bannerUrl is string && data.bannerUrl.size() <= 1000)) &&
+        (!('isFeatured' in data) || data.isFeatured is bool) &&
+        (!('speakers' in data) || (data.speakers is list && data.speakers.size() <= 20)) &&
+        (!('sessions' in data) || (data.sessions is list && data.sessions.size() <= 50)) &&
+        (!('createdAt' in data) || data.createdAt is timestamp || data.createdAt is string) &&
+        (!('updatedAt' in data) || data.updatedAt is timestamp || data.updatedAt is string);
+    }
+
+    // Check if event update is a safe atomic registration increment by authenticated student
+    function isEventRegistrationIncrement() {
+      return isAuthenticated() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['registeredCount']) &&
+        request.resource.data.registeredCount == resource.data.registeredCount + 1 &&
+        request.resource.data.registeredCount <= resource.data.capacity;
+    }
+
+    // Domain validator for tickets/{ticketId}
+    function isValidTicket(data) {
+      let allowed = [
+        'id', 'eventId', 'eventTitle', 'eventDate', 'eventTime', 'eventLocation',
+        'userId', 'studentName', 'studentEmail', 'studentId', 'ticketCode',
+        'qrToken', 'qrData', 'status', 'checkInStatus', 'checkedInAt', 'createdAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['eventId', 'userId', 'status']) &&
+        data.eventId is string && data.eventId.size() > 0 && data.eventId.size() <= 100 &&
+        data.userId is string && data.userId.size() > 0 && data.userId.size() <= 100 &&
+        data.status is string && data.status in ['active', 'checkedIn', 'expired', 'confirmed', 'cancelled'] &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('eventTitle' in data) || (data.eventTitle is string && data.eventTitle.size() <= 200)) &&
+        (!('eventDate' in data) || (data.eventDate is string && data.eventDate.size() <= 50)) &&
+        (!('eventTime' in data) || (data.eventTime is string && data.eventTime.size() <= 50)) &&
+        (!('eventLocation' in data) || (data.eventLocation is string && data.eventLocation.size() <= 200)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('studentEmail' in data) || (data.studentEmail is string && data.studentEmail.size() <= 100)) &&
+        (!('studentId' in data) || (data.studentId is string && data.studentId.size() <= 50)) &&
+        (!('ticketCode' in data) || (data.ticketCode is string && data.ticketCode.size() <= 100)) &&
+        (!('qrToken' in data) || (data.qrToken is string && data.qrToken.size() <= 500)) &&
+        (!('qrData' in data) || (data.qrData is string && data.qrData.size() <= 500)) &&
+        (!('checkInStatus' in data) || data.checkInStatus is bool) &&
+        (!('checkedInAt' in data) || data.checkedInAt is string || data.checkedInAt is timestamp) &&
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
+    }
+
+    // Owner ticket cancellation rule
+    function isOwnerTicketCancel() {
+      return isAuthenticated() &&
+        resource.data.userId == request.auth.uid &&
+        resource.data.status in ['active', 'confirmed'] &&
+        request.resource.data.status == 'cancelled' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+    }
+
+    // Staff ticket check-in rule
+    function isStaffTicketCheckIn() {
+      return isStaffOrAdmin() &&
+        areImmutableFieldsUnchanged(['id', 'userId', 'eventId', 'ticketCode']);
+    }
+
+    // Domain validator for events/{eventId}/questions/{questionId}
+    function isValidQuestion(data, eventId) {
+      let allowed = [
+        'id', 'eventId', 'userId', 'authorId', 'studentName',
+        'question', 'upvotes', 'upvoters', 'timestamp', 'createdAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['question']) &&
+        data.question is string && data.question.size() > 0 && data.question.size() <= 500 &&
+        (!('eventId' in data) || data.eventId == eventId) &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('userId' in data) || (data.userId is string && data.userId.size() <= 100)) &&
+        (!('authorId' in data) || (data.authorId is string && data.authorId.size() <= 100)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('upvotes' in data) || (data.upvotes is int && data.upvotes >= 0 && data.upvotes <= 100000)) &&
+        (!('upvoters' in data) || (data.upvoters is list && data.upvoters.size() <= 1000)) &&
+        (!('timestamp' in data) || data.timestamp is string || data.timestamp is timestamp) &&
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
+    }
+
+    // Author check for question document (supports authorId or userId)
+    function isQuestionAuthor(data) {
+      return (('authorId' in data && request.auth.uid == data.authorId) ||
+              ('userId' in data && request.auth.uid == data.userId));
+    }
+
+    // Question content edit by author
+    function isQuestionAuthorEdit() {
+      return isAuthenticated() &&
+        isQuestionAuthor(resource.data) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['question', 'timestamp']) &&
+        request.resource.data.question.size() > 0;
+    }
+
+    // Question upvote modification by any authenticated student
+    function isQuestionUpvoteOnly() {
+      return isAuthenticated() &&
+        (
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['upvotes']) &&
+            (request.resource.data.upvotes == resource.data.upvotes + 1 ||
+             request.resource.data.upvotes == resource.data.upvotes - 1)
+          ) ||
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['upvotes', 'upvoters'])
+          ) ||
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['upvoters'])
+          )
+        );
+    }
+
+    // Domain validator for feedbacks/{feedbackId}
+    function isValidFeedback(data) {
+      let allowed = [
+        'id', 'eventId', 'eventTitle', 'userId', 'studentName',
+        'rating', 'comment', 'createdAt', 'timestamp'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['eventId', 'userId', 'rating']) &&
+        data.eventId is string && data.eventId.size() > 0 && data.eventId.size() <= 100 &&
+        data.userId is string && data.userId.size() > 0 && data.userId.size() <= 100 &&
+        data.rating is int && data.rating >= 1 && data.rating <= 5 &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('eventTitle' in data) || (data.eventTitle is string && data.eventTitle.size() <= 200)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('comment' in data) || (data.comment is string && data.comment.size() <= 1000)) &&
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp) &&
+        (!('timestamp' in data) || data.timestamp is string || data.timestamp is timestamp);
+    }
+
+    // Domain validator for certificates/{certId}
+    function isValidCertificate(data) {
+      let allowed = [
+        'id', 'eventId', 'eventTitle', 'userId', 'studentName',
+        'issueDate', 'verificationHash', 'downloadUrl', 'createdAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['eventId', 'userId', 'verificationHash']) &&
+        data.eventId is string && data.eventId.size() > 0 && data.eventId.size() <= 100 &&
+        data.userId is string && data.userId.size() > 0 && data.userId.size() <= 100 &&
+        data.verificationHash is string && data.verificationHash.size() > 0 && data.verificationHash.size() <= 256 &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('eventTitle' in data) || (data.eventTitle is string && data.eventTitle.size() <= 200)) &&
+        (!('studentName' in data) || (data.studentName is string && data.studentName.size() <= 100)) &&
+        (!('issueDate' in data) || (data.issueDate is string && data.issueDate.size() <= 50)) &&
+        (!('downloadUrl' in data) || (data.downloadUrl is string && data.downloadUrl.size() <= 1000)) &&
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
+    }
+
+    // Domain validator for clubs/{clubId}
+    function isValidClub(data) {
+      let allowed = [
+        'id', 'name', 'category', 'description', 'followerCount', 'logoUrl', 'createdAt'
+      ];
+      return hasOnlyAllowedFields(allowed) &&
+        hasRequiredFields(['name', 'category']) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.category is string && data.category.size() <= 100 &&
+        (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        (!('followerCount' in data) || (data.followerCount is int && data.followerCount >= 0 && data.followerCount <= 1000000)) &&
+        (!('logoUrl' in data) || (data.logoUrl is string && data.logoUrl.size() <= 1000)) &&
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
+    }
+
+    // ===============================================================
+    // Collection Security Rules
+    // ===============================================================
+
+    // 1. Users Collection
+    // Read: All authenticated users
+    // Write (create/update): Only owner or staff/admin (with strict anti-escalation)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+
+      allow create: if isAuthenticated() &&
+        isValidUser(request.resource.data) &&
+        (
+          (isOwner(userId) && request.resource.data.role == 'student') ||
+          isAdmin()
+        );
+
+      allow update: if isAuthenticated() &&
+        isValidUser(request.resource.data) &&
+        (
+          (
+            isOwner(userId) &&
+            request.resource.data.role == resource.data.role &&
+            areImmutableFieldsUnchanged(['id', 'email', 'createdAt'])
+          ) ||
+          isStaffOrAdmin()
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    // 2. Events Collection
+    // Read: Public (authenticated or unauthenticated for public campus listing)
+    // Write: Authenticated staff / leader / admin or student atomic capacity increment
+    match /events/{eventId} {
+      allow read: if true;
+
+      allow create: if isStaffOrAdmin() &&
+        isValidEvent(request.resource.data);
+
+      allow update: if (isStaffOrAdmin() && isValidEvent(request.resource.data)) ||
+        isEventRegistrationIncrement();
+
+      allow delete: if isStaffOrAdmin();
+
+      // 4. Live Speaker Q&A Subcollection
+      // Read: All authenticated students
+      // Create: Authenticated author
+      // Update: Upvotes by students OR Question editing by author
+      match /questions/{questionId} {
+        allow read: if isAuthenticated();
+
+        allow create: if isAuthenticated() &&
+          isValidQuestion(request.resource.data, eventId) &&
+          isQuestionAuthor(request.resource.data) &&
+          (!('upvotes' in request.resource.data) || request.resource.data.upvotes == 0);
+
+        allow update: if isAuthenticated() &&
+          isValidQuestion(request.resource.data, eventId) &&
+          (isQuestionAuthorEdit() || isQuestionUpvoteOnly());
+
+        allow delete: if isAuthenticated() &&
+          (isQuestionAuthor(resource.data) || isStaffOrAdmin());
+      }
+    }
+
+    // 3. Tickets Collection
+    // Read: Ticket owner or staff
+    // Create: Authenticated student creating own ticket
+    // Update: Staff check-in or Ticket owner cancelling
+    match /tickets/{ticketId} {
+      allow read: if isAuthenticated() &&
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+
+      allow create: if isAuthenticated() &&
+        isValidTicket(request.resource.data) &&
+        request.resource.data.userId == request.auth.uid;
+
+      allow update: if isAuthenticated() &&
+        isValidTicket(request.resource.data) &&
+        (isStaffTicketCheckIn() || isOwnerTicketCancel());
+
+      allow delete: if isStaffOrAdmin();
+    }
+
+    // 5. Feedbacks Collection
+    // Read: Staff / Admin / Event Organizers
+    // Create: Authenticated user attending event
+    match /feedbacks/{feedbackId} {
+      allow read: if isStaffOrAdmin();
+
+      allow create: if isAuthenticated() &&
+        isValidFeedback(request.resource.data) &&
+        request.resource.data.userId == request.auth.uid;
+
+      allow update, delete: if isStaffOrAdmin();
+    }
+
+    // 6. Certificates Collection
+    // Read: Certificate owner or staff
+    // Write: Staff / automated Cloud Functions
+    match /certificates/{certId} {
+      allow read: if isAuthenticated() &&
+        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+
+      allow create, update: if isStaffOrAdmin() &&
+        isValidCertificate(request.resource.data);
+
+      allow delete: if isStaffOrAdmin();
+    }
+
+    // 7. Clubs Directory Collection
+    // Read: Public (explore clubs directory)
+    // Write: Staff or Admin
+    match /clubs/{clubId} {
+      allow read: if true;
+
+      allow create, update: if isStaffOrAdmin() &&
+        isValidClub(request.resource.data);
+
+      allow delete: if isAdmin();
+    }
+
+    // 8. Announcements Collection (Final Assignment Inbox)
+    // Read: All authenticated students and staff
+    // Write: Staff or Admin only
+    match /announcements/{annId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isStaffOrAdmin();
+    }
+
+    // 9. Registrations Collection (Final Assignment Cross-Role Flow)
+    // Read: Owner or Staff
+    // Create: User can create their own registration ONLY with status = 'pending' (R-01)
+    // Update: Staff can approve or reject (pending -> approved/rejected) (R-02)
+    //         Owner can cancel while pending
+    // Delete: Owner while pending, or Staff
+    match /registrations/{regId} {
+      allow read: if isAuthenticated() &&
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) ||
+         isStaffOrAdmin());
+
+      allow create: if isAuthenticated() &&
+        (('userId' in request.resource.data && request.resource.data.userId == request.auth.uid) ||
+         ('uid' in request.resource.data && request.resource.data.uid == request.auth.uid)) &&
+        request.resource.data.status == 'pending';
+
+      allow update: if isAuthenticated() && (
+        (isStaffOrAdmin() && request.resource.data.status in ['approved', 'rejected']) ||
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) &&
+         resource.data.status == 'pending' &&
+         request.resource.data.status == 'cancelled')
+      );
+
+      allow delete: if isAuthenticated() && (
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) &&
+         resource.data.status == 'pending') ||
+        isStaffOrAdmin()
+      );
+    }
+
+    // Default Deny Fallback for all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
