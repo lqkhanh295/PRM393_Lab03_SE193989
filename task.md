@@ -8,7 +8,7 @@
 
 ## 📌 NGUYÊN TẮC BẮT BUỘC DỰ ÁN (PROJECT GROUND RULES)
 1. **Tuyệt đối tuân thủ Zero-Mock Data Policy:** Không tự ý tạo hoặc thêm bất kỳ dữ liệu mẫu, mock list, fallback hardcode nào vào mã nguồn `lib/`. Mọi dữ liệu phải kết nối trực tiếp với Cloud Firebase.
-2. **Quy chuẩn Git:** Không commit đè lên nhánh `main`. Tạo nhánh cá nhân (ví dụ: `feature/evidence-artemis`, `docs/report-update`) trước khi tạo Pull Request để Team Leader duyệt.
+2. **Quy chuẩn Git:** Không commit đè lên nhánh `main`. Tạo nhánh cá nhân (ví dụ: `feature/evidence-artemis`, `docs/report-update`) trước khi tạo Pull Request để Khánh duyệt.
 3. **Định nghĩa Hoàn thành (Definition of Done - DoD):** Một task chỉ được tích hoàn thành `[x]` khi đã đáp ứng đầy đủ:
    * Có file sản phẩm cụ thể (Code, Ảnh minh chứng, File PDF/Log/Video).
    * Đã được kiểm thử chạy không lỗi (`flutter test` 7/7 passed, không crash).
@@ -21,10 +21,10 @@
 | STT | Thành viên | Vai trò chuyên môn | Trọng tâm công việc |
 | :---: | :--- | :--- | :--- |
 | **1** | **Lê Quốc Khánh (Leader)** | Lead Developer & Mobile Architect | Kiến trúc MVVM, 28+ Màn hình Flutter, Tích hợp Firebase SDK, Desktop Web Portal, Lịch cả tháng, Quét vé cổng. |
-| **2** | **Thành viên 2** | Backend Cloud & Security Specialist | Quản trị dữ liệu thật Firestore, Cấu hình Remote Config, Kiểm tra Rules & Upload Storage, Test Push FCM. |
-| **3** | **Thành viên 3** | QA & Automation Test Engineer | Vận hành Google ARTEMIS E2E, Chạy 10 Test Cases pytest, Thu thập & sắp xếp toàn bộ ảnh minh chứng `evidence/`. |
-| **4** | **Thành viên 4** | Analytics & Code Quality Specialist | Kiểm thử Firebase Analytics DebugView (7 events), Crashlytics, Rà soát tài liệu AI Code Review. |
-| **5** | **Thành viên 5** | Technical Writer & Media Producer | Quay & dựng Video Demo 5–10 phút, Hoàn thiện Slide thuyết trình (12–15 slide), Đóng gói Báo cáo PDF (8–12 trang). |
+| **2** | **Trung** | Backend Cloud & Security Specialist | Quản trị dữ liệu thật Firestore, Cấu hình Remote Config, Kiểm tra Rules & Upload Storage, Test Push FCM. |
+| **3** | **Khoa** | QA & Automation Test Engineer | Vận hành Google ARTEMIS E2E, Chạy 10 Test Cases pytest, Thu thập & sắp xếp toàn bộ ảnh minh chứng `evidence/`. |
+| **4** | **Đạt** | Analytics & Code Quality Specialist | Kiểm thử Firebase Analytics DebugView (7 events), Crashlytics, Rà soát tài liệu AI Code Review. |
+| **5** | **Thịnh** | Technical Writer & Media Producer | Quay & dựng Video Demo 5–10 phút, Hoàn thiện Slide thuyết trình (12–15 slide), Đóng gói Báo cáo PDF (8–12 trang). |
 
 ---
 
@@ -67,12 +67,12 @@
   - [x] Xóa sạch toàn bộ fake data, fallback list cứng trong toàn bộ `lib/`.
   - [x] Tạo file quy chuẩn bất biến: [`GEMINI.md`](./GEMINI.md), [`AGENTS.md`](./AGENTS.md), [`.agents/rules/no_mock_data.md`](./.agents/rules/no_mock_data.md).
 - [ ] **Task 1.8: Hỗ trợ kỹ thuật & Đóng gói nộp bài**
-  - [ ] Giải đáp thắc mắc và hỗ trợ 4 thành viên hoàn thành task.
+  - [ ] Giải đáp thắc mắc và hỗ trợ Trung, Khoa, Đạt, Thịnh hoàn thành task.
   - [ ] Review Pull Request của các thành viên, chạy lại kiểm thử `flutter test` đảm bảo 100% pass trước khi nộp.
 
 ---
 
-### ☁️ THÀNH VIÊN 2: CHUYÊN VIÊN BACKEND CLOUD & DỮ LIỆU
+### ☁️ THÀNH VIÊN 2: TRUNG (CHUYÊN VIÊN BACKEND CLOUD & DỮ LIỆU)
 *Trách nhiệm chính: Quản trị Firebase Console, Dữ liệu thật Firestore, Phân quyền Security Rules, Cấu hình Remote Config và Kiểm thử FCM.*
 
 #### Các bước thực hiện & Checklist:
@@ -109,12 +109,12 @@
     * Tiêu đề: `"Nhắc nhở Campus: Hội thảo AI sắp bắt đầu lúc 14:00!"`
     * Nội dung: `"Đừng quên mở vé điện tử QR để quét check-in nhanh tại cửa Cổng 1."`
   - [ ] Gửi thông báo đến ứng dụng đang chạy trên máy ảo / thiết bị thật.
-  - [ ] Chụp lại ảnh màn hình thông báo hiển thị trên thanh Notification Bar của điện thoại và lưu file vào `evidence/fcm/`.
+  - [ ] Chụp lại ảnh màn hình thông báo hiển thị trên thanh Notification Bar của điện thoại và gửi cho Khoa lưu file vào `evidence/fcm/`.
   - *Tiêu chí hoàn thành:* Điện thoại nhận được thông báo đẩy thật từ máy chủ Google.
 
 ---
 
-### 🧪 THÀNH VIÊN 3: KỸ SƯ KIỂM THỬ QA & TỰ ĐỘNG HÓA ARTEMIS
+### 🧪 THÀNH VIÊN 3: KHOA (KỸ SƯ KIỂM THỬ QA & TỰ ĐỘNG HÓA ARTEMIS)
 *Trách nhiệm chính: Chạy bộ kiểm thử tự động Google ARTEMIS E2E, xác nhận 10 test cases, kiểm thử thủ công và thu thập ảnh minh chứng `evidence/`.*
 
 #### Các bước thực hiện & Checklist:
@@ -162,13 +162,13 @@
 - [ ] **Task 3.4: Chụp và sắp xếp toàn bộ ảnh minh chứng vào thư mục `evidence/`**
   - [ ] `evidence/app_running/`: Chụp 8 ảnh các màn hình app (Đăng nhập, Home, Lịch tháng, Chi tiết, Vé QR, Live Companion, Quét cổng, Web Portal).
   - [ ] `evidence/artemis/`: Ảnh chụp terminal chạy pytest và ảnh máy ảo lúc ARTEMIS đang tự động click.
-  - [ ] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console.
+  - [ ] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console (nhận từ Trung).
   - [ ] `evidence/storage/`: Ảnh chụp bucket Cloud Storage có file PDF trong thư mục `reports/...`.
   - *Tiêu chí hoàn thành:* Mọi thư mục con trong `evidence/` đều có ảnh chụp thực tế rõ nét.
 
 ---
 
-### 📊 THÀNH VIÊN 4: CHUYÊN VIÊN ANALYTICS, CRASHLYTICS & AI CODE REVIEW
+### 📊 THÀNH VIÊN 4: ĐẠT (CHUYÊN VIÊN ANALYTICS, CRASHLYTICS & AI CODE REVIEW)
 *Trách nhiệm chính: Giám sát Firebase Analytics DebugView (7 events chuẩn), Kích hoạt kiểm thử Crashlytics và Hoàn thiện tài liệu AI Code Review.*
 
 #### Các bước thực hiện & Checklist:
@@ -192,7 +192,7 @@
   - *Tiêu chí hoàn thành:* Có ảnh chụp DebugView đầy đủ 7 events không chứa PII.
 - [ ] **Task 4.2: Kích hoạt & Xác minh Firebase Crashlytics**
   - [ ] Mở ứng dụng di động $\rightarrow$ Chuyển sang tab **Cá nhân (`ProfileScreen`)**.
-  - [ ] Cuộn xuống mục **Firebase Lab 3 Terminal**:
+  - [ ] Cuộn xuống mục **Hậu cần & Phục vụ**:
     * Bấm nút **"Gửi Non-fatal"**: Kiểm tra app hiển thị thông báo đã gửi non-fatal exception.
     * Bấm nút **"Kích hoạt Crash"**: Ứng dụng sẽ cố tình văng ra màn hình chính (simulated test crash).
   - [ ] Khởi động lại ứng dụng (để Crashlytics SDK đẩy log crash lên đám mây).
@@ -213,7 +213,7 @@
 
 ---
 
-### 🎬 THÀNH VIÊN 5: BIÊN TẬP VIDEO DEMO, SLIDE & BÁO CÁO PDF
+### 🎬 THÀNH VIÊN 5: THỊNH (BIÊN TẬP VIDEO DEMO, SLIDE & BÁO CÁO PDF)
 *Trách nhiệm chính: Quay & dựng Video Demo sản phẩm (5–10 phút), Cập nhật Slide thuyết trình (12–15 slide) và Đóng gói Báo cáo tổng kết PDF (8–12 trang).*
 
 #### Các bước thực hiện & Checklist:
@@ -221,7 +221,7 @@
   - [ ] Cài đặt phần mềm quay màn hình máy tính (OBS Studio hoặc Camtasia).
   - [ ] Mở sẵn trên màn hình: Máy ảo Android chạy app Flutter + Trình duyệt mở Web Portal và Firebase Console.
   - [ ] Quay video theo đúng kịch bản phân đoạn chuẩn (Rubric Section 9):
-    * **Phân đoạn 1 (0:00 - 1:00):** Giới thiệu đề tài Campus Event, tên môn PRM393, lớp SE1822, danh sách 5 thành viên nhóm, và định vị kiến trúc Student-Centric.
+    * **Phân đoạn 1 (0:00 - 1:00):** Giới thiệu đề tài Campus Event, tên môn PRM393, lớp SE1822, danh sách 5 thành viên nhóm (Khánh, Trung, Khoa, Đạt, Thịnh), và định vị kiến trúc Student-Centric.
     * **Phân đoạn 2 (1:00 - 3:00) - Pre-Event Flow:** Sinh viên đăng nhập Email FPT, xem màn hình Trang chủ, mở Lịch biểu cả tháng xem các ngày có chấm cam, bấm vào xem chi tiết sự kiện và thực hiện Đăng ký giữ chỗ 1-chạm $\rightarrow$ Cấp vé điện tử QR.
     * **Phân đoạn 3 (3:00 - 4:30) - In-Event Flow:** Mở vé điện tử, chuyển sang chế độ Live Companion, xem lịch trình trực tiếp các phiên, gửi câu hỏi thắc mắc cho diễn giả và bấm upvote tim câu hỏi.
     * **Phân đoạn 4 (4:30 - 6:00) - Post-Event Flow:** Đánh giá 5 sao, gửi góp ý, tài khoản được cộng +5 Điểm rèn luyện, bấm xuất giấy chứng nhận PDF và tải lên Firebase Cloud Storage.
@@ -236,8 +236,8 @@
   - *Tiêu chí hoàn thành:* Link video YouTube hoạt động tốt, nội dung đầy đủ 6 phân đoạn theo barem chấm điểm.
 - [ ] **Task 5.2: Hoàn thiện Báo Cáo Tổng Kết PDF ([`report/`](./report))**
   - [ ] Mở file báo cáo tổng kết đồ án (file Word/HTML mẫu trong thư mục `report/`).
-  - [ ] Cập nhật bảng thông tin nhóm: Điền đầy đủ Họ và tên, MSSV, Email, và Tỷ lệ đóng góp (%) của cả 5 thành viên.
-  - [ ] Chèn các ảnh chụp màn hình do Thành viên 3 và Thành viên 4 cung cấp vào các mục minh chứng tương ứng (Firebase Console, DebugView, ARTEMIS test).
+  - [ ] Cập nhật bảng thông tin nhóm: Điền đầy đủ Họ và tên, MSSV, Email, và Tỷ lệ đóng góp (%) của cả 5 thành viên (Khánh, Trung, Khoa, Đạt, Thịnh).
+  - [ ] Chèn các ảnh chụp màn hình do Khoa và Đạt cung cấp vào các mục minh chứng tương ứng (Firebase Console, DebugView, ARTEMIS test).
   - [ ] Rà soát dung lượng báo cáo đạt chuẩn từ 8 đến 12 trang theo yêu cầu Section 9 & 11.
   - [ ] Xuất file ra định dạng PDF chính thức với tên: [`report/Lab03_SE193989.pdf`](./report/Lab03_SE193989.pdf).
   - *Tiêu chí hoàn thành:* File PDF báo cáo hoàn thiện, không bị lỗi font chữ hay nhảy trang.
@@ -266,19 +266,19 @@
 gantt
     title Kế hoạch 3 Ngày Hoàn Tất Đồ Án PRM393 Lab 3
     dateFormat  YYYY-MM-DD
-    section Thành viên 2 (Backend)
+    section Trung (Backend Cloud)
     Nhập data Firestore & Remote Config :active, 2026-11-07, 1d
     Test FCM Push & Security Rules : 2026-11-08, 1d
-    section Thành viên 3 (QA Test)
+    section Khoa (QA & ARTEMIS Test)
     Cài ARTEMIS & Chạy 10 test cases pytest :active, 2026-11-07, 1d
     Kiểm thử thủ công & Gom ảnh evidence : 2026-11-08, 1d
-    section Thành viên 4 (Analytics)
+    section Đạt (Analytics & AI Review)
     Kích hoạt DebugView & Ghi nhận 7 events :active, 2026-11-07, 1d
     Test Crashlytics & Rà soát AI Review : 2026-11-08, 1d
-    section Thành viên 5 (Media & Docs)
+    section Thịnh (Media & Docs)
     Chuẩn bị kịch bản & Quay thô video : 2026-11-07, 1d
     Dựng Video demo, xuất Slide & Báo cáo PDF : 2026-11-08, 2d
-    section Tổng kết
+    section Khánh & Cả Nhóm
     Họp duyệt hồ sơ & Nộp bài chính thức : 2026-11-09, 1d
 ```
 
