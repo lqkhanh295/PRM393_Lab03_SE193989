@@ -11,7 +11,7 @@ class AnalyticsService {
   Future<void> setUserId(String? userId) async {
     try {
       await _analytics?.setUserId(id: userId);
-      debugPrint('[AnalyticsService] Set user ID: $userId');
+      debugPrint('[AnalyticsService] User identifier updated.');
     } catch (e) {
       debugPrint('[AnalyticsService] Error setUserId: $e');
     }
@@ -20,10 +20,7 @@ class AnalyticsService {
   Future<void> logLogin({required String method, required String role}) async {
     try {
       await _analytics?.logLogin(loginMethod: method);
-      await _analytics?.logEvent(
-        name: 'login_custom',
-        parameters: {'method': method, 'user_role': role},
-      );
+      await _analytics?.setUserProperty(name: 'user_role', value: role);
       debugPrint('[AnalyticsService] Event logged: login ($method, $role)');
     } catch (e) {
       debugPrint('[AnalyticsService] Error logLogin: $e');
@@ -36,19 +33,16 @@ class AnalyticsService {
     String? category,
   }) async {
     try {
+      // Search text is user input. Do not send strings that resemble email
+      // addresses or student identifiers to Firebase Analytics.
+      final safeSearchTerm = _safeSearchTerm(searchTerm);
       await _analytics?.logSearch(
-        searchTerm: searchTerm,
+        searchTerm: safeSearchTerm,
         numberOfNights: null,
       );
-      await _analytics?.logEvent(
-        name: 'search_action',
-        parameters: {
-          'search_term': searchTerm,
-          'result_count': resultCount,
-          'category_filter': category ?? 'all',
-        },
+      debugPrint(
+        '[AnalyticsService] Event logged: search (count: $resultCount, category: ${category ?? 'all'})',
       );
-      debugPrint('[AnalyticsService] Event logged: search ($searchTerm, count: $resultCount)');
     } catch (e) {
       debugPrint('[AnalyticsService] Error logSearch: $e');
     }
@@ -70,7 +64,9 @@ class AnalyticsService {
           ),
         ],
       );
-      debugPrint('[AnalyticsService] Event logged: view_item ($itemId - $itemName)');
+      debugPrint(
+        '[AnalyticsService] Event logged: view_item ($itemId - $itemName)',
+      );
     } catch (e) {
       debugPrint('[AnalyticsService] Error logViewItem: $e');
     }
@@ -112,7 +108,9 @@ class AnalyticsService {
           'question_length': length,
         },
       );
-      debugPrint('[AnalyticsService] Event logged: live_interact ($actionType)');
+      debugPrint(
+        '[AnalyticsService] Event logged: live_interact ($actionType)',
+      );
     } catch (e) {
       debugPrint('[AnalyticsService] Error logLiveInteract: $e');
     }
@@ -132,7 +130,9 @@ class AnalyticsService {
           'has_text_comment': hasComment ? 1 : 0,
         },
       );
-      debugPrint('[AnalyticsService] Event logged: submit_feedback ($rating stars)');
+      debugPrint(
+        '[AnalyticsService] Event logged: submit_feedback ($rating stars)',
+      );
     } catch (e) {
       debugPrint('[AnalyticsService] Error logSubmitFeedback: $e');
     }
@@ -152,7 +152,9 @@ class AnalyticsService {
           'upload_duration_ms': durationMs,
         },
       );
-      debugPrint('[AnalyticsService] Event logged: export_report ($exportType, ${fileSizeBytes}B)');
+      debugPrint(
+        '[AnalyticsService] Event logged: export_report ($exportType, ${fileSizeBytes}B)',
+      );
     } catch (e) {
       debugPrint('[AnalyticsService] Error logExportReport: $e');
     }
@@ -170,15 +172,46 @@ class AnalyticsService {
     }
   }
 
+  /// Logs an internal product event after validating its Firebase-compatible
+  /// name and redacting any value that resembles PII.
   Future<void> logCustomEvent({
     required String eventName,
     Map<String, Object>? parameters,
   }) async {
-    try {
-      await _analytics?.logEvent(name: eventName, parameters: parameters);
-      debugPrint('[AnalyticsService] Event logged: $eventName');
-    } catch (e) {
-      debugPrint('[AnalyticsService] Error logCustomEvent: $e');
+    final isValidName = RegExp(r'^[a-z][a-z0-9_]{0,39}$').hasMatch(eventName);
+    final isReservedPrefix =
+        eventName.startsWith('firebase_') ||
+        eventName.startsWith('google_') ||
+        eventName.startsWith('ga_');
+    if (!isValidName || isReservedPrefix) {
+      debugPrint('[AnalyticsService] Ignored invalid analytics event name.');
+      return;
     }
+
+    try {
+      final safeParameters = <String, Object>{
+        for (final entry in (parameters ?? const <String, Object>{}).entries)
+          entry.key: entry.value is String
+              ? _safeSearchTerm(entry.value as String)
+              : entry.value,
+      };
+      await _analytics?.logEvent(name: eventName, parameters: safeParameters);
+      debugPrint('[AnalyticsService] Custom event logged: $eventName');
+    } catch (e) {
+      debugPrint('[AnalyticsService] Error logging custom event: $e');
+    }
+  }
+
+  String _safeSearchTerm(String value) {
+    final normalized = value.trim();
+    final looksLikeEmail = normalized.contains('@');
+    final hasLongNumber = RegExp(r'\d{7,}').hasMatch(normalized);
+    if (normalized.isEmpty ||
+        normalized.length > 50 ||
+        looksLikeEmail ||
+        hasLongNumber) {
+      return 'redacted';
+    }
+    return normalized;
   }
 }
