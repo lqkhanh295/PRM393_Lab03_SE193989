@@ -3,5 +3,8 @@
   "enable_live_qa": true,
   "featured_banner_title": "Chào mừng sinh viên FPTU đến với Campus Event 2026",
   "enable_offline_ticket_cache": true,
-  "gate_checkin_alert_threshold": 350
+  "gate_checkin_alert_threshold": 350,
+  "enable_gemini_insights": true,
+  "gemini_model_name": "gemini-1.5-flash",
+  "gemini_prompt_template": "Phân tích sự kiện sau và trả về JSON tóm tắt, điểm nổi bật, đối tượng phù hợp và câu hỏi gợi ý."
 }

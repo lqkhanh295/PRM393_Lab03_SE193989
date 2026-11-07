@@ -1,0 +1,23 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.2.0, pluggy-1.7.0 -- D:\Term 8\PRM\PRM393_Lab03_SE193989\e2e_test\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: d:\Term 8\PRM\PRM393_Lab03_SE193989\e2e_test
+configfile: pyproject.toml
+plugins: asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 12 items
+
+e2e_test\test_auth.py::test_student_login_success PASSED                 [  8%]
+e2e_test\test_auth.py::test_student_logout_and_session PASSED            [ 16%]
+e2e_test\test_detail.py::test_event_registration_pass_modal PASSED       [ 25%]
+e2e_test\test_detail.py::test_offline_resilient_digital_ticket PASSED    [ 33%]
+e2e_test\test_detail.py::test_realtime_qa_submission_and_upvote PASSED   [ 41%]
+e2e_test\test_export.py::test_pdf_export_and_storage_upload PASSED       [ 50%]
+e2e_test\test_export.py::test_event_feedback_submission PASSED           [ 58%]
+e2e_test\test_search.py::test_search_event_by_keyword_and_category PASSED [ 66%]
+e2e_test\test_search.py::test_empty_search_state_recovery PASSED         [ 75%]
+e2e_test\test_search.py::test_dynamic_remote_config_banner PASSED        [ 83%]
+e2e_test\test_staff.py::test_gate_desk_fast_scan PASSED                  [ 91%]
+e2e_test\test_staff.py::test_gate_desk_duplicate_scan_warning PASSED     [100%]
+
+============================= 12 passed in 1.33s ==============================

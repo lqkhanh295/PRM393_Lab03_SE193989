@@ -153,6 +153,35 @@ const app = {
         points: 5,
         certId: 'CERT-2026-9908'
       }
+    ],
+    registrations: [
+      {
+        id: 'REG-2026-01',
+        studentName: 'Nguyễn Văn An',
+        studentEmail: 'an.nv@fptu.edu.vn',
+        eventTitle: 'Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động',
+        eventId: 'EVT-2026-02',
+        createdAt: '28/10/2026 14:10',
+        status: 'pending'
+      }
+    ],
+    announcements: [
+      {
+        id: 'ANN-2026-01',
+        title: 'Chào mừng Lễ hội Công nghệ FPTU Tech Expo 2026! 🚀',
+        category: 'general',
+        categoryLabel: 'Bản tin chung',
+        createdAt: '28/10/2026 08:00',
+        status: 'Đã phát'
+      },
+      {
+        id: 'ANN-2026-02',
+        title: 'Hướng dẫn quét mã vé QR tại bàn Check-in Cổng 1',
+        category: 'reminder',
+        categoryLabel: 'Nhắc nhở',
+        createdAt: '28/10/2026 08:15',
+        status: 'Đã phát'
+      }
     ]
   },
 
@@ -163,6 +192,8 @@ const app = {
     this.renderRecentOverviewTable();
     this.renderBudgetTable();
     this.renderStudentsTable();
+    this.renderReviewQueue();
+    this.renderAnnouncementsHistory();
     this.renderGateChart();
     
     // Wire up live Cloud Firestore pipelines
@@ -424,6 +455,174 @@ const app = {
     this.renderKPIs();
     this.renderBudgetTable();
     this.showToast(`Đã từ chối hồ sơ "${item.title}". Lý do: ${reason}`);
+  },
+
+  // ==========================================
+  // FINAL ASSIGNMENT: REVIEW QUEUE (CROSS-ROLE)
+  // ==========================================
+  renderReviewQueue() {
+    const tbody = document.getElementById('review-queue-body');
+    const badge = document.getElementById('sidebar-pending-registrations');
+    const pill = document.getElementById('queue-status-pill');
+    if (!tbody) return;
+
+    const pending = this.state.registrations.filter(r => r.status === 'pending');
+    if (badge) badge.innerText = pending.length;
+    if (pill) {
+      pill.innerText = `${pending.length} Đơn Cần Duyệt`;
+      pill.className = pending.length > 0 ? 'pill pill-warning' : 'pill pill-positive';
+    }
+
+    if (this.state.registrations.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 24px;">Hàng chờ trống. Chưa có đơn đăng ký sự kiện nào.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = this.state.registrations.map(r => {
+      let statusPill = '';
+      let actions = '';
+
+      if (r.status === 'approved') {
+        statusPill = '<span class="pill pill-positive">Đã Duyệt & Cấp Vé</span>';
+        actions = `<span class="mono" style="font-size: 11.5px; color: var(--positive);">${r.ticketId || 'CE2026-083291'}</span>`;
+      } else if (r.status === 'rejected') {
+        statusPill = '<span class="pill pill-negative">Đã Từ Chối</span>';
+        actions = `<span style="font-size: 11.5px; color: var(--muted);">${r.reason || 'Hết chỗ'}</span>`;
+      } else {
+        statusPill = '<span class="pill pill-warning">Chờ Phê Duyệt</span>';
+        actions = `
+          <button class="btn btn-success btn-sm" onclick="app.approveRegistration('${r.id}')">Duyệt & Cấp Vé</button>
+          <button class="btn btn-danger btn-sm" onclick="app.rejectRegistration('${r.id}')">Từ Chối</button>
+        `;
+      }
+
+      return `
+        <tr>
+          <td class="mono" style="font-weight: 600;">${r.id}</td>
+          <td style="font-weight: 600;">${r.studentName}</td>
+          <td class="mono" style="font-size: 12px; color: var(--muted);">${r.studentEmail}</td>
+          <td>${r.eventTitle}</td>
+          <td style="font-size: 12px; color: var(--muted);">${r.createdAt}</td>
+          <td>${statusPill}</td>
+          <td style="text-align: right;">${actions}</td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  refreshReviewQueue() {
+    this.renderReviewQueue();
+    this.showToast('Đã làm mới danh sách hàng chờ đăng ký sự kiện.');
+  },
+
+  approveRegistration(id) {
+    const item = this.state.registrations.find(r => r.id === id);
+    if (!item) return;
+
+    const ticketCode = `CE2026-${Math.floor(100000 + Math.random() * 900000)}`;
+    item.status = 'approved';
+    item.ticketId = ticketCode;
+
+    // Emit live announcement notification
+    const ann = {
+      id: `ANN-${Date.now()}`,
+      title: `Đăng ký sự kiện đã được duyệt! 🎉`,
+      category: 'ticket_approved',
+      categoryLabel: 'Duyệt vé thành công',
+      createdAt: 'Vừa xong',
+      status: 'Đã phát'
+    };
+    this.state.announcements.unshift(ann);
+
+    this.renderReviewQueue();
+    this.renderAnnouncementsHistory();
+    this.showToast(`Phê duyệt thành công! Đã cấp vé ${ticketCode} cho sinh viên ${item.studentName}. Thông báo đã gửi tới Mobile Inbox.`);
+  },
+
+  rejectRegistration(id) {
+    const item = this.state.registrations.find(r => r.id === id);
+    if (!item) return;
+
+    const reason = prompt('Nhập lý do từ chối đơn đăng ký sự kiện:', 'Sự kiện đã đạt số lượng tối đa');
+    if (reason === null) return;
+
+    item.status = 'rejected';
+    item.reason = reason;
+    this.renderReviewQueue();
+    this.showToast(`Đã từ chối đơn đăng ký của ${item.studentName}. Lý do: ${reason}`);
+  },
+
+  // ==========================================
+  // FINAL ASSIGNMENT: ANNOUNCEMENTS BROADCAST
+  // ==========================================
+  handleBroadcastSubmit(e) {
+    e.preventDefault();
+    const titleInput = document.getElementById('ann-title');
+    const contentInput = document.getElementById('ann-content');
+    const categorySelect = document.getElementById('ann-category');
+    const pinnedCheckbox = document.getElementById('ann-pinned');
+
+    if (!titleInput || !contentInput) return;
+
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+    const category = categorySelect ? categorySelect.value : 'general';
+    const isPinned = pinnedCheckbox ? pinnedCheckbox.checked : false;
+
+    if (!title || !content) {
+      alert('Vui lòng nhập đầy đủ tiêu đề và nội dung thông báo!');
+      return;
+    }
+
+    const categoryNames = {
+      general: 'Bản tin chung',
+      reminder: 'Nhắc nhở',
+      urgent: 'Khẩn cấp',
+      ticket_approved: 'Duyệt vé'
+    };
+
+    const newAnn = {
+      id: `ANN-${Date.now()}`,
+      title: title,
+      category: category,
+      categoryLabel: categoryNames[category] || 'Bản tin',
+      createdAt: 'Vừa xong',
+      status: isPinned ? 'Đã ghim' : 'Đã phát'
+    };
+
+    this.state.announcements.unshift(newAnn);
+    titleInput.value = '';
+    contentInput.value = '';
+    if (pinnedCheckbox) pinnedCheckbox.checked = false;
+
+    this.renderAnnouncementsHistory();
+    this.showToast(`Phát thanh thành công! Bản tin "${title}" đã gửi đến Mobile Inbox của toàn bộ sinh viên.`);
+  },
+
+  renderAnnouncementsHistory() {
+    const tbody = document.getElementById('announcements-history-body');
+    if (!tbody) return;
+
+    if (this.state.announcements.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--muted); padding: 20px;">Chưa có bản tin nào được phát thanh.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = this.state.announcements.map(a => {
+      let catPill = '<span class="pill pill-neutral">Chung</span>';
+      if (a.category === 'ticket_approved') catPill = '<span class="pill pill-positive">Duyệt Vé</span>';
+      if (a.category === 'urgent') catPill = '<span class="pill pill-negative">Khẩn Cấp</span>';
+      if (a.category === 'reminder') catPill = '<span class="pill pill-warning">Nhắc Nhở</span>';
+
+      return `
+        <tr>
+          <td style="font-weight: 600;">${a.title}</td>
+          <td>${catPill}</td>
+          <td style="font-size: 12px; color: var(--muted);">${a.createdAt}</td>
+          <td><span class="pill pill-positive">${a.status}</span></td>
+        </tr>
+      `;
+    }).join('');
   },
 
   // Update Safety Compliance Score

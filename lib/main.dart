@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+
 import 'theme/app_theme.dart';
 import 'services/auth_service.dart';
 import 'services/firestore_service.dart';
@@ -18,6 +19,7 @@ import 'services/analytics_service.dart';
 import 'services/crashlytics_service.dart';
 import 'services/remote_config_service.dart';
 import 'services/pdf_export_service.dart';
+import 'services/gemini_ai_service.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/home_viewmodel.dart';
 import 'viewmodels/explore_viewmodel.dart';
@@ -28,6 +30,7 @@ import 'viewmodels/live_event_vm.dart';
 import 'viewmodels/feedback_vm.dart';
 import 'viewmodels/profile_viewmodel.dart';
 import 'viewmodels/mobile_desk_vm.dart';
+import 'viewmodels/inbox_viewmodel.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/main_navigation_screen.dart';
 
@@ -42,15 +45,40 @@ void main() async {
     debugPrint('[Firebase] Native init fallback notice: $e');
   }
 
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+
   // Instantiate Cloud & Foundation Services (Native instances on Mobile, graceful fallback on Web)
-  final authService = AuthService(!kIsWeb ? FirebaseAuth.instance : null, !kIsWeb ? FirebaseFirestore.instance : null);
-  final firestoreService = FirestoreService(!kIsWeb ? FirebaseFirestore.instance : null);
-  final storageService = StorageService(!kIsWeb ? FirebaseStorage.instance : null);
+  final authService = AuthService(
+    !kIsWeb ? FirebaseAuth.instance : null,
+    !kIsWeb ? FirebaseFirestore.instance : null,
+  );
+  final firestoreService = FirestoreService(
+    !kIsWeb ? FirebaseFirestore.instance : null,
+  );
+  final storageService = StorageService(
+    !kIsWeb ? FirebaseStorage.instance : null,
+  );
   final fcmService = FCMService(!kIsWeb ? FirebaseMessaging.instance : null);
-  final analyticsService = AnalyticsService(!kIsWeb ? FirebaseAnalytics.instance : null);
-  final crashlyticsService = CrashlyticsService(!kIsWeb ? FirebaseCrashlytics.instance : null);
-  final remoteConfigService = RemoteConfigService(!kIsWeb ? FirebaseRemoteConfig.instance : null);
+  final analyticsService = AnalyticsService(
+    !kIsWeb ? FirebaseAnalytics.instance : null,
+  );
+  final crashlyticsService = CrashlyticsService(
+    !kIsWeb ? FirebaseCrashlytics.instance : null,
+  );
+  final remoteConfigService = RemoteConfigService(
+    !kIsWeb ? FirebaseRemoteConfig.instance : null,
+  );
   final pdfExportService = PdfExportService(storageService);
+  final geminiAiService = GeminiAiService(
+    remoteConfigService: remoteConfigService,
+    analyticsService: analyticsService,
+  );
 
   // Initialize background listeners and ensure real Cloud Firestore data
   await fcmService.initialize();
@@ -69,6 +97,7 @@ void main() async {
         Provider<CrashlyticsService>.value(value: crashlyticsService),
         Provider<RemoteConfigService>.value(value: remoteConfigService),
         Provider<PdfExportService>.value(value: pdfExportService),
+        Provider<GeminiAiService>.value(value: geminiAiService),
 
         // ViewModels Injection
         ChangeNotifierProvider(
@@ -106,9 +135,7 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => MyTicketsViewModel(
-            firestoreService: firestoreService,
-          ),
+          create: (_) => MyTicketsViewModel(firestoreService: firestoreService),
         ),
         ChangeNotifierProvider(
           create: (_) => LiveEventViewModel(
@@ -138,6 +165,12 @@ void main() async {
           create: (_) => MobileDeskViewModel(
             firestoreService: firestoreService,
             crashlyticsService: crashlyticsService,
+            analyticsService: analyticsService,
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => InboxViewModel(
+            firestoreService: firestoreService,
             analyticsService: analyticsService,
           ),
         ),

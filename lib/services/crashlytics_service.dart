@@ -11,7 +11,7 @@ class CrashlyticsService {
   Future<void> setUserId(String userId) async {
     try {
       await _crashlytics?.setUserIdentifier(userId);
-      debugPrint('[CrashlyticsService] Set user identifier: $userId');
+      debugPrint('[CrashlyticsService] User identifier updated.');
     } catch (e) {
       debugPrint('[CrashlyticsService] Error setUserIdentifier: $e');
     }
@@ -45,19 +45,25 @@ class CrashlyticsService {
         reason: reason ?? 'Handled error from Campus Event app',
         fatal: false,
       );
-      debugPrint('[CrashlyticsService] Handled non-fatal error recorded: $exception ($reason)');
+      debugPrint(
+        '[CrashlyticsService] Handled non-fatal error recorded: $exception ($reason)',
+      );
     } catch (e) {
       debugPrint('[CrashlyticsService] Error recording non-fatal: $e');
     }
   }
 
-  /// Triggers a test crash for verification demo
+  /// Triggers a test crash for verification demo.
+  /// Stack trace message: "Simulated Crashlytics Test Crash: Verified in demo mode"
+  /// After crash, restart the app so the SDK flushes the report to Firebase Console.
   void triggerTestCrash() {
-    debugPrint('[CrashlyticsService] ⚠️ Triggering simulated verification test crash...');
-    if (_crashlytics != null) {
-      _crashlytics.crash();
-    } else {
-      throw StateError('Simulated Crashlytics Test Crash: Verified in demo mode');
+    if (_crashlytics == null) {
+      debugPrint(
+        '[CrashlyticsService] Crash test unavailable: Firebase Crashlytics is not configured.',
+      );
+      return;
     }
+    debugPrint('[CrashlyticsService] Triggering verification test crash: "Simulated Crashlytics Test Crash: Verified in demo mode"');
+    _crashlytics.crash();
   }
 }

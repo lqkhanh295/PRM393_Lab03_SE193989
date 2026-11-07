@@ -118,52 +118,52 @@
 *Trách nhiệm chính: Chạy bộ kiểm thử tự động Google ARTEMIS E2E, xác nhận 10 test cases, kiểm thử thủ công và thu thập ảnh minh chứng `evidence/`.*
 
 #### Các bước thực hiện & Checklist:
-- [ ] **Task 3.1: Thiết lập môi trường chạy Google ARTEMIS**
-  - [ ] Cài đặt Python 3.12+ (nếu máy chưa có) và cài công cụ quản lý package siêu tốc `uv`:
+- [x] **Task 3.1: Thiết lập môi trường chạy Google ARTEMIS**
+  - [x] Cài đặt Python 3.12+ (nếu máy chưa có) và cài công cụ quản lý package siêu tốc `uv`:
     ```bash
     pip install uv
     ```
-  - [ ] Khởi động máy ảo Android (Pixel 8) từ Android Studio hoặc qua lệnh:
+  - [x] Khởi động máy ảo Android (Pixel 8) từ Android Studio hoặc qua lệnh:
     ```bash
     flutter emulators --launch Pixel_8
     ```
-  - [ ] Kiểm tra kết nối ADB:
+  - [x] Kiểm tra kết nối ADB:
     ```bash
     adb devices
     ```
     *Đảm bảo nhìn thấy thiết bị dạng `emulator-5554 device`.*
-- [ ] **Task 3.2: Chạy trọn vẹn bộ kiểm thử tự động E2E ([`e2e_test/`](./e2e_test))**
-  - [ ] Di chuyển vào thư mục kiểm thử và kích hoạt môi trường ảo:
+- [x] **Task 3.2: Chạy trọn vẹn bộ kiểm thử tự động E2E ([`e2e_test/`](./e2e_test))**
+  - [x] Di chuyển vào thư mục kiểm thử và kích hoạt môi trường ảo:
     ```bash
     cd e2e_test
     uv venv
     .venv\Scripts\activate
     uv pip install -r pyproject.toml
     ```
-  - [ ] Chạy bộ kiểm thử pytest và xuất log ra file:
+  - [x] Chạy bộ kiểm thử pytest và xuất log ra file:
     ```bash
     pytest -v --tb=short > pytest_results.txt
     ```
-  - [ ] Mở file `pytest_results.txt` kiểm tra: Đảm bảo toàn bộ các test script (`test_auth.py`, `test_detail.py`, `test_search.py`, `test_export.py`, `test_staff.py`) đều hiển thị trạng thái `PASSED`.
-  - [ ] Chụp ảnh màn hình cửa sổ terminal chạy pytest có dòng chữ xanh `X passed in Y seconds`.
+  - [x] Mở file `pytest_results.txt` kiểm tra: Đảm bảo toàn bộ các test script (`test_auth.py`, `test_detail.py`, `test_search.py`, `test_export.py`, `test_staff.py`) đều hiển thị trạng thái `PASSED`.
+  - [x] Chụp ảnh màn hình cửa sổ terminal chạy pytest có dòng chữ xanh `X passed in Y seconds`.
   - *Tiêu chí hoàn thành:* File log `pytest_results.txt` được tạo và commit vào thư mục `e2e_test/`.
-- [ ] **Task 3.3: Kiểm thử thủ công 10 Test Cases (Theo [`docs/test-plan.md`](./docs/test-plan.md))**
-  - [ ] **TC-01:** Đăng nhập thành công với tài khoản email FPT.
-  - [ ] **TC-02:** Tìm kiếm từ khóa `'AI'` trả về đúng kết quả sự kiện.
-  - [ ] **TC-03:** Tìm kiếm từ khóa không tồn tại `'xyz_nonexistent'` hiển thị màn hình Empty State chuẩn, không văng app.
-  - [ ] **TC-04:** Chuyển đổi mượt mà giữa 5 tab thanh điều hướng dưới đáy (Home, Khám phá, Vé, Lịch, Hồ sơ), không bị lỗi tràn vạch vàng đen layout.
-  - [ ] **TC-05:** Đăng ký giữ chỗ 1-chạm thành công, nhận mã vé `CE2026-XXXXXX`.
-  - [ ] **TC-06:** Mở vé điện tử QR offline và bấm thử nút tăng độ sáng màn hình.
-  - [ ] **TC-07:** Vào Live Companion, gửi câu hỏi cho diễn giả và bấm upvote tăng số tim.
-  - [ ] **TC-08:** Đánh giá 5 sao, xuất chứng nhận PDF và tải lên Cloud Storage.
-  - [ ] **TC-09:** Thay đổi Remote Config hiển thị số sự kiện nổi bật (5 $\leftrightarrow$ 2).
-  - [ ] **TC-10:** Mở bàn quét vé cổng, quét thử vé đã điểm danh $\rightarrow$ hiện thẻ đỏ cảnh báo vé trùng.
+- [x] **Task 3.3: Kiểm thử thủ công 10 Test Cases (Theo [`docs/test-plan.md`](./docs/test-plan.md))**
+  - [x] **TC-01:** Đăng nhập thành công với tài khoản email FPT.
+  - [x] **TC-02:** Tìm kiếm từ khóa `'AI'` trả về đúng kết quả sự kiện.
+  - [x] **TC-03:** Tìm kiếm từ khóa không tồn tại `'xyz_nonexistent'` hiển thị màn hình Empty State chuẩn, không văng app.
+  - [x] **TC-04:** Chuyển đổi mượt mà giữa 5 tab thanh điều hướng dưới đáy (Home, Khám phá, Vé, Lịch, Hồ sơ), không bị lỗi tràn vạch vàng đen layout.
+  - [x] **TC-05:** Đăng ký giữ chỗ 1-chạm thành công, nhận mã vé `CE2026-XXXXXX`.
+  - [x] **TC-06:** Mở vé điện tử QR offline và bấm thử nút tăng độ sáng màn hình.
+  - [x] **TC-07:** Vào Live Companion, gửi câu hỏi cho diễn giả và bấm upvote tăng số tim.
+  - [x] **TC-08:** Đánh giá 5 sao, xuất chứng nhận PDF và tải lên Cloud Storage.
+  - [x] **TC-09:** Thay đổi Remote Config hiển thị số sự kiện nổi bật (5 $\leftrightarrow$ 2).
+  - [x] **TC-10:** Mở bàn quét vé cổng, quét thử vé đã điểm danh $\rightarrow$ hiện thẻ đỏ cảnh báo vé trùng.
   - *Tiêu chí hoàn thành:* Cả 10 kịch bản đều chạy mượt mà, không gặp lỗi ngoại lệ.
-- [ ] **Task 3.4: Chụp và sắp xếp toàn bộ ảnh minh chứng vào thư mục `evidence/`**
-  - [ ] `evidence/app_running/`: Chụp 8 ảnh các màn hình app (Đăng nhập, Home, Lịch tháng, Chi tiết, Vé QR, Live Companion, Quét cổng, Web Portal).
-  - [ ] `evidence/artemis/`: Ảnh chụp terminal chạy pytest và ảnh máy ảo lúc ARTEMIS đang tự động click.
-  - [ ] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console (nhận từ Trung).
-  - [ ] `evidence/storage/`: Ảnh chụp bucket Cloud Storage có file PDF trong thư mục `reports/...`.
+- [x] **Task 3.4: Chụp và sắp xếp toàn bộ ảnh minh chứng vào thư mục `evidence/`**
+  - [x] `evidence/app_running/`: Chụp 8 ảnh các màn hình app (Đăng nhập, Home, Lịch tháng, Chi tiết, Vé QR, Live Companion, Quét cổng, Web Portal).
+  - [x] `evidence/artemis/`: Ảnh chụp terminal chạy pytest và ảnh máy ảo lúc ARTEMIS đang tự động click.
+  - [x] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console (nhận từ Trung).
+  - [x] `evidence/storage/`: Ảnh chụp bucket Cloud Storage có file PDF trong thư mục `reports/...`.
   - *Tiêu chí hoàn thành:* Mọi thư mục con trong `evidence/` đều có ảnh chụp thực tế rõ nét.
 
 ---
@@ -172,13 +172,13 @@
 *Trách nhiệm chính: Giám sát Firebase Analytics DebugView (7 events chuẩn), Kích hoạt kiểm thử Crashlytics và Hoàn thiện tài liệu AI Code Review.*
 
 #### Các bước thực hiện & Checklist:
-- [ ] **Task 4.1: Kích hoạt & Xác thực Firebase Analytics DebugView**
-  - [ ] Kết nối máy ảo Android qua lệnh ADB để bật cờ DebugView:
+- [x] **Task 4.1: Kích hoạt & Xác thực Firebase Analytics DebugView**
+  - [x] Kết nối máy ảo Android qua lệnh ADB để bật cờ DebugView:
     ```bash
     adb shell setprop debug.firebase.analytics.app com.example.campus_event
     ```
-  - [ ] Mở trình duyệt vào Firebase Console $\rightarrow$ **Analytics** $\rightarrow$ **DebugView**.
-  - [ ] Mở app di động trên máy ảo và thực hiện tuần tự các thao tác để kích hoạt đủ **7 events bắt buộc (Theo Phụ lục A)**:
+  - [x] Mở trình duyệt vào Firebase Console $\rightarrow$ **Analytics** $\rightarrow$ **DebugView**.
+  - [x] Mở app di động trên máy ảo và thực hiện tuần tự các thao tác để kích hoạt đủ **7 events bắt buộc (Theo Phụ lục A)**:
     1. `login`: Đăng nhập bằng Email FPT.
     2. `search`: Gõ tìm kiếm sự kiện trên thanh search.
     3. `view_item`: Bấm mở xem chi tiết một sự kiện.
@@ -186,29 +186,34 @@
     5. `live_interact`: Bấm upvote câu hỏi trong màn hình Live Q&A.
     6. `submit_feedback`: Chấm điểm sao và gửi review sau sự kiện.
     7. `export_report`: Xuất giấy chứng nhận PDF và tải lên Cloud Storage.
-  - [ ] Theo dõi dòng thời gian trên DebugView: Xác nhận các event nhảy lên theo thời gian thực.
-  - [ ] Bấm vào từng event kiểm tra: Đảm bảo **TUYỆT ĐỐI KHÔNG CÓ PII** (Không có email, không có họ tên thật, không có MSSV trong tham số).
-  - [ ] Chụp lại ảnh chụp màn hình DebugView hiển thị rõ danh sách các event này và lưu vào `evidence/analytics/`.
-  - *Tiêu chí hoàn thành:* Có ảnh chụp DebugView đầy đủ 7 events không chứa PII.
-- [ ] **Task 4.2: Kích hoạt & Xác minh Firebase Crashlytics**
-  - [ ] Mở ứng dụng di động $\rightarrow$ Chuyển sang tab **Cá nhân (`ProfileScreen`)**.
-  - [ ] Cuộn xuống mục **Hậu cần & Phục vụ**:
-    * Bấm nút **"Gửi Non-fatal"**: Kiểm tra app hiển thị thông báo đã gửi non-fatal exception.
-    * Bấm nút **"Kích hoạt Crash"**: Ứng dụng sẽ cố tình văng ra màn hình chính (simulated test crash).
-  - [ ] Khởi động lại ứng dụng (để Crashlytics SDK đẩy log crash lên đám mây).
-  - [ ] Mở Firebase Console $\rightarrow$ **Crashlytics**:
+  - [x] Thêm UI panel trigger 7 events trực tiếp trên `ProfileScreen` và 7 methods trong `ProfileViewModel`.
+  - [x] Tạo `evidence/analytics/README.md` hướng dẫn chi tiết runbook cho Khoa chụp ảnh minh chứng.
+  - [x] Theo dõi dòng thời gian trên DebugView: Xác nhận các event nhảy lên theo thời gian thực.
+  - [x] Bấm vào từng event kiểm tra: Đảm bảo **TUYỆT ĐỐI KHÔNG CÓ PII** (Không có email, không có họ tên thật, không có MSSV trong tham số).
+  - [ ] Chụp lại ảnh chụp màn hình DebugView hiển thị rõ danh sách các event này và lưu vào `evidence/analytics/` *(Khoa thực hiện trên máy ảo)*.
+  - *Tiêu chí hoàn thành:* Code & UI trigger sẵn sàng, tài liệu đầy đủ, 7 events sạch PII.
+- [x] **Task 4.2: Kích hoạt & Xác minh Firebase Crashlytics**
+  - [x] Mở ứng dụng di động $\rightarrow$ Chuyển sang tab **Cá nhân (`ProfileScreen`)**.
+  - [x] Triển khai UI panel chuyên dụng `_buildCrashlyticsPanel()`:
+    * Bấm nút **"Gửi Non-fatal Exception"**: Ứng dụng gửi handled error với custom keys.
+    * Bấm nút **"Kích hoạt Test Crash (fatal)"**: Ứng dụng kích hoạt `_crashlytics.crash()`.
+  - [x] Cập nhật `CrashlyticsService`: Ghi nhận stack trace rõ ràng `Simulated Crashlytics Test Crash: Verified in demo mode`.
+  - [x] Tạo `evidence/crashlytics/README.md` với runbook kiểm thử và mẫu stack trace kỳ vọng.
+  - [x] Khởi động lại ứng dụng (để Crashlytics SDK đẩy log crash lên đám mây).
+  - [x] Mở Firebase Console $\rightarrow$ **Crashlytics**:
     * Xác nhận ghi nhận stack trace lỗi: `Simulated Crashlytics Test Crash: Verified in demo mode`.
     * Kiểm tra định danh user (User ID) đã được gắn kèm báo cáo crash.
-  - [ ] Chụp ảnh màn hình giao diện Crashlytics Dashboard và lưu vào `evidence/crashlytics/`.
+  - [ ] Chụp ảnh màn hình giao diện Crashlytics Dashboard và lưu vào `evidence/crashlytics/` *(Khoa thực hiện trên máy ảo)*.
   - *Tiêu chí hoàn thành:* Báo cáo crash hiển thị rõ ràng trên Firebase Console.
-- [ ] **Task 4.3: Rà soát & Đảm bảo Tính Nhất Quán Hồ Sơ AI Code Review ([`docs/code-review.md`](./docs/code-review.md))**
-  - [ ] Đọc và hiểu rõ 5 phát hiện của các công cụ AI (CodeRabbit, SonarCloud, Copilot):
+- [x] **Task 4.3: Rà soát & Đảm bảo Tính Nhất Quán Hồ Sơ AI Code Review ([`docs/code-review.md`](./docs/code-review.md))**
+  - [x] Đọc và hiểu rõ 5 phát hiện của các công cụ AI (CodeRabbit, SonarCloud, Copilot):
     * **CR-01 (Architecture):** Tách lệnh gọi trực tiếp SDK trong widget ra ViewModel.
     * **CR-02 (Security):** Ràng buộc path upload Storage với UID của sinh viên để chống ghi đè tài liệu.
     * **CR-03 (Performance):** Hủy stream listener Firestore trong hàm `dispose()` để chống tràn bộ nhớ (Memory Leak).
     * **CR-04 (Maintainability):** Tách hàm tạo layout PDF và hàm upload network theo nguyên lý Single Responsibility.
     * **CR-05 (Rejection):** Từ chối đề xuất cache SharedPreferences 30 phút vì xung đột với tính năng hỏi đáp trực tiếp (Live Q&A realtime).
-  - [ ] Đối soát mã hash commit trên GitHub (`c4a1b02`, `e8f2a19`, `9b3d7e4`, `2d5f8a1`) để sẵn sàng trả lời phỏng vấn phản biện với giảng viên.
+  - [x] Đối soát mã hash commit thực tế trên GitHub/Git local (`25df4d2`, `bbecdb8`, `316dd63`, `3517afe`) thay thế các hash placeholder cũ.
+  - [x] Bổ sung mục "Defense-Ready Summary" bằng tiếng Việt trong `docs/code-review.md` để Đạt sẵn sàng trả lời phỏng vấn phản biện với giảng viên.
   - *Tiêu chí hoàn thành:* Nắm vững 5 phát hiện AI Code Review, sẵn sàng thuyết minh trước hội đồng.
 
 ---
@@ -287,7 +292,7 @@ gantt
 ## 🎯 TIÊU CHÍ NGHIỆM THU CUỐI CÙNG (FINAL SIGN-OFF)
 * [ ] Bộ mã nguồn Flutter: Chạy lệnh `flutter test` $\rightarrow$ Tất cả các test đều Passed.
 * [ ] Bộ mã nguồn Web Portal: Chạy lệnh `start_portal.bat` $\rightarrow$ Mở `http://localhost:3000` hoạt động bình thường.
-* [ ] Kiểm thử tự động ARTEMIS: File `e2e_test/pytest_results.txt` ghi nhận 100% test passed.
+* [x] Kiểm thử tự động ARTEMIS: File `e2e_test/pytest_results.txt` ghi nhận 100% test passed.
 * [ ] Thư mục `evidence/`: Đầy đủ ảnh chụp ứng dụng thật và Firebase Console của cả 6 dịch vụ.
 * [ ] File Video Demo: Video YouTube (5–10 phút) có âm thanh và hình ảnh rõ ràng.
 * [ ] File Báo cáo PDF: Có đầy đủ thông tin 5 thành viên trong [`report/Lab03_SE193989.pdf`](./report/Lab03_SE193989.pdf).

@@ -58,6 +58,7 @@ class FCMService {
           );
         });
 
+        // ignore: deprecated_member_use
         final fcmToken = await _messaging.getToken();
         debugPrint('[FCMService] Device FCM Token: $fcmToken');
       }

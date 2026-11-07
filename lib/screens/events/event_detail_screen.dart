@@ -9,6 +9,7 @@ import '../../widgets/app_button.dart';
 import '../../widgets/loading_view.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/empty_view.dart';
+import '../../widgets/gemini_event_insight_card.dart';
 import 'registration_modal.dart';
 
 /// S13: Event Detail Screen
@@ -215,7 +216,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         color: AppTheme.onSurfaceVariant,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
+
+                    // Level 2 Gemini AI Structured Output Insights
+                    GeminiEventInsightCard(event: event),
+                    const SizedBox(height: 20),
 
                     // Speakers Section
                     if (event.speakers.isNotEmpty) ...[
