@@ -14,7 +14,7 @@ class LiveEventViewModel extends ChangeNotifier {
   ScreenState<List<SpeakerQuestionModel>> _questionsState = const StateInitial();
   ScreenState<List<SpeakerQuestionModel>> get questionsState => _questionsState;
 
-  int _currentSessionIndex = 1; // 2nd session is currently active
+  final int _currentSessionIndex = 1; // 2nd session is currently active
   int get currentSessionIndex => _currentSessionIndex;
 
   LiveEventViewModel({

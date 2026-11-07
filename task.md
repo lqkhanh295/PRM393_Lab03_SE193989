@@ -118,52 +118,52 @@
 *Trách nhiệm chính: Chạy bộ kiểm thử tự động Google ARTEMIS E2E, xác nhận 10 test cases, kiểm thử thủ công và thu thập ảnh minh chứng `evidence/`.*
 
 #### Các bước thực hiện & Checklist:
-- [ ] **Task 3.1: Thiết lập môi trường chạy Google ARTEMIS**
-  - [ ] Cài đặt Python 3.12+ (nếu máy chưa có) và cài công cụ quản lý package siêu tốc `uv`:
+- [x] **Task 3.1: Thiết lập môi trường chạy Google ARTEMIS**
+  - [x] Cài đặt Python 3.12+ (nếu máy chưa có) và cài công cụ quản lý package siêu tốc `uv`:
     ```bash
     pip install uv
     ```
-  - [ ] Khởi động máy ảo Android (Pixel 8) từ Android Studio hoặc qua lệnh:
+  - [x] Khởi động máy ảo Android (Pixel 8) từ Android Studio hoặc qua lệnh:
     ```bash
     flutter emulators --launch Pixel_8
     ```
-  - [ ] Kiểm tra kết nối ADB:
+  - [x] Kiểm tra kết nối ADB:
     ```bash
     adb devices
     ```
     *Đảm bảo nhìn thấy thiết bị dạng `emulator-5554 device`.*
-- [ ] **Task 3.2: Chạy trọn vẹn bộ kiểm thử tự động E2E ([`e2e_test/`](./e2e_test))**
-  - [ ] Di chuyển vào thư mục kiểm thử và kích hoạt môi trường ảo:
+- [x] **Task 3.2: Chạy trọn vẹn bộ kiểm thử tự động E2E ([`e2e_test/`](./e2e_test))**
+  - [x] Di chuyển vào thư mục kiểm thử và kích hoạt môi trường ảo:
     ```bash
     cd e2e_test
     uv venv
     .venv\Scripts\activate
     uv pip install -r pyproject.toml
     ```
-  - [ ] Chạy bộ kiểm thử pytest và xuất log ra file:
+  - [x] Chạy bộ kiểm thử pytest và xuất log ra file:
     ```bash
     pytest -v --tb=short > pytest_results.txt
     ```
-  - [ ] Mở file `pytest_results.txt` kiểm tra: Đảm bảo toàn bộ các test script (`test_auth.py`, `test_detail.py`, `test_search.py`, `test_export.py`, `test_staff.py`) đều hiển thị trạng thái `PASSED`.
-  - [ ] Chụp ảnh màn hình cửa sổ terminal chạy pytest có dòng chữ xanh `X passed in Y seconds`.
+  - [x] Mở file `pytest_results.txt` kiểm tra: Đảm bảo toàn bộ các test script (`test_auth.py`, `test_detail.py`, `test_search.py`, `test_export.py`, `test_staff.py`) đều hiển thị trạng thái `PASSED`.
+  - [x] Chụp ảnh màn hình cửa sổ terminal chạy pytest có dòng chữ xanh `X passed in Y seconds`.
   - *Tiêu chí hoàn thành:* File log `pytest_results.txt` được tạo và commit vào thư mục `e2e_test/`.
-- [ ] **Task 3.3: Kiểm thử thủ công 10 Test Cases (Theo [`docs/test-plan.md`](./docs/test-plan.md))**
-  - [ ] **TC-01:** Đăng nhập thành công với tài khoản email FPT.
-  - [ ] **TC-02:** Tìm kiếm từ khóa `'AI'` trả về đúng kết quả sự kiện.
-  - [ ] **TC-03:** Tìm kiếm từ khóa không tồn tại `'xyz_nonexistent'` hiển thị màn hình Empty State chuẩn, không văng app.
-  - [ ] **TC-04:** Chuyển đổi mượt mà giữa 5 tab thanh điều hướng dưới đáy (Home, Khám phá, Vé, Lịch, Hồ sơ), không bị lỗi tràn vạch vàng đen layout.
-  - [ ] **TC-05:** Đăng ký giữ chỗ 1-chạm thành công, nhận mã vé `CE2026-XXXXXX`.
-  - [ ] **TC-06:** Mở vé điện tử QR offline và bấm thử nút tăng độ sáng màn hình.
-  - [ ] **TC-07:** Vào Live Companion, gửi câu hỏi cho diễn giả và bấm upvote tăng số tim.
-  - [ ] **TC-08:** Đánh giá 5 sao, xuất chứng nhận PDF và tải lên Cloud Storage.
-  - [ ] **TC-09:** Thay đổi Remote Config hiển thị số sự kiện nổi bật (5 $\leftrightarrow$ 2).
-  - [ ] **TC-10:** Mở bàn quét vé cổng, quét thử vé đã điểm danh $\rightarrow$ hiện thẻ đỏ cảnh báo vé trùng.
+- [x] **Task 3.3: Kiểm thử thủ công 10 Test Cases (Theo [`docs/test-plan.md`](./docs/test-plan.md))**
+  - [x] **TC-01:** Đăng nhập thành công với tài khoản email FPT.
+  - [x] **TC-02:** Tìm kiếm từ khóa `'AI'` trả về đúng kết quả sự kiện.
+  - [x] **TC-03:** Tìm kiếm từ khóa không tồn tại `'xyz_nonexistent'` hiển thị màn hình Empty State chuẩn, không văng app.
+  - [x] **TC-04:** Chuyển đổi mượt mà giữa 5 tab thanh điều hướng dưới đáy (Home, Khám phá, Vé, Lịch, Hồ sơ), không bị lỗi tràn vạch vàng đen layout.
+  - [x] **TC-05:** Đăng ký giữ chỗ 1-chạm thành công, nhận mã vé `CE2026-XXXXXX`.
+  - [x] **TC-06:** Mở vé điện tử QR offline và bấm thử nút tăng độ sáng màn hình.
+  - [x] **TC-07:** Vào Live Companion, gửi câu hỏi cho diễn giả và bấm upvote tăng số tim.
+  - [x] **TC-08:** Đánh giá 5 sao, xuất chứng nhận PDF và tải lên Cloud Storage.
+  - [x] **TC-09:** Thay đổi Remote Config hiển thị số sự kiện nổi bật (5 $\leftrightarrow$ 2).
+  - [x] **TC-10:** Mở bàn quét vé cổng, quét thử vé đã điểm danh $\rightarrow$ hiện thẻ đỏ cảnh báo vé trùng.
   - *Tiêu chí hoàn thành:* Cả 10 kịch bản đều chạy mượt mà, không gặp lỗi ngoại lệ.
-- [ ] **Task 3.4: Chụp và sắp xếp toàn bộ ảnh minh chứng vào thư mục `evidence/`**
-  - [ ] `evidence/app_running/`: Chụp 8 ảnh các màn hình app (Đăng nhập, Home, Lịch tháng, Chi tiết, Vé QR, Live Companion, Quét cổng, Web Portal).
-  - [ ] `evidence/artemis/`: Ảnh chụp terminal chạy pytest và ảnh máy ảo lúc ARTEMIS đang tự động click.
-  - [ ] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console (nhận từ Trung).
-  - [ ] `evidence/storage/`: Ảnh chụp bucket Cloud Storage có file PDF trong thư mục `reports/...`.
+- [x] **Task 3.4: Chụp và sắp xếp toàn bộ ảnh minh chứng vào thư mục `evidence/`**
+  - [x] `evidence/app_running/`: Chụp 8 ảnh các màn hình app (Đăng nhập, Home, Lịch tháng, Chi tiết, Vé QR, Live Companion, Quét cổng, Web Portal).
+  - [x] `evidence/artemis/`: Ảnh chụp terminal chạy pytest và ảnh máy ảo lúc ARTEMIS đang tự động click.
+  - [x] `evidence/firestore/`: Ảnh chụp các collection `events`, `tickets`, `users` trên Firebase Console (nhận từ Trung).
+  - [x] `evidence/storage/`: Ảnh chụp bucket Cloud Storage có file PDF trong thư mục `reports/...`.
   - *Tiêu chí hoàn thành:* Mọi thư mục con trong `evidence/` đều có ảnh chụp thực tế rõ nét.
 
 ---
@@ -287,7 +287,7 @@ gantt
 ## 🎯 TIÊU CHÍ NGHIỆM THU CUỐI CÙNG (FINAL SIGN-OFF)
 * [ ] Bộ mã nguồn Flutter: Chạy lệnh `flutter test` $\rightarrow$ Tất cả các test đều Passed.
 * [ ] Bộ mã nguồn Web Portal: Chạy lệnh `start_portal.bat` $\rightarrow$ Mở `http://localhost:3000` hoạt động bình thường.
-* [ ] Kiểm thử tự động ARTEMIS: File `e2e_test/pytest_results.txt` ghi nhận 100% test passed.
+* [x] Kiểm thử tự động ARTEMIS: File `e2e_test/pytest_results.txt` ghi nhận 100% test passed.
 * [ ] Thư mục `evidence/`: Đầy đủ ảnh chụp ứng dụng thật và Firebase Console của cả 6 dịch vụ.
 * [ ] File Video Demo: Video YouTube (5–10 phút) có âm thanh và hình ảnh rõ ràng.
 * [ ] File Báo cáo PDF: Có đầy đủ thông tin 5 thành viên trong [`report/Lab03_SE193989.pdf`](./report/Lab03_SE193989.pdf).

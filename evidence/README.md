@@ -29,12 +29,12 @@ evidence/
 
 | Service / Test | Evidence Type | File / Location | Status |
 | :--- | :--- | :--- | :---: |
-| **App Running** | Emulator screenshot | `evidence/app_running/pixel8_running.png` | ✅ Verified |
+| **App Running (8 Screens)** | Live screen captures | `evidence/app_running/` (`01_login.png` to `08_web_portal.png`, `pixel8_running.png`) | ✅ Verified (8/8) |
 | **Authentication** | Users table | `evidence/auth/` | ✅ Ready |
-| **Firestore** | Collections list | `evidence/firestore/` | ✅ Seeded & Verified |
-| **Storage** | User path `reports/{uid}/...` | `evidence/storage/` | ✅ Rules configured |
+| **Firestore** | Collections list | `evidence/firestore/firestore_collections_live.png` | ✅ Seeded & Verified |
+| **Storage** | User path `reports/{uid}/...` | `evidence/storage/storage_reports_pdf.png` | ✅ Rules configured & Uploaded |
 | **Cloud Messaging**| Notification handler | In-app notification center | ✅ Implemented |
 | **Analytics** | ≥ 7 Events | `docs/analytics-plan.md` | ✅ Instrumented |
 | **Crashlytics** | Non-fatal & crash keys | `evidence/crashlytics/` | ✅ Service active |
 | **Remote Config** | Parameters change | `evidence/remote_config/` | ✅ Defaults in app |
-| **ARTEMIS E2E** | ≥ 10 Test Cases | `docs/test-plan.md`, `e2e_test/` | ✅ 5 test files ready |
+| **ARTEMIS E2E** | 12 Test Cases (100% Passed) | `evidence/artemis/pytest_terminal_passed.png`, `evidence/artemis/artemis_autonomous_click.png`, `e2e_test/pytest_results.txt` | ✅ 12/12 Tests PASSED |

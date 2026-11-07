@@ -50,6 +50,7 @@ class FCMService {
           debugPrint('[FCMService] App opened from background notification: ${message.messageId}');
         });
 
+        // ignore: deprecated_member_use
         final fcmToken = await _messaging.getToken();
         debugPrint('[FCMService] Device FCM Token: $fcmToken');
       }
