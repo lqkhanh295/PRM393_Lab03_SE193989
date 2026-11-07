@@ -36,19 +36,17 @@ User identity is tracked strictly via anonymous Firebase UID (`analytics.setUser
   - **No Email Addresses:** `email` is never sent as an event parameter.
   - **No Student Full Names:** Student names are kept solely within the local user state.
   - **No MSSV in Parameters:** Domain IDs (`event_id`, `club_id`, `ticket_id`) are used instead of student roll numbers.
-* The Google Analytics DebugView confirms that all payloads only contain semantic string enums, integers, and entity slugs.
+* The app suppresses search strings that resemble an email address or a long student identifier. The remaining payloads contain only semantic enums, integers, and entity slugs.
+* DebugView must be verified against a real signed-in device before submission; this document does not substitute for Console evidence.
 
 ---
 
-## 4. Analytics DebugView Evidence Mapping
+## 4. Analytics DebugView Verification Runbook
 
-```
-[FirebaseAnalytics] Logging event: login {method: google, user_role: student}
-[FirebaseAnalytics] Logging event: search {search_term: AI Workshop, result_count: 3, category_filter: Technology}
-[FirebaseAnalytics] Logging event: view_item {item_id: EVT-2026-01, item_name: Tech Expo 2026, item_category: F-Code, spots_remaining: 58}
-[FirebaseAnalytics] Logging event: register_event {event_id: EVT-2026-01, club_id: fcode, registration_seconds: 14, calendar_synced: 1}
-[FirebaseAnalytics] Logging event: live_interact {event_id: EVT-2026-01, action_type: upvote, question_length: 42}
-[FirebaseAnalytics] Logging event: submit_feedback {event_id: EVT-2026-01, rating_stars: 5, has_text_comment: 1}
-[FirebaseAnalytics] Logging event: export_report {export_type: certificate, file_size_kb: 142, upload_duration_ms: 680}
-```
-*(All events are verified in the Firebase Console DebugView stream).*
+1. Connect a real Android emulator or device, then enable DebugView with:
+   `adb shell setprop debug.firebase.analytics.app com.example.campus_event`
+2. Sign in with an authorized FPT account and execute the seven flows: `login`, `search`, `view_item`, `register_event`, `live_interact`, `submit_feedback`, and `export_report`.
+3. In Firebase Console → Analytics → DebugView, confirm each event arrives and inspect its parameters. Do not capture or retain a screenshot containing an email, name, or MSSV.
+4. Save the unaltered Console screenshot at `evidence/analytics/debugview-seven-events.png` only after the seven actual events are visible.
+
+**Evidence status:** Pending a real Firebase DebugView session. No fabricated screenshots or event logs are stored in this repository.
