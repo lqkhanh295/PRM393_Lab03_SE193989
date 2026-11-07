@@ -56,3 +56,4 @@ Simulated Crashlytics Test Crash: Verified in demo mode
 ```
 
 > **Lưu ý:** Không fabricate ảnh. Chỉ chụp từ Firebase Console thực tế.
+

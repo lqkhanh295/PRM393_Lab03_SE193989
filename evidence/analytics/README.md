@@ -48,3 +48,4 @@ Cuộn xuống vùng **"ANALYTICS DEBUGVIEW — PHỤ LỤC A"**
 ---
 
 > **Lưu ý:** Không fabricate ảnh. Chỉ chụp từ Firebase Console thực tế.
+
