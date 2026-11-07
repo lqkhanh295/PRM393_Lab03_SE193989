@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/screen_state.dart';
 import '../models/certificate_model.dart';
-import '../models/user_model.dart';
 import '../services/firestore_service.dart';
 import '../services/storage_service.dart';
 import '../services/remote_config_service.dart';
@@ -10,7 +9,6 @@ import '../services/crashlytics_service.dart';
 import '../services/fcm_service.dart';
 import '../services/analytics_service.dart';
 import '../services/pdf_export_service.dart';
-import '../services/seed_firestore_data.dart';
 
 /// MVVM ProfileViewModel
 /// Manages student profile data and hosts the mandatory Lab 3 Firebase Demo Area.
@@ -25,7 +23,8 @@ class ProfileViewModel extends ChangeNotifier {
   final PdfExportService _pdfExportService;
 
   ScreenState<List<CertificateModel>> _certificatesState = const StateInitial();
-  ScreenState<List<CertificateModel>> get certificatesState => _certificatesState;
+  ScreenState<List<CertificateModel>> get certificatesState =>
+      _certificatesState;
 
   // Firebase Demo Area State
   double _uploadProgress = 0.0;
@@ -48,13 +47,13 @@ class ProfileViewModel extends ChangeNotifier {
     required FCMService fcmService,
     required AnalyticsService analyticsService,
     required PdfExportService pdfExportService,
-  })  : _firestoreService = firestoreService,
-        _storageService = storageService,
-        _remoteConfigService = remoteConfigService,
-        _crashlyticsService = crashlyticsService,
-        _fcmService = fcmService,
-        _analyticsService = analyticsService,
-        _pdfExportService = pdfExportService;
+  }) : _firestoreService = firestoreService,
+       _storageService = storageService,
+       _remoteConfigService = remoteConfigService,
+       _crashlyticsService = crashlyticsService,
+       _fcmService = fcmService,
+       _analyticsService = analyticsService,
+       _pdfExportService = pdfExportService;
 
   Future<void> loadProfileCertificates(String userId) async {
     _certificatesState = const StateLoading();
@@ -75,7 +74,7 @@ class ProfileViewModel extends ChangeNotifier {
   // ==========================================
 
   /// Action 1: Generate PDF and Upload to Firebase Storage
-  Future<void> generateAndUploadPdfSummary(UserModel user) async {
+  Future<void> generateAndUploadPdfSummary(CertificateModel certificate) async {
     _isUploading = true;
     _uploadProgress = 0.0;
     _statusMessage = 'Đang khởi tạo tài liệu PDF...';
@@ -84,22 +83,12 @@ class ProfileViewModel extends ChangeNotifier {
     final stopwatch = Stopwatch()..start();
 
     try {
-      final cert = CertificateModel(
-        id: 'DEMO-EXPORT-${DateTime.now().millisecondsSinceEpoch}',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026: AI & Autonomous Agents',
-        userId: user.id,
-        studentName: user.name,
-        issueDate: '28/10/2026',
-        verificationHash: 'VERIFIED-HASH-${DateTime.now().millisecondsSinceEpoch}',
-        downloadUrl: '',
-      );
-
       final result = await _pdfExportService.exportAndUploadCertificate(
-        certificate: cert,
+        certificate: certificate,
         onProgress: (progress) {
           _uploadProgress = progress;
-          _statusMessage = 'Đang tải lên Cloud Storage (${(progress * 100).toInt()}%)...';
+          _statusMessage =
+              'Đang tải lên Cloud Storage (${(progress * 100).toInt()}%)...';
           notifyListeners();
         },
       );
@@ -111,7 +100,7 @@ class ProfileViewModel extends ChangeNotifier {
       _isUploading = false;
 
       await _analyticsService.logExportReport(
-        exportType: 'certificate_pdf',
+        exportType: 'certificate',
         fileSizeBytes: result.fileSizeBytes,
         durationMs: stopwatch.elapsedMilliseconds,
       );
@@ -120,7 +109,11 @@ class ProfileViewModel extends ChangeNotifier {
     } catch (e, stack) {
       _isUploading = false;
       _statusMessage = '❌ Lỗi upload: $e';
-      await _crashlyticsService.recordHandledError(e, stack, reason: 'PDF upload failure');
+      await _crashlyticsService.recordHandledError(
+        e,
+        stack,
+        reason: 'PDF upload failure',
+      );
       notifyListeners();
     }
   }
@@ -137,9 +130,11 @@ class ProfileViewModel extends ChangeNotifier {
   }
 
   /// Action 3: Trigger Crashlytics Non-Fatal Handled Error
-  Future<void> triggerHandledErrorDemo(String userId) async {
+  Future<void> triggerHandledErrorDemo() async {
     try {
-      throw FormatException('Simulated Non-Fatal Exception: Ticket ID checksum invalid at Gate 1');
+      throw FormatException(
+        'Simulated Non-Fatal Exception: Ticket ID checksum invalid at Gate 1',
+      );
     } catch (e, stack) {
       await _crashlyticsService.recordHandledError(
         e,
@@ -147,7 +142,6 @@ class ProfileViewModel extends ChangeNotifier {
         reason: 'Handled error test action from Profile Demo Area',
         customKeys: {
           'test_action': 'trigger_handled_error',
-          'user_id': userId,
           'screen': 'profile_demo',
         },
       );
@@ -166,27 +160,89 @@ class ProfileViewModel extends ChangeNotifier {
     final currentMax = _remoteConfigService.maxFeaturedEvents;
     final nextMax = currentMax == 5 ? 2 : 5;
     _remoteConfigService.setSimulatedConfig(maxEvents: nextMax);
-    _statusMessage = '⚙️ Remote Config cập nhật: max_featured_events = $nextMax (Không cần build lại)';
+    _statusMessage =
+        '⚙️ Remote Config cập nhật: max_featured_events = $nextMax (Không cần build lại)';
     notifyListeners();
   }
 
-  /// Action 6: One-click Seed Data to Cloud Firestore Collections
-  Future<void> seedFirestoreCollectionsDemo() async {
-    _statusMessage = '⏳ Đang khởi tạo và đồng bộ dữ liệu lên Cloud Firestore...';
-    notifyListeners();
+  // ==========================================
+  // TASK 4 (ĐẠT): ANALYTICS DEBUGVIEW 7-EVENT TRIGGERS
+  // Phụ lục A — Kích hoạt từng event một cách tuần tự trên app
+  // Strictly zero-PII: chỉ ghi anonymous entity IDs và counters.
+  // ==========================================
 
-    try {
-      if (!kIsWeb) {
-        final count = await FirestoreSeeder.seedAll(FirebaseFirestore.instance);
-        _statusMessage = '✅ Đã nạp thành công $count documents vào các collections Firestore!';
-      } else {
-        _statusMessage = '✅ Đã đồng bộ dữ liệu sự kiện FPTU vào bộ nhớ Firestore!';
-      }
-      notifyListeners();
-    } catch (e, stack) {
-      _statusMessage = '❌ Lỗi khởi tạo Firestore: $e';
-      await _crashlyticsService.recordHandledError(e, stack, reason: 'Firestore seeding error');
-      notifyListeners();
-    }
+  /// Event 1 — login: ghi nhận đăng nhập Email FPT (demo trigger từ Profile)
+  Future<void> triggerAnalyticsLogin() async {
+    await _analyticsService.logLogin(method: 'email_fpt', role: 'student');
+    _statusMessage = '✅ [1/7] login — method="email_fpt", role="student" → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 2 — search: tìm kiếm sự kiện theo từ khóa "AI"
+  Future<void> triggerAnalyticsSearch() async {
+    await _analyticsService.logSearch(
+      searchTerm: 'AI',
+      resultCount: 3,
+      category: 'Technology',
+    );
+    _statusMessage = '✅ [2/7] search — search_term="AI", result_count=3 → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 3 — view_item: xem chi tiết sự kiện demo (ID không chứa PII)
+  Future<void> triggerAnalyticsViewItem() async {
+    await _analyticsService.logViewItem(
+      itemId: 'evt_tech_expo_2026',
+      itemName: 'Tech Expo 2026',
+      category: 'Technology',
+      spotsRemaining: 42,
+    );
+    _statusMessage = '✅ [3/7] view_item — item_id="evt_tech_expo_2026" → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 4 — register_event: đăng ký giữ chỗ 1-chạm thành công
+  Future<void> triggerAnalyticsRegisterEvent() async {
+    await _analyticsService.logRegisterEvent(
+      eventId: 'evt_tech_expo_2026',
+      clubId: 'fcode',
+      durationSeconds: 4,
+      calendarSynced: true,
+    );
+    _statusMessage = '✅ [4/7] register_event — event_id="evt_tech_expo_2026", duration=4s → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 5 — live_interact: upvote câu hỏi trong Live Q&A
+  Future<void> triggerAnalyticsLiveInteract() async {
+    await _analyticsService.logLiveInteract(
+      eventId: 'evt_tech_expo_2026',
+      actionType: 'upvote',
+      length: 0,
+    );
+    _statusMessage = '✅ [5/7] live_interact — action_type="upvote" → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 6 — submit_feedback: đánh giá 5 sao sau sự kiện
+  Future<void> triggerAnalyticsSubmitFeedback() async {
+    await _analyticsService.logSubmitFeedback(
+      eventId: 'evt_tech_expo_2026',
+      rating: 5,
+      hasComment: true,
+    );
+    _statusMessage = '✅ [6/7] submit_feedback — rating_stars=5, has_comment=1 → DebugView';
+    notifyListeners();
+  }
+
+  /// Event 7 — export_report: xuất e-Certificate PDF & upload Cloud Storage
+  Future<void> triggerAnalyticsExportReport() async {
+    await _analyticsService.logExportReport(
+      exportType: 'certificate',
+      fileSizeBytes: 128000,
+      durationMs: 850,
+    );
+    _statusMessage = '✅ [7/7] export_report — export_type="certificate", size=125KB → DebugView';
+    notifyListeners();
   }
 }
