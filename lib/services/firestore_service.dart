@@ -7,6 +7,8 @@ import '../models/club_model.dart';
 import '../models/speaker_question_model.dart';
 import '../models/certificate_model.dart';
 import '../models/user_model.dart';
+import '../models/announcement_model.dart';
+import '../models/registration_model.dart';
 import 'seed_firestore_data.dart';
 
 class CheckInValidationResult {
@@ -36,6 +38,8 @@ class FirestoreService {
   final List<ClubModel> _cachedClubs = [];
   final List<SpeakerQuestionModel> _cachedQuestions = [];
   final List<CertificateModel> _cachedCertificates = [];
+  final List<AnnouncementModel> _cachedAnnouncements = [];
+  final List<RegistrationModel> _cachedRegistrations = [];
 
   FirestoreService([this._firestore]);
 
@@ -560,5 +564,214 @@ class FirestoreService {
       debugPrint('[FirestoreService] getCheckedInCount error: $e');
     }
     return _cachedTickets.where((t) => t.eventId == eventId && t.status == TicketStatus.checkedIn).length;
+  }
+
+  // ==========================================
+  // FINAL ASSIGNMENT: ANNOUNCEMENTS INBOX
+  // ==========================================
+
+  /// Real-time stream of official announcements
+  Stream<List<AnnouncementModel>> streamAnnouncements() {
+    if (_firestore != null) {
+      return _firestore
+          .collection('announcements')
+          .orderBy('createdAt', descending: true)
+          .snapshots()
+          .map((snap) => snap.docs
+              .map((d) => AnnouncementModel.fromMap(d.data(), d.id))
+              .toList());
+    }
+    return Stream.value(_cachedAnnouncements);
+  }
+
+  /// Get list of announcements directly from Cloud Firestore
+  Future<List<AnnouncementModel>> getAnnouncements() async {
+    try {
+      if (_firestore != null) {
+        final snap = await _firestore
+            .collection('announcements')
+            .orderBy('createdAt', descending: true)
+            .get();
+        if (snap.docs.isNotEmpty) {
+          final list = snap.docs
+              .map((d) => AnnouncementModel.fromMap(d.data(), d.id))
+              .toList();
+          _cachedAnnouncements.clear();
+          _cachedAnnouncements.addAll(list);
+          return list;
+        }
+      }
+    } catch (e) {
+      debugPrint('[FirestoreService] getAnnouncements error: $e');
+    }
+    return _cachedAnnouncements;
+  }
+
+  /// Broadcast announcement from Web Admin or Staff HUD
+  Future<void> sendAnnouncement(AnnouncementModel announcement) async {
+    try {
+      if (_firestore != null) {
+        await _firestore
+            .collection('announcements')
+            .doc(announcement.id)
+            .set(announcement.toMap());
+      }
+    } catch (e) {
+      debugPrint('[FirestoreService] sendAnnouncement cloud error: $e');
+    }
+    _cachedAnnouncements.insert(0, announcement);
+  }
+
+  // ==========================================
+  // FINAL ASSIGNMENT: CROSS-ROLE REGISTRATION FLOW
+  // ==========================================
+
+  /// Submit event registration requiring Organizer approval (status: pending)
+  Future<RegistrationModel> submitRegistration({
+    required EventModel event,
+    required UserModel user,
+  }) async {
+    final regId = 'REG-${DateTime.now().millisecondsSinceEpoch}';
+    final registration = RegistrationModel(
+      id: regId,
+      eventId: event.id,
+      eventTitle: event.title,
+      userId: user.id,
+      studentName: user.name,
+      studentEmail: user.email,
+      status: RegistrationStatus.pending,
+      createdAt: DateTime.now(),
+    );
+
+    try {
+      if (_firestore != null) {
+        await _firestore.collection('registrations').doc(regId).set(registration.toMap());
+      }
+    } catch (e) {
+      debugPrint('[FirestoreService] submitRegistration error: $e');
+    }
+
+    _cachedRegistrations.insert(0, registration);
+    return registration;
+  }
+
+  /// Stream a user's registration status for an event in real-time
+  Stream<RegistrationModel?> streamUserRegistration(String eventId, String userId) {
+    if (_firestore != null) {
+      return _firestore
+          .collection('registrations')
+          .where('eventId', isEqualTo: eventId)
+          .where('userId', isEqualTo: userId)
+          .limit(1)
+          .snapshots()
+          .map((snap) {
+        if (snap.docs.isNotEmpty) {
+          return RegistrationModel.fromMap(snap.docs.first.data(), snap.docs.first.id);
+        }
+        return null;
+      });
+    }
+    final match = _cachedRegistrations.cast<RegistrationModel?>().firstWhere(
+          (r) => r?.eventId == eventId && r?.userId == userId,
+          orElse: () => null,
+        );
+    return Stream.value(match);
+  }
+
+  /// Stream all pending registrations for Organizer Web Admin Review Queue
+  Stream<List<RegistrationModel>> streamPendingRegistrations() {
+    if (_firestore != null) {
+      return _firestore
+          .collection('registrations')
+          .where('status', isEqualTo: 'pending')
+          .snapshots()
+          .map((snap) => snap.docs
+              .map((d) => RegistrationModel.fromMap(d.data(), d.id))
+              .toList());
+    }
+    return Stream.value(
+      _cachedRegistrations.where((r) => r.status == RegistrationStatus.pending).toList(),
+    );
+  }
+
+  /// Review registration: Approve or Reject with reason (Organizer on Web Admin)
+  Future<void> reviewRegistration(
+    String regId, {
+    required bool approve,
+    String? reason,
+  }) async {
+    final newStatus = approve ? RegistrationStatus.approved : RegistrationStatus.rejected;
+    final now = DateTime.now();
+
+    try {
+      if (_firestore != null) {
+        final updateMap = <String, dynamic>{
+          'status': newStatus.name,
+          'reviewedAt': FieldValue.serverTimestamp(),
+          'reason': ?reason,
+        };
+
+        // If approved, automatically issue active Ticket in tickets collection!
+        if (approve) {
+          final regDoc = await _firestore.collection('registrations').doc(regId).get();
+          if (regDoc.exists && regDoc.data() != null) {
+            final regData = regDoc.data()!;
+            final ticketId = 'CE2026-${(100000 + Random().nextInt(899999))}';
+            final token = 'QR-TOKEN-$ticketId-${now.millisecondsSinceEpoch}';
+
+            final newTicket = TicketModel(
+              id: ticketId,
+              eventId: regData['eventId'] as String? ?? '',
+              eventTitle: regData['eventTitle'] as String? ?? 'Sự kiện FPTU',
+              eventDate: '28/10/2026',
+              eventTime: '13:30 - 17:30',
+              eventLocation: 'Hội trường Trịnh Công Sơn',
+              userId: regData['userId'] as String? ?? '',
+              studentName: regData['studentName'] as String? ?? 'Sinh viên FPTU',
+              studentEmail: regData['studentEmail'] as String? ?? '',
+              qrToken: token,
+              status: TicketStatus.active,
+            );
+
+            await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
+            updateMap['ticketId'] = ticketId;
+
+            // Also send Inbox Announcement notification to student!
+            final annId = 'ANN-${now.millisecondsSinceEpoch}';
+            await _firestore.collection('announcements').doc(annId).set({
+              'id': annId,
+              'title': 'Đăng ký sự kiện đã được duyệt! 🎉',
+              'content': 'Đơn đăng ký tham dự "${regData['eventTitle']}" của bạn đã được Ban Tổ Chức phê duyệt. Vé điện tử đã sẵn sàng trong mục "Vé của tôi".',
+              'category': 'ticket_approved',
+              'authorRole': 'organizer',
+              'eventId': regData['eventId'],
+              'isPinned': true,
+              'createdAt': FieldValue.serverTimestamp(),
+            });
+          }
+        }
+
+        await _firestore.collection('registrations').doc(regId).update(updateMap);
+      }
+    } catch (e) {
+      debugPrint('[FirestoreService] reviewRegistration error: $e');
+    }
+
+    final idx = _cachedRegistrations.indexWhere((r) => r.id == regId);
+    if (idx != -1) {
+      final old = _cachedRegistrations[idx];
+      _cachedRegistrations[idx] = RegistrationModel(
+        id: old.id,
+        eventId: old.eventId,
+        eventTitle: old.eventTitle,
+        userId: old.userId,
+        studentName: old.studentName,
+        studentEmail: old.studentEmail,
+        status: newStatus,
+        reason: reason,
+        createdAt: old.createdAt,
+        reviewedAt: now,
+      );
+    }
   }
 }

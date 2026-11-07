@@ -10,7 +10,9 @@ import '../../widgets/empty_view.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/points_badge.dart';
 import '../../widgets/app_icon_button.dart';
+import '../../viewmodels/inbox_viewmodel.dart';
 import '../events/event_detail_screen.dart';
+import '../inbox/announcements_inbox_screen.dart';
 
 /// S07: Home Campus Pulse Screen
 /// Anti-Slop Architecture: High typographic contrast, hairline rules, zero fuzzy blur.
@@ -77,12 +79,46 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8.0),
               child: ActivityPointsBadge(points: user.activityPoints),
             ),
-          AppIconButton(
-            icon: Icons.notifications_none_rounded,
-            tooltip: 'Thông báo',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Mở trung tâm thông báo (FCM)')),
+          Consumer<InboxViewModel>(
+            builder: (context, inboxVM, child) {
+              final unread = inboxVM.unreadCount;
+              return Stack(
+                children: [
+                  AppIconButton(
+                    icon: Icons.notifications_none_rounded,
+                    tooltip: 'Hộp thư thông báo',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AnnouncementsInboxScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  if (unread > 0)
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                          color: AppTheme.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
+                        child: Text(
+                          '$unread',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               );
             },
           ),

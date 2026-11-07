@@ -529,6 +529,47 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // 8. Announcements Collection (Final Assignment Inbox)
+    // Read: All authenticated students and staff
+    // Write: Staff or Admin only
+    match /announcements/{annId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isStaffOrAdmin();
+    }
+
+    // 9. Registrations Collection (Final Assignment Cross-Role Flow)
+    // Read: Owner or Staff
+    // Create: User can create their own registration ONLY with status = 'pending' (R-01)
+    // Update: Staff can approve or reject (pending -> approved/rejected) (R-02)
+    //         Owner can cancel while pending
+    // Delete: Owner while pending, or Staff
+    match /registrations/{regId} {
+      allow read: if isAuthenticated() &&
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) ||
+         isStaffOrAdmin());
+
+      allow create: if isAuthenticated() &&
+        (('userId' in request.resource.data && request.resource.data.userId == request.auth.uid) ||
+         ('uid' in request.resource.data && request.resource.data.uid == request.auth.uid)) &&
+        request.resource.data.status == 'pending';
+
+      allow update: if isAuthenticated() && (
+        (isStaffOrAdmin() && request.resource.data.status in ['approved', 'rejected']) ||
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) &&
+         resource.data.status == 'pending' &&
+         request.resource.data.status == 'cancelled')
+      );
+
+      allow delete: if isAuthenticated() && (
+        ((('userId' in resource.data && resource.data.userId == request.auth.uid) ||
+          ('uid' in resource.data && resource.data.uid == request.auth.uid)) &&
+         resource.data.status == 'pending') ||
+        isStaffOrAdmin()
+      );
+    }
+
     // Default Deny Fallback for all other collections
     match /{document=**} {
       allow read, write: if false;

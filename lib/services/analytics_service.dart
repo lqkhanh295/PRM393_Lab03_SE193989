@@ -169,4 +169,16 @@ class AnalyticsService {
       debugPrint('[AnalyticsService] Error logLogout: $e');
     }
   }
+
+  Future<void> logCustomEvent({
+    required String eventName,
+    Map<String, Object>? parameters,
+  }) async {
+    try {
+      await _analytics?.logEvent(name: eventName, parameters: parameters);
+      debugPrint('[AnalyticsService] Event logged: $eventName');
+    } catch (e) {
+      debugPrint('[AnalyticsService] Error logCustomEvent: $e');
+    }
+  }
 }
