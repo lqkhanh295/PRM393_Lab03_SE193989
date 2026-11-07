@@ -182,7 +182,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                 border: Border.all(color: AppTheme.hairline, width: 1),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -478,12 +478,12 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                         color: AppTheme.surface,
                         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                         border: Border.all(
-                          color: hasTicket ? AppTheme.success.withOpacity(0.5) : AppTheme.hairline,
+                          color: hasTicket ? AppTheme.success.withValues(alpha: 0.5) : AppTheme.hairline,
                           width: hasTicket ? 1.5 : 1,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
+                            color: Colors.black.withValues(alpha: 0.03),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -732,7 +732,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withValues(alpha: 0.06),
                     blurRadius: 3,
                     offset: const Offset(0, 1),
                   )
@@ -786,7 +786,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.obsidian.withOpacity(0.35),
+            color: AppTheme.obsidian.withValues(alpha: 0.35),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -798,7 +798,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
       boxDecoration = BoxDecoration(
         color: const Color(0xFFFFF4EB),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppTheme.primary.withOpacity(0.65), width: 1.2),
+        border: Border.all(color: AppTheme.primary.withValues(alpha: 0.65), width: 1.2),
       );
     } else if (isToday && isCurrentMonth) {
       textColor = AppTheme.obsidian;
@@ -808,7 +808,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
         border: Border.all(color: AppTheme.hairline, width: 1.2),
       );
     } else {
-      textColor = isCurrentMonth ? AppTheme.onSurface : AppTheme.textSubtle.withOpacity(0.35);
+      textColor = isCurrentMonth ? AppTheme.onSurface : AppTheme.textSubtle.withValues(alpha: 0.35);
       boxDecoration = const BoxDecoration(
         color: Colors.transparent,
       );

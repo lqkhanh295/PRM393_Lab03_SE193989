@@ -66,12 +66,12 @@ class _GeminiEventInsightCardState extends State<GeminiEventInsightCard> {
         color: AppTheme.surface,
         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(
-          color: AppTheme.primary.withOpacity(0.35),
+          color: AppTheme.primary.withValues(alpha: 0.35),
           width: 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primary.withOpacity(0.04),
+            color: AppTheme.primary.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),

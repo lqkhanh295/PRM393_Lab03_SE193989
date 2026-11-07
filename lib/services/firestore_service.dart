@@ -573,7 +573,7 @@ class FirestoreService {
   /// Real-time stream of official announcements
   Stream<List<AnnouncementModel>> streamAnnouncements() {
     if (_firestore != null) {
-      return _firestore!
+      return _firestore
           .collection('announcements')
           .orderBy('createdAt', descending: true)
           .snapshots()
@@ -588,7 +588,7 @@ class FirestoreService {
   Future<List<AnnouncementModel>> getAnnouncements() async {
     try {
       if (_firestore != null) {
-        final snap = await _firestore!
+        final snap = await _firestore
             .collection('announcements')
             .orderBy('createdAt', descending: true)
             .get();
@@ -611,7 +611,7 @@ class FirestoreService {
   Future<void> sendAnnouncement(AnnouncementModel announcement) async {
     try {
       if (_firestore != null) {
-        await _firestore!
+        await _firestore
             .collection('announcements')
             .doc(announcement.id)
             .set(announcement.toMap());
@@ -645,7 +645,7 @@ class FirestoreService {
 
     try {
       if (_firestore != null) {
-        await _firestore!.collection('registrations').doc(regId).set(registration.toMap());
+        await _firestore.collection('registrations').doc(regId).set(registration.toMap());
       }
     } catch (e) {
       debugPrint('[FirestoreService] submitRegistration error: $e');
@@ -658,7 +658,7 @@ class FirestoreService {
   /// Stream a user's registration status for an event in real-time
   Stream<RegistrationModel?> streamUserRegistration(String eventId, String userId) {
     if (_firestore != null) {
-      return _firestore!
+      return _firestore
           .collection('registrations')
           .where('eventId', isEqualTo: eventId)
           .where('userId', isEqualTo: userId)
@@ -681,7 +681,7 @@ class FirestoreService {
   /// Stream all pending registrations for Organizer Web Admin Review Queue
   Stream<List<RegistrationModel>> streamPendingRegistrations() {
     if (_firestore != null) {
-      return _firestore!
+      return _firestore
           .collection('registrations')
           .where('status', isEqualTo: 'pending')
           .snapshots()
@@ -708,12 +708,12 @@ class FirestoreService {
         final updateMap = <String, dynamic>{
           'status': newStatus.name,
           'reviewedAt': FieldValue.serverTimestamp(),
-          if (reason != null) 'reason': reason,
+          'reason': ?reason,
         };
 
         // If approved, automatically issue active Ticket in tickets collection!
         if (approve) {
-          final regDoc = await _firestore!.collection('registrations').doc(regId).get();
+          final regDoc = await _firestore.collection('registrations').doc(regId).get();
           if (regDoc.exists && regDoc.data() != null) {
             final regData = regDoc.data()!;
             final ticketId = 'CE2026-${(100000 + Random().nextInt(899999))}';
@@ -733,12 +733,12 @@ class FirestoreService {
               status: TicketStatus.active,
             );
 
-            await _firestore!.collection('tickets').doc(ticketId).set(newTicket.toMap());
+            await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
             updateMap['ticketId'] = ticketId;
 
             // Also send Inbox Announcement notification to student!
             final annId = 'ANN-${now.millisecondsSinceEpoch}';
-            await _firestore!.collection('announcements').doc(annId).set({
+            await _firestore.collection('announcements').doc(annId).set({
               'id': annId,
               'title': 'Đăng ký sự kiện đã được duyệt! 🎉',
               'content': 'Đơn đăng ký tham dự "${regData['eventTitle']}" của bạn đã được Ban Tổ Chức phê duyệt. Vé điện tử đã sẵn sàng trong mục "Vé của tôi".',
@@ -751,7 +751,7 @@ class FirestoreService {
           }
         }
 
-        await _firestore!.collection('registrations').doc(regId).update(updateMap);
+        await _firestore.collection('registrations').doc(regId).update(updateMap);
       }
     } catch (e) {
       debugPrint('[FirestoreService] reviewRegistration error: $e');

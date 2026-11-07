@@ -5,7 +5,9 @@ import '../../theme/app_theme.dart';
 import '../../models/screen_state.dart';
 import '../../models/announcement_model.dart';
 import '../../viewmodels/inbox_viewmodel.dart';
-import '../../widgets/feedback_states.dart';
+import '../../widgets/loading_view.dart';
+import '../../widgets/error_view.dart';
+import '../../widgets/empty_view.dart';
 
 /// Announcements Inbox Screen
 /// Displays official broadcast messages from Web Admin & Event Organizers in real-time.
@@ -69,21 +71,21 @@ class _AnnouncementsInboxScreenState extends State<AnnouncementsInboxScreen> {
           // Content Area with ScreenState
           Expanded(
             child: switch (state) {
-              StateLoading() => const StateLoadingView(message: 'Đang tải thông báo từ máy chủ...'),
-              StateError(:final message) => StateErrorView(
-                  message: message,
+              StateLoading() => const LoadingView(message: 'Đang tải thông báo từ máy chủ...'),
+              StateError(:final error) => ErrorView(
+                  errorMessage: error,
                   onRetry: () => inboxVM.listenToAnnouncements(),
                 ),
-              StateEmpty(:final message) => StateEmptyView(message: message),
+              StateEmpty(:final message) => EmptyView(message: message),
               StateData() || StateInitial() => announcements.isEmpty
-                  ? const StateEmptyView(message: 'Không có thông báo nào trong mục này.')
+                  ? const EmptyView(message: 'Không có thông báo nào trong mục này.')
                   : RefreshIndicator(
                       onRefresh: () async => inboxVM.listenToAnnouncements(),
                       color: AppTheme.primary,
                       child: ListView.separated(
                         padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
                         itemCount: announcements.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        separatorBuilder: (context, index) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final item = announcements[index];
                           return _buildAnnouncementCard(context, item);
@@ -150,12 +152,12 @@ class _AnnouncementsInboxScreenState extends State<AnnouncementsInboxScreen> {
         color: AppTheme.surface,
         borderRadius: BorderRadius.circular(AppTheme.radiusCard),
         border: Border.all(
-          color: item.isPinned ? AppTheme.primary.withOpacity(0.4) : AppTheme.hairline,
+          color: item.isPinned ? AppTheme.primary.withValues(alpha: 0.4) : AppTheme.hairline,
           width: item.isPinned ? 1.5 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
