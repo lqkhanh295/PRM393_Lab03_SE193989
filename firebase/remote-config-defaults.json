@@ -1,7 +1,7 @@
 {
   "max_featured_events": 5,
   "enable_live_qa": true,
-  "featured_banner_title": "Chào mừng đến với FPTU Tech Expo 2026",
+  "featured_banner_title": "Chào mừng sinh viên FPTU đến với Campus Event 2026",
   "enable_offline_ticket_cache": true,
   "gate_checkin_alert_threshold": 350,
   "enable_gemini_insights": true,

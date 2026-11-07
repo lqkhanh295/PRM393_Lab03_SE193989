@@ -419,7 +419,8 @@ service cloud.firestore {
       allow create: if isAuthenticated() &&
         isValidUser(request.resource.data) &&
         (
-          (isOwner(userId) && request.resource.data.role == 'student') ||
+          (isOwner(userId) && request.resource.data.role == 'student' &&
+            (!('activityPoints' in request.resource.data) || request.resource.data.activityPoints == 0)) ||
           isAdmin()
         );
 
@@ -429,9 +430,10 @@ service cloud.firestore {
           (
             isOwner(userId) &&
             request.resource.data.role == resource.data.role &&
-            areImmutableFieldsUnchanged(['id', 'email', 'createdAt'])
+            areImmutableFieldsUnchanged(['id', 'email', 'createdAt', 'activityPoints'])
           ) ||
-          isStaffOrAdmin()
+          (isStaffOrAdmin() && areImmutableFieldsUnchanged(['role'])) ||
+          isAdmin()
         );
 
       allow delete: if isAdmin();
