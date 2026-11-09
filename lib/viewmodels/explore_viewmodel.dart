@@ -52,7 +52,20 @@ class ExploreViewModel extends ChangeNotifier {
     }
   }
 
-  /// Get clubs filtered by current query and selected category
+  /// Helper function to strip Vietnamese diacritics for accent-insensitive search
+  static String stripDiacritics(String str) {
+    const withDiacritics = 'àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ'
+        'ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ';
+    const withoutDiacritics = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd'
+        'AAAAAAAAAAAAAAAAAEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYYD';
+    var result = str;
+    for (int i = 0; i < withDiacritics.length; i++) {
+      result = result.replaceAll(withDiacritics[i], withoutDiacritics[i]);
+    }
+    return result;
+  }
+
+  /// Get clubs filtered by current query and selected category with Vietnamese accent support
   List<ClubModel> get filteredClubs {
     var result = _clubs;
 
@@ -68,15 +81,27 @@ class ExploreViewModel extends ChangeNotifier {
       }).toList();
     }
 
-    // Filter by Query
+    // Filter by Query (Accent-Insensitive & Case-Insensitive)
     if (_currentQuery.trim().isNotEmpty) {
       final q = _currentQuery.toLowerCase().trim();
+      final qClean = stripDiacritics(q);
+
       result = result.where((c) {
-        return c.name.toLowerCase().contains(q) ||
-            (c.acronym?.toLowerCase().contains(q) ?? false) ||
-            c.category.toLowerCase().contains(q) ||
-            c.description.toLowerCase().contains(q) ||
-            (c.email?.toLowerCase().contains(q) ?? false);
+        final name = c.name.toLowerCase();
+        final nameClean = stripDiacritics(name);
+        final acronym = c.acronym?.toLowerCase() ?? '';
+        final cat = c.category.toLowerCase();
+        final desc = c.description.toLowerCase();
+        final descClean = stripDiacritics(desc);
+        final email = c.email?.toLowerCase() ?? '';
+
+        return name.contains(q) ||
+            nameClean.contains(qClean) ||
+            acronym.contains(q) ||
+            cat.contains(q) ||
+            desc.contains(q) ||
+            descClean.contains(qClean) ||
+            email.contains(q);
       }).toList();
     }
 
@@ -113,11 +138,21 @@ class ExploreViewModel extends ChangeNotifier {
       var filtered = rawEvents;
       if (query.trim().isNotEmpty) {
         final q = query.toLowerCase().trim();
+        final qClean = stripDiacritics(q);
         filtered = filtered.where((e) {
-          return e.title.toLowerCase().contains(q) ||
-              e.description.toLowerCase().contains(q) ||
-              e.clubName.toLowerCase().contains(q) ||
-              e.location.toLowerCase().contains(q);
+          final title = e.title.toLowerCase();
+          final desc = e.description.toLowerCase();
+          final club = e.clubName.toLowerCase();
+          final loc = e.location.toLowerCase();
+
+          return title.contains(q) ||
+              stripDiacritics(title).contains(qClean) ||
+              desc.contains(q) ||
+              stripDiacritics(desc).contains(qClean) ||
+              club.contains(q) ||
+              stripDiacritics(club).contains(qClean) ||
+              loc.contains(q) ||
+              stripDiacritics(loc).contains(qClean);
         }).toList();
       }
 

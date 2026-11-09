@@ -7,6 +7,11 @@ import 'package:campus_event/widgets/ticket_card.dart';
 import 'package:campus_event/widgets/event_card.dart';
 import 'package:campus_event/models/ticket_model.dart';
 import 'package:campus_event/models/event_model.dart';
+import 'package:campus_event/models/club_model.dart';
+import 'package:campus_event/widgets/club_card.dart';
+import 'package:campus_event/viewmodels/explore_viewmodel.dart';
+import 'package:campus_event/services/firestore_service.dart';
+import 'package:campus_event/services/analytics_service.dart';
 import 'package:campus_event/services/auth_service.dart';
 
 void main() {
@@ -199,5 +204,92 @@ void main() {
       ),
       throwsException,
     );
+  });
+
+  testWidgets('ClubCard does not overflow with long club name in narrow container', (WidgetTester tester) async {
+    const club = ClubModel(
+      id: 'fcode',
+      name: 'Câu lạc bộ Học thuật Lập trình và Thuật toán F-Code Đại học FPT TP.HCM',
+      acronym: 'F-Code',
+      category: 'Technology',
+      description: 'Cộng đồng sinh viên đam mê lập trình, thuật toán và thi đấu ICPC toàn quốc.',
+      followerCount: 2450,
+      logoUrl: 'https://daihoc.fpt.edu.vn/logo.png',
+      officialUrl: 'https://daihoc.fpt.edu.vn/hcm/f-code/',
+      fanpageUrl: 'https://www.facebook.com/fcodefpt/',
+      email: 'fcode.fptuhcm@gmail.com',
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 260,
+              child: ClubCard(club: club),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Technology'), findsOneWidget);
+    expect(find.text('F-Code'), findsWidgets);
+  });
+
+  test('ClubModel roundtrip preserves all attributes and URLs', () {
+    const club = ClubModel(
+      id: 'ai4sd',
+      name: 'Exploring AI Applications in Software Development Club',
+      acronym: 'AI4SD',
+      category: 'Technology',
+      description: 'Nghiên cứu ứng dụng LLM trong phát triển phần mềm.',
+      followerCount: 980,
+      logoUrl: 'https://daihoc.fpt.edu.vn/logo.png',
+      officialUrl: 'https://daihoc.fpt.edu.vn/hcm/ai4sd/',
+      fanpageUrl: 'https://www.facebook.com/ai4sd/',
+      email: 'ai4sd.fptu@gmail.com',
+    );
+
+    final map = club.toMap();
+    final restored = ClubModel.fromMap(map, club.id);
+
+    expect(restored.id, equals('ai4sd'));
+    expect(restored.name, equals(club.name));
+    expect(restored.acronym, equals('AI4SD'));
+    expect(restored.officialUrl, equals('https://daihoc.fpt.edu.vn/hcm/ai4sd/'));
+    expect(restored.email, equals('ai4sd.fptu@gmail.com'));
+    expect(restored.followerCount, equals(980));
+  });
+
+  test('ExploreViewModel filteredClubs supports Vietnamese accent-free search', () async {
+    final firestoreService = FirestoreService();
+    final analyticsService = AnalyticsService();
+    final vm = ExploreViewModel(
+      firestoreService: firestoreService,
+      analyticsService: analyticsService,
+    );
+
+    await vm.loadExploreData();
+    expect(vm.clubs.length, equals(45));
+
+    // Search with accent
+    await vm.searchEvents(query: 'Bóng đá');
+    final accentResults = vm.filteredClubs;
+    expect(accentResults.any((c) => c.id == 'ffc'), isTrue);
+
+    // Search WITHOUT accent: "bong da"
+    await vm.searchEvents(query: 'bong da');
+    final noAccentResults = vm.filteredClubs;
+    expect(noAccentResults.any((c) => c.id == 'ffc'), isTrue);
+
+    // Search "vovinam"
+    await vm.searchEvents(query: 'vovinam');
+    expect(vm.filteredClubs.any((c) => c.id == 'fvc'), isTrue);
+
+    // Search "coc sai gon"
+    await vm.searchEvents(query: 'coc sai gon');
+    expect(vm.filteredClubs.any((c) => c.id == 'media_club'), isTrue);
   });
 }

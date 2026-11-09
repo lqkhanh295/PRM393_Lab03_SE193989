@@ -117,3 +117,4 @@ async function seedClubs() {
 }
 
 seedClubs().catch(err => console.error('[Seed Error]', err));
+

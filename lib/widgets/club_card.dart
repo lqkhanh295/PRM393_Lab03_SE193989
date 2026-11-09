@@ -49,21 +49,22 @@ class ClubCard extends StatelessWidget {
           borderRadius: BorderRadius.vertical(top: Radius.circular(AppTheme.radiusCard)),
         ),
         child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header indicator
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.outline,
-                    borderRadius: BorderRadius.circular(2),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header indicator
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppTheme.outline,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(height: 16),
 
               // Title and Acronym
@@ -221,8 +222,9 @@ class ClubCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -317,39 +319,42 @@ class ClubCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: catColor.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              club.category,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: catColor,
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                              decoration: BoxDecoration(
+                                color: catColor.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                club.category,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: catColor,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Icon(Icons.people_outline, size: 13, color: AppTheme.textMuted),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${club.followerCount}',
-                            style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
-                          ),
-                          if (club.email != null) ...[
                             const SizedBox(width: 8),
-                            const Icon(Icons.email_outlined, size: 13, color: AppTheme.textSubtle),
+                            Icon(Icons.people_outline, size: 13, color: AppTheme.textMuted),
+                            const SizedBox(width: 3),
+                            Text(
+                              '${club.followerCount}',
+                              style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                            ),
+                            if (club.email != null) ...[
+                              const SizedBox(width: 8),
+                              const Icon(Icons.email_outlined, size: 13, color: AppTheme.textSubtle),
+                            ],
+                            if (club.fanpageUrl != null) ...[
+                              const SizedBox(width: 4),
+                              const Icon(Icons.facebook, size: 13, color: Color(0xFF1877F2)),
+                            ],
                           ],
-                          if (club.fanpageUrl != null) ...[
-                            const SizedBox(width: 4),
-                            const Icon(Icons.facebook, size: 13, color: Color(0xFF1877F2)),
-                          ],
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -376,3 +381,4 @@ class ClubCard extends StatelessWidget {
     );
   }
 }
+
