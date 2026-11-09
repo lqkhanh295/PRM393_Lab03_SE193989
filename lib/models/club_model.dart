@@ -5,6 +5,10 @@ class ClubModel {
   final String description;
   final int followerCount;
   final String logoUrl;
+  final String? acronym;
+  final String? officialUrl;
+  final String? fanpageUrl;
+  final String? email;
 
   const ClubModel({
     required this.id,
@@ -13,6 +17,10 @@ class ClubModel {
     required this.description,
     required this.followerCount,
     required this.logoUrl,
+    this.acronym,
+    this.officialUrl,
+    this.fanpageUrl,
+    this.email,
   });
 
   factory ClubModel.fromMap(Map<String, dynamic> map, String id) {
@@ -23,6 +31,10 @@ class ClubModel {
       description: map['description'] as String? ?? '',
       followerCount: (map['followerCount'] as num?)?.toInt() ?? 100,
       logoUrl: map['logoUrl'] as String? ?? 'https://i.pravatar.cc/100?u=$id',
+      acronym: map['acronym'] as String?,
+      officialUrl: map['officialUrl'] as String?,
+      fanpageUrl: map['fanpageUrl'] as String?,
+      email: map['email'] as String?,
     );
   }
 
@@ -33,6 +45,10 @@ class ClubModel {
       'description': description,
       'followerCount': followerCount,
       'logoUrl': logoUrl,
+      if (acronym != null) 'acronym': acronym,
+      if (officialUrl != null) 'officialUrl': officialUrl,
+      if (fanpageUrl != null) 'fanpageUrl': fanpageUrl,
+      if (email != null) 'email': email,
     };
   }
 }

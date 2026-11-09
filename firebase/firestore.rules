@@ -393,13 +393,18 @@ service cloud.firestore {
     // Domain validator for clubs/{clubId}
     function isValidClub(data) {
       let allowed = [
-        'id', 'name', 'category', 'description', 'followerCount', 'logoUrl', 'createdAt'
+        'id', 'name', 'category', 'description', 'followerCount', 'logoUrl', 'createdAt',
+        'acronym', 'officialUrl', 'fanpageUrl', 'email'
       ];
       return hasOnlyAllowedFields(allowed) &&
         hasRequiredFields(['name', 'category']) &&
         data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
         data.category is string && data.category.size() <= 100 &&
         (!('id' in data) || (data.id is string && data.id.size() <= 100)) &&
+        (!('acronym' in data) || (data.acronym is string && data.acronym.size() <= 50)) &&
+        (!('officialUrl' in data) || (data.officialUrl is string && data.officialUrl.size() <= 1000)) &&
+        (!('fanpageUrl' in data) || (data.fanpageUrl is string && data.fanpageUrl.size() <= 1000)) &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 100)) &&
         (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
         (!('followerCount' in data) || (data.followerCount is int && data.followerCount >= 0 && data.followerCount <= 1000000)) &&
         (!('logoUrl' in data) || (data.logoUrl is string && data.logoUrl.size() <= 1000)) &&

@@ -41,7 +41,13 @@ class FirestoreService {
   final List<AnnouncementModel> _cachedAnnouncements = [];
   final List<RegistrationModel> _cachedRegistrations = [];
 
-  FirestoreService([this._firestore]);
+  FirestoreService([this._firestore]) {
+    _cachedClubs.addAll(
+      FirestoreSeeder.officialClubs.map(
+        (c) => ClubModel.fromMap(c, c['id'] as String),
+      ),
+    );
+  }
 
   /// Auto-initialize and ensure Cloud Firestore has all official FPTU documents
   Future<void> ensureDatabaseInitialized() async {

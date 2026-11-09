@@ -5,6 +5,8 @@ import '../models/club_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 
+enum ExploreTab { events, clubs }
+
 /// MVVM ExploreViewModel
 /// Manages category filtering, keyword searching, and club directory browsing.
 class ExploreViewModel extends ChangeNotifier {
@@ -17,19 +19,69 @@ class ExploreViewModel extends ChangeNotifier {
   List<ClubModel> _clubs = [];
   List<ClubModel> get clubs => _clubs;
 
+  ExploreTab _currentTab = ExploreTab.events;
+  ExploreTab get currentTab => _currentTab;
+
   String _selectedCategory = 'Tất cả';
   String get selectedCategory => _selectedCategory;
 
   String _currentQuery = '';
   String get currentQuery => _currentQuery;
 
-  final List<String> categories = ['Tất cả', 'Technology', 'Design', 'Sports', 'Media'];
+  final List<String> categories = [
+    'Tất cả',
+    'Technology',
+    'Business',
+    'Languages',
+    'Sports',
+    'Media',
+    'Arts',
+    'Community',
+  ];
 
   ExploreViewModel({
     required FirestoreService firestoreService,
     required AnalyticsService analyticsService,
   })  : _firestoreService = firestoreService,
         _analyticsService = analyticsService;
+
+  void setTab(ExploreTab tab) {
+    if (_currentTab != tab) {
+      _currentTab = tab;
+      notifyListeners();
+    }
+  }
+
+  /// Get clubs filtered by current query and selected category
+  List<ClubModel> get filteredClubs {
+    var result = _clubs;
+
+    // Filter by Category
+    if (_selectedCategory != 'Tất cả') {
+      final cat = _selectedCategory.toLowerCase();
+      result = result.where((c) {
+        final cCat = c.category.toLowerCase();
+        if (cat == 'languages' && (cCat == 'languages' || cCat == 'skills')) return true;
+        if (cat == 'technology' && (cCat == 'technology' || cCat == 'academic' || cCat == 'design')) return true;
+        if (cat == 'arts' && (cCat == 'arts' || cCat == 'culture' || cCat == 'lifestyle')) return true;
+        return cCat == cat;
+      }).toList();
+    }
+
+    // Filter by Query
+    if (_currentQuery.trim().isNotEmpty) {
+      final q = _currentQuery.toLowerCase().trim();
+      result = result.where((c) {
+        return c.name.toLowerCase().contains(q) ||
+            (c.acronym?.toLowerCase().contains(q) ?? false) ||
+            c.category.toLowerCase().contains(q) ||
+            c.description.toLowerCase().contains(q) ||
+            (c.email?.toLowerCase().contains(q) ?? false);
+      }).toList();
+    }
+
+    return result;
+  }
 
   Future<void> loadExploreData() async {
     _state = const StateLoading('Đang tải danh mục sự kiện...');
