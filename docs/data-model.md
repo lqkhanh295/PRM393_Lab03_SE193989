@@ -17,7 +17,7 @@
 | `announcements/{id}` | `title` (string $\le$ 200), `content` (string), `category` (string: `general`, `reminder`, `urgent`, `ticket_approved`), `authorRole` (string), `eventId` (string, optional), `isPinned` (bool), `createdAt` (timestamp) | Staff, Organizer, Admin | All authenticated users | Staff, Admin | Staff, Admin | Mobile AnnouncementsInboxScreen, HomeScreen Notification Badge; Web Announcements Broadcast Screen |
 | `feedbacks/{id}` | `eventId` (string), `userId` (string), `rating` (int: 1..5), `comments` (string), `submittedAt` (timestamp) | Authenticated attendee | Staff, Admin | Staff, Admin | Staff, Admin | Mobile EventFeedbackScreen; Web Safety Compliance |
 | `certificates/{id}` | `eventId` (string), `userId` (string), `studentName` (string), `eventTitle` (string), `issueDate` (string), `verificationHash` (string: SHA-256), `downloadUrl` (string), `createdAt` (timestamp) | Staff / Cloud Function | Owner; Staff; Admin | Staff, Admin | Staff, Admin | Mobile ProfileScreen, Certificate View; Web Student Directory Export |
-| `clubs/{id}` | `name` (string), `category` (string), `description` (string), `followerCount` (int), `logoUrl` (string) | Staff, Admin | Public | Staff, Admin | Admin | Mobile ExploreScreen, EventDetailScreen; Web Budget Proposals |
+| `clubs/{id}` | `name` (string), `category` (string), `description` (string), `followerCount` (int), `logoUrl` (string), `acronym` (string, opt), `officialUrl` (string, opt), `fanpageUrl` (string, opt), `email` (string, opt) | Staff, Admin | Public | Staff, Admin | Admin | Mobile ExploreScreen, EventDetailScreen, ProfileScreen; Web Budget Proposals |
 
 ---
 

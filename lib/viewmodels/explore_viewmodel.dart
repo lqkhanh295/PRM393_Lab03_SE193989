@@ -48,7 +48,21 @@ class ExploreViewModel extends ChangeNotifier {
   void setTab(ExploreTab tab) {
     if (_currentTab != tab) {
       _currentTab = tab;
+      if (tab == ExploreTab.events && _state is StateInitial) {
+        searchEvents(query: _currentQuery, category: _selectedCategory);
+      } else {
+        notifyListeners();
+      }
+    }
+  }
+
+  /// Sets search query and handles instant filtering for clubs or async search for events
+  void setQuery(String query) {
+    _currentQuery = query;
+    if (_currentTab == ExploreTab.clubs) {
       notifyListeners();
+    } else {
+      searchEvents(query: query, category: _selectedCategory);
     }
   }
 

@@ -64,12 +64,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       icon: const Icon(Icons.clear, size: 18),
                       onPressed: () {
                         _searchController.clear();
-                        exploreVM.searchEvents(query: '');
+                        exploreVM.setQuery('');
                       },
                     )
                   : null,
               onChanged: (val) {
-                exploreVM.searchEvents(query: val);
+                exploreVM.setQuery(val);
               },
             ),
           ),

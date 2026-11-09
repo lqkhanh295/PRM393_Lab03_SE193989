@@ -24,12 +24,18 @@ class ClubModel {
   });
 
   factory ClubModel.fromMap(Map<String, dynamic> map, String id) {
+    int parseFollowerCount(dynamic val) {
+      if (val is num) return val.toInt();
+      if (val is String) return int.tryParse(val) ?? 100;
+      return 100;
+    }
+
     return ClubModel(
       id: id,
       name: map['name'] as String? ?? 'CLB FPTU',
       category: map['category'] as String? ?? 'Technology',
       description: map['description'] as String? ?? '',
-      followerCount: (map['followerCount'] as num?)?.toInt() ?? 100,
+      followerCount: parseFollowerCount(map['followerCount']),
       logoUrl: map['logoUrl'] as String? ?? 'https://i.pravatar.cc/100?u=$id',
       acronym: map['acronym'] as String?,
       officialUrl: map['officialUrl'] as String?,
@@ -40,6 +46,7 @@ class ClubModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'category': category,
       'description': description,

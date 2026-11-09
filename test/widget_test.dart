@@ -261,6 +261,15 @@ void main() {
     expect(restored.officialUrl, equals('https://daihoc.fpt.edu.vn/hcm/ai4sd/'));
     expect(restored.email, equals('ai4sd.fptu@gmail.com'));
     expect(restored.followerCount, equals(980));
+
+    // String followerCount fallback
+    final mapWithStringCount = {
+      'name': 'GDGoC FPTU',
+      'category': 'Technology',
+      'followerCount': '3100',
+    };
+    final clubParsed = ClubModel.fromMap(mapWithStringCount, 'gdoc');
+    expect(clubParsed.followerCount, equals(3100));
   });
 
   test('ExploreViewModel filteredClubs supports Vietnamese accent-free search', () async {
