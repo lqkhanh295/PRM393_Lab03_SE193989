@@ -682,15 +682,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: CircleAvatar(
-                            backgroundColor: AppTheme.surfaceSubtle,
-                            child: Text(
-                              (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                color: AppTheme.obsidian,
-                              ),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: (club.logoUrl.trim().isNotEmpty && club.logoUrl.trim().startsWith('http'))
+                                  ? Image.network(
+                                      club.logoUrl.trim(),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => Container(
+                                        color: AppTheme.surfaceSubtle,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: AppTheme.obsidian,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      color: AppTheme.surfaceSubtle,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: AppTheme.obsidian,
+                                        ),
+                                      ),
+                                    ),
                             ),
                           ),
                           title: Text(

@@ -270,6 +270,60 @@ void main() {
     };
     final clubParsed = ClubModel.fromMap(mapWithStringCount, 'gdoc');
     expect(clubParsed.followerCount, equals(3100));
+
+    // Empty logoUrl remains empty for monogram fallback
+    final mapWithEmptyLogo = {
+      'name': 'CLB Cóc Sài Gòn',
+      'category': 'Media',
+      'logoUrl': '',
+    };
+    final clubWithEmptyLogo = ClubModel.fromMap(mapWithEmptyLogo, 'csg');
+    expect(clubWithEmptyLogo.logoUrl, equals(''));
+  });
+
+  testWidgets('ClubCard with empty logoUrl renders Monogram acronym', (WidgetTester tester) async {
+    const club = ClubModel(
+      id: 'csg',
+      name: 'Câu lạc bộ Truyền thông Cóc Sài Gòn',
+      acronym: 'CSG',
+      category: 'Media',
+      description: 'Kênh thông tin truyền thông sinh viên.',
+      followerCount: 5200,
+      logoUrl: '',
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ClubCard(club: club),
+        ),
+      ),
+    );
+
+    expect(find.text('CSG'), findsWidgets);
+    expect(find.byType(Image), findsNothing);
+  });
+
+  testWidgets('ClubCard with valid logoUrl renders Image widget', (WidgetTester tester) async {
+    const club = ClubModel(
+      id: 'fcode',
+      name: 'CLB F-Code',
+      acronym: 'F-Code',
+      category: 'Technology',
+      description: 'CLB Lập trình',
+      followerCount: 2450,
+      logoUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=120',
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: ClubCard(club: club),
+        ),
+      ),
+    );
+
+    expect(find.byType(Image), findsOneWidget);
   });
 
   test('ExploreViewModel filteredClubs supports Vietnamese accent-free search', () async {

@@ -36,7 +36,7 @@ class ClubModel {
       category: map['category'] as String? ?? 'Technology',
       description: map['description'] as String? ?? '',
       followerCount: parseFollowerCount(map['followerCount']),
-      logoUrl: map['logoUrl'] as String? ?? 'https://i.pravatar.cc/100?u=$id',
+      logoUrl: (map['logoUrl'] as String?)?.trim() ?? '',
       acronym: map['acronym'] as String?,
       officialUrl: map['officialUrl'] as String?,
       fanpageUrl: map['fanpageUrl'] as String?,

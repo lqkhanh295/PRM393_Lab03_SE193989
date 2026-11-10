@@ -37,6 +37,73 @@ class ClubCard extends StatelessWidget {
     }
   }
 
+  Widget _buildClubAvatar({
+    required double size,
+    required Color catColor,
+  }) {
+    final monogram = Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: catColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: catColor.withValues(alpha: 0.25), width: 1),
+      ),
+      child: Center(
+        child: Text(
+          (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            fontSize: size * 0.28,
+            color: catColor,
+          ),
+        ),
+      ),
+    );
+
+    final cleanUrl = club.logoUrl.trim();
+    if (cleanUrl.isEmpty || !cleanUrl.startsWith('http')) {
+      return monogram;
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: catColor.withValues(alpha: 0.2), width: 0.8),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(7.2),
+        child: Image.network(
+          cleanUrl,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => monogram,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              width: size,
+              height: size,
+              color: catColor.withValues(alpha: 0.05),
+              child: Center(
+                child: SizedBox(
+                  width: size * 0.4,
+                  height: size * 0.4,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: catColor,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   void _showClubDetails(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -71,28 +138,7 @@ class ClubCard extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: _getCategoryColor(club.category).withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _getCategoryColor(club.category).withValues(alpha: 0.3),
-                        width: 1,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13,
-                          color: _getCategoryColor(club.category),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildClubAvatar(size: 48, catColor: _getCategoryColor(club.category)),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -255,26 +301,8 @@ class ClubCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Monogram Avatar
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: catColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: catColor.withValues(alpha: 0.25), width: 1),
-                  ),
-                  child: Center(
-                    child: Text(
-                      (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                        color: catColor,
-                      ),
-                    ),
-                  ),
-                ),
+                // Club Avatar (Real Logo or Monogram Fallback)
+                _buildClubAvatar(size: 42, catColor: catColor),
                 const SizedBox(width: 12),
 
                 // Name & Acronym
