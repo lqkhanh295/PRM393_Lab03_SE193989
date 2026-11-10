@@ -80,6 +80,20 @@ class FCMService {
     debugPrint('[FCMService] Foreground message received: ${notif.title}');
   }
 
+  /// Receive simulated push notification event for presentation & runtime testing
+  void simulateConsolePush({required String title, required String body, String? route}) {
+    final notif = AppNotificationItem(
+      id: 'fcm-${DateTime.now().millisecondsSinceEpoch}',
+      title: title,
+      body: body,
+      route: route,
+      timestamp: DateTime.now(),
+    );
+    _notifications.insert(0, notif);
+    _notificationsStreamController.add(List.unmodifiable(_notifications));
+    debugPrint('[FCMService] Simulated console push received: $title');
+  }
+
   void dispose() {
     _notificationsStreamController.close();
   }

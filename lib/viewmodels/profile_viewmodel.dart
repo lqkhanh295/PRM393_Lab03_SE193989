@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../models/screen_state.dart';
 import '../models/certificate_model.dart';
+import '../models/club_model.dart';
 import '../services/firestore_service.dart';
 import '../services/storage_service.dart';
 import '../services/remote_config_service.dart';
@@ -25,6 +26,9 @@ class ProfileViewModel extends ChangeNotifier {
   ScreenState<List<CertificateModel>> _certificatesState = const StateInitial();
   ScreenState<List<CertificateModel>> get certificatesState =>
       _certificatesState;
+
+  List<ClubModel> _followedClubs = [];
+  List<ClubModel> get followedClubs => _followedClubs;
 
   // Firebase Demo Area State
   double _uploadProgress = 0.0;
@@ -66,6 +70,17 @@ class ProfileViewModel extends ChangeNotifier {
     } catch (e) {
       _certificatesState = StateError('Lỗi tải chứng nhận: $e');
       notifyListeners();
+    }
+  }
+
+  /// Load clubs followed by the active student directly from Cloud Firestore
+  Future<void> loadFollowedClubs(List<String> followedIds) async {
+    try {
+      final allClubs = await _firestoreService.getClubs();
+      _followedClubs = allClubs.where((c) => followedIds.contains(c.id)).toList();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('[ProfileViewModel] loadFollowedClubs error: $e');
     }
   }
 

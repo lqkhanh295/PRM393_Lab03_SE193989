@@ -29,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final user = context.read<AuthViewModel>().currentUser;
       if (user != null) {
         context.read<ProfileViewModel>().loadProfileCertificates(user.id);
+        context.read<ProfileViewModel>().loadFollowedClubs(user.followedClubs);
       }
     });
   }
@@ -657,9 +658,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const Spacer(),
-                      const Text(
-                        '2 CLB',
-                        style: TextStyle(
+                      Text(
+                        '${profileVM.followedClubs.length} CLB',
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textMuted,
@@ -668,71 +669,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundColor: AppTheme.surfaceSubtle,
+                  if (profileVM.followedClubs.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        'FC',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: AppTheme.obsidian,
+                        'Bạn chưa theo dõi câu lạc bộ nào.',
+                        style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                      ),
+                    )
+                  else
+                    ...profileVM.followedClubs.map((club) => Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: (club.logoUrl.trim().isNotEmpty && club.logoUrl.trim().startsWith('http'))
+                                  ? Image.network(
+                                      club.logoUrl.trim(),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => Container(
+                                        color: AppTheme.surfaceSubtle,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            color: AppTheme.obsidian,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      color: AppTheme.surfaceSubtle,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: AppTheme.obsidian,
+                                        ),
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          title: Text(
+                            club.name,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${club.followerCount} người theo dõi · ${club.category}',
+                            style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                          ),
+                          trailing: const Icon(
+                            Icons.check_circle_rounded,
+                            size: 18,
+                            color: AppTheme.primary,
+                          ),
                         ),
-                      ),
-                    ),
-                    title: Text(
-                      'CLB Học thuật F-Code',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '2.450 thành viên · Công nghệ & Thuật toán',
-                      style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
-                    ),
-                    trailing: Icon(
-                      Icons.check_circle_rounded,
-                      size: 18,
-                      color: AppTheme.primary,
-                    ),
-                  ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: AppTheme.hairline,
-                  ),
-                  const ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      backgroundColor: AppTheme.surfaceSubtle,
-                      child: Text(
-                        'CSG',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: AppTheme.obsidian,
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      'CLB Truyền thông Cóc Sài Gòn',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    subtitle: Text(
-                      '3.890 thành viên · Truyền thông & Văn hóa',
-                      style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
-                    ),
-                    trailing: Icon(
-                      Icons.check_circle_rounded,
-                      size: 18,
-                      color: AppTheme.primary,
-                    ),
-                  ),
+                        if (club != profileVM.followedClubs.last)
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: AppTheme.hairline,
+                          ),
+                      ],
+                    )),
                 ],
               ),
             ),
