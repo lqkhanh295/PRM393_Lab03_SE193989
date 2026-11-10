@@ -216,8 +216,20 @@ class FirestoreSeeder {
 
       // 2. Nhóm Văn hóa, Nghệ thuật, Truyền thông & Sự kiện (10 CLB)
       {
-        'id': 'media_club',
+        'id': 'csg',
         'name': 'Câu lạc bộ Truyền thông Cóc Sài Gòn',
+        'acronym': 'CSG',
+        'category': 'Media',
+        'description': 'Kênh thông tin truyền thông sinh viên hàng đầu tại Đại học FPT TP.HCM.',
+        'followerCount': 5200,
+        'logoUrl': 'https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-coc-sai-gon.png',
+        'officialUrl': 'https://daihoc.fpt.edu.vn/hcm/cau-lac-bo-truyen-thong-coc-sai-gon-2/',
+        'fanpageUrl': 'https://www.facebook.com/cocsaigonfuhcm/',
+        'email': 'csg.fptuhcm@gmail.com',
+      },
+      {
+        'id': 'media_club',
+        'name': 'Câu lạc bộ Truyền thông Cóc Sài Gòn (Legacy ID)',
         'acronym': 'CSG',
         'category': 'Media',
         'description': 'Kênh thông tin truyền thông sinh viên hàng đầu tại Đại học FPT TP.HCM.',

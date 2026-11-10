@@ -59,6 +59,23 @@ class FirestoreService {
       if (snap.docs.isEmpty) {
         debugPrint('[FirestoreService] Cloud Firestore empty. Auto-seeding official collections...');
         await FirestoreSeeder.seedAll(_firestore);
+      } else {
+        // Sync clubs if Cloud Firestore has fewer than official list
+        try {
+          final clubsSnap = await _firestore.collection('clubs').get();
+          if (clubsSnap.docs.length < FirestoreSeeder.officialClubs.length) {
+            debugPrint('[FirestoreService] Syncing missing official clubs to Cloud Firestore...');
+            final batch = _firestore.batch();
+            for (final club in FirestoreSeeder.officialClubs) {
+              final docRef = _firestore.collection('clubs').doc(club['id'] as String);
+              batch.set(docRef, club, SetOptions(merge: true));
+            }
+            await batch.commit();
+            debugPrint('[FirestoreService] Successfully synced official clubs to Cloud Firestore!');
+          }
+        } catch (e) {
+          debugPrint('[FirestoreService] Auto-sync clubs note: $e');
+        }
       }
       // Populate local cache from real Cloud Firestore
       await _syncFromCloud();
@@ -546,7 +563,16 @@ class FirestoreService {
       if (_firestore != null) {
         final snap = await _firestore.collection('clubs').get();
         if (snap.docs.isNotEmpty) {
-          return snap.docs.map((d) => ClubModel.fromMap(d.data(), d.id)).toList();
+          final cloudList = snap.docs.map((d) => ClubModel.fromMap(d.data(), d.id)).toList();
+          if (cloudList.length >= _cachedClubs.length) {
+            return cloudList;
+          }
+          // Merge cloud clubs with cached official clubs so all 45 clubs remain accessible
+          final Map<String, ClubModel> map = {for (var c in _cachedClubs) c.id: c};
+          for (var c in cloudList) {
+            map[c.id] = c;
+          }
+          return map.values.toList();
         }
       }
     } catch (e) {

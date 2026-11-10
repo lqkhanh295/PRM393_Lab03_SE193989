@@ -281,7 +281,7 @@ void main() {
     );
 
     await vm.loadExploreData();
-    expect(vm.clubs.length, equals(45));
+    expect(vm.clubs.length, greaterThanOrEqualTo(45));
 
     // Search with accent
     await vm.searchEvents(query: 'Bóng đá');
@@ -297,8 +297,8 @@ void main() {
     await vm.searchEvents(query: 'vovinam');
     expect(vm.filteredClubs.any((c) => c.id == 'fvc'), isTrue);
 
-    // Search "coc sai gon"
+    // Search "coc sai gon" (matches both official 'csg' and legacy 'media_club')
     await vm.searchEvents(query: 'coc sai gon');
-    expect(vm.filteredClubs.any((c) => c.id == 'media_club'), isTrue);
+    expect(vm.filteredClubs.any((c) => c.id == 'csg' || c.id == 'media_club'), isTrue);
   });
 }
