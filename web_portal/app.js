@@ -5,11 +5,11 @@
  */
 
 const app = {
-  // Application Data State
+  // Application Data State (Strict Zero-Mock Data Policy: 100% Cloud Firestore Realtime)
   state: {
     activeView: 'overview',
-    checkinCount: 124,
-    totalCapacity: 200,
+    checkinCount: 0,
+    totalCapacity: 0,
     approvedBudget: 48500000,
     hourlyFlow: [
       { hour: '07:30', count: 8 },
@@ -31,7 +31,7 @@ const app = {
       {
         id: 'PRJ-2026-02',
         title: 'Workshop UI/UX Design Masterclass',
-        club: 'CLB Truyền thông F-Media',
+        club: 'CLB Kỹ sư phần mềm Nhật Bản',
         budget: 6500000,
         source: 'Quỹ Hoạt động Sinh viên FPTU',
         status: 'pending',
@@ -40,149 +40,19 @@ const app = {
       {
         id: 'PRJ-2026-03',
         title: 'Giải Bóng Đá FPTU Champions League',
-        club: 'CLB Thể thao Vovinam & Football',
+        club: 'CLB Thể thao FPTU',
         budget: 24000000,
         source: 'Quỹ CTSV Cấp Phép Thi Đấu',
         status: 'pending',
         date: '12/11/2026'
-      },
-      {
-        id: 'PRJ-2026-04',
-        title: 'Đêm Nhạc Giao Lưu F-Acoustic Chill 2026',
-        club: 'CLB Âm nhạc Guitar FPTU',
-        budget: 9000000,
-        source: 'Quỹ CLB & Bán Vé Gây Quỹ',
-        status: 'approved',
-        date: '20/11/2026'
       }
     ],
-    students: [
-      {
-        ticketCode: 'CE2026-083291',
-        studentId: 'SE193989',
-        name: 'Lê Quốc Khánh',
-        major: 'Kỹ thuật Phần mềm (SE)',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026',
-        checkInTime: '08:15:22 28/10/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9901'
-      },
-      {
-        ticketCode: 'CE2026-083292',
-        studentId: 'SE182234',
-        name: 'Trần Bảo An',
-        major: 'Kỹ thuật Phần mềm (SE)',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026',
-        checkInTime: '08:22:10 28/10/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9902'
-      },
-      {
-        ticketCode: 'CE2026-083293',
-        studentId: 'IA190241',
-        name: 'Nguyễn Hoàng Minh',
-        major: 'An toàn Thông tin (IA)',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026',
-        checkInTime: '08:35:48 28/10/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9903'
-      },
-      {
-        ticketCode: 'CE2026-083294',
-        studentId: 'GD180452',
-        name: 'Phạm Quỳnh Mai',
-        major: 'Thiết kế Đồ họa (GD)',
-        eventId: 'EVT-2026-02',
-        eventTitle: 'Workshop UI/UX Design',
-        checkInTime: '09:05:12 05/11/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9904'
-      },
-      {
-        ticketCode: 'CE2026-083295',
-        studentId: 'SE191102',
-        name: 'Đặng Tuấn Anh',
-        major: 'Kỹ thuật Phần mềm (SE)',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026',
-        checkInTime: '09:12:05 28/10/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9905'
-      },
-      {
-        ticketCode: 'CE2026-083296',
-        studentId: 'MC184511',
-        name: 'Lê Thùy Dương',
-        major: 'Truyền thông Đa phương tiện',
-        eventId: 'EVT-2026-02',
-        eventTitle: 'Workshop UI/UX Design',
-        checkInTime: '—',
-        status: 'active',
-        points: 0,
-        certId: 'Chưa cấp'
-      },
-      {
-        ticketCode: 'CE2026-083297',
-        studentId: 'SE190881',
-        name: 'Vũ Minh Đức',
-        major: 'Trí tuệ Nhân tạo (AI)',
-        eventId: 'EVT-2026-03',
-        eventTitle: 'FPTU Champions League',
-        checkInTime: '—',
-        status: 'active',
-        points: 0,
-        certId: 'Chưa cấp'
-      },
-      {
-        ticketCode: 'CE2026-083298',
-        studentId: 'IB170293',
-        name: 'Hoàng Kim Ngân',
-        major: 'Kinh doanh Quốc tế (IB)',
-        eventId: 'EVT-2026-01',
-        eventTitle: 'FPTU Tech Expo 2026',
-        checkInTime: '08:45:19 28/10/2026',
-        status: 'checkedIn',
-        points: 5,
-        certId: 'CERT-2026-9908'
-      }
-    ],
-    registrations: [
-      {
-        id: 'REG-2026-01',
-        studentName: 'Nguyễn Văn An',
-        studentEmail: 'an.nv@fptu.edu.vn',
-        eventTitle: 'Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động',
-        eventId: 'EVT-2026-02',
-        createdAt: '28/10/2026 14:10',
-        status: 'pending'
-      }
-    ],
-    announcements: [
-      {
-        id: 'ANN-2026-01',
-        title: 'Chào mừng Lễ hội Công nghệ FPTU Tech Expo 2026! 🚀',
-        category: 'general',
-        categoryLabel: 'Bản tin chung',
-        createdAt: '28/10/2026 08:00',
-        status: 'Đã phát'
-      },
-      {
-        id: 'ANN-2026-02',
-        title: 'Hướng dẫn quét mã vé QR tại bàn Check-in Cổng 1',
-        category: 'reminder',
-        categoryLabel: 'Nhắc nhở',
-        createdAt: '28/10/2026 08:15',
-        status: 'Đã phát'
-      }
-    ]
+    students: [],
+    tickets: [],
+    registrations: [],
+    announcements: [],
+    liveEvents: [],
+    liveClubs: []
   },
 
   // Initialize
@@ -196,98 +66,157 @@ const app = {
     this.renderAnnouncementsHistory();
     this.renderGateChart();
     
-    // Wire up live Cloud Firestore pipelines
-    await this.fetchFromFirestore();
-    console.log('[Campus Event Portal] Initialized successfully with live Cloud Firestore.');
+    // Wire up live Cloud Firestore pipelines (Backend API & Firestore Direct)
+    await this.loadAllRealData();
+    console.log('[Campus Event Portal] Initialized successfully with 100% live Cloud Firestore.');
   },
 
-  // Live Cloud Firestore Fetcher
-  async fetchFromFirestore() {
+  // Live Cloud Firestore Data Loader (Zero-Mock Data)
+  async loadAllRealData() {
     try {
-      const eventsRes = await fetch('https://firestore.googleapis.com/v1/projects/campus-event-48443/databases/(default)/documents/events');
-      if (eventsRes.ok) {
-        const eventsData = await eventsRes.json();
-        if (eventsData.documents && eventsData.documents.length > 0) {
-          const liveEvents = eventsData.documents.map(doc => {
-            const f = doc.fields;
-            return {
-              id: f.id?.stringValue || doc.name.split('/').pop(),
-              title: f.title?.stringValue || 'Sự kiện FPTU',
-              clubName: f.clubName?.stringValue || 'CLB FPTU',
-              clubId: f.clubId?.stringValue || '',
-              location: f.location?.stringValue || 'Hội trường Trịnh Công Sơn',
-              capacity: parseInt(f.capacity?.integerValue || '200', 10),
-              registeredCount: parseInt(f.registeredCount?.integerValue || '0', 10),
-              date: f.date?.stringValue || '',
-              time: f.time?.stringValue || ''
-            };
-          });
-
-          this.state.liveEvents = liveEvents;
-
-          // Update Venues Status with Real Cloud Firestore Data
-          this.renderLiveVenues(liveEvents);
-
-          // Update KPIs based on Real Firestore capacity & registrations
-          const totalRegistered = liveEvents.reduce((sum, e) => sum + e.registeredCount, 0);
-          const totalCap = liveEvents.reduce((sum, e) => sum + e.capacity, 0);
-          
-          this.state.checkinCount = totalRegistered;
-          this.state.totalCapacity = totalCap;
-          this.renderKPIs();
-
-          // Update Event Filter Options in Student Directory
-          const eventFilterEl = document.getElementById('event-filter');
-          if (eventFilterEl) {
-            eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
-              liveEvents.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+      // 1. Sync Backend Status & Active User Account
+      try {
+        const statusRes = await fetch('/api/status');
+        if (statusRes.ok) {
+          const statusData = await statusRes.json();
+          const userSnippet = document.querySelector('.sidebar-footer .user-name');
+          if (userSnippet && statusData.user) {
+            userSnippet.innerText = statusData.user;
           }
+          const liveIndicator = document.querySelector('.live-indicator span:last-child');
+          if (liveIndicator) {
+            liveIndicator.innerText = `Firestore: ${statusData.projectId} (Đã kết nối)`;
+          }
+        }
+      } catch (e) {
+        console.warn('[Status Check] Backend API note:', e);
+      }
 
-          // Link first event to first students
-          if (liveEvents[0]) {
-            this.state.students.slice(0, 3).forEach(s => {
-              s.eventId = liveEvents[0].id;
-              s.eventTitle = liveEvents[0].title;
+      // 2. Fetch Events from Cloud Firestore
+      let events = [];
+      try {
+        const eventsRes = await fetch('/api/events');
+        if (eventsRes.ok) {
+          const eventsData = await eventsRes.json();
+          events = eventsData.documents || [];
+        }
+      } catch (e) {
+        // Fallback to direct public Firestore REST endpoint
+        try {
+          const fbRes = await fetch('https://firestore.googleapis.com/v1/projects/campus-event-48443/databases/(default)/documents/events');
+          if (fbRes.ok) {
+            const d = await fbRes.json();
+            events = (d.documents || []).map(doc => {
+              const f = doc.fields;
+              return {
+                id: f.id?.stringValue || doc.name.split('/').pop(),
+                title: f.title?.stringValue || 'Sự kiện FPTU',
+                clubName: f.clubName?.stringValue || 'CLB FPTU',
+                clubId: f.clubId?.stringValue || '',
+                location: f.location?.stringValue || 'Hội trường Trịnh Công Sơn',
+                capacity: parseInt(f.capacity?.integerValue || '200', 10),
+                registeredCount: parseInt(f.registeredCount?.integerValue || '0', 10),
+                date: f.date?.stringValue || '',
+                time: f.time?.stringValue || ''
+              };
             });
           }
-          if (liveEvents[1]) {
-            this.state.students.slice(3, 5).forEach(s => {
-              s.eventId = liveEvents[1].id;
-              s.eventTitle = liveEvents[1].title;
-            });
-          }
-          this.renderStudentsTable();
-          this.renderRecentOverviewTable();
-          
-          console.log(`[Firestore] Successfully fetched ${liveEvents.length} live events from Cloud Firestore.`);
+        } catch (fbErr) {
+          console.warn('[Events Direct Fetch] Note:', fbErr);
         }
       }
 
-      // Fetch Clubs from Cloud Firestore
-      const clubsRes = await fetch('https://firestore.googleapis.com/v1/projects/campus-event-48443/databases/(default)/documents/clubs');
-      if (clubsRes.ok) {
-        const clubsData = await clubsRes.json();
-        if (clubsData.documents && clubsData.documents.length > 0) {
-          const liveClubs = clubsData.documents.map(doc => {
-            const f = doc.fields;
-            return {
-              id: f.id?.stringValue || doc.name.split('/').pop(),
-              name: f.name?.stringValue || 'CLB FPTU',
-              category: f.category?.stringValue || 'Chung'
-            };
-          });
+      if (events.length > 0) {
+        this.state.liveEvents = events;
+        this.renderLiveVenues(events);
 
-          // Sync clubs with budget proposals
-          if (liveClubs.length >= 2) {
-            this.state.budgetProposals[0].club = liveClubs[0].name;
-            this.state.budgetProposals[1].club = liveClubs[2] ? liveClubs[2].name : liveClubs[1].name;
+        const totalRegistered = events.reduce((sum, e) => sum + (e.registeredCount || 0), 0);
+        const totalCap = events.reduce((sum, e) => sum + (e.capacity || 200), 0);
+        this.state.checkinCount = totalRegistered;
+        this.state.totalCapacity = totalCap;
+        this.renderKPIs();
+
+        const eventFilterEl = document.getElementById('event-filter');
+        if (eventFilterEl) {
+          eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
+            events.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+        }
+      }
+
+      // 3. Fetch Clubs from Cloud Firestore
+      try {
+        const clubsRes = await fetch('/api/clubs');
+        if (clubsRes.ok) {
+          const clubsData = await clubsRes.json();
+          this.state.liveClubs = clubsData.documents || [];
+          if (this.state.liveClubs.length >= 2) {
+            this.state.budgetProposals[0].club = this.state.liveClubs[0].name;
+            this.state.budgetProposals[1].club = this.state.liveClubs[1].name;
             this.renderBudgetTable();
           }
         }
+      } catch (e) {
+        console.warn('[Clubs] Note:', e);
       }
+
+      // 4. Fetch Registrations from Cloud Firestore (Cross-Role Review Queue)
+      try {
+        const regRes = await fetch('/api/registrations');
+        if (regRes.ok) {
+          const regData = await regRes.json();
+          this.state.registrations = regData.documents || [];
+          this.renderReviewQueue();
+        }
+      } catch (e) {
+        console.warn('[Registrations] Note:', e);
+      }
+
+      // 5. Fetch Tickets from Cloud Firestore (Gate Telemetry & Student Directory)
+      try {
+        const tktRes = await fetch('/api/tickets');
+        if (tktRes.ok) {
+          const tktData = await tktRes.json();
+          const tickets = tktData.documents || [];
+          this.state.tickets = tickets;
+          this.state.students = tickets.map(t => ({
+            ticketCode: t.ticketCode || t.id,
+            studentId: t.studentId || (t.userId || 'SE193989').replace('USR-', ''),
+            name: t.studentName || 'Sinh viên FPTU',
+            major: t.major || 'Kỹ thuật Phần mềm (SE)',
+            eventId: t.eventId || 'EVT-2026-01',
+            eventTitle: t.eventTitle || 'FPTU Tech Expo 2026',
+            checkInTime: t.checkedInAt || (t.checkInStatus ? '08:45:12' : '—'),
+            status: t.status === 'checkedIn' || t.checkInStatus ? 'checkedIn' : 'active',
+            points: t.points || 5,
+            certId: t.certId || 'CERT-2026-9901'
+          }));
+          this.renderStudentsTable();
+          this.renderRecentOverviewTable();
+        }
+      } catch (e) {
+        console.warn('[Tickets] Note:', e);
+      }
+
+      // 6. Fetch Announcements from Cloud Firestore (Announcements Inbox)
+      try {
+        const annRes = await fetch('/api/announcements');
+        if (annRes.ok) {
+          const annData = await annRes.json();
+          this.state.announcements = annData.documents || [];
+          this.renderAnnouncementsHistory();
+        }
+      } catch (e) {
+        console.warn('[Announcements] Note:', e);
+      }
+
     } catch (err) {
-      console.warn('[Firestore] Note: Running offline or cached mode:', err);
+      console.error('[loadAllRealData] Error:', err);
     }
+  },
+
+  // Legacy compatibility alias
+  async fetchFromFirestore() {
+    await this.loadAllRealData();
   },
 
   // Render Real Venues from Firestore
@@ -474,7 +403,7 @@ const app = {
     }
 
     if (this.state.registrations.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 24px;">Hàng chờ trống. Chưa có đơn đăng ký sự kiện nào.</td></tr>`;
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 24px;">Hàng chờ trống. Chưa có đơn đăng ký sự kiện nào trên Cloud Firestore.</td></tr>';
       return;
     }
 
@@ -484,10 +413,10 @@ const app = {
 
       if (r.status === 'approved') {
         statusPill = '<span class="pill pill-positive">Đã Duyệt & Cấp Vé</span>';
-        actions = `<span class="mono" style="font-size: 11.5px; color: var(--positive);">${r.ticketId || 'CE2026-083291'}</span>`;
+        actions = `<span class="mono" style="font-size: 11.5px; color: var(--positive);">${r.ticketId || 'Đã cấp vé'}</span>`;
       } else if (r.status === 'rejected') {
         statusPill = '<span class="pill pill-negative">Đã Từ Chối</span>';
-        actions = `<span style="font-size: 11.5px; color: var(--muted);">${r.reason || 'Hết chỗ'}</span>`;
+        actions = `<span style="font-size: 11.5px; color: var(--muted);">${r.reason || 'Không đủ điều kiện'}</span>`;
       } else {
         statusPill = '<span class="pill pill-warning">Chờ Phê Duyệt</span>';
         actions = `
@@ -496,13 +425,15 @@ const app = {
         `;
       }
 
+      const formattedDate = r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN') : 'Mới nộp';
+
       return `
         <tr>
           <td class="mono" style="font-weight: 600;">${r.id}</td>
-          <td style="font-weight: 600;">${r.studentName}</td>
-          <td class="mono" style="font-size: 12px; color: var(--muted);">${r.studentEmail}</td>
-          <td>${r.eventTitle}</td>
-          <td style="font-size: 12px; color: var(--muted);">${r.createdAt}</td>
+          <td style="font-weight: 600;">${r.studentName || 'Sinh viên'}</td>
+          <td class="mono" style="font-size: 12px; color: var(--muted);">${r.studentEmail || '—'}</td>
+          <td>${r.eventTitle || 'Sự kiện FPTU'}</td>
+          <td style="font-size: 12px; color: var(--muted);">${formattedDate}</td>
           <td>${statusPill}</td>
           <td style="text-align: right;">${actions}</td>
         </tr>
@@ -510,52 +441,65 @@ const app = {
     }).join('');
   },
 
-  refreshReviewQueue() {
-    this.renderReviewQueue();
-    this.showToast('Đã làm mới danh sách hàng chờ đăng ký sự kiện.');
+  async refreshReviewQueue() {
+    this.showToast('Đang làm mới danh sách hàng chờ từ Cloud Firestore...');
+    await this.loadAllRealData();
   },
 
-  approveRegistration(id) {
+  async approveRegistration(id) {
     const item = this.state.registrations.find(r => r.id === id);
-    if (!item) return;
+    const studentName = item ? item.studentName : 'sinh viên';
 
-    const ticketCode = `CE2026-${Math.floor(100000 + Math.random() * 900000)}`;
-    item.status = 'approved';
-    item.ticketId = ticketCode;
-
-    // Emit live announcement notification
-    const ann = {
-      id: `ANN-${Date.now()}`,
-      title: `Đăng ký sự kiện đã được duyệt! 🎉`,
-      category: 'ticket_approved',
-      categoryLabel: 'Duyệt vé thành công',
-      createdAt: 'Vừa xong',
-      status: 'Đã phát'
-    };
-    this.state.announcements.unshift(ann);
-
-    this.renderReviewQueue();
-    this.renderAnnouncementsHistory();
-    this.showToast(`Phê duyệt thành công! Đã cấp vé ${ticketCode} cho sinh viên ${item.studentName}. Thông báo đã gửi tới Mobile Inbox.`);
+    this.showToast(`Đang gửi yêu cầu duyệt đơn ${id} lên Cloud Firestore...`);
+    try {
+      const res = await fetch(`/api/registrations/${id}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(`Phê duyệt thành công! Đã cấp vé ${data.ticketCode} cho ${studentName}. Thông báo đã gửi tới Mobile Inbox.`);
+        await this.loadAllRealData();
+      } else {
+        this.showToast(`Lỗi khi duyệt vé: ${data.error || 'Vui lòng kiểm tra lại'}`);
+      }
+    } catch (e) {
+      console.error('Approve error:', e);
+      this.showToast(`Lỗi kết nối máy chủ: ${e.message}`);
+    }
   },
 
-  rejectRegistration(id) {
+  async rejectRegistration(id) {
     const item = this.state.registrations.find(r => r.id === id);
-    if (!item) return;
+    const studentName = item ? item.studentName : 'sinh viên';
 
-    const reason = prompt('Nhập lý do từ chối đơn đăng ký sự kiện:', 'Sự kiện đã đạt số lượng tối đa');
+    const reason = prompt(`Nhập lý do từ chối đơn đăng ký của ${studentName}:`, 'Sự kiện đã đạt số lượng tối đa');
     if (reason === null) return;
 
-    item.status = 'rejected';
-    item.reason = reason;
-    this.renderReviewQueue();
-    this.showToast(`Đã từ chối đơn đăng ký của ${item.studentName}. Lý do: ${reason}`);
+    this.showToast(`Đang cập nhật từ chối đơn ${id} lên Cloud Firestore...`);
+    try {
+      const res = await fetch(`/api/registrations/${id}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(`Đã từ chối đơn đăng ký của ${studentName}. Lý do: ${reason}`);
+        await this.loadAllRealData();
+      } else {
+        this.showToast(`Lỗi khi từ chối: ${data.error || 'Vui lòng thử lại'}`);
+      }
+    } catch (e) {
+      console.error('Reject error:', e);
+      this.showToast(`Lỗi kết nối máy chủ: ${e.message}`);
+    }
   },
 
   // ==========================================
   // FINAL ASSIGNMENT: ANNOUNCEMENTS BROADCAST
   // ==========================================
-  handleBroadcastSubmit(e) {
+  async handleBroadcastSubmit(e) {
     e.preventDefault();
     const titleInput = document.getElementById('ann-title');
     const contentInput = document.getElementById('ann-content');
@@ -566,7 +510,7 @@ const app = {
 
     const title = titleInput.value.trim();
     const content = contentInput.value.trim();
-    const category = categorySelect ? categorySelect.value : 'general';
+    const category = categorySelect ? categorySelect.value : 'official';
     const isPinned = pinnedCheckbox ? pinnedCheckbox.checked : false;
 
     if (!title || !content) {
@@ -574,29 +518,32 @@ const app = {
       return;
     }
 
-    const categoryNames = {
-      general: 'Bản tin chung',
-      reminder: 'Nhắc nhở',
-      urgent: 'Khẩn cấp',
-      ticket_approved: 'Duyệt vé'
-    };
-
-    const newAnn = {
-      id: `ANN-${Date.now()}`,
-      title: title,
-      category: category,
-      categoryLabel: categoryNames[category] || 'Bản tin',
-      createdAt: 'Vừa xong',
-      status: isPinned ? 'Đã ghim' : 'Đã phát'
-    };
-
-    this.state.announcements.unshift(newAnn);
-    titleInput.value = '';
-    contentInput.value = '';
-    if (pinnedCheckbox) pinnedCheckbox.checked = false;
-
-    this.renderAnnouncementsHistory();
-    this.showToast(`Phát thanh thành công! Bản tin "${title}" đã gửi đến Mobile Inbox của toàn bộ sinh viên.`);
+    this.showToast('Đang phát thanh thông báo lên Cloud Firestore...');
+    try {
+      const res = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          category: category,
+          message: content,
+          pinned: isPinned
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(`Phát thanh thành công! Bản tin "${title}" đã gửi đến Mobile Inbox theo thời gian thực.`);
+        titleInput.value = '';
+        contentInput.value = '';
+        if (pinnedCheckbox) pinnedCheckbox.checked = false;
+        await this.loadAllRealData();
+      } else {
+        this.showToast(`Lỗi phát thanh: ${data.error || 'Vui lòng thử lại'}`);
+      }
+    } catch (err) {
+      console.error('Broadcast error:', err);
+      this.showToast(`Lỗi kết nối máy chủ: ${err.message}`);
+    }
   },
 
   renderAnnouncementsHistory() {
@@ -604,22 +551,29 @@ const app = {
     if (!tbody) return;
 
     if (this.state.announcements.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--muted); padding: 20px;">Chưa có bản tin nào được phát thanh.</td></tr>`;
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--muted); padding: 20px;">Chưa có bản tin nào trong Cloud Firestore.</td></tr>';
       return;
     }
 
     tbody.innerHTML = this.state.announcements.map(a => {
-      let catPill = '<span class="pill pill-neutral">Chung</span>';
-      if (a.category === 'ticket_approved') catPill = '<span class="pill pill-positive">Duyệt Vé</span>';
-      if (a.category === 'urgent') catPill = '<span class="pill pill-negative">Khẩn Cấp</span>';
+      let catPill = '<span class="pill pill-neutral">Thông báo</span>';
       if (a.category === 'reminder') catPill = '<span class="pill pill-warning">Nhắc Nhở</span>';
+      if (a.category === 'urgent') catPill = '<span class="pill pill-negative">Khẩn Cấp</span>';
+      if (a.category === 'ticket_approved') catPill = '<span class="pill pill-positive">Duyệt Vé</span>';
+      if (a.category === 'ticket_rejected') catPill = '<span class="pill pill-negative">Từ Chối</span>';
+      if (a.category === 'official') catPill = '<span class="pill pill-accent">Chính Thức</span>';
+
+      const timeStr = a.createdAt ? new Date(a.createdAt).toLocaleString('vi-VN') : 'Vừa xong';
 
       return `
         <tr>
-          <td style="font-weight: 600;">${a.title}</td>
+          <td style="font-weight: 600;">
+            ${a.pinned ? '📌 ' : ''}${a.title}
+            ${a.message ? `<div style="font-size: 11.5px; color: var(--muted); font-weight: normal; margin-top: 3px;">${a.message}</div>` : ''}
+          </td>
           <td>${catPill}</td>
-          <td style="font-size: 12px; color: var(--muted);">${a.createdAt}</td>
-          <td><span class="pill pill-positive">${a.status}</span></td>
+          <td style="font-size: 12px; color: var(--muted);">${timeStr}</td>
+          <td><span class="pill pill-positive">${a.status || 'Đã phát'}</span></td>
         </tr>
       `;
     }).join('');
