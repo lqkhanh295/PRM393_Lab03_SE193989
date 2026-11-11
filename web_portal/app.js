@@ -250,6 +250,28 @@ const app = {
         console.warn('[Budgets] Note:', e);
       }
 
+      // Fetch PCCC Inspections from Cloud Firestore
+      try {
+        const pcccRes = await fetch('/api/pccc-inspections');
+        if (pcccRes.ok) {
+          const pcccData = await pcccRes.json();
+          if (pcccData.documents && pcccData.documents.length > 0) {
+            pcccData.documents.forEach(savedVenue => {
+              const existing = this.state.venues.find(v => v.id === savedVenue.id);
+              if (existing) {
+                if (savedVenue.signed !== undefined) existing.signed = savedVenue.signed;
+                if (savedVenue.signedDate) existing.signedDate = savedVenue.signedDate;
+                if (savedVenue.signatory) existing.signatory = savedVenue.signatory;
+                if (savedVenue.licenseNumber) existing.licenseNumber = savedVenue.licenseNumber;
+              }
+            });
+            this.renderVenues();
+          }
+        }
+      } catch (e) {
+        console.warn('[PCCC] Note:', e);
+      }
+
       // 3. Fetch Clubs from Cloud Firestore
       try {
         const clubsRes = await fetch('/api/clubs');
@@ -1231,7 +1253,7 @@ const app = {
   },
 
   // Sign & Issue Safety License for a specific venue
-  signSafetyLicense(venueId) {
+  async signSafetyLicense(venueId) {
     const venue = this.state.venues.find(v => v.id === venueId);
     if (!venue) return;
 
@@ -1250,6 +1272,23 @@ const app = {
     this.showToast(`Đã ký số và ban hành Giấy phép PCCC số ${venue.licenseNumber} cho "${venue.name}" thành công!`);
     this.filterVenues();
     this.viewSafetyLicense(venueId);
+
+    // Persist PCCC Safety License to Cloud Firestore
+    try {
+      await fetch(`/api/pccc-inspections/${venueId}/sign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          signed: true,
+          signedDate: dateStr,
+          signatory: venue.signatory,
+          licenseNumber: venue.licenseNumber
+        })
+      });
+      console.log(`[PCCC Sign] Persisted ${venueId} to Cloud Firestore.`);
+    } catch (e) {
+      console.warn('[PCCC Sign] Sync error:', e);
+    }
   },
 
   // View Official Safety License Modal

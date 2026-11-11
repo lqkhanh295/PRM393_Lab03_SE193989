@@ -847,6 +847,35 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 200, { success: true, budgetId, status });
       }
 
+      // 11. GET /api/pccc-inspections (Real Firestore PCCC Safety Inspections)
+      if (pathname === '/api/pccc-inspections' && req.method === 'GET') {
+        const data = await firestoreRequest('/pccc_inspections');
+        let documents = (data.documents || []).map(fromFirestoreDoc);
+        return sendJson(res, 200, { documents });
+      }
+
+      // 11b. POST /api/pccc-inspections/:id/sign (Sign Safety License)
+      const pcccMatch = pathname.match(/^\/api\/pccc-inspections\/([^\/]+)\/sign$/);
+      if (pcccMatch && req.method === 'POST') {
+        const venueId = decodeURIComponent(pcccMatch[1]);
+        const body = await parseBody(req);
+        const signed = body.signed !== undefined ? body.signed : true;
+        const signedDate = body.signedDate || new Date().toLocaleString('vi-VN');
+        const signatory = body.signatory || 'Thượng úy PCCC & Trưởng ban CTSV FPTU';
+        const licenseNumber = body.licenseNumber || '108/BB-CTSV';
+
+        await firestoreRequest(`/pccc_inspections/${venueId}?updateMask.fieldPaths=signed&updateMask.fieldPaths=signedDate&updateMask.fieldPaths=signatory&updateMask.fieldPaths=licenseNumber`, 'PATCH', {
+          fields: {
+            signed: { booleanValue: signed },
+            signedDate: { stringValue: signedDate },
+            signatory: { stringValue: signatory },
+            licenseNumber: { stringValue: licenseNumber }
+          }
+        });
+        console.log(`[PCCC Inspection] Venue ${venueId} signed successfully: ${licenseNumber}`);
+        return sendJson(res, 200, { success: true, venueId, signed, signedDate, signatory, licenseNumber });
+      }
+
       // 404 for unknown API
       return sendJson(res, 404, { error: 'API route not found' });
     } catch (err) {
