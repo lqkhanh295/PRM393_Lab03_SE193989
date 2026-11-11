@@ -1,0 +1,812 @@
+{
+  "GET:/events": {
+    "timestamp": 1794394976710,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/EVT-2026-01",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-01"
+            },
+            "title": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "description": {
+              "stringValue": "Triển lãm công nghệ thường niên quy mô 500 sinh viên tại Đại học FPT TP.HCM. Cập nhật các xu hướng AI, Generative Agents và cơ hội nghề nghiệp cùng chuyên gia Google, FPT Software."
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "clubId": {
+              "stringValue": "fcode"
+            },
+            "clubName": {
+              "stringValue": "CLB F-Code"
+            },
+            "date": {
+              "stringValue": "28/10/2026"
+            },
+            "time": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "location": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "capacity": {
+              "integerValue": "400"
+            },
+            "registeredCount": {
+              "integerValue": "342"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800"
+            },
+            "isFeatured": {
+              "booleanValue": true
+            },
+            "safetyStatus": {
+              "stringValue": "passed"
+            },
+            "budgetTotal": {
+              "integerValue": "15000000"
+            },
+            "budgetSpent": {
+              "integerValue": "12500000"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-01T08:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/EVT-2026-02",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-02"
+            },
+            "title": {
+              "stringValue": "Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động"
+            },
+            "description": {
+              "stringValue": "Khám phá bí quyết thiết kế UI/UX theo 10 Heuristics của Jakob Nielsen, tối ưu Touch Target và đo lường tương phản WCAG 2.1 AA cho ứng dụng di động."
+            },
+            "category": {
+              "stringValue": "Design"
+            },
+            "clubId": {
+              "stringValue": "media_club"
+            },
+            "clubName": {
+              "stringValue": "CLB Cóc Sài Gòn"
+            },
+            "date": {
+              "stringValue": "30/10/2026"
+            },
+            "time": {
+              "stringValue": "09:00 - 11:30"
+            },
+            "location": {
+              "stringValue": "Phòng Hội thảo Alpha Building (Phòng 301)"
+            },
+            "capacity": {
+              "integerValue": "120"
+            },
+            "registeredCount": {
+              "integerValue": "94"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800"
+            },
+            "isFeatured": {
+              "booleanValue": true
+            },
+            "safetyStatus": {
+              "stringValue": "passed"
+            },
+            "budgetTotal": {
+              "integerValue": "5000000"
+            },
+            "budgetSpent": {
+              "integerValue": "3800000"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-02T08:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/EVT-2026-03",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-03"
+            },
+            "title": {
+              "stringValue": "Giải Đấu Thể Thao Điện Tử FPTU Champions League"
+            },
+            "description": {
+              "stringValue": "Vòng chung kết giải thể thao điện tử sinh viên toàn trường, phát sóng trực tiếp kèm quà tặng áo đấu độc quyền FPTU."
+            },
+            "category": {
+              "stringValue": "Entertainment"
+            },
+            "clubId": {
+              "stringValue": "fcode"
+            },
+            "clubName": {
+              "stringValue": "CLB F-Code"
+            },
+            "date": {
+              "stringValue": "05/11/2026"
+            },
+            "time": {
+              "stringValue": "18:00 - 21:30"
+            },
+            "location": {
+              "stringValue": "Sân khấu Hội trường Lớn A2"
+            },
+            "capacity": {
+              "integerValue": "300"
+            },
+            "registeredCount": {
+              "integerValue": "288"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800"
+            },
+            "isFeatured": {
+              "booleanValue": false
+            },
+            "safetyStatus": {
+              "stringValue": "passed"
+            },
+            "budgetTotal": {
+              "integerValue": "8000000"
+            },
+            "budgetSpent": {
+              "integerValue": "6200000"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-03T08:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "GET:/gate_assignments": {
+    "timestamp": 1794395149137,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/gate_assignments/doc_1794395149137",
+          "fields": {
+            "id": {
+              "stringValue": "DUTY-2026-7681"
+            },
+            "email": {
+              "stringValue": "lebaolong@fpt.edu.vn"
+            },
+            "studentName": {
+              "stringValue": "Lê Bảo Long"
+            },
+            "studentId": {
+              "stringValue": "SE181144"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026"
+            },
+            "gateName": {
+              "stringValue": "Cổng Phụ (Cửa 2)"
+            },
+            "role": {
+              "stringValue": "Cộng Tác Viên (Scanner)"
+            },
+            "shiftTime": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "status": {
+              "stringValue": "active"
+            },
+            "assignedBy": {
+              "stringValue": "Phòng CTSV"
+            },
+            "assignedAt": {
+              "stringValue": "2026-11-11T11:05:47.681Z"
+            }
+          },
+          "createTime": "2026-11-11T11:05:49.137Z",
+          "updateTime": "2026-11-11T11:05:49.137Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/gate_assignments/DUTY-2026-01",
+          "fields": {
+            "id": {
+              "stringValue": "DUTY-2026-01"
+            },
+            "email": {
+              "stringValue": "kkk@fpt.edu.vn"
+            },
+            "studentName": {
+              "stringValue": "Kkk"
+            },
+            "studentId": {
+              "stringValue": "KKK"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "gateName": {
+              "stringValue": "Cổng Chính (Cửa 1)"
+            },
+            "role": {
+              "stringValue": "Trưởng Bàn Soát Vé (Leader)"
+            },
+            "shiftTime": {
+              "stringValue": "13:00 - 17:30"
+            },
+            "status": {
+              "stringValue": "active"
+            },
+            "assignedBy": {
+              "stringValue": "Phòng CTSV"
+            },
+            "assignedAt": {
+              "stringValue": "2026-11-11T10:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/gate_assignments/DUTY-2026-02",
+          "fields": {
+            "id": {
+              "stringValue": "DUTY-2026-02"
+            },
+            "email": {
+              "stringValue": "hoangtm.se18@fpt.edu.vn"
+            },
+            "studentName": {
+              "stringValue": "Trần Minh Hoàng"
+            },
+            "studentId": {
+              "stringValue": "SE180123"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-02"
+            },
+            "eventTitle": {
+              "stringValue": "Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động"
+            },
+            "gateName": {
+              "stringValue": "Phòng Hội thảo Alpha"
+            },
+            "role": {
+              "stringValue": "Cộng Tác Viên (Scanner)"
+            },
+            "shiftTime": {
+              "stringValue": "08:30 - 11:30"
+            },
+            "status": {
+              "stringValue": "active"
+            },
+            "assignedBy": {
+              "stringValue": "Phòng CTSV"
+            },
+            "assignedAt": {
+              "stringValue": "2026-11-11T10:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/gate_assignments/DUTY-2026-03",
+          "fields": {
+            "id": {
+              "stringValue": "DUTY-2026-03"
+            },
+            "email": {
+              "stringValue": "trongvd.ia18@fpt.edu.vn"
+            },
+            "studentName": {
+              "stringValue": "Vũ Đình Trọng"
+            },
+            "studentId": {
+              "stringValue": "IA184592"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-03"
+            },
+            "eventTitle": {
+              "stringValue": "Giải Đấu Thể Thao Điện Tử FPTU Champions League"
+            },
+            "gateName": {
+              "stringValue": "Sảnh A Tòa nhà Innovation"
+            },
+            "role": {
+              "stringValue": "Giám Sát An Ninh Cửa"
+            },
+            "shiftTime": {
+              "stringValue": "17:30 - 21:30"
+            },
+            "status": {
+              "stringValue": "active"
+            },
+            "assignedBy": {
+              "stringValue": "Phòng CTSV"
+            },
+            "assignedAt": {
+              "stringValue": "2026-11-11T10:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "GET:/tickets": {
+    "timestamp": 1794394976710,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-01",
+          "fields": {
+            "id": {
+              "stringValue": "TICKET-2026-01"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "userId": {
+              "stringValue": "USR-FPTU-2026"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "eventDate": {
+              "stringValue": "28/10/2026"
+            },
+            "eventTime": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "eventLocation": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "studentName": {
+              "stringValue": "Nguyễn Văn An"
+            },
+            "studentId": {
+              "stringValue": "SE183291"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-083291"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-01-USR-FPTU-2026-CE2026-083291"
+            },
+            "status": {
+              "stringValue": "checked_in"
+            },
+            "checkInStatus": {
+              "booleanValue": true
+            },
+            "checkedInAt": {
+              "stringValue": "2026-11-11T10:15:32.000Z"
+            },
+            "gate": {
+              "stringValue": "Cổng Chính (Cửa 1)"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-01T09:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-02",
+          "fields": {
+            "id": {
+              "stringValue": "TICKET-2026-02"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "userId": {
+              "stringValue": "USR-FPTU-2027"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "eventDate": {
+              "stringValue": "28/10/2026"
+            },
+            "eventTime": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "eventLocation": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "studentName": {
+              "stringValue": "Lê Bảo Long"
+            },
+            "studentId": {
+              "stringValue": "SE181144"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-081144"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-01-USR-FPTU-2027-CE2026-081144"
+            },
+            "status": {
+              "stringValue": "checked_in"
+            },
+            "checkInStatus": {
+              "booleanValue": true
+            },
+            "checkedInAt": {
+              "stringValue": "2026-11-11T10:16:04.000Z"
+            },
+            "gate": {
+              "stringValue": "Cổng Chính (Cửa 1)"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-01T09:10:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-03",
+          "fields": {
+            "id": {
+              "stringValue": "TICKET-2026-03"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "userId": {
+              "stringValue": "USR-FPTU-2028"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "eventDate": {
+              "stringValue": "28/10/2026"
+            },
+            "eventTime": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "eventLocation": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "studentName": {
+              "stringValue": "Trần Mai Phương"
+            },
+            "studentId": {
+              "stringValue": "SS170889"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-070889"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-01-USR-FPTU-2028-CE2026-070889"
+            },
+            "status": {
+              "stringValue": "confirmed"
+            },
+            "checkInStatus": {
+              "booleanValue": false
+            },
+            "createdAt": {
+              "stringValue": "2026-11-01T09:15:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-04",
+          "fields": {
+            "id": {
+              "stringValue": "TICKET-2026-04"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-02"
+            },
+            "userId": {
+              "stringValue": "USR-FPTU-2029"
+            },
+            "eventTitle": {
+              "stringValue": "Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động"
+            },
+            "eventDate": {
+              "stringValue": "30/10/2026"
+            },
+            "eventTime": {
+              "stringValue": "09:00 - 11:30"
+            },
+            "eventLocation": {
+              "stringValue": "Phòng Hội thảo Alpha Building (Phòng 301)"
+            },
+            "studentName": {
+              "stringValue": "Phạm Đăng Khôi"
+            },
+            "studentId": {
+              "stringValue": "GD180231"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-080231"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-02-USR-FPTU-2029-CE2026-080231"
+            },
+            "status": {
+              "stringValue": "checked_in"
+            },
+            "checkInStatus": {
+              "booleanValue": true
+            },
+            "checkedInAt": {
+              "stringValue": "2026-11-11T09:45:10.000Z"
+            },
+            "gate": {
+              "stringValue": "Phòng Hội thảo Alpha"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-02T10:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-05",
+          "fields": {
+            "id": {
+              "stringValue": "TICKET-2026-05"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-03"
+            },
+            "userId": {
+              "stringValue": "USR-FPTU-2030"
+            },
+            "eventTitle": {
+              "stringValue": "Giải Đấu Thể Thao Điện Tử FPTU Champions League"
+            },
+            "eventDate": {
+              "stringValue": "05/11/2026"
+            },
+            "eventTime": {
+              "stringValue": "18:00 - 21:30"
+            },
+            "eventLocation": {
+              "stringValue": "Sân khấu Hội trường Lớn A2"
+            },
+            "studentName": {
+              "stringValue": "Đỗ Hữu Nghĩa"
+            },
+            "studentId": {
+              "stringValue": "IT182219"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-082219"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-03-USR-FPTU-2030-CE2026-082219"
+            },
+            "status": {
+              "stringValue": "confirmed"
+            },
+            "checkInStatus": {
+              "booleanValue": false
+            },
+            "createdAt": {
+              "stringValue": "2026-11-03T11:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "GET:/clubs": {
+    "timestamp": 1794394976710,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fcode",
+          "fields": {
+            "id": {
+              "stringValue": "fcode"
+            },
+            "name": {
+              "stringValue": "CLB F-Code"
+            },
+            "category": {
+              "stringValue": "Học thuật"
+            },
+            "membersCount": {
+              "integerValue": "120"
+            },
+            "foundedYear": {
+              "integerValue": "2014"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/media_club",
+          "fields": {
+            "id": {
+              "stringValue": "media_club"
+            },
+            "name": {
+              "stringValue": "CLB Cóc Sài Gòn"
+            },
+            "category": {
+              "stringValue": "Truyền thông"
+            },
+            "membersCount": {
+              "integerValue": "85"
+            },
+            "foundedYear": {
+              "integerValue": "2016"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fpt_dance",
+          "fields": {
+            "id": {
+              "stringValue": "fpt_dance"
+            },
+            "name": {
+              "stringValue": "CLB FPT Dance Crew"
+            },
+            "category": {
+              "stringValue": "Nghệ thuật"
+            },
+            "membersCount": {
+              "integerValue": "65"
+            },
+            "foundedYear": {
+              "integerValue": "2017"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "GET:/registrations": {
+    "timestamp": 1794394976710,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-01",
+          "fields": {
+            "id": {
+              "stringValue": "REG-2026-01"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "studentName": {
+              "stringValue": "Hoàng Kim Ngân"
+            },
+            "studentId": {
+              "stringValue": "SE189912"
+            },
+            "studentEmail": {
+              "stringValue": "nganhk.se18@fpt.edu.vn"
+            },
+            "status": {
+              "stringValue": "pending"
+            },
+            "submittedAt": {
+              "stringValue": "2026-11-11T09:00:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-02",
+          "fields": {
+            "id": {
+              "stringValue": "REG-2026-02"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "studentName": {
+              "stringValue": "Đặng Tuấn Anh"
+            },
+            "studentId": {
+              "stringValue": "IA180451"
+            },
+            "studentEmail": {
+              "stringValue": "anhdt.ia18@fpt.edu.vn"
+            },
+            "status": {
+              "stringValue": "pending"
+            },
+            "submittedAt": {
+              "stringValue": "2026-11-11T09:30:00.000Z"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  },
+  "GET:/announcements": {
+    "timestamp": 1794394976710,
+    "data": {
+      "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/announcements/ANN-01",
+          "fields": {
+            "id": {
+              "stringValue": "ANN-01"
+            },
+            "title": {
+              "stringValue": "Khai mạc FPTU Tech Expo 2026 tại Hội trường Trịnh Công Sơn"
+            },
+            "category": {
+              "stringValue": "official"
+            },
+            "categoryLabel": {
+              "stringValue": "Phát thanh CTSV"
+            },
+            "message": {
+              "stringValue": "Toàn bộ sinh viên đã đăng ký vui lòng xuất trình mã QR tại Bàn Điểm Danh Cổng 1 hoặc Cổng 2 trước 13:30."
+            },
+            "pinned": {
+              "booleanValue": true
+            },
+            "createdAt": {
+              "stringValue": "2026-11-11T07:00:00.000Z"
+            },
+            "status": {
+              "stringValue": "published"
+            }
+          },
+          "createTime": "2026-11-11T10:00:00.000000Z",
+          "updateTime": "2026-11-11T10:00:00.000000Z"
+        }
+      ]
+    }
+  }
+}
