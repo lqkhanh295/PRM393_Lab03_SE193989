@@ -1188,7 +1188,7 @@ class FirestoreService {
     }
   }
 
-  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore
+  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore with Web Portal Fallback Bridge
   Future<List<GateAssignmentModel>> getGateAssignments({String? email}) async {
     try {
       if (_firestore != null) {
@@ -1201,11 +1201,39 @@ class FirestoreService {
             .map((doc) => GateAssignmentModel.fromMap(doc.data(), doc.id))
             .where((a) => a.isActive)
             .toList();
-        return list;
+        if (list.isNotEmpty) return list;
       }
     } catch (e) {
-      debugPrint('[FirestoreService] getGateAssignments note: $e');
+      debugPrint('[FirestoreService] getGateAssignments live cloud note: $e');
     }
+
+    // High-availability fallback: query Web Portal backend bridge (handles Firestore transient 429 quota exhaustion)
+    try {
+      final queryParam = (email != null && email.isNotEmpty) ? '?email=${Uri.encodeComponent(email)}' : '';
+      final endpoints = [
+        'http://localhost:3000/api/gate-assignments$queryParam',
+        'http://10.0.2.2:3000/api/gate-assignments$queryParam',
+      ];
+      for (final ep in endpoints) {
+        try {
+          final res = await http.get(Uri.parse(ep)).timeout(const Duration(milliseconds: 1500));
+          if (res.statusCode == 200) {
+            final data = jsonDecode(res.body);
+            if (data is Map && data['documents'] is List) {
+              final list = (data['documents'] as List)
+                  .map((item) => GateAssignmentModel.fromMap(Map<String, dynamic>.from(item as Map), item['id'] as String? ?? ''))
+                  .where((a) => a.isActive)
+                  .toList();
+              if (list.isNotEmpty) {
+                debugPrint('[FirestoreService] Successfully retrieved ${list.length} gate assignments via Web Portal bridge ($ep)');
+                return list;
+              }
+            }
+          }
+        } catch (_) {}
+      }
+    } catch (_) {}
+
     return [];
   }
 }

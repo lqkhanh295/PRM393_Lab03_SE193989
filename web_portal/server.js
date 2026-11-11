@@ -380,6 +380,35 @@ const server = http.createServer(async (req, res) => {
           return sendJson(res, 400, { error: 'Vui lòng điền đầy đủ tiêu đề, địa điểm và ngày tổ chức sự kiện.' });
         }
 
+        // Validate that event date is not in the past
+        let eventDateObj = null;
+        const dateRaw = String(body.date).trim();
+        if (dateRaw.includes('/')) {
+          const parts = dateRaw.split('/').map(Number); // DD/MM/YYYY
+          if (parts.length === 3 && parts.every(n => !isNaN(n))) {
+            eventDateObj = new Date(parts[2], parts[1] - 1, parts[0], 23, 59, 59);
+          }
+        } else if (dateRaw.includes('-')) {
+          const parts = dateRaw.split('-').map(Number);
+          if (parts.length === 3 && parts.every(n => !isNaN(n))) {
+            if (parts[0] > 1000) { // YYYY-MM-DD
+              eventDateObj = new Date(parts[0], parts[1] - 1, parts[2], 23, 59, 59);
+            } else { // DD-MM-YYYY
+              eventDateObj = new Date(parts[2], parts[1] - 1, parts[0], 23, 59, 59);
+            }
+          }
+        }
+
+        if (eventDateObj) {
+          const now = new Date();
+          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+          if (eventDateObj < startOfToday) {
+            return sendJson(res, 400, {
+              error: 'Không thể tạo sự kiện trong quá khứ! Ngày tổ chức phải từ ngày hiện tại trở đi.'
+            });
+          }
+        }
+
         const eventId = body.id || `EVT-2026-${Date.now().toString().slice(-4)}`;
         const now = new Date().toISOString();
 

@@ -2941,11 +2941,41 @@ const app = {
       clubSelect.innerHTML = html;
     }
 
-    // Set default date to 7 days from now
-    if (dateInput && !dateInput.value) {
-      const d = new Date();
-      d.setDate(d.getDate() + 7);
-      dateInput.value = d.toISOString().split('T')[0];
+    // Calculate today's date in local time (YYYY-MM-DD)
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+    // Disallow past dates in native date picker and set default date to 7 days from now
+    if (dateInput) {
+      dateInput.min = todayStr;
+      if (!dateInput.value || dateInput.value < todayStr) {
+        const d = new Date();
+        d.setDate(d.getDate() + 7);
+        const dY = d.getFullYear();
+        const dM = String(d.getMonth() + 1).padStart(2, '0');
+        const dD = String(d.getDate()).padStart(2, '0');
+        dateInput.value = `${dY}-${dM}-${dD}`;
+      }
+
+      // Reset validation error state
+      const errEl = document.getElementById('evt-date-error');
+      if (errEl) errEl.style.display = 'none';
+      dateInput.style.borderColor = '';
+
+      // Live change validation
+      dateInput.oninput = dateInput.onchange = () => {
+        const err = document.getElementById('evt-date-error');
+        if (dateInput.value && dateInput.value < todayStr) {
+          if (err) err.style.display = 'block';
+          dateInput.style.borderColor = '#ef4444';
+        } else {
+          if (err) err.style.display = 'none';
+          dateInput.style.borderColor = '';
+        }
+      };
     }
 
     modal.style.display = 'flex';
@@ -2974,6 +3004,18 @@ const app = {
 
     const title = titleInput.value.trim();
     const rawDate = dateInput.value; // YYYY-MM-DD
+
+    // Enforce business rule: Event date cannot be in the past
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    if (!rawDate || rawDate < todayStr) {
+      const errEl = document.getElementById('evt-date-error');
+      if (errEl) errEl.style.display = 'block';
+      dateInput.style.borderColor = '#ef4444';
+      dateInput.focus();
+      this.showToast('Không thể tạo sự kiện trong quá khứ! Ngày tổ chức phải từ hôm nay trở đi.', 'error');
+      return;
+    }
     // Format date as DD/MM/YYYY for Mobile App compatibility
     let formattedDate = rawDate;
     if (rawDate && rawDate.includes('-')) {

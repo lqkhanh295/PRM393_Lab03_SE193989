@@ -1,8 +1,70 @@
 {
   "GET:/events": {
-    "timestamp": 1794414547738,
+    "timestamp": 1794415028555,
     "data": {
       "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/doc_1794415028555",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-8043"
+            },
+            "title": {
+              "stringValue": "Hội thảo AI & Robotics Campus 2026"
+            },
+            "description": {
+              "stringValue": "Sự kiện chia sẻ thực chiến AI"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "clubId": {
+              "stringValue": "fcode"
+            },
+            "clubName": {
+              "stringValue": "CLB F-Code"
+            },
+            "date": {
+              "stringValue": "20/11/2026"
+            },
+            "time": {
+              "stringValue": "14:00 - 17:00"
+            },
+            "location": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "capacity": {
+              "integerValue": "250"
+            },
+            "registeredCount": {
+              "integerValue": "0"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200"
+            },
+            "isFeatured": {
+              "booleanValue": false
+            },
+            "speakers": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "sessions": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "createdAt": {
+              "stringValue": "2026-11-11T16:37:08.044Z"
+            },
+            "updatedAt": {
+              "stringValue": "2026-11-11T16:37:08.044Z"
+            }
+          },
+          "createTime": "2026-11-11T16:37:08.555Z",
+          "updateTime": "2026-11-11T16:37:08.555Z"
+        },
         {
           "name": "projects/campus-event-48443/databases/(default)/documents/events/doc_1794414547738",
           "fields": {
