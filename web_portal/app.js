@@ -545,6 +545,7 @@ const app = {
   state: {
     activeView: 'overview',
     checkinCount: 0,
+    totalRegistered: 0,
     totalCapacity: 0,
     approvedBudget: 48500000,
     hourlyFlow: [
@@ -755,7 +756,7 @@ const app = {
 
         const totalRegistered = events.reduce((sum, e) => sum + (e.registeredCount || 0), 0);
         const totalCap = events.reduce((sum, e) => sum + (e.capacity || 200), 0);
-        this.state.checkinCount = totalRegistered;
+        this.state.totalRegistered = totalRegistered;
         this.state.totalCapacity = totalCap;
         this.renderKPIs();
 
