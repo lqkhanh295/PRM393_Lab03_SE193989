@@ -441,6 +441,80 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 200, { success: true, message: `Đã thu hồi vé ${ticketId}` });
       }
 
+      // 10. GET /api/gate-assignments (Gate Duty Roster & Staff Assignments)
+      if (pathname === '/api/gate-assignments' && req.method === 'GET') {
+        const emailFilter = parsedUrl.searchParams.get('email');
+        const data = await firestoreRequest('/gate_assignments');
+        let assignments = (data.documents || []).map(fromFirestoreDoc);
+        if (emailFilter) {
+          assignments = assignments.filter(a => a.email && a.email.toLowerCase() === emailFilter.toLowerCase());
+        }
+        return sendJson(res, 200, { documents: assignments });
+      }
+
+      // 10b. POST /api/gate-assignments (Create New Duty Assignment)
+      if (pathname === '/api/gate-assignments' && req.method === 'POST') {
+        const body = await parseBody(req);
+        if (!body.email || !body.eventId) {
+          return sendJson(res, 400, { error: 'Vui lòng cung cấp email CTV và sự kiện được phân công.' });
+        }
+
+        const dutyId = body.id || `DUTY-2026-${Date.now().toString().slice(-4)}`;
+        const now = new Date().toISOString();
+
+        const assignmentData = {
+          id: dutyId,
+          email: body.email.trim().toLowerCase(),
+          studentName: (body.studentName || 'CTV FPTU').trim(),
+          studentId: (body.studentId || (body.email.split('@')[0])).toUpperCase().trim(),
+          eventId: body.eventId,
+          eventTitle: body.eventTitle || 'Sự kiện FPTU',
+          gateName: body.gateName || 'Cổng Chính (Cửa 1)',
+          role: body.role || 'CTV Soát Vé Cổng',
+          shiftTime: body.shiftTime || '13:00 - 17:30',
+          status: 'active',
+          assignedBy: 'Phòng CTSV',
+          assignedAt: now
+        };
+
+        const fields = toFirestoreFields(assignmentData);
+        await firestoreRequest(`/gate_assignments?documentId=${dutyId}`, 'POST', { fields });
+        console.log(`[Gate Assignment] Created duty assignment: ${dutyId} for ${assignmentData.email} (${assignmentData.eventId})`);
+        return sendJson(res, 200, { success: true, dutyId, assignment: assignmentData });
+      }
+
+      // 10c. PATCH /api/gate-assignments/:id (Update Duty Status / Gate)
+      const dutyPatchMatch = pathname.match(/^\/api\/gate-assignments\/([^\/]+)$/);
+      if (dutyPatchMatch && req.method === 'PATCH') {
+        const dutyId = decodeURIComponent(dutyPatchMatch[1]);
+        const body = await parseBody(req);
+        const updateFields = {};
+        const fieldPaths = [];
+
+        if (body.status) {
+          updateFields.status = { stringValue: body.status };
+          fieldPaths.push('updateMask.fieldPaths=status');
+        }
+        if (body.gateName) {
+          updateFields.gateName = { stringValue: body.gateName };
+          fieldPaths.push('updateMask.fieldPaths=gateName');
+        }
+
+        if (fieldPaths.length > 0) {
+          await firestoreRequest(`/gate_assignments/${dutyId}?${fieldPaths.join('&')}`, 'PATCH', { fields: updateFields });
+        }
+        console.log(`[Gate Assignment] Updated ${dutyId}:`, body);
+        return sendJson(res, 200, { success: true, dutyId });
+      }
+
+      // 10d. DELETE /api/gate-assignments/:id (Delete Duty Assignment)
+      if (dutyPatchMatch && req.method === 'DELETE') {
+        const dutyId = decodeURIComponent(dutyPatchMatch[1]);
+        await firestoreRequest(`/gate_assignments/${dutyId}`, 'DELETE');
+        console.log(`[Gate Assignment] Deleted ${dutyId}`);
+        return sendJson(res, 200, { success: true, dutyId });
+      }
+
       // 9c. POST /api/tickets/checkin (Gate Check-In Action - Real Cloud Firestore)
       if (pathname === '/api/tickets/checkin' && req.method === 'POST') {
         const body = await parseBody(req);

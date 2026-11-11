@@ -87,6 +87,8 @@ class AppOutlinedButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
+  final Widget? leadingWidget;
+  final bool isLoading;
   final Color? borderColor;
   final Color? textColor;
 
@@ -95,6 +97,8 @@ class AppOutlinedButton extends StatelessWidget {
     required this.label,
     this.onPressed,
     this.icon,
+    this.leadingWidget,
+    this.isLoading = false,
     this.borderColor,
     this.textColor,
   });
@@ -106,13 +110,14 @@ class AppOutlinedButton extends StatelessWidget {
 
     return Semantics(
       button: true,
-      enabled: onPressed != null,
+      enabled: onPressed != null && !isLoading,
       label: label,
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: text,
           backgroundColor: Colors.transparent,
+          disabledForegroundColor: AppTheme.textSubtle,
           elevation: 0,
           side: BorderSide(color: border, width: 1.2),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -121,30 +126,42 @@ class AppOutlinedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppTheme.radiusButton),
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 18, color: text),
-              const SizedBox(width: 8),
-            ],
-            Flexible(
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.2,
-                  color: text,
+        child: isLoading
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.2,
+                  valueColor: AlwaysStoppedAnimation<Color>(text),
                 ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (leadingWidget != null) ...[
+                    leadingWidget!,
+                    const SizedBox(width: 10),
+                  ] else if (icon != null) ...[
+                    Icon(icon, size: 18, color: text),
+                    const SizedBox(width: 8),
+                  ],
+                  Flexible(
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                        color: text,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

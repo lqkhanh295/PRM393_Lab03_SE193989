@@ -10,7 +10,14 @@ import '../models/user_model.dart';
 class AuthService {
   final FirebaseAuth? _firebaseAuth;
   final FirebaseFirestore? _firestore;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(clientId: kIsWeb ? '1053429994801-campusevent.apps.googleusercontent.com' : null, scopes: ['email', 'profile']);
+
+  static const String _webClientId = '74927582053-u55o35mih7dnssub0g5c3cmm3mmtcnil.apps.googleusercontent.com';
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: kIsWeb ? _webClientId : null,
+    serverClientId: _webClientId,
+    scopes: ['email', 'profile'],
+  );
 
   UserModel? _currentUser;
   final _authStateController = StreamController<UserModel?>.broadcast();
@@ -94,7 +101,7 @@ class AuthService {
 
       if (googleUser == null) {
         debugPrint('[AuthService] Google Sign-In cancelled by user');
-        throw Exception('Người dùng đã hủy đăng nhập Google.');
+        return null;
       }
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -107,14 +114,16 @@ class AuthService {
         final UserCredential userCred = await _firebaseAuth.signInWithCredential(credential);
         final User? user = userCred.user;
         if (user != null) {
-          final prefix = (user.email ?? googleUser.email).split('@').first;
+          final email = user.email ?? googleUser.email;
+          final prefix = email.split('@').first;
           final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+          
           final basicUser = UserModel(
             id: user.uid,
             name: user.displayName ?? googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
-            email: user.email ?? googleUser.email,
+            email: email,
             avatarUrl: user.photoURL ?? googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-            major: 'Sinh viên FPTU',
+            major: 'Kỹ thuật Phần mềm (SE)',
             activityPoints: 0,
             role: 'student',
           );
@@ -122,14 +131,15 @@ class AuthService {
           _listenToUserDocument(_currentUser!.id);
         }
       } else {
-        final prefix = googleUser.email.split('@').first;
+        final email = googleUser.email;
+        final prefix = email.split('@').first;
         final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
         final basicUser = UserModel(
           id: googleUser.id,
           name: googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
-          email: googleUser.email,
+          email: email,
           avatarUrl: googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${googleUser.id}',
-          major: 'Sinh viên FPTU',
+          major: 'Kỹ thuật Phần mềm (SE)',
           activityPoints: 0,
           role: 'student',
         );
@@ -138,8 +148,22 @@ class AuthService {
       }
 
       _authStateController.add(_currentUser);
-      debugPrint('[AuthService] Sign-in successful: ${_currentUser?.email}');
+      debugPrint('[AuthService] Google Sign-in successful: ${_currentUser?.email}');
       return _currentUser;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('[AuthService] Firebase Auth error: ${e.code} - ${e.message}');
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          throw Exception('Tài khoản này đã được liên kết với một phương thức đăng nhập khác.');
+        case 'invalid-credential':
+          throw Exception('Thông tin xác thực Google không hợp lệ hoặc đã hết hạn.');
+        case 'user-disabled':
+          throw Exception('Tài khoản đã bị tạm khóa. Vui lòng liên hệ ban quản trị FPTU.');
+        case 'network-request-failed':
+          throw Exception('Lỗi kết nối mạng. Vui lòng kiểm tra Wifi/4G và thử lại.');
+        default:
+          throw Exception(e.message ?? 'Đăng nhập Google thất bại. Vui lòng thử lại.');
+      }
     } catch (e) {
       debugPrint('[AuthService] Sign-in error: $e');
       rethrow;

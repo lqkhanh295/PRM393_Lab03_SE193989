@@ -11,6 +11,7 @@ import '../models/certificate_model.dart';
 import '../models/user_model.dart';
 import '../models/announcement_model.dart';
 import '../models/registration_model.dart';
+import '../models/gate_assignment_model.dart';
 import 'seed_firestore_data.dart';
 
 class CheckInValidationResult {
@@ -1119,5 +1120,26 @@ class FirestoreService {
         reviewedAt: now,
       );
     }
+  }
+
+  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore
+  Future<List<GateAssignmentModel>> getGateAssignments({String? email}) async {
+    try {
+      if (_firestore != null) {
+        Query<Map<String, dynamic>> query = _firestore.collection('gate_assignments');
+        if (email != null && email.isNotEmpty) {
+          query = query.where('email', isEqualTo: email.toLowerCase().trim());
+        }
+        final snap = await query.get();
+        final list = snap.docs
+            .map((doc) => GateAssignmentModel.fromMap(doc.data(), doc.id))
+            .where((a) => a.isActive)
+            .toList();
+        return list;
+      }
+    } catch (e) {
+      debugPrint('[FirestoreService] getGateAssignments note: $e');
+    }
+    return [];
   }
 }

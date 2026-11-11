@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../models/screen_state.dart';
 import '../models/certificate_model.dart';
 import '../models/club_model.dart';
+import '../models/gate_assignment_model.dart';
 import '../services/firestore_service.dart';
 import '../services/storage_service.dart';
 import '../services/remote_config_service.dart';
@@ -30,6 +31,26 @@ class ProfileViewModel extends ChangeNotifier {
 
   List<ClubModel> _followedClubs = [];
   List<ClubModel> get followedClubs => _followedClubs;
+
+  // Gate Check-in Duty Assignments (Phân công ca trực cổng)
+  List<GateAssignmentModel> _gateAssignments = [];
+  List<GateAssignmentModel> get gateAssignments => _gateAssignments;
+  bool _isLoadingAssignments = false;
+  bool get isLoadingAssignments => _isLoadingAssignments;
+
+  Future<void> loadGateAssignments(String email) async {
+    if (email.isEmpty) return;
+    _isLoadingAssignments = true;
+    notifyListeners();
+    try {
+      _gateAssignments = await _firestoreService.getGateAssignments(email: email);
+    } catch (e) {
+      debugPrint('[ProfileViewModel] loadGateAssignments error: $e');
+    } finally {
+      _isLoadingAssignments = false;
+      notifyListeners();
+    }
+  }
 
   // Firebase Demo Area State
   double _uploadProgress = 0.0;

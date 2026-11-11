@@ -237,8 +237,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Google SSO Button
                   AppOutlinedButton(
-                    label: 'Đăng nhập với Google FPT (@fpt.edu.vn)',
-                    icon: Icons.g_mobiledata_rounded,
+                    label: 'Đăng nhập với Google (@fpt.edu.vn)',
+                    leadingWidget: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppTheme.hairline, width: 1),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'G',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF4285F4),
+                        ),
+                      ),
+                    ),
+                    isLoading: isLoading && authVM.state is StateLoading && (authVM.state as StateLoading).message.contains('Google'),
                     onPressed: isLoading
                         ? null
                         : () async {

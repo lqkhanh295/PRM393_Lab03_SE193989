@@ -53,9 +53,15 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
       return false;
     } catch (e, stack) {
-      debugPrint('[AuthViewModel] Sign-in error: $e');
+      final msg = e.toString().replaceAll('Exception: ', '');
+      if (msg.contains('hủy') || msg.contains('cancel')) {
+        _state = const StateInitial();
+        notifyListeners();
+        return false;
+      }
+      debugPrint('[AuthViewModel] Google sign-in error: $e');
       await _crashlyticsService.recordHandledError(e, stack, reason: 'Google sign-in error');
-      _state = StateError(e.toString().replaceAll('Exception: ', ''));
+      _state = StateError(msg);
       notifyListeners();
       return false;
     }

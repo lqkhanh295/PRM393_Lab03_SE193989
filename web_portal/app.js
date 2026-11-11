@@ -53,6 +53,10 @@ const app = {
     gateStartTime: Date.now() - 4800000,
     lastScanTimeStr: null,
     lastScanTicketCode: null,
+    gateAssignments: [],
+    dutyFilterEvent: 'all',
+    dutyFilterStatus: 'all',
+    dutySearchQuery: '',
     students: [],
     tickets: [],
     registrations: [],
@@ -135,6 +139,7 @@ const app = {
     this.renderStudentsTable();
     this.renderReviewQueue();
     this.renderAnnouncementsHistory();
+    this.renderDutyRoster();
     this.renderTelemetryView();
     this.renderGateChart();
     this.renderVenues();
@@ -285,6 +290,18 @@ const app = {
         console.warn('[Tickets] Note:', e);
       }
 
+      // 5b. Fetch Gate Duty Assignments from Cloud Firestore
+      try {
+        const dutyRes = await fetch('/api/gate-assignments');
+        if (dutyRes.ok) {
+          const dutyData = await dutyRes.json();
+          this.state.gateAssignments = dutyData.documents || [];
+          this.renderDutyRoster();
+        }
+      } catch (e) {
+        console.warn('[Gate Assignments] Note:', e);
+      }
+
       // 6. Fetch Announcements from Cloud Firestore (Announcements Inbox)
       try {
         const annRes = await fetch('/api/announcements');
@@ -367,6 +384,8 @@ const app = {
       this.renderGateChart();
     } else if (viewName === 'telemetry') {
       this.renderTelemetryView();
+    } else if (viewName === 'duty-roster') {
+      this.renderDutyRoster();
     }
   },
 
@@ -1876,6 +1895,240 @@ const app = {
     }
   },
 
+
+  // ==========================================================================
+  // VIEW: DUTY ROSTER & GATE ASSIGNMENTS (PHÂN CÔNG CA TRỰC ĐIỂM DANH)
+  // ==========================================================================
+  async refreshGateAssignments() {
+    try {
+      const dutyRes = await fetch('/api/gate-assignments');
+      if (dutyRes.ok) {
+        const dutyData = await dutyRes.json();
+        this.state.gateAssignments = dutyData.documents || [];
+        this.renderDutyRoster();
+        this.showToast('Đã đồng bộ danh sách phân công ca trực từ Cloud Firestore!');
+      }
+    } catch (e) {
+      this.showToast('Lỗi khi làm mới phân công ca trực.');
+    }
+  },
+
+  renderDutyRoster(filteredList = null) {
+    const tbody = document.getElementById('duty-roster-body');
+    const badge = document.getElementById('sidebar-duty-count');
+    const list = filteredList || this.state.gateAssignments || [];
+
+    // Update KPI cards
+    const totalStaff = this.state.gateAssignments.length;
+    const activeShifts = this.state.gateAssignments.filter(a => a.status === 'active').length;
+    const uniqueGates = new Set(this.state.gateAssignments.map(a => a.gateName)).size;
+    const coveredEvents = new Set(this.state.gateAssignments.map(a => a.eventId)).size;
+    const totalEvents = this.state.liveEvents?.length || 4;
+
+    const elStaff = document.getElementById('duty-kpi-total-staff');
+    const elActive = document.getElementById('duty-kpi-active-shifts');
+    const elGates = document.getElementById('duty-kpi-gates-covered');
+    const elEvts = document.getElementById('duty-kpi-events-covered');
+    const elEvtsTotal = document.getElementById('duty-kpi-events-total');
+    const elCoverage = document.getElementById('duty-kpi-coverage-rate');
+    const elCount = document.getElementById('duty-count-indicator');
+
+    if (elStaff) elStaff.innerText = totalStaff;
+    if (elActive) elActive.innerText = activeShifts;
+    if (elGates) elGates.innerText = uniqueGates;
+    if (elEvts) elEvts.innerText = coveredEvents;
+    if (elEvtsTotal) elEvtsTotal.innerText = `/ ${totalEvents} sự kiện`;
+    if (elCoverage) {
+      const rate = totalEvents > 0 ? Math.round((coveredEvents / totalEvents) * 100) : 0;
+      elCoverage.innerText = `Tỷ lệ phủ ca trực: ${rate}%`;
+    }
+    if (badge) badge.innerText = activeShifts;
+    if (elCount) elCount.innerText = `Đang hiển thị ${list.length} / ${totalStaff} ca trực`;
+
+    // Populate event filter dropdown
+    const eventFilterEl = document.getElementById('duty-event-filter');
+    if (eventFilterEl && eventFilterEl.options.length <= 1 && this.state.liveEvents?.length > 0) {
+      eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
+        this.state.liveEvents.map(e => `<option value="${e.id}">[${e.id}] ${e.title}</option>`).join('');
+    }
+
+    if (!tbody) return;
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--muted); padding: 36px;">Không tìm thấy ca trực nào phù hợp với bộ lọc tìm kiếm.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(a => {
+      const isActive = a.status === 'active';
+      const statusPill = isActive
+        ? '<span class="pill pill-positive">Đang kích hoạt</span>'
+        : '<span class="pill pill-negative">Đã thu hồi</span>';
+
+      return `
+        <tr>
+          <td class="mono" style="font-weight: 600;">${a.id}</td>
+          <td>
+            <div style="font-weight: 600; color: var(--text);">${a.studentName}</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: monospace;">${a.assignedBy || 'Phòng CTSV'}</div>
+          </td>
+          <td>
+            <div style="font-size: 12.5px;">${a.email}</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: monospace;">MSSV: ${a.studentId || '—'}</div>
+          </td>
+          <td>
+            <div style="font-weight: 600; color: var(--text); font-size: 12.5px;">${a.eventTitle || a.eventId}</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: monospace;">Mã: ${a.eventId}</div>
+          </td>
+          <td>
+            <span style="font-weight: 500; font-size: 12.5px;">${a.gateName || 'Cổng Chính (Cửa 1)'}</span>
+          </td>
+          <td>
+            <span class="pill pill-neutral" style="font-size: 11px;">${a.role || 'CTV Soát Vé'}</span>
+          </td>
+          <td style="font-size: 12px; color: var(--muted); font-family: monospace;">
+            ${a.shiftTime || '13:00 - 17:30'}
+          </td>
+          <td>${statusPill}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn ${isActive ? 'btn-secondary' : 'btn-primary'} btn-sm" onclick="app.toggleDutyStatus('${a.id}', '${a.status}')" style="padding: 4px 8px; font-size: 11px; margin-right: 4px;">
+              ${isActive ? 'Thu hồi' : 'Kích hoạt'}
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="app.deleteDutyAssignment('${a.id}')" style="padding: 4px 8px; font-size: 11px; color: var(--negative);" title="Xóa phân công">
+              ✕
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  filterDutyAssignments() {
+    const searchVal = (document.getElementById('duty-search-input')?.value || '').trim().toLowerCase();
+    const eventVal = document.getElementById('duty-event-filter')?.value || 'all';
+    const statusVal = document.getElementById('duty-status-filter')?.value || 'all';
+
+    let filtered = [...this.state.gateAssignments];
+
+    if (searchVal) {
+      filtered = filtered.filter(a =>
+        (a.email && a.email.toLowerCase().includes(searchVal)) ||
+        (a.studentName && a.studentName.toLowerCase().includes(searchVal)) ||
+        (a.studentId && a.studentId.toLowerCase().includes(searchVal)) ||
+        (a.eventTitle && a.eventTitle.toLowerCase().includes(searchVal)) ||
+        (a.id && a.id.toLowerCase().includes(searchVal))
+      );
+    }
+
+    if (eventVal !== 'all') {
+      filtered = filtered.filter(a => a.eventId === eventVal);
+    }
+
+    if (statusVal !== 'all') {
+      filtered = filtered.filter(a => a.status === statusVal);
+    }
+
+    this.renderDutyRoster(filtered);
+  },
+
+  openDutyAssignmentModal() {
+    const modal = document.getElementById('duty-modal');
+    const evtSelect = document.getElementById('duty-form-event');
+    if (!modal) return;
+
+    if (evtSelect && this.state.liveEvents?.length > 0) {
+      evtSelect.innerHTML = this.state.liveEvents.map(e => `<option value="${e.id}" data-title="${e.title}">[${e.id}] ${e.title} (${e.location})</option>`).join('');
+    }
+
+    modal.style.display = 'flex';
+  },
+
+  closeDutyModal() {
+    const modal = document.getElementById('duty-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  async handleDutyFormSubmit(e) {
+    e.preventDefault();
+    const evtSelect = document.getElementById('duty-form-event');
+    const emailInput = document.getElementById('duty-form-email');
+    const nameInput = document.getElementById('duty-form-name');
+    const mssvInput = document.getElementById('duty-form-mssv');
+    const gateSelect = document.getElementById('duty-form-gate');
+    const roleSelect = document.getElementById('duty-form-role');
+    const shiftInput = document.getElementById('duty-form-shift');
+
+    const selectedOpt = evtSelect.options[evtSelect.selectedIndex];
+    const eventTitle = selectedOpt ? selectedOpt.getAttribute('data-title') : '';
+
+    const payload = {
+      eventId: evtSelect.value,
+      eventTitle: eventTitle,
+      email: emailInput.value.trim().toLowerCase(),
+      studentName: nameInput.value.trim(),
+      studentId: mssvInput.value.trim(),
+      gateName: gateSelect.value,
+      role: roleSelect.value,
+      shiftTime: shiftInput.value.trim()
+    };
+
+    try {
+      this.showToast('Đang tạo phân công ca trực trên Cloud Firestore...');
+      const res = await fetch('/api/gate-assignments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        this.closeDutyModal();
+        await this.refreshGateAssignments();
+        this.showToast(`[Phân Công Thành Công] Đã cấp quyền soát vé cho ${payload.studentName} (${payload.email}) tại ${payload.gateName}.`);
+      } else {
+        this.showToast(data.error || 'Lỗi khi lưu phân công ca trực.');
+      }
+    } catch (err) {
+      console.error('[handleDutyFormSubmit] Error:', err);
+      this.showToast('Không thể kết nối đến máy chủ.');
+    }
+  },
+
+  async toggleDutyStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'revoked' : 'active';
+    try {
+      const res = await fetch(`/api/gate-assignments/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      if (res.ok) {
+        await this.refreshGateAssignments();
+        this.showToast(`Đã ${newStatus === 'active' ? 'kích hoạt lại' : 'thu hồi'} quyền ca trực ${id}.`);
+      } else {
+        this.showToast('Lỗi khi cập nhật trạng thái ca trực.');
+      }
+    } catch (e) {
+      this.showToast('Không thể kết nối đến máy chủ.');
+    }
+  },
+
+  async deleteDutyAssignment(id) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa phân công ca trực ${id} khỏi Cloud Firestore không?`)) return;
+    try {
+      const res = await fetch(`/api/gate-assignments/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        await this.refreshGateAssignments();
+        this.showToast(`Đã xóa phân công ca trực ${id}.`);
+      } else {
+        this.showToast('Lỗi khi xóa phân công.');
+      }
+    } catch (e) {
+      this.showToast('Không thể kết nối đến máy chủ.');
+    }
+  },
 
   // Export to CSV
   exportToCSV() {
