@@ -811,16 +811,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
 
             // ==========================================
-            // TASK 4 (ĐẠT): ANALYTICS DEBUGVIEW TRIGGER PANEL
-            // Kích hoạt tuần tự 7 events bắt buộc — Phụ lục A
+            // TASK 4 (ĐẠT): BẢNG ĐIỀU KHIỂN CHẨN ĐOÁN LAB 3 (EXPANSION TILE THU GỌN)
             // ==========================================
-            _buildAnalyticsTriggerPanel(context, profileVM, user?.id ?? ''),
-            const SizedBox(height: 14),
-
-            // ==========================================
-            // TASK 4 (ĐẠT): CRASHLYTICS VERIFICATION CONTROLS
-            // ==========================================
-            _buildCrashlyticsPanel(context, profileVM),
+            Container(
+              decoration: BoxDecoration(
+                color: AppTheme.surface,
+                borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                border: Border.all(color: AppTheme.hairline, width: 1),
+              ),
+              child: Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  initiallyExpanded: false,
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  leading: const Icon(Icons.build_circle_outlined, color: AppTheme.textMuted, size: 22),
+                  title: const Text(
+                    'Bảng điều khiển kiểm định Lab 3',
+                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: AppTheme.obsidian),
+                  ),
+                  subtitle: const Text(
+                    'Analytics 7 events & Crashlytics (dành cho giảng viên / nghiệm thu)',
+                    style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                  ),
+                  children: [
+                    _buildAnalyticsTriggerPanel(context, profileVM, user?.id ?? ''),
+                    const SizedBox(height: 14),
+                    _buildCrashlyticsPanel(context, profileVM),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
 
             // Sign out Button
@@ -1255,7 +1276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildWebFeatureTile(
                 icon: Icons.fire_extinguisher_outlined,
                 title: 'Hồ sơ An toàn PCCC & Sức chứa',
-                desc: 'Thẩm định phương án thoát hiểm và khống chế hạn mức 1.200 chỗ hội trường Trịnh Công Sơn.',
+                desc: 'Thẩm định phương án thoát hiểm và khống chế hạn mức 400 chỗ hội trường Trịnh Công Sơn.',
               ),
               const SizedBox(height: 8),
 
@@ -1287,7 +1308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'URL Nội bộ: https://ctsv-portal.fptu.edu.vn',
+                        'URL Nội bộ: http://localhost:3000 (Cổng Quản Trị CTSV)',
                         style: TextStyle(
                           fontSize: 11,
                           fontFamily: 'monospace',

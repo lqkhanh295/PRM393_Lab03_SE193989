@@ -49,13 +49,16 @@ class FeedbackViewModel extends ChangeNotifier {
       );
 
       final certId = 'CERT-${DateTime.now().millisecondsSinceEpoch}';
+      final now = DateTime.now();
+      final issueDateStr = '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+
       final cert = CertificateModel(
         id: certId,
         eventId: eventId,
         eventTitle: eventTitle,
         userId: user.id,
         studentName: user.name,
-        issueDate: '28/10/2026',
+        issueDate: issueDateStr,
         verificationHash: 'HASH-FPTU-CERT-${DateTime.now().millisecondsSinceEpoch}',
         downloadUrl: '',
       );

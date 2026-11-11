@@ -703,70 +703,73 @@
     }
   },
   "GET:/registrations": {
-    "timestamp": 1794394976710,
+    "timestamp": 1794400404904,
     "data": {
       "documents": [
         {
-          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-01",
+          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-001",
           "fields": {
-            "id": {
-              "stringValue": "REG-2026-01"
-            },
-            "eventId": {
-              "stringValue": "EVT-2026-01"
-            },
             "eventTitle": {
-              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+              "stringValue": "FPTU Tech Expo 2026: AI & Robotics"
             },
-            "studentName": {
-              "stringValue": "Hoàng Kim Ngân"
-            },
-            "studentId": {
-              "stringValue": "SE189912"
-            },
-            "studentEmail": {
-              "stringValue": "nganhk.se18@fpt.edu.vn"
+            "ticketId": {
+              "stringValue": "CE2026-888999"
             },
             "status": {
               "stringValue": "pending"
             },
-            "submittedAt": {
-              "stringValue": "2026-11-11T09:00:00.000Z"
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "id": {
+              "stringValue": "REG-2026-001"
+            },
+            "userId": {
+              "stringValue": "USR-AN-NV"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-10T18:52:13.681Z"
+            },
+            "studentEmail": {
+              "stringValue": "an.nv@fpt.edu.vn"
+            },
+            "studentName": {
+              "stringValue": "Nguyễn Văn An"
             }
           },
-          "createTime": "2026-11-11T10:00:00.000000Z",
-          "updateTime": "2026-11-11T10:00:00.000000Z"
+          "createTime": "2026-11-10T18:52:14.855058Z",
+          "updateTime": "2026-11-10T18:53:50.975956Z"
         },
         {
-          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-02",
+          "name": "projects/campus-event-48443/databases/(default)/documents/registrations/REG-2026-002",
           "fields": {
-            "id": {
-              "stringValue": "REG-2026-02"
-            },
             "eventId": {
-              "stringValue": "EVT-2026-01"
-            },
-            "eventTitle": {
-              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
-            },
-            "studentName": {
-              "stringValue": "Đặng Tuấn Anh"
-            },
-            "studentId": {
-              "stringValue": "IA180451"
-            },
-            "studentEmail": {
-              "stringValue": "anhdt.ia18@fpt.edu.vn"
+              "stringValue": "EVT-2026-02"
             },
             "status": {
               "stringValue": "pending"
             },
-            "submittedAt": {
-              "stringValue": "2026-11-11T09:30:00.000Z"
+            "createdAt": {
+              "stringValue": "2026-11-10T18:52:30.447Z"
+            },
+            "userId": {
+              "stringValue": "USR-KHOA-LQ"
+            },
+            "studentName": {
+              "stringValue": "Lê Quốc Khoa"
+            },
+            "studentEmail": {
+              "stringValue": "khoa.lq@fe.edu.vn"
+            },
+            "eventTitle": {
+              "stringValue": "Workshop UI/UX Design Masterclass"
+            },
+            "id": {
+              "stringValue": "REG-2026-002"
             }
           },
-          "createTime": "2026-11-11T10:00:00.000000Z",
-          "updateTime": "2026-11-11T10:00:00.000000Z"
+          "createTime": "2026-11-10T18:52:30.770094Z",
+          "updateTime": "2026-11-10T18:52:30.770094Z"
         }
       ]
     }
@@ -808,5 +811,9 @@
         }
       ]
     }
+  },
+  "GET:/budgets": {
+    "timestamp": 1794400399843,
+    "data": {}
   }
 }

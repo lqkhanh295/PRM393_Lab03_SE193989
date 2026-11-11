@@ -854,6 +854,27 @@ class FirestoreService {
   }) async {
     try {
       if (_firestore != null) {
+        // Prevent duplicate feedback points spam: Check if user already submitted feedback for this event
+        final existingSnap = await _firestore
+            .collection('feedback')
+            .where('eventId', isEqualTo: eventId)
+            .where('userId', isEqualTo: userId)
+            .limit(1)
+            .get();
+
+        if (existingSnap.docs.isNotEmpty) {
+          // Already submitted feedback: Update comment & rating only, DO NOT award +5 points a second time!
+          final docId = existingSnap.docs.first.id;
+          await _firestore.collection('feedback').doc(docId).update({
+            'rating': rating,
+            'comments': comments,
+            'updatedAt': FieldValue.serverTimestamp(),
+          });
+          debugPrint('[FirestoreService] Feedback updated for event $eventId (No duplicate points awarded)');
+          return;
+        }
+
+        // First time submission: Record feedback and award +5 points
         await _firestore.collection('feedback').add({
           'eventId': eventId,
           'userId': userId,
@@ -862,7 +883,7 @@ class FirestoreService {
           'submittedAt': FieldValue.serverTimestamp(),
         });
 
-        // Atomically increment student activity points (+5) in Firestore
+        // Atomically increment student activity points (+5) in Firestore ONLY on first submission
         await _firestore.collection('users').doc(userId).set({
           'activityPoints': FieldValue.increment(5),
         }, SetOptions(merge: true));

@@ -1,3 +1,6 @@
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
@@ -211,10 +214,70 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                 AppOutlinedButton(
                   label: 'Tải Slide Báo Cáo Của Diễn Giả (PDF)',
                   icon: Icons.download_rounded,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Đang tải slide tài liệu từ diễn giả...')),
-                    );
+                  onPressed: () async {
+                    try {
+                      final doc = pw.Document();
+                      doc.addPage(
+                        pw.Page(
+                          pageFormat: PdfPageFormat.a4,
+                          build: (pw.Context ctx) {
+                            return pw.Container(
+                              padding: const pw.EdgeInsets.all(32),
+                              child: pw.Column(
+                                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                children: [
+                                  pw.Text(
+                                    'TRUONG DAI HOC FPT TP. HO CHI MINH',
+                                    style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: PdfColors.blue900),
+                                  ),
+                                  pw.SizedBox(height: 6),
+                                  pw.Text(
+                                    'TAI LIEU DIEN GIA & SLIDE PHIEN THUYET TRINH',
+                                    style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                                  ),
+                                  pw.Divider(thickness: 1.5, color: PdfColors.grey400),
+                                  pw.SizedBox(height: 14),
+                                  pw.Text('Chu de: ${currentSession.title.isNotEmpty ? currentSession.title : "Chuyen de FPTU"}', style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold)),
+                                  pw.SizedBox(height: 8),
+                                  pw.Text('Dien gia: ${currentSession.speakerName.isNotEmpty ? currentSession.speakerName : "Chuyen gia khach moi"}', style: const pw.TextStyle(fontSize: 12)),
+                                  pw.SizedBox(height: 6),
+                                  pw.Text('Khung gio: ${currentSession.time.isNotEmpty ? currentSession.time : "13:30 - 17:30"}', style: const pw.TextStyle(fontSize: 12)),
+                                  pw.SizedBox(height: 18),
+                                  pw.Container(
+                                    padding: const pw.EdgeInsets.all(16),
+                                    decoration: pw.BoxDecoration(
+                                      color: PdfColors.grey100,
+                                      borderRadius: pw.BorderRadius.circular(8),
+                                    ),
+                                    child: pw.Column(
+                                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                      children: [
+                                        pw.Text('TOM TAT NOI DUNG & TAI LIEU CHUYEN MON:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11)),
+                                        pw.SizedBox(height: 8),
+                                        pw.Text('1. Tong quan cac xu huong cong nghe va ky thuat phan mem moi nhat.', style: const pw.TextStyle(fontSize: 10)),
+                                        pw.Text('2. So do kien truc thuc te va huong dan lap trinh ung dung.', style: const pw.TextStyle(fontSize: 10)),
+                                        pw.Text('3. Bo tai lieu Slide va ma nguon tham khao doc quyen cho sinh vien tham du.', style: const pw.TextStyle(fontSize: 10)),
+                                      ],
+                                    ),
+                                  ),
+                                  pw.Spacer(),
+                                  pw.Text('FPTU Campus Event - He Thong Quan Ly Su Kien Sinh Vien FPT', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                      await Printing.layoutPdf(
+                        name: 'Slide_Dien_Gia',
+                        onLayout: (PdfPageFormat format) async => doc.save(),
+                      );
+                    } catch (e) {
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Lỗi xuất tài liệu: $e')),
+                      );
+                    }
                   },
                 ),
               ],

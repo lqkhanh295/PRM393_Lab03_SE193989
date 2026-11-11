@@ -160,7 +160,7 @@ Yêu cầu trả về đúng định dạng JSON thuần túy (không markdown) 
               'Sinh viên cần tích lũy điểm rèn luyện trong học kỳ.',
             ],
       suggestedQuestions: [
-        'Làm thế nào để ứng dụng kiến thức trong sự kiện này vào đồ án môn học PRM393?',
+        'Diễn giả có thể chia sẻ lộ trình phát triển kỹ năng và cơ hội thực tập cho sinh viên năm 3-4 không?',
         'Các chứng chỉ và kỹ năng nào được doanh nghiệp đánh giá cao nhất hiện nay?',
       ],
       isFallback: true,

@@ -232,6 +232,24 @@ const app = {
         this.renderTelemetryView();
       }
 
+            // Fetch Budget Proposals from Cloud Firestore
+      try {
+        const budgetRes = await fetch('/api/budgets');
+        if (budgetRes.ok) {
+          const budgetData = await budgetRes.json();
+          if (budgetData.documents && budgetData.documents.length > 0) {
+            this.state.budgetProposals = budgetData.documents;
+            this.state.approvedBudget = this.state.budgetProposals
+              .filter(p => p.status === 'approved')
+              .reduce((sum, p) => sum + (p.budget || 0), 0);
+            this.renderKPIs();
+            this.renderBudgetTable();
+          }
+        }
+      } catch (e) {
+        console.warn('[Budgets] Note:', e);
+      }
+
       // 3. Fetch Clubs from Cloud Firestore
       try {
         const clubsRes = await fetch('/api/clubs');
@@ -542,29 +560,56 @@ const app = {
   },
 
   // Approve Budget
-  approveBudget(id) {
+  async approveBudget(id) {
     const item = this.state.budgetProposals.find(p => p.id === id);
     if (!item) return;
 
-    item.status = 'approved';
-    this.state.approvedBudget += item.budget;
-    this.renderKPIs();
-    this.filterBudget();
-    this.showToast(`Đã duyệt ngân sách ${this.formatVND(item.budget)} ₫ cho "${item.title}"`);
+    this.showToast(`Đang cập nhật phê duyệt ngân sách ${id} lên Cloud Firestore...`);
+    try {
+      const res = await fetch(`/api/budgets/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'approved' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        item.status = 'approved';
+        this.state.approvedBudget += item.budget;
+        this.renderKPIs();
+        this.filterBudget();
+        this.showToast(`Đã duyệt ngân sách ${this.formatVND(item.budget)} ₫ cho "${item.title}"`);
+      }
+    } catch (e) {
+      console.error('Approve budget error:', e);
+      this.showToast(`Lỗi duyệt ngân sách: ${e.message}`);
+    }
   },
 
-  // Reject Budget
-  rejectBudget(id) {
+  async rejectBudget(id) {
     const item = this.state.budgetProposals.find(p => p.id === id);
     if (!item) return;
 
     const reason = prompt('Nhập lý do Phòng CTSV từ chối hoặc yêu cầu sửa dự toán:', 'Dự toán vượt hạn mức Quỹ CLB quý 4');
     if (reason === null) return;
 
-    item.status = 'rejected';
-    this.renderKPIs();
-    this.filterBudget();
-    this.showToast(`Đã từ chối hồ sơ "${item.title}". Lý do: ${reason}`);
+    this.showToast(`Đang cập nhật từ chối hồ sơ ${id} lên Cloud Firestore...`);
+    try {
+      const res = await fetch(`/api/budgets/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'rejected', reason })
+      });
+      const data = await res.json();
+      if (data.success) {
+        item.status = 'rejected';
+        this.renderKPIs();
+        this.filterBudget();
+        this.showToast(`Đã từ chối hồ sơ "${item.title}". Lý do: ${reason}`);
+      }
+    } catch (e) {
+      console.error('Reject budget error:', e);
+      this.showToast(`Lỗi từ chối ngân sách: ${e.message}`);
+    }
   },
 
   // ==========================================================================

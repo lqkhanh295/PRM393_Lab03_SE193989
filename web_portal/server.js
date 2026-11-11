@@ -779,6 +779,74 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
+      // 10. GET /api/budgets (Real Firestore Budget Proposals)
+      if (pathname === '/api/budgets' && req.method === 'GET') {
+        const data = await firestoreRequest('/budgets');
+        let documents = (data.documents || []).map(fromFirestoreDoc);
+
+        if (documents.length === 0) {
+          const defaultProposals = [
+            {
+              id: 'PRJ-2026-01',
+              title: 'FPTU Tech Expo 2026: AI & Robotics',
+              club: 'CLB Lập trình F-Code',
+              budget: 18000000,
+              source: 'Quỹ HĐSV (12tr) + Doanh nghiệp (6tr)',
+              status: 'approved',
+              date: '28/10/2026'
+            },
+            {
+              id: 'PRJ-2026-02',
+              title: 'Workshop UI/UX Design Masterclass',
+              club: 'CLB Kỹ sư phần mềm Nhật Bản',
+              budget: 6500000,
+              source: 'Quỹ Hoạt động Sinh viên FPTU',
+              status: 'pending',
+              date: '05/11/2026'
+            },
+            {
+              id: 'PRJ-2026-03',
+              title: 'Giải Bóng Đá FPTU Champions League',
+              club: 'CLB Thể thao FPTU',
+              budget: 24000000,
+              source: 'Quỹ CTSV Cấp Phép Thi Đấu',
+              status: 'pending',
+              date: '12/11/2026'
+            }
+          ];
+
+          for (const p of defaultProposals) {
+            try {
+              const fields = toFirestoreFields(p);
+              await firestoreRequest(`/budgets/${p.id}`, 'PATCH', { fields });
+            } catch (_) {}
+          }
+          documents = defaultProposals;
+        }
+
+        return sendJson(res, 200, { documents });
+      }
+
+      // 10b. POST /api/budgets/:id/status (Approve or Reject Budget Proposal)
+      const budgetMatch = pathname.match(/^\/api\/budgets\/([^\/]+)\/status$/);
+      if (budgetMatch && req.method === 'POST') {
+        const budgetId = decodeURIComponent(budgetMatch[1]);
+        const body = await parseBody(req);
+        const status = body.status || 'approved';
+        const reason = body.reason || '';
+        const now = new Date().toISOString();
+
+        await firestoreRequest(`/budgets/${budgetId}?updateMask.fieldPaths=status&updateMask.fieldPaths=reason&updateMask.fieldPaths=reviewedAt`, 'PATCH', {
+          fields: {
+            status: { stringValue: status },
+            reason: { stringValue: reason },
+            reviewedAt: { stringValue: now }
+          }
+        });
+        console.log(`[Budget Review] Budget ${budgetId} updated to ${status}`);
+        return sendJson(res, 200, { success: true, budgetId, status });
+      }
+
       // 404 for unknown API
       return sendJson(res, 404, { error: 'API route not found' });
     } catch (err) {
