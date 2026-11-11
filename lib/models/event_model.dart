@@ -136,4 +136,40 @@ class EventModel {
       'sessions': sessions.map((s) => s.toMap()).toList(),
     };
   }
+
+  EventModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? category,
+    String? clubId,
+    String? clubName,
+    String? date,
+    String? time,
+    String? location,
+    int? capacity,
+    int? registeredCount,
+    String? bannerUrl,
+    bool? isFeatured,
+    List<EventSpeaker>? speakers,
+    List<EventSession>? sessions,
+  }) {
+    return EventModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      clubId: clubId ?? this.clubId,
+      clubName: clubName ?? this.clubName,
+      date: date ?? this.date,
+      time: time ?? this.time,
+      location: location ?? this.location,
+      capacity: capacity ?? this.capacity,
+      registeredCount: registeredCount ?? this.registeredCount,
+      bannerUrl: bannerUrl ?? this.bannerUrl,
+      isFeatured: isFeatured ?? this.isFeatured,
+      speakers: speakers ?? this.speakers,
+      sessions: sessions ?? this.sessions,
+    );
+  }
 }

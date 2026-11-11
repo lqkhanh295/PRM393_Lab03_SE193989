@@ -69,7 +69,8 @@ class TicketModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = <String, dynamic>{
+      'id': id,
       'eventId': eventId,
       'eventTitle': eventTitle,
       'eventDate': eventDate,
@@ -78,10 +79,17 @@ class TicketModel {
       'userId': userId,
       'studentName': studentName,
       'studentEmail': studentEmail,
+      'ticketCode': id,
       'qrToken': qrToken,
-      'status': status.name,
-      'checkedInAt': checkedInAt?.toIso8601String(),
+      'qrData': 'FPTU-CE-$eventId-$userId-$id',
+      'status': status == TicketStatus.checkedIn ? 'checkedIn' : 'active',
+      'checkInStatus': status == TicketStatus.checkedIn,
+      'createdAt': DateTime.now().toIso8601String(),
     };
+    if (checkedInAt != null) {
+      map['checkedInAt'] = checkedInAt!.toIso8601String();
+    }
+    return map;
   }
 
   TicketModel copyWith({

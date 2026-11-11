@@ -88,7 +88,60 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
             ),
             const SizedBox(height: 20),
 
-            if (!isSubmitted) ...[
+            if (!widget.ticket.isCheckedIn) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppTheme.surface,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+                  border: Border.all(color: AppTheme.outlineVariant, width: 1),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 56,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                      child: const Icon(
+                        Icons.lock_person_rounded,
+                        size: 28,
+                        color: AppTheme.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Yêu cầu điểm danh trước khi đánh giá',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.obsidian,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Theo quy chế đào tạo FPTU (Quy tắc BR-005), Điểm rèn luyện (+5đ) và Chứng nhận số (e-Certificate) chỉ được cấp khi sinh viên có lượt điểm danh (Check-in) hợp lệ tại cửa sự kiện.\n\nVui lòng quay lại màn hình Vé điện tử và đưa mã QR cho Ban tổ chức tại cửa quét check-in trước.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.textMuted,
+                        height: 1.45,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    AppOutlinedButton(
+                      label: 'Quay lại vé điện tử',
+                      icon: Icons.arrow_back_rounded,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+            ] else if (!isSubmitted) ...[
               // 5-Star Rating Card
               Container(
                 width: double.infinity,

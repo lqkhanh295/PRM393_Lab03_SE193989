@@ -201,6 +201,31 @@ class FirestoreService {
     return _cachedTickets.where((t) => t.userId == userId).toList();
   }
 
+  /// Real-time single ticket document stream (BR-004, BR-005)
+  Stream<TicketModel?> streamTicket(String ticketId) {
+    if (_firestore == null) {
+      final cached = _cachedTickets.where((t) => t.id == ticketId).firstOrNull;
+      return Stream.value(cached);
+    }
+    return _firestore
+        .collection('tickets')
+        .doc(ticketId)
+        .snapshots()
+        .map((snap) {
+          if (!snap.exists || snap.data() == null) {
+            return _cachedTickets.where((t) => t.id == ticketId).firstOrNull;
+          }
+          final updated = TicketModel.fromMap(snap.data()!, snap.id);
+          final idx = _cachedTickets.indexWhere((t) => t.id == updated.id);
+          if (idx >= 0) {
+            _cachedTickets[idx] = updated;
+          } else {
+            _cachedTickets.insert(0, updated);
+          }
+          return updated;
+        });
+  }
+
   /// 1-Tap Registration Transaction (BR-001, BR-002, BR-004) - Real Cloud Firestore
   Future<TicketModel> registerForEvent({
     required EventModel event,
@@ -251,15 +276,31 @@ class FirestoreService {
       status: TicketStatus.active,
     );
 
-    try {
-      if (_firestore != null) {
+    if (_firestore != null) {
+      try {
         await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
+        debugPrint('[FirestoreService] Real Ticket written to Cloud Firestore: $ticketId');
+      } catch (e) {
+        debugPrint('[FirestoreService] Firestore ticket registration sync warning: $e');
+      }
+
+      try {
         await _firestore.collection('events').doc(event.id).update({
           'registeredCount': FieldValue.increment(1),
         });
+        debugPrint('[FirestoreService] Cloud Firestore registeredCount incremented for event: ${event.id}');
+      } catch (e) {
+        debugPrint('[FirestoreService] Firestore event registeredCount update warning: $e');
       }
-    } catch (e) {
-      debugPrint('[FirestoreService] Firestore ticket registration sync: $e');
+    }
+
+    // Immediately update local cache so spotsRemaining updates everywhere without lag
+    final evtIdx = _cachedEvents.indexWhere((e) => e.id == event.id);
+    if (evtIdx >= 0) {
+      final old = _cachedEvents[evtIdx];
+      _cachedEvents[evtIdx] = old.copyWith(
+        registeredCount: old.registeredCount + 1,
+      );
     }
 
     _cachedTickets.insert(0, newTicket);

@@ -7,6 +7,7 @@ import '../../models/screen_state.dart';
 import '../../viewmodels/registration_vm.dart';
 import '../../viewmodels/my_tickets_vm.dart';
 import '../../viewmodels/home_viewmodel.dart';
+import '../../viewmodels/event_detail_vm.dart';
 import '../../widgets/app_button.dart';
 import 'registration_result_screen.dart';
 
@@ -128,6 +129,11 @@ class RegistrationModal extends StatelessWidget {
                     final ticket = (regVM.state as StateData).data;
                     context.read<MyTicketsViewModel>().loadUserTickets(user.id);
                     context.read<HomeViewModel>().loadHomeScreenData();
+                    try {
+                      final detailVM = context.read<EventDetailViewModel>();
+                      detailVM.incrementRegistration();
+                      detailVM.refreshEvent(event.id);
+                    } catch (_) {}
                     Navigator.pop(context); // Close bottom sheet
                     Navigator.push(
                       context,
