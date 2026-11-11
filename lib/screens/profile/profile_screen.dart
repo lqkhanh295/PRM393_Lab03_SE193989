@@ -6,6 +6,7 @@ import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/profile_viewmodel.dart';
 import '../../models/screen_state.dart';
 import '../../models/certificate_model.dart';
+import '../../models/gate_assignment_model.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/points_badge.dart';
 import '../auth/login_screen.dart';
@@ -1368,6 +1369,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showDutySelectorBottomSheet(
+    BuildContext context,
+    List<GateAssignmentModel> assignments,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(AppTheme.radiusSheet)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Chọn Ca Trực Cổng Của Bạn',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Bạn được phân công làm nhiệm vụ điểm danh tại nhiều sự kiện. Vui lòng chọn sự kiện bạn đang trực:',
+              style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+            ),
+            const SizedBox(height: 14),
+            ...assignments.map(
+              (a) => ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(color: AppTheme.hairline),
+                ),
+                leading: const Icon(Icons.meeting_room_outlined,
+                    color: AppTheme.obsidian),
+                title: Text(a.eventTitle,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700, fontSize: 13)),
+                subtitle: Text('${a.gateName} • ${a.shiftTime} (${a.role})',
+                    style: const TextStyle(fontSize: 11)),
+                trailing:
+                    const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => MobileDeskScreen(
+                        eventId: a.eventId,
+                        eventTitle: a.eventTitle,
+                        gateName: a.gateName,
+                        staffRole: a.role,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

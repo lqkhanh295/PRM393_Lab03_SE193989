@@ -149,11 +149,11 @@ const app = {
     await this.loadAllRealData();
     console.log('[Campus Event Portal] Initialized successfully with 100% live Cloud Firestore.');
 
-    // Realtime Background Sync (auto-refresh from Firestore every 3.5 seconds)
+    // Realtime Background Sync (auto-refresh from Firestore every 45 seconds with server TTL cache)
     if (!this._pollInterval) {
       this._pollInterval = setInterval(() => {
         this.loadAllRealData();
-      }, 3500);
+      }, 45000);
     }
   },
 

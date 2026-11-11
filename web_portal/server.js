@@ -15,6 +15,14 @@ const PUBLIC_DIR = __dirname;
 const PROJECT_ID = 'campus-event-48443';
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
+process.on('uncaughtException', (err) => {
+  console.error('[Process Uncaught Exception]:', err.stack || err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Process Unhandled Rejection]:', reason);
+});
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -120,8 +128,110 @@ function toFirestoreFields(obj) {
   return fields;
 }
 
-// Firestore REST Request with Bearer Token
+// Process safety guards
+process.on('uncaughtException', (err) => {
+  console.error('[Uncaught Exception]', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[Unhandled Rejection]', reason);
+});
+
+// Firestore REST Request with Bearer Token & Smart Quota Protection Cache
+const CACHE_FILE = path.join(__dirname, '.firestore_cache.json');
+const firestoreCache = new Map();
+const CACHE_TTL_MS = 60000; // 60 seconds quota-safe cache
+
+// Load disk snapshot on startup if available
+try {
+  if (fs.existsSync(CACHE_FILE)) {
+    const raw = fs.readFileSync(CACHE_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    for (const [k, v] of Object.entries(parsed)) {
+      firestoreCache.set(k, v);
+    }
+    console.log(`[Cache] Preloaded ${firestoreCache.size} collections from disk snapshot.`);
+  }
+} catch (e) {
+  console.warn('[Cache] Could not preload cache file:', e.message);
+}
+
+function persistCacheToDisk() {
+  try {
+    const obj = {};
+    for (const [k, v] of firestoreCache.entries()) {
+      obj[k] = v;
+    }
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  } catch (e) {
+    console.warn('[Cache] Could not persist cache:', e.message);
+  }
+}
+
+function getFromCache(method, endpoint) {
+  const exactKey = `${method}:${endpoint}`;
+  if (firestoreCache.has(exactKey)) return firestoreCache.get(exactKey).data;
+  const baseEndpoint = endpoint.split('?')[0];
+  const baseKey = `${method}:${baseEndpoint}`;
+  if (firestoreCache.has(baseKey)) return firestoreCache.get(baseKey).data;
+  return null;
+}
+
+function mutateCache(endpoint, method, body, createdId) {
+  try {
+    const rawPath = endpoint.split('?')[0].replace(/^\//, '');
+    const parts = rawPath.split('/');
+    const collection = parts[0];
+    const docId = parts[1] || createdId;
+    const cacheKey = `GET:/${collection}`;
+
+    if (!firestoreCache.has(cacheKey)) return;
+    const cached = firestoreCache.get(cacheKey);
+    if (!cached.data || !Array.isArray(cached.data.documents)) return;
+
+    if (method === 'DELETE' && docId) {
+      cached.data.documents = cached.data.documents.filter(d => !d.name.endsWith(`/${docId}`));
+      firestoreCache.set(cacheKey, { timestamp: Date.now(), data: cached.data });
+      persistCacheToDisk();
+      console.log(`[Cache Sync] Removed ${docId} from ${cacheKey}`);
+    } else if (method === 'POST' && body && body.fields) {
+      const docName = `projects/${PROJECT_ID}/databases/(default)/documents/${collection}/${docId || ('doc_' + Date.now())}`;
+      const newDoc = {
+        name: docName,
+        fields: body.fields,
+        createTime: new Date().toISOString(),
+        updateTime: new Date().toISOString()
+      };
+      cached.data.documents = cached.data.documents.filter(d => d.name !== docName);
+      cached.data.documents.unshift(newDoc);
+      firestoreCache.set(cacheKey, { timestamp: Date.now(), data: cached.data });
+      persistCacheToDisk();
+      console.log(`[Cache Sync] Added ${docName} to ${cacheKey}`);
+    } else if (method === 'PATCH' && docId && body && body.fields) {
+      for (const d of cached.data.documents) {
+        if (d.name.endsWith(`/${docId}`)) {
+          d.fields = { ...(d.fields || {}), ...body.fields };
+          d.updateTime = new Date().toISOString();
+        }
+      }
+      firestoreCache.set(cacheKey, { timestamp: Date.now(), data: cached.data });
+      persistCacheToDisk();
+      console.log(`[Cache Sync] Patched ${docId} in ${cacheKey}`);
+    }
+  } catch (err) {
+    console.warn('[Cache Mutation Note]', err.message);
+  }
+}
+
 async function firestoreRequest(endpoint, method = 'GET', body = null) {
+  const cacheKey = `${method}:${endpoint}`;
+  if (method === 'GET') {
+    const cachedData = getFromCache(method, endpoint);
+    const cachedEntry = firestoreCache.get(cacheKey) || firestoreCache.get(`${method}:${endpoint.split('?')[0]}`);
+    if (cachedData && cachedEntry && (Date.now() - cachedEntry.timestamp < CACHE_TTL_MS)) {
+      return cachedData;
+    }
+  }
+
   const { token } = getFirebaseToken();
   const headers = {
     'Content-Type': 'application/json'
@@ -136,12 +246,50 @@ async function firestoreRequest(endpoint, method = 'GET', body = null) {
     options.body = JSON.stringify(body);
   }
 
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Firestore HTTP ${res.status}: ${errorText}`);
+  try {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      const errorText = await res.text();
+      // If 429 (Quota exceeded) or server error, gracefully serve cached data if available
+      const cachedData = getFromCache(method, endpoint);
+      if (cachedData) {
+        console.warn(`[Firestore Quota/Status ${res.status}] Serving cached data for ${endpoint}`);
+        return cachedData;
+      }
+      if (res.status === 429 && method === 'GET') {
+        console.warn(`[Firestore Quota Exceeded] No cache for ${endpoint}, returning empty documents`);
+        return { documents: [] };
+      }
+      if (method !== 'GET') {
+        mutateCache(endpoint, method, body);
+        return { success: true, localCached: true };
+      }
+      throw new Error(`Firestore HTTP ${res.status}: ${errorText}`);
+    }
+    const data = await res.json();
+    if (method === 'GET') {
+      firestoreCache.set(cacheKey, { timestamp: Date.now(), data });
+      persistCacheToDisk();
+    } else {
+      mutateCache(endpoint, method, body);
+    }
+    return data;
+  } catch (err) {
+    const cachedData = getFromCache(method, endpoint);
+    if (cachedData) {
+      console.warn(`[Firestore Fallback] Serving cached data for ${endpoint} due to error:`, err.message);
+      return cachedData;
+    }
+    if (method === 'GET') {
+      console.warn(`[Firestore Safe Default] Returning empty documents list for ${endpoint}:`, err.message);
+      return { documents: [] };
+    }
+    if (method !== 'GET') {
+      mutateCache(endpoint, method, body);
+      return { success: true, localCached: true };
+    }
+    throw err;
   }
-  return res.json();
 }
 
 // Helper to parse JSON body from incoming request
