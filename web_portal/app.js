@@ -852,7 +852,7 @@ const app = {
             eventId: t.eventId || 'EVT-2026-01',
             eventTitle: t.eventTitle || 'FPTU Tech Expo 2026',
             checkInTime: t.checkedInAt || (t.checkInStatus ? '14:00' : '—'),
-            status: t.status === 'checkedIn' || t.checkInStatus ? 'checkedIn' : 'active',
+            status: t.status === 'checkedIn' || t.status === 'checked_in' || t.checkInStatus ? 'checkedIn' : 'active',
             points: t.points || 5,
             certId: t.certId || 'CERT-2026-9901'
           }));
@@ -866,7 +866,7 @@ const app = {
           this.renderReviewQueue();
 
           // TASK-20: Dynamically compute hourly flow from real checked-in tickets
-          const checkedTickets = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus);
+          const checkedTickets = tickets.filter(t => t.status === 'checkedIn' || t.status === 'checked_in' || t.checkInStatus);
           if (checkedTickets.length > 0) {
             const timeBuckets = {};
             checkedTickets.forEach(t => {
