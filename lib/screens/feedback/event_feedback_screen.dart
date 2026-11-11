@@ -23,6 +23,7 @@ class EventFeedbackScreen extends StatefulWidget {
 
 class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
   final TextEditingController _commentController = TextEditingController();
+  bool _awardedPoints = true;
 
   @override
   void dispose() {
@@ -196,13 +197,16 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                 icon: Icons.send_rounded,
                 onPressed: () async {
                   if (user != null) {
-                    final success = await feedbackVM.submitFeedback(
+                    final isNewSubmission = await feedbackVM.submitFeedback(
                       eventId: widget.ticket.eventId,
                       eventTitle: widget.ticket.eventTitle,
                       user: user,
                       comment: _commentController.text,
                     );
-                    if (success) {
+                    setState(() {
+                      _awardedPoints = isNewSubmission;
+                    });
+                    if (isNewSubmission) {
                       await authVM.addActivityPoints(5);
                     }
                   }
@@ -218,14 +222,16 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                   borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                   border: Border.all(color: AppTheme.successBorder, width: 1),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.verified_rounded, color: AppTheme.successInk, size: 24),
-                    SizedBox(width: 12),
+                    const Icon(Icons.verified_rounded, color: AppTheme.successInk, size: 24),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Cảm ơn bạn! Đã cộng +5 Điểm rèn luyện vào hồ sơ sinh viên FPTU.',
-                        style: TextStyle(
+                        _awardedPoints
+                            ? 'Cảm ơn bạn! Đã cộng +5 Điểm rèn luyện vào hồ sơ sinh viên FPTU.'
+                            : 'Cảm ơn bạn! Đã cập nhật đánh giá (Điểm rèn luyện đã được cộng trước đó).',
+                        style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: AppTheme.successInk,
@@ -254,13 +260,21 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
               CertificateCard(
                 certificate: (feedbackVM.state as StateData).data,
                 onDownload: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  final messenger = ScaffoldMessenger.of(context);
+                  messenger.showSnackBar(
                     const SnackBar(
-                      content: Text('Đang khởi tạo bản in / lưu file PDF Chứng nhận...'),
+                      content: Text('Đang khởi tạo và tải file PDF Chứng nhận...'),
                       duration: Duration(seconds: 2),
                     ),
                   );
                   await feedbackVM.exportCertificatePdf((feedbackVM.state as StateData).data);
+                  if (!mounted) return;
+                  messenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('Đã xuất và tải file PDF chứng nhận thành công!'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 },
               ),
               const SizedBox(height: 12),

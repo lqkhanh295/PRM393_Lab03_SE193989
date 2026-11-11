@@ -360,9 +360,73 @@
     }
   },
   "GET:/tickets": {
-    "timestamp": 1794394976710,
+    "timestamp": 1794402819441,
     "data": {
       "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/tickets/CE2026-TEST-VERIFY",
+          "fields": {
+            "id": {
+              "stringValue": "CE2026-TEST-VERIFY"
+            },
+            "ticketCode": {
+              "stringValue": "CE2026-TEST-VERIFY"
+            },
+            "eventId": {
+              "stringValue": "EVT-2026-01"
+            },
+            "eventTitle": {
+              "stringValue": "FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai"
+            },
+            "eventDate": {
+              "stringValue": "28/10/2026"
+            },
+            "eventTime": {
+              "stringValue": "13:30 - 17:30"
+            },
+            "eventLocation": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "userId": {
+              "stringValue": "USR-TEST-01"
+            },
+            "studentName": {
+              "stringValue": "Ki?m Tra Check-in"
+            },
+            "studentEmail": {
+              "stringValue": "student@fpt.edu.vn"
+            },
+            "studentId": {
+              "stringValue": ""
+            },
+            "qrToken": {
+              "stringValue": "CE2026-TEST-VERIFY"
+            },
+            "qrData": {
+              "stringValue": "FPTU-CE-EVT-2026-01-USR-TEST-01-CE2026-TEST-VERIFY"
+            },
+            "status": {
+              "stringValue": "checkedIn"
+            },
+            "checkInStatus": {
+              "booleanValue": true
+            },
+            "checkedInAt": {
+              "stringValue": "20:13:39 11/11/2026"
+            },
+            "points": {
+              "integerValue": "5"
+            },
+            "certId": {
+              "stringValue": "CERT-2026-8034"
+            },
+            "createdAt": {
+              "stringValue": "2026-11-11T13:13:39.002Z"
+            }
+          },
+          "createTime": "2026-11-11T13:13:39.441Z",
+          "updateTime": "2026-11-11T13:13:39.441Z"
+        },
         {
           "name": "projects/campus-event-48443/databases/(default)/documents/tickets/TICKET-2026-01",
           "fields": {

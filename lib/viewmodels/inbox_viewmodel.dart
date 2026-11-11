@@ -19,6 +19,7 @@ class InboxViewModel extends ChangeNotifier {
   List<AnnouncementModel> _allAnnouncements = [];
   String _selectedCategory = 'All';
   String get selectedCategory => _selectedCategory;
+  String? _currentUserId;
 
   List<AnnouncementModel> get filteredAnnouncements {
     if (_selectedCategory == 'All' || _selectedCategory == 'Tất cả') {
@@ -37,12 +38,20 @@ class InboxViewModel extends ChangeNotifier {
     listenToAnnouncements();
   }
 
-  void listenToAnnouncements() {
+  void updateCurrentUser(String? userId) {
+    if (_currentUserId != userId) {
+      _currentUserId = userId;
+      listenToAnnouncements(currentUserId: userId);
+    }
+  }
+
+  void listenToAnnouncements({String? currentUserId}) {
+    if (currentUserId != null) _currentUserId = currentUserId;
     _state = const StateLoading('Đang tải hộp thư thông báo...');
     notifyListeners();
 
     _subscription?.cancel();
-    _subscription = _firestoreService.streamAnnouncements().listen(
+    _subscription = _firestoreService.streamAnnouncements(currentUserId: _currentUserId).listen(
       (list) {
         _allAnnouncements = list;
         if (list.isEmpty) {

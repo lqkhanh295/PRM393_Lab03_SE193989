@@ -64,8 +64,9 @@ class FeedbackViewModel extends ChangeNotifier {
       );
 
       final firestoreService = _firestoreService;
+      bool isNewSubmission = true;
       if (firestoreService != null) {
-        await firestoreService.submitEventFeedback(
+        isNewSubmission = await firestoreService.submitEventFeedback(
           eventId: eventId,
           userId: user.id,
           rating: _rating,
@@ -77,7 +78,7 @@ class FeedbackViewModel extends ChangeNotifier {
 
       _state = StateData(cert);
       notifyListeners();
-      return true;
+      return isNewSubmission;
     } catch (e) {
       _state = StateError('Lỗi gửi đánh giá: $e');
       notifyListeners();

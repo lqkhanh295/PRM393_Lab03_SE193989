@@ -153,7 +153,7 @@ const app = {
     if (!this._pollInterval) {
       this._pollInterval = setInterval(() => {
         this.loadAllRealData();
-      }, 45000);
+      }, 5000);
     }
   },
 
@@ -322,7 +322,7 @@ const app = {
 
           // Synchronize Live KPI Count with Real Firestore Checked-in tickets
           const checkedCount = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus).length;
-          this.state.checkinCount = 724 + checkedCount;
+          this.state.checkinCount = checkedCount;
           this.renderKPIs();
           this.renderStudentsTable();
           this.renderRecentOverviewTable();
@@ -460,7 +460,7 @@ const app = {
     const tbody = document.getElementById('overview-recent-table');
     if (!tbody) return;
 
-    const recent = this.state.students.filter(s => s.status === 'checkedIn').slice(0, 5);
+    const recent = this.state.students.filter(s => s.status === 'checkedIn' || s.checkInStatus).sort((a, b) => (b.checkInTime || '').localeCompare(a.checkInTime || '')).slice(0, 8);
     if (recent.length === 0) {
       tbody.innerHTML = `
         <tr>

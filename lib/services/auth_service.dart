@@ -271,25 +271,6 @@ class AuthService {
     }
   }
 
-  /// Demo quick login helper for emulator / testing with Real Firestore User doc
-  Future<UserModel> signInDemoStudent({String role = 'student'}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    final demo = UserModel(
-      id: 'USR-FPTU-2026',
-      name: 'Nguyễn Văn An',
-      email: 'an.nv@fptu.edu.vn',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
-      major: 'Kỹ thuật Phần mềm (SE18)',
-      activityPoints: 25,
-      role: role,
-      followedClubs: const ['fcode', 'media_club'],
-    );
-    _currentUser = await _syncUserWithFirestore(demo);
-    _listenToUserDocument(_currentUser!.id);
-    _authStateController.add(_currentUser);
-    return _currentUser!;
-  }
-
   /// Add activity points directly and synchronize with Cloud Firestore
   Future<void> addActivityPoints(int points) async {
     if (_currentUser == null) return;
@@ -299,17 +280,13 @@ class AuthService {
 
     if (_firestore != null) {
       try {
-        await _firestore.collection('users').doc(_currentUser!.id).set({
-          'id': _currentUser!.id,
-          'name': _currentUser!.name,
-          'email': _currentUser!.email,
-          'major': _currentUser!.major,
-          'role': _currentUser!.role,
+        await _firestore.collection('users').doc(_currentUser!.id).update({
           'activityPoints': FieldValue.increment(points),
-        }, SetOptions(merge: true));
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
         debugPrint('[AuthService] Incremented points by $points for ${_currentUser!.id}');
       } catch (e) {
-        debugPrint('[AuthService] addActivityPoints error: $e');
+        debugPrint('[AuthService] addActivityPoints update note: $e');
       }
     }
   }

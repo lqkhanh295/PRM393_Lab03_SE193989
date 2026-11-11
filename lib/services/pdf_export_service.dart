@@ -143,13 +143,20 @@ class PdfExportService {
     return pdf.save();
   }
 
-  /// Opens native print & PDF preview / save dialog directly on mobile
+  /// Opens native print & PDF preview / save dialog directly on mobile or browser download
   Future<void> openAndDownloadCertificatePdf(CertificateModel certificate) async {
     final pdfBytes = await generateCertificatePdf(certificate);
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdfBytes,
-      name: 'ChungNhan_${certificate.id}',
-    );
+    try {
+      await Printing.sharePdf(
+        bytes: pdfBytes,
+        filename: 'ChungNhan_${certificate.id}.pdf',
+      );
+    } catch (_) {
+      await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => pdfBytes,
+        name: 'ChungNhan_${certificate.id}',
+      );
+    }
   }
 
   /// Generates a PDF ticket summary for offline storage

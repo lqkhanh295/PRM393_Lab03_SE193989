@@ -207,15 +207,27 @@ function mutateCache(endpoint, method, body, createdId) {
       persistCacheToDisk();
       console.log(`[Cache Sync] Added ${docName} to ${cacheKey}`);
     } else if (method === 'PATCH' && docId && body && body.fields) {
+      let found = false;
       for (const d of cached.data.documents) {
-        if (d.name.endsWith(`/${docId}`)) {
+        if (d.name && d.name.endsWith(`/${docId}`)) {
           d.fields = { ...(d.fields || {}), ...body.fields };
           d.updateTime = new Date().toISOString();
+          found = true;
+          break;
         }
+      }
+      if (!found) {
+        const docName = `projects/${PROJECT_ID}/databases/(default)/documents/${collection}/${docId}`;
+        cached.data.documents.unshift({
+          name: docName,
+          fields: body.fields,
+          createTime: new Date().toISOString(),
+          updateTime: new Date().toISOString()
+        });
       }
       firestoreCache.set(cacheKey, { timestamp: Date.now(), data: cached.data });
       persistCacheToDisk();
-      console.log(`[Cache Sync] Patched ${docId} in ${cacheKey}`);
+      console.log(`[Cache Sync] Patched/Upserted ${docId} in ${cacheKey}`);
     }
   } catch (err) {
     console.warn('[Cache Mutation Note]', err.message);
@@ -949,4 +961,12 @@ server.on('error', (err) => {
   } else {
     console.error('Server error:', err);
   }
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[Process Uncaught Exception]:', err.message);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Process Unhandled Rejection]:', reason);
 });

@@ -11,6 +11,8 @@ import '../../widgets/error_view.dart';
 import '../../widgets/empty_view.dart';
 import '../../widgets/gemini_event_insight_card.dart';
 import 'registration_modal.dart';
+import '../tickets/digital_ticket_screen.dart';
+import '../../viewmodels/my_tickets_vm.dart';
 
 /// S13: Event Detail Screen
 /// Anti-Slop Architecture: Clear timeline, clean speaker badges, fixed bottom bar.
@@ -390,25 +392,44 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  child: AppPrimaryButton(
-                    label: event.isFull ? 'Đã hết chỗ' : 'Đăng ký tham gia',
-                    onPressed: event.isFull
-                        ? null
-                        : () {
-                            final user = context.read<AuthViewModel>().currentUser;
-                            if (user != null) {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => RegistrationModal(event: event, user: user),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Vui lòng đăng nhập để đăng ký sự kiện')),
-                              );
-                            }
+                  child: Builder(
+                    builder: (btnCtx) {
+                      final existingTicket = btnCtx.watch<MyTicketsViewModel>().getTicketForEvent(event.id);
+                      if (existingTicket != null) {
+                        return AppPrimaryButton(
+                          label: 'Xem vé của tôi',
+                          icon: Icons.confirmation_number_outlined,
+                          onPressed: () {
+                            Navigator.push(
+                              btnCtx,
+                              MaterialPageRoute(
+                                builder: (_) => DigitalTicketScreen(ticket: existingTicket),
+                              ),
+                            );
                           },
+                        );
+                      }
+                      return AppPrimaryButton(
+                        label: event.isFull ? 'Đã hết chỗ' : 'Đăng ký tham gia',
+                        onPressed: event.isFull
+                            ? null
+                            : () {
+                                final user = btnCtx.read<AuthViewModel>().currentUser;
+                                if (user != null) {
+                                  showModalBottomSheet(
+                                    context: btnCtx,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (_) => RegistrationModal(event: event, user: user),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(btnCtx).showSnackBar(
+                                    const SnackBar(content: Text('Vui lòng đăng nhập để đăng ký sự kiện')),
+                                  );
+                                }
+                              },
+                      );
+                    },
                   ),
                 ),
               ],

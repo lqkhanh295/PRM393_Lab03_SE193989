@@ -89,6 +89,16 @@ class MyTicketsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool hasTicketForEvent(String eventId) => getTicketForEvent(eventId) != null;
+
+  TicketModel? getTicketForEvent(String eventId) {
+    try {
+      return _allTickets.firstWhere((t) => t.eventId == eventId);
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   void dispose() {
     _streamSubscription?.cancel();

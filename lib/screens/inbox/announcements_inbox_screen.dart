@@ -5,6 +5,7 @@ import '../../theme/app_theme.dart';
 import '../../models/screen_state.dart';
 import '../../models/announcement_model.dart';
 import '../../viewmodels/inbox_viewmodel.dart';
+import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/loading_view.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/empty_view.dart';
@@ -24,6 +25,8 @@ class _AnnouncementsInboxScreenState extends State<AnnouncementsInboxScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = context.read<AuthViewModel>().currentUser;
+      context.read<InboxViewModel>().updateCurrentUser(user?.id);
       context.read<InboxViewModel>().logOpenInbox();
     });
   }

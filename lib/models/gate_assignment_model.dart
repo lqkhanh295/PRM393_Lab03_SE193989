@@ -1,5 +1,5 @@
 /// Model representing a Gate Check-in Duty Assignment (Phân công ca trực cổng)
-/// 100% Real Cloud Firestore Integration for PRM393.
+/// 100% Real Cloud Firestore Integration for FPTU Campus Event System.
 class GateAssignmentModel {
   final String id;
   final String email;

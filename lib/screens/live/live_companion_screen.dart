@@ -152,8 +152,28 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
       );
     }
 
-    final currentSession = sessions.first;
-    final nextSessions = sessions.length > 1 ? sessions.sublist(1) : <EventSession>[];
+    int activeIdx = 0;
+    final now = DateTime.now();
+    for (int i = 0; i < sessions.length; i++) {
+      final s = sessions[i];
+      final parts = s.time.split('-');
+      if (parts.isNotEmpty) {
+        final startParts = parts[0].trim().split(':');
+        if (startParts.length == 2) {
+          final h = int.tryParse(startParts[0]);
+          final m = int.tryParse(startParts[1]);
+          if (h != null && m != null) {
+            final sessionTime = DateTime(now.year, now.month, now.day, h, m);
+            if (now.isAfter(sessionTime)) {
+              activeIdx = i;
+            }
+          }
+        }
+      }
+    }
+    if (activeIdx >= sessions.length) activeIdx = sessions.length - 1;
+    final currentSession = sessions[activeIdx];
+    final nextSessions = sessions.asMap().entries.where((e) => e.key != activeIdx).map((e) => e.value).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
@@ -268,10 +288,18 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
                           },
                         ),
                       );
-                      await Printing.layoutPdf(
-                        name: 'Slide_Dien_Gia',
-                        onLayout: (PdfPageFormat format) async => doc.save(),
-                      );
+                      final bytes = await doc.save();
+                      try {
+                        await Printing.sharePdf(
+                          bytes: bytes,
+                          filename: 'Slide_Dien_Gia_${currentSession.title.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_')}.pdf',
+                        );
+                      } catch (_) {
+                        await Printing.layoutPdf(
+                          name: 'Slide_Dien_Gia',
+                          onLayout: (PdfPageFormat format) async => bytes,
+                        );
+                      }
                     } catch (e) {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(

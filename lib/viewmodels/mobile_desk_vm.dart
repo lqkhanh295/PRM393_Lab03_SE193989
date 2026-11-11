@@ -10,8 +10,8 @@ class MobileDeskViewModel extends ChangeNotifier {
   final CrashlyticsService _crashlyticsService;
   final AnalyticsService _analyticsService;
 
-  int _checkedInCount = 342;
-  int _totalCapacity = 400;
+  int _checkedInCount = 0;
+  int _totalCapacity = 0;
   int get checkedInCount => _checkedInCount;
   int get totalCapacity => _totalCapacity;
   double get attendanceRate => _totalCapacity > 0 ? (_checkedInCount / _totalCapacity) : 0.0;
@@ -36,11 +36,7 @@ class MobileDeskViewModel extends ChangeNotifier {
       if (event != null) {
         _totalCapacity = event.capacity;
         final realChecked = await _firestoreService.getCheckedInCount(eventId);
-        if (realChecked > 0) {
-          _checkedInCount = realChecked;
-        } else {
-          _checkedInCount = event.registeredCount;
-        }
+        _checkedInCount = realChecked;
         notifyListeners();
       }
     } catch (e) {

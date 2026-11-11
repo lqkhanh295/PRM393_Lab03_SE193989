@@ -9,6 +9,7 @@ class AnnouncementModel {
   final String category;
   final String authorRole;
   final String? eventId;
+  final String userId;
   final bool isPinned;
   final DateTime createdAt;
 
@@ -19,6 +20,7 @@ class AnnouncementModel {
     required this.category,
     required this.authorRole,
     this.eventId,
+    this.userId = '',
     this.isPinned = false,
     required this.createdAt,
   });
@@ -39,6 +41,7 @@ class AnnouncementModel {
       category: map['category'] as String? ?? 'general',
       authorRole: map['authorRole'] as String? ?? 'staff',
       eventId: map['eventId'] as String?,
+      userId: map['userId'] as String? ?? '',
       isPinned: map['isPinned'] as bool? ?? false,
       createdAt: parseDate(map['createdAt']),
     );
@@ -51,6 +54,7 @@ class AnnouncementModel {
       'category': category,
       'authorRole': authorRole,
       if (eventId != null) 'eventId': eventId,
+      if (userId.isNotEmpty) 'userId': userId,
       'isPinned': isPinned,
       'createdAt': Timestamp.fromDate(createdAt),
     };

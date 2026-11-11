@@ -29,7 +29,7 @@ class CheckInValidationResult {
 }
 
 /// Cloud Firestore Service Wrapper
-/// 100% Real Cloud Firestore Integration for PRM393.
+/// 100% Real Cloud Firestore Integration for FPTU Campus Event System.
 /// Connects to collections: events, tickets, clubs, users, certificates, feedback.
 class FirestoreService {
   final FirebaseFirestore? _firestore;
@@ -43,6 +43,7 @@ class FirestoreService {
   final List<CertificateModel> _cachedCertificates = [];
   final List<AnnouncementModel> _cachedAnnouncements = [];
   final List<RegistrationModel> _cachedRegistrations = [];
+  final List<Map<String, dynamic>> _cachedFeedbacks = [];
 
   // Reactive notifier for ticket state changes across the application
   final ValueNotifier<int> ticketsNotifier = ValueNotifier<int>(0);
@@ -845,7 +846,8 @@ class FirestoreService {
   }
 
   /// Submit Real Event Feedback & Grant Activity Points
-  Future<void> submitEventFeedback({
+  /// Returns true if first-time submission (points awarded), false if duplicate update.
+  Future<bool> submitEventFeedback({
     required String eventId,
     required String userId,
     required int rating,
@@ -871,7 +873,7 @@ class FirestoreService {
             'updatedAt': FieldValue.serverTimestamp(),
           });
           debugPrint('[FirestoreService] Feedback updated for event $eventId (No duplicate points awarded)');
-          return;
+          return false;
         }
 
         // First time submission: Record feedback and award +5 points
@@ -884,12 +886,33 @@ class FirestoreService {
         });
 
         // Atomically increment student activity points (+5) in Firestore ONLY on first submission
-        await _firestore.collection('users').doc(userId).set({
+        await _firestore.collection('users').doc(userId).update({
           'activityPoints': FieldValue.increment(5),
-        }, SetOptions(merge: true));
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        debugPrint('[FirestoreService] First feedback submitted, awarded +5 activity points.');
+        return true;
+      } else {
+        // Fallback / Offline / Web in-memory mode
+        final existingIdx = _cachedFeedbacks.indexWhere((f) => f['eventId'] == eventId && f['userId'] == userId);
+        if (existingIdx != -1) {
+          _cachedFeedbacks[existingIdx]['rating'] = rating;
+          _cachedFeedbacks[existingIdx]['comments'] = comments;
+          debugPrint('[FirestoreService] Cached feedback updated for event $eventId');
+          return false;
+        }
+        _cachedFeedbacks.add({
+          'eventId': eventId,
+          'userId': userId,
+          'rating': rating,
+          'comments': comments,
+        });
+        debugPrint('[FirestoreService] First cached feedback submitted, awarded +5 points.');
+        return true;
       }
     } catch (e) {
       debugPrint('[FirestoreService] submitEventFeedback error: $e');
+      return false;
     }
   }
 
@@ -938,8 +961,8 @@ class FirestoreService {
   // FINAL ASSIGNMENT: ANNOUNCEMENTS INBOX
   // ==========================================
 
-  /// Real-time stream of official announcements
-  Stream<List<AnnouncementModel>> streamAnnouncements() {
+  /// Real-time stream of official announcements, filtered by userId for privacy (BR-003)
+  Stream<List<AnnouncementModel>> streamAnnouncements({String? currentUserId}) {
     if (_firestore != null) {
       return _firestore
           .collection('announcements')
@@ -947,13 +970,14 @@ class FirestoreService {
           .snapshots()
           .map((snap) => snap.docs
               .map((d) => AnnouncementModel.fromMap(d.data(), d.id))
+              .where((a) => a.userId.isEmpty || a.userId == currentUserId)
               .toList());
     }
-    return Stream.value(_cachedAnnouncements);
+    return Stream.value(_cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList());
   }
 
-  /// Get list of announcements directly from Cloud Firestore
-  Future<List<AnnouncementModel>> getAnnouncements() async {
+  /// Get list of announcements directly from Cloud Firestore, filtered by userId
+  Future<List<AnnouncementModel>> getAnnouncements({String? currentUserId}) async {
     try {
       if (_firestore != null) {
         final snap = await _firestore
@@ -963,6 +987,7 @@ class FirestoreService {
         if (snap.docs.isNotEmpty) {
           final list = snap.docs
               .map((d) => AnnouncementModel.fromMap(d.data(), d.id))
+              .where((a) => a.userId.isEmpty || a.userId == currentUserId)
               .toList();
           _cachedAnnouncements.clear();
           _cachedAnnouncements.addAll(list);
@@ -972,7 +997,7 @@ class FirestoreService {
     } catch (e) {
       debugPrint('[FirestoreService] getAnnouncements error: $e');
     }
-    return _cachedAnnouncements;
+    return _cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList();
   }
 
   /// Broadcast announcement from Web Admin or Staff HUD

@@ -99,24 +99,6 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> signInDemoStudent({String role = 'student'}) async {
-    _state = const StateLoading('Đang đăng nhập chế độ Demo...');
-    notifyListeners();
-
-    try {
-      final user = await _authService.signInDemoStudent(role: role);
-      await _analyticsService.setUserId(user.id);
-      await _analyticsService.logLogin(method: 'demo', role: user.role);
-      await _crashlyticsService.setUserId(user.id);
-      _state = StateData(user);
-      notifyListeners();
-    } catch (e, stack) {
-      await _crashlyticsService.recordHandledError(e, stack);
-      _state = StateError(e.toString());
-      notifyListeners();
-    }
-  }
-
   void switchDemoRole(String role) {
     _authService.switchDemoRole(role);
     notifyListeners();
