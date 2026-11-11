@@ -990,6 +990,176 @@ const app = {
     }
   },
 
+  // Get Event Temporal Status (Đã diễn ra, Đang diễn ra, Sắp diễn ra, Chưa diễn ra)
+  getEventTemporalStatus(event) {
+    if (!event || !event.date) {
+      return {
+        status: 'ended',
+        label: 'Đã diễn ra',
+        pillClass: 'pill-neutral',
+        gateStatus: 'Đã đóng cổng',
+        isPast: true,
+        isOngoing: false,
+        isUpcoming: false,
+        isFuture: false,
+        durationMs: 4 * 3600 * 1000,
+        start: null,
+        end: null
+      };
+    }
+
+    let year, month, day;
+    const trimmedDate = String(event.date).trim();
+    if (trimmedDate.includes('/')) {
+      const parts = trimmedDate.split('/');
+      if (parts.length === 3) {
+        const p0 = parseInt(parts[0], 10);
+        const p1 = parseInt(parts[1], 10);
+        const p2 = parseInt(parts[2], 10);
+        if (p0 > 1000) {
+          year = p0; month = p1 - 1; day = p2;
+        } else {
+          day = p0; month = p1 - 1; year = p2;
+        }
+      }
+    } else if (trimmedDate.includes('-')) {
+      const parts = trimmedDate.split('-');
+      if (parts.length === 3) {
+        const p0 = parseInt(parts[0], 10);
+        const p1 = parseInt(parts[1], 10);
+        const p2 = parseInt(parts[2], 10);
+        if (p0 > 1000) {
+          year = p0; month = p1 - 1; day = p2;
+        } else {
+          day = p0; month = p1 - 1; year = p2;
+        }
+      }
+    }
+
+    if (year === undefined) {
+      const d = new Date(trimmedDate);
+      if (!isNaN(d.getTime())) {
+        year = d.getFullYear();
+        month = d.getMonth();
+        day = d.getDate();
+      } else {
+        return {
+          status: 'ended',
+          label: 'Đã diễn ra',
+          pillClass: 'pill-neutral',
+          gateStatus: 'Đã đóng cổng',
+          isPast: true,
+          isOngoing: false,
+          isUpcoming: false,
+          isFuture: false,
+          durationMs: 4 * 3600 * 1000,
+          start: null,
+          end: null
+        };
+      }
+    }
+
+    let startHour = 8, startMin = 0;
+    let endHour = 18, endMin = 0;
+
+    if (event.time && typeof event.time === 'string') {
+      const parts = event.time.split('-');
+      if (parts.length >= 1) {
+        const s = parts[0].trim().split(':');
+        if (s.length >= 2) {
+          startHour = parseInt(s[0], 10) || 0;
+          startMin = parseInt(s[1], 10) || 0;
+        }
+      }
+      if (parts.length >= 2) {
+        const e = parts[1].trim().split(':');
+        if (e.length >= 2) {
+          endHour = parseInt(e[0], 10) || 0;
+          endMin = parseInt(e[1], 10) || 0;
+        }
+      } else {
+        endHour = Math.min(23, startHour + 4);
+        endMin = startMin;
+      }
+    }
+
+    const start = new Date(year, month, day, startHour, startMin, 0);
+    const end = new Date(year, month, day, endHour, endMin, 0);
+    const durationMs = Math.max(0, end.getTime() - start.getTime()) || (4 * 3600 * 1000);
+    const now = new Date();
+    const nowMs = now.getTime();
+    const startMs = start.getTime();
+    const endMs = end.getTime();
+
+    // 1. ĐÃ DIỄN RA
+    if (nowMs > endMs) {
+      return {
+        status: 'ended',
+        label: 'Đã diễn ra',
+        pillClass: 'pill-neutral',
+        gateStatus: 'Đã đóng cổng',
+        isPast: true,
+        isOngoing: false,
+        isUpcoming: false,
+        isFuture: false,
+        start,
+        end,
+        durationMs
+      };
+    }
+
+    // 2. ĐANG DIỄN RA
+    if (nowMs >= startMs && nowMs <= endMs) {
+      return {
+        status: 'ongoing',
+        label: 'Đang diễn ra',
+        pillClass: 'pill-positive',
+        gateStatus: 'Đang mở cổng',
+        isPast: false,
+        isOngoing: true,
+        isUpcoming: false,
+        isFuture: false,
+        start,
+        end,
+        durationMs
+      };
+    }
+
+    // 3. SẮP DIỄN RA (Trong vòng 48 giờ tới hoặc cùng ngày trước giờ mở)
+    const diffHours = (startMs - nowMs) / (3600 * 1000);
+    if (diffHours > 0 && diffHours <= 48) {
+      return {
+        status: 'upcoming',
+        label: 'Sắp diễn ra',
+        pillClass: 'pill-warning',
+        gateStatus: 'Sắp mở cổng',
+        isPast: false,
+        isOngoing: false,
+        isUpcoming: true,
+        isFuture: false,
+        start,
+        end,
+        durationMs,
+        diffHours
+      };
+    }
+
+    // 4. CHƯA DIỄN RA (Còn hơn 48 giờ)
+    return {
+      status: 'future',
+      label: 'Chưa diễn ra',
+      pillClass: 'pill-neutral',
+      gateStatus: 'Chưa mở cổng',
+      isPast: false,
+      isOngoing: false,
+      isUpcoming: false,
+      isFuture: true,
+      start,
+      end,
+      durationMs
+    };
+  },
+
   // Format currency VND
   formatVND(amount) {
     return new Intl.NumberFormat('vi-VN').format(amount);
@@ -2168,12 +2338,91 @@ const app = {
 
   updateTelemetryElapsedTimer() {
     const elapsedEl = document.getElementById('telem-elapsed-time');
+    const unitEl = document.getElementById('telem-elapsed-unit');
+    const subEl = document.getElementById('telem-last-scan-sub');
     if (!elapsedEl) return;
-    const diff = Math.max(0, Date.now() - (this.state.gateStartTime || (Date.now() - 4800000)));
-    const hours = Math.floor(diff / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-    elapsedEl.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    const selectedId = this.state.selectedTelemetryEvent || 'all';
+    const events = this.state.liveEvents || [];
+
+    const formatHMS = (ms) => {
+      const h = Math.floor(ms / 3600000);
+      const m = Math.floor((ms % 3600000) / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
+
+    if (selectedId !== 'all') {
+      const activeEvent = events.find(e => e.id === selectedId);
+      if (!activeEvent) return;
+      const temporal = this.getEventTemporalStatus(activeEvent);
+
+      if (temporal.status === 'ended') {
+        elapsedEl.innerText = formatHMS(temporal.durationMs);
+        if (unitEl) unitEl.innerText = 'thời lượng ca (đã đóng)';
+        if (subEl) {
+          subEl.innerHTML = '<span class="pill pill-neutral">Đã diễn ra</span> Ca trực đã kết thúc · Đã đóng cổng';
+        }
+        return;
+      }
+
+      if (temporal.status === 'future') {
+        elapsedEl.innerText = '00:00:00';
+        if (unitEl) unitEl.innerText = 'chưa mở ca';
+        if (subEl) {
+          const startTime = activeEvent.time?.split('-')[0]?.trim() || '13:30';
+          subEl.innerHTML = `<span class="pill pill-neutral">Chưa diễn ra</span> Dự kiến mở cổng: <strong>${startTime} · ${activeEvent.date}</strong>`;
+        }
+        return;
+      }
+
+      if (temporal.status === 'upcoming') {
+        elapsedEl.innerText = '00:00:00';
+        if (unitEl) unitEl.innerText = 'sắp mở ca';
+        if (subEl) {
+          const startTime = activeEvent.time?.split('-')[0]?.trim() || '13:30';
+          subEl.innerHTML = `<span class="pill pill-warning">Sắp diễn ra</span> Chuẩn bị mở cổng lúc: <strong>${startTime} · ${activeEvent.date}</strong>`;
+        }
+        return;
+      }
+
+      // ongoing
+      const diff = Math.max(0, Date.now() - (temporal.start ? temporal.start.getTime() : Date.now()));
+      elapsedEl.innerText = formatHMS(diff);
+      if (unitEl) unitEl.innerText = 'thời gian mở ca';
+      if (subEl) {
+        const mostRecentScan = this.state.students.find(s => s.eventId === selectedId && s.status === 'checkedIn' && s.checkInTime !== '—');
+        const lastTime = this.state.lastScanTimeStr || (mostRecentScan ? mostRecentScan.checkInTime : 'Chưa có');
+        subEl.innerHTML = `Lượt quét gần nhất: <span id="telem-last-scan-time" style="font-weight: 600; color: var(--text);">${lastTime}</span> <span style="color: var(--muted);">(Đang mở cổng)</span>`;
+      }
+    } else {
+      // All events
+      const ongoingEvent = events.find(e => this.getEventTemporalStatus(e).isOngoing);
+      if (ongoingEvent) {
+        const temp = this.getEventTemporalStatus(ongoingEvent);
+        const diff = Math.max(0, Date.now() - (temp.start ? temp.start.getTime() : Date.now()));
+        elapsedEl.innerText = formatHMS(diff);
+        if (unitEl) unitEl.innerText = 'thời gian mở ca hôm nay';
+        if (subEl) {
+          subEl.innerHTML = `<span class="pill pill-positive">Đang diễn ra</span> Ca trực: <strong>${ongoingEvent.title}</strong>`;
+        }
+      } else {
+        const upcomingEvent = events.find(e => this.getEventTemporalStatus(e).isUpcoming);
+        if (upcomingEvent) {
+          elapsedEl.innerText = '00:00:00';
+          if (unitEl) unitEl.innerText = 'chờ ca trực tiếp theo';
+          if (subEl) {
+            subEl.innerHTML = `<span class="pill pill-warning">Sắp diễn ra</span> Kế tiếp: <strong>${upcomingEvent.title} (${upcomingEvent.date})</strong>`;
+          }
+        } else {
+          elapsedEl.innerText = '00:00:00';
+          if (unitEl) unitEl.innerText = 'không có ca trực mở';
+          if (subEl) {
+            subEl.innerHTML = '<span class="pill pill-neutral">Đã đóng ca</span> Toàn bộ ca trực trước đó đã kết thúc';
+          }
+        }
+      }
+    }
   },
 
   populateTelemetryDropdown() {
@@ -2184,7 +2433,9 @@ const app = {
     let html = '<option value="all">⚡ Tất cả sự kiện (Tổng hợp toàn trường)</option>';
     if (this.state.liveEvents && this.state.liveEvents.length > 0) {
       this.state.liveEvents.forEach(e => {
-        html += `<option value="${e.id}" ${e.id === currentVal ? 'selected' : ''}>[${e.id}] ${e.title} - ${e.location}</option>`;
+        const temp = this.getEventTemporalStatus(e);
+        const tag = `[${temp.label.toUpperCase()}]`;
+        html += `<option value="${e.id}" ${e.id === currentVal ? 'selected' : ''}>${tag} [${e.id}] ${e.title} - ${e.date}</option>`;
       });
     }
     select.innerHTML = html;
@@ -2243,13 +2494,17 @@ const app = {
     const bannerEl = document.getElementById('telem-event-banner');
     if (bannerEl) {
       if (isAll) {
+        const hasOngoing = events.some(e => this.getEventTemporalStatus(e).isOngoing);
+        const allStatusPill = hasOngoing 
+          ? '<span class="pill pill-positive"><span class="live-pulse-dot"></span> Đang Có Ca Trực Mở</span>'
+          : '<span class="pill pill-neutral">Hiện Đã Đóng Cổng Điểm Danh</span>';
         bannerEl.innerHTML = `
           <div class="telem-banner-container">
             <div class="telem-banner-info">
               <div class="telem-banner-title">
-                <span class="live-pulse-dot"></span>
+                ${hasOngoing ? '<span class="live-pulse-dot"></span>' : ''}
                 <span>Tổng Hợp Điểm Danh Cổng Toàn Trường (Tất cả ${events.length} sự kiện)</span>
-                <span class="pill pill-positive">Ca Trực Đang Mở</span>
+                ${allStatusPill}
               </div>
               <div class="telem-banner-meta">
                 <span class="telem-banner-meta-item">🏛️ Các khu vực: <strong>Hội trường TCS, Alpha Building, Sảnh Innovation</strong></span>
@@ -2277,27 +2532,50 @@ const app = {
           </div>
         `;
       } else if (activeEvent) {
+        const temporal = this.getEventTemporalStatus(activeEvent);
+        let bannerStatusHtml = '';
+        let progressLabel = '';
+        let remainingLabel = '';
+
+        if (temporal.status === 'ended') {
+          bannerStatusHtml = '<span class="pill pill-neutral">Đã Diễn Ra · Đã Đóng Cổng</span>';
+          progressLabel = `Tổng kết sinh viên có mặt: <strong>${scannedCount} / ${totalTickets} sinh viên (${scannedPct}%)</strong>`;
+          remainingLabel = `<span class="num" style="color: var(--muted);">${remainingCount} vé vắng mặt</span>`;
+        } else if (temporal.status === 'ongoing') {
+          bannerStatusHtml = '<span class="live-pulse-dot"></span> <span class="pill pill-positive">Đang Diễn Ra · Đang Mở Cổng</span>';
+          progressLabel = `Tiến độ check-in vào hội trường: <strong>${scannedCount} / ${totalTickets} sinh viên (${scannedPct}%)</strong>`;
+          remainingLabel = `<span class="num" style="color: var(--muted);">${remainingCount} vé chưa đến</span>`;
+        } else if (temporal.status === 'upcoming') {
+          bannerStatusHtml = '<span class="pill pill-warning">Sắp Diễn Ra · Chuẩn Bị Mở Cổng</span>';
+          progressLabel = `Chuẩn bị đón tiếp: <strong>${totalTickets} vé đã phát hành</strong>`;
+          remainingLabel = '<span class="num" style="color: var(--muted);">Chưa mở cửa soát vé</span>';
+        } else {
+          bannerStatusHtml = '<span class="pill pill-neutral">Chưa Diễn Ra · Chưa Mở Cổng</span>';
+          progressLabel = `Dự kiến tổ chức: <strong>${activeEvent.date}</strong>`;
+          remainingLabel = `<span class="num" style="color: var(--muted);">${totalTickets} vé đăng ký</span>`;
+        }
+
         bannerEl.innerHTML = `
           <div class="telem-banner-container">
             <div class="telem-banner-info">
               <div class="telem-banner-title">
-                <span class="live-pulse-dot"></span>
+                ${temporal.status === 'ongoing' ? '<span class="live-pulse-dot"></span>' : ''}
                 <span>[${activeEvent.id}] ${activeEvent.title}</span>
-                <span class="pill pill-positive">Đang Điểm Danh Cổng</span>
+                ${bannerStatusHtml}
               </div>
               <div class="telem-banner-meta">
                 <span class="telem-banner-meta-item">🏢 Đơn vị tổ chức: <strong>${activeEvent.clubName || 'CLB FPTU'}</strong></span>
                 <span class="telem-banner-meta-item">📍 Địa điểm: <strong>${activeEvent.location}</strong></span>
-                <span class="telem-banner-meta-item">📅 Thời gian: <strong>${activeEvent.date} (${activeEvent.time || '13:30 - 17:30'})</strong></span>
+                <span class="telem-banner-meta-item">📅 Thời gian: <strong>${activeEvent.date} (${activeEvent.time || '13:30 - 17:30'})</strong> ${temporal.status === 'ended' ? '<span style="color:var(--muted);">(Sự kiện quá khứ)</span>' : ''}</span>
                 <span class="telem-banner-meta-item">👥 Sức chứa hội trường: <strong>${activeEvent.capacity} chỗ</strong></span>
               </div>
               <div style="margin-top: 10px;">
                 <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                  <span>Tiến độ check-in vào hội trường: <strong>${scannedCount} / ${totalTickets} sinh viên (${scannedPct}%)</strong></span>
-                  <span class="num" style="color: var(--muted);">${remainingCount} vé chưa đến</span>
+                  <span>${progressLabel}</span>
+                  ${remainingLabel}
                 </div>
                 <div class="capacity-bar-wrap">
-                  <div class="capacity-bar-fill" style="width: ${scannedPct}%; background-color: var(--positive);"></div>
+                  <div class="capacity-bar-fill" style="width: ${scannedPct}%; background-color: ${temporal.status === 'ended' ? 'var(--muted)' : 'var(--positive)'};"></div>
                 </div>
               </div>
             </div>
@@ -2372,23 +2650,54 @@ const app = {
       const remaining = Math.max(0, total - scanned);
       const pct = total > 0 ? Math.round((scanned / total) * 100) : 0;
       const isSelected = e.id === selectedId;
+      const temporal = this.getEventTemporalStatus(e);
 
       let barColor = 'var(--positive)';
-      if (pct > 90) barColor = 'var(--negative)';
-      else if (pct > 75) barColor = 'var(--warning)';
+      if (temporal.status === 'ended') {
+        barColor = 'var(--muted)';
+      } else if (pct > 90) {
+        barColor = 'var(--negative)';
+      } else if (pct > 75) {
+        barColor = 'var(--warning)';
+      }
+
+      let gateStatusHtml = '';
+      if (temporal.status === 'ended') {
+        gateStatusHtml = `
+          <span class="pill pill-neutral" style="margin-bottom: 2px; display: inline-block;">Đã diễn ra</span>
+          <div style="font-size: 11px; color: var(--muted); font-weight: 500;">Đã đóng cổng</div>
+        `;
+      } else if (temporal.status === 'ongoing') {
+        gateStatusHtml = `
+          <span class="pill pill-positive" style="margin-bottom: 2px; display: inline-block;">
+            <span class="live-pulse-dot" style="display:inline-block;width:6px;height:6px;margin-right:4px;"></span>Đang diễn ra
+          </span>
+          <div style="font-size: 11px; color: var(--positive); font-weight: 600;">Đang mở cổng</div>
+        `;
+      } else if (temporal.status === 'upcoming') {
+        gateStatusHtml = `
+          <span class="pill pill-warning" style="margin-bottom: 2px; display: inline-block;">Sắp diễn ra</span>
+          <div style="font-size: 11px; color: var(--warning); font-weight: 600;">Sắp mở cổng</div>
+        `;
+      } else {
+        gateStatusHtml = `
+          <span class="pill pill-neutral" style="margin-bottom: 2px; display: inline-block;">Chưa diễn ra</span>
+          <div style="font-size: 11px; color: var(--muted); font-weight: 500;">Chưa mở cổng</div>
+        `;
+      }
 
       return `
-        <tr style="${isSelected ? 'background-color: #f0fdf4;' : ''}">
+        <tr style="${isSelected ? 'background-color: #f8fafc; font-weight: 500; border-left: 3px solid var(--accent, #ea580c);' : ''}">
           <td class="mono" style="font-weight: 600;">${e.id}</td>
           <td>
-            <div style="font-weight: 600; color: var(--text);">${e.title}</div>
-            <div style="font-size: 11.5px; color: var(--muted);">${e.clubName || 'CLB FPTU'}</div>
+            <div style="font-weight: 600; color: var(--text); font-size: 13px;">${e.title}</div>
+            <div style="font-size: 11.5px; color: var(--muted); margin-top: 1px;">${e.clubName || 'CLB FPTU'}</div>
           </td>
           <td>${e.location}</td>
-          <td style="font-size: 12px; color: var(--muted);">${e.date} (${e.time || '13:30'})</td>
+          <td style="font-size: 12px; color: var(--muted); font-family: monospace;">${e.date} (${e.time || '13:30'})</td>
           <td class="num">${e.capacity}</td>
-          <td class="num" style="font-weight: 700; color: var(--positive);">${scanned}</td>
-          <td class="num" style="color: var(--muted);">${remaining}</td>
+          <td class="num" style="font-weight: 700; color: ${temporal.status === 'ended' ? 'var(--muted)' : 'var(--positive)'};">${scanned}</td>
+          <td class="num" style="color: var(--muted); font-family: monospace;">${remaining}</td>
           <td>
             <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 2px;">
               <span>${scanned}/${total}</span>
@@ -2399,9 +2708,7 @@ const app = {
             </div>
           </td>
           <td>
-            ${isSelected 
-              ? '<span class="pill pill-positive">Đang giám sát</span>' 
-              : '<span class="pill pill-neutral">Đang mở cổng</span>'}
+            ${gateStatusHtml}
           </td>
           <td style="text-align: center;">
             <button class="btn ${isSelected ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.handleTelemetryEventChange('${e.id}')" style="padding: 4px 10px; font-size: 11.5px;">
@@ -2653,7 +2960,15 @@ const app = {
             <div style="font-size: 11px; color: var(--muted); font-family: monospace;">MSSV: ${a.studentId || '—'}</div>
           </td>
           <td>
-            <div style="font-weight: 600; color: var(--text); font-size: 12.5px;">${a.eventTitle || a.eventId}</div>
+            <div style="font-weight: 600; color: var(--text); font-size: 12.5px;">
+              ${a.eventTitle || a.eventId}
+              ${(() => {
+                const evt = (this.state.liveEvents || []).find(e => e.id === a.eventId);
+                if (!evt) return '';
+                const temp = this.getEventTemporalStatus(evt);
+                return `<span class="pill ${temp.pillClass}" style="font-size: 10px; margin-left: 4px;">${temp.label}</span>`;
+              })()}
+            </div>
             <div style="font-size: 11px; color: var(--muted); font-family: monospace;">Mã: ${a.eventId}</div>
           </td>
           <td>
