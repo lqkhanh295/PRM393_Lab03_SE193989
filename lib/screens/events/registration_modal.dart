@@ -10,10 +10,11 @@ import '../../viewmodels/home_viewmodel.dart';
 import '../../viewmodels/event_detail_vm.dart';
 import '../../widgets/app_button.dart';
 import 'registration_result_screen.dart';
+import 'registration_pending_screen.dart';
 
-/// S15: 1-Tap Registration Bottom Sheet Modal
+/// S15: 1-Tap Registration Bottom Sheet Modal (Supporting Slide 18 Cross-Role Flow)
 /// Anti-slop Editorial Sheet: flat hairline surfaces, high-contrast verified student details.
-class RegistrationModal extends StatelessWidget {
+class RegistrationModal extends StatefulWidget {
   final EventModel event;
   final UserModel user;
 
@@ -22,6 +23,14 @@ class RegistrationModal extends StatelessWidget {
     required this.event,
     required this.user,
   });
+
+  @override
+  State<RegistrationModal> createState() => _RegistrationModalState();
+}
+
+class _RegistrationModalState extends State<RegistrationModal> {
+  // Whether to use Cross-Role approval flow (Slide 18) or 1-Tap instant ticket
+  bool _requireApproval = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +89,11 @@ class RegistrationModal extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    _buildInfoRow('Họ và tên:', user.name),
+                    _buildInfoRow('Họ và tên:', widget.user.name),
                     const SizedBox(height: 8),
-                    _buildInfoRow('Email FPT:', user.email),
+                    _buildInfoRow('Email FPT:', widget.user.email),
                     const SizedBox(height: 8),
-                    _buildInfoRow('Chuyên ngành:', user.major),
+                    _buildInfoRow('Chuyên ngành:', widget.user.major),
                   ],
                 ),
               ),
@@ -102,7 +111,7 @@ class RegistrationModal extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      event.title,
+                      widget.event.title,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
@@ -111,44 +120,178 @@ class RegistrationModal extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${event.time} · ${event.date} · ${event.location}',
+                      '${widget.event.time} · ${widget.event.date} · ${widget.event.location}',
                       style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+
+              // Mode Selector: 1-Tap vs Cross-Role Approval (Slide 18)
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceSubtle,
+                  borderRadius: BorderRadius.circular(AppTheme.radiusInput),
+                  border: Border.all(color: AppTheme.hairline, width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.how_to_reg_outlined, size: 16, color: AppTheme.obsidian),
+                            SizedBox(width: 6),
+                            Text(
+                              'Hình thức cấp vé:',
+                              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppTheme.obsidian),
+                            ),
+                          ],
+                        ),
+                        if (_requireApproval)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF3C7),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              'SLIDE 18 DEMO',
+                              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: Color(0xFFB45309)),
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => setState(() => _requireApproval = false),
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: !_requireApproval ? AppTheme.obsidian : Colors.transparent,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: !_requireApproval ? AppTheme.obsidian : AppTheme.hairline,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Cấp Vé Ngay (1-Tap)',
+                                  style: TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: !_requireApproval ? Colors.white : AppTheme.textMuted,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () => setState(() => _requireApproval = true),
+                            borderRadius: BorderRadius.circular(6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: _requireApproval ? AppTheme.obsidian : Colors.transparent,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: _requireApproval ? AppTheme.obsidian : AppTheme.hairline,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Xét Duyệt BTC (Slide 18)',
+                                  style: TextStyle(
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: _requireApproval ? Colors.white : AppTheme.textMuted,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _requireApproval
+                          ? 'Đơn sẽ chuyển tới Hàng Chờ Duyệt (Web Admin Portal) để BTC phê duyệt trước khi cấp mã QR.'
+                          : 'Cấp vé điện tử mã QR tức thì vào mục "Vé của tôi".',
+                      style: const TextStyle(fontSize: 11, color: AppTheme.textMuted, height: 1.3),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
 
               // Action Buttons
               AppPrimaryButton(
-                label: 'Xác nhận giữ chỗ ngay',
+                label: _requireApproval ? 'Nộp đơn chờ BTC xét duyệt' : 'Xác nhận giữ chỗ ngay',
+                icon: _requireApproval ? Icons.send_rounded : Icons.check_circle_outline_rounded,
                 isLoading: isLoading,
                 onPressed: () async {
-                  final success = await regVM.register(event: event, user: user);
-                  if (success && context.mounted) {
-                    final ticket = (regVM.state as StateData).data;
-                    context.read<MyTicketsViewModel>().loadUserTickets(user.id);
-                    context.read<HomeViewModel>().loadHomeScreenData();
-                    try {
-                      final detailVM = context.read<EventDetailViewModel>();
-                      detailVM.incrementRegistration();
-                      detailVM.refreshEvent(event.id);
-                    } catch (_) {}
-                    Navigator.pop(context); // Close bottom sheet
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => RegistrationResultScreen(ticket: ticket),
-                      ),
+                  if (_requireApproval) {
+                    final reg = await regVM.submitPendingRegistration(
+                      event: widget.event,
+                      user: widget.user,
                     );
-                  } else if (regVM.state is StateError && context.mounted) {
-                    final err = (regVM.state as StateError).error;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(err),
-                        backgroundColor: AppTheme.errorInk,
-                      ),
-                    );
+                    if (reg != null && context.mounted) {
+                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => RegistrationPendingScreen(
+                            registration: reg,
+                            event: widget.event,
+                            user: widget.user,
+                          ),
+                        ),
+                      );
+                    } else if (regVM.state is StateError && context.mounted) {
+                      final err = (regVM.state as StateError).error;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(err), backgroundColor: AppTheme.errorInk),
+                      );
+                    }
+                  } else {
+                    final success = await regVM.register(event: widget.event, user: widget.user);
+                    if (success && context.mounted) {
+                      final ticket = (regVM.state as StateData).data;
+                      context.read<MyTicketsViewModel>().loadUserTickets(widget.user.id);
+                      context.read<HomeViewModel>().loadHomeScreenData();
+                      try {
+                        final detailVM = context.read<EventDetailViewModel>();
+                        detailVM.incrementRegistration();
+                        detailVM.refreshEvent(widget.event.id);
+                      } catch (_) {}
+                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => RegistrationResultScreen(ticket: ticket),
+                        ),
+                      );
+                    } else if (regVM.state is StateError && context.mounted) {
+                      final err = (regVM.state as StateError).error;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(err),
+                          backgroundColor: AppTheme.errorInk,
+                        ),
+                      );
+                    }
                   }
                 },
               ),

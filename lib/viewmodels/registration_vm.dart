@@ -3,6 +3,7 @@ import '../models/screen_state.dart';
 import '../models/event_model.dart';
 import '../models/ticket_model.dart';
 import '../models/user_model.dart';
+import '../models/registration_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 import '../services/crashlytics_service.dart';
@@ -25,6 +26,7 @@ class RegistrationViewModel extends ChangeNotifier {
         _analyticsService = analyticsService,
         _crashlyticsService = crashlyticsService;
 
+  /// 1-Tap Instant Registration (Creates Ticket Immediately)
   Future<bool> register({
     required EventModel event,
     required UserModel user,
@@ -66,6 +68,45 @@ class RegistrationViewModel extends ChangeNotifier {
       _state = StateError(e.toString().replaceAll('Exception: ', ''));
       notifyListeners();
       return false;
+    }
+  }
+
+  /// Cross-Role Approval Flow (Slide 18: Student submits pending request -> Admin reviews)
+  Future<RegistrationModel?> submitPendingRegistration({
+    required EventModel event,
+    required UserModel user,
+  }) async {
+    _state = const StateLoading('Đang gửi hồ sơ đăng ký tới Ban Tổ Chức...');
+    notifyListeners();
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      final registration = await _firestoreService.submitRegistration(
+        event: event,
+        user: user,
+      );
+
+      await _analyticsService.logRegisterEvent(
+        eventId: event.id,
+        clubId: event.clubId,
+        durationSeconds: 1,
+        calendarSynced: false,
+      );
+
+      _state = const StateInitial();
+      notifyListeners();
+      return registration;
+    } catch (e, stack) {
+      debugPrint('[RegistrationViewModel] Pending registration error: $e');
+      await _crashlyticsService.recordHandledError(
+        e,
+        stack,
+        reason: 'Cross-role pending registration failure for event ${event.id}',
+        customKeys: {'eventId': event.id, 'userId': user.id},
+      );
+      _state = StateError(e.toString().replaceAll('Exception: ', ''));
+      notifyListeners();
+      return null;
     }
   }
 
