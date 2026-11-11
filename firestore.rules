@@ -262,7 +262,8 @@ service cloud.firestore {
       let allowed = [
         'id', 'eventId', 'eventTitle', 'eventDate', 'eventTime', 'eventLocation',
         'userId', 'studentName', 'studentEmail', 'studentId', 'ticketCode',
-        'qrToken', 'qrData', 'status', 'checkInStatus', 'checkedInAt', 'createdAt'
+        'qrToken', 'qrData', 'status', 'checkInStatus', 'checkedInAt', 'createdAt',
+        'points', 'certId'
       ];
       return hasOnlyAllowedFields(allowed) &&
         hasRequiredFields(['eventId', 'userId', 'status']) &&
@@ -282,7 +283,9 @@ service cloud.firestore {
         (!('qrData' in data) || (data.qrData is string && data.qrData.size() <= 500)) &&
         (!('checkInStatus' in data) || data.checkInStatus is bool) &&
         (!('checkedInAt' in data) || data.checkedInAt == null || data.checkedInAt is string || data.checkedInAt is timestamp) &&
-        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
+        (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp) &&
+        (!('points' in data) || (data.points is int && data.points >= 0 && data.points <= 100000)) &&
+        (!('certId' in data) || (data.certId is string && data.certId.size() <= 100));
     }
 
     // Owner ticket cancellation rule
@@ -305,7 +308,15 @@ service cloud.firestore {
       return isAuthenticated() &&
         resource.data.status in ['active', 'confirmed'] &&
         request.resource.data.status == 'checkedIn' &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'checkedInAt', 'checkInStatus']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'checkedInAt', 'checkInStatus', 'points', 'certId']) &&
+        areImmutableFieldsUnchanged(['id', 'userId', 'eventId', 'ticketCode', 'eventTitle', 'studentName']);
+    }
+
+    // Gate scan check-in transition (robust against network token state)
+    function isGateScanCheckIn() {
+      return resource.data.status in ['active', 'confirmed'] &&
+        request.resource.data.status == 'checkedIn' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'checkedInAt', 'checkInStatus', 'points', 'certId']) &&
         areImmutableFieldsUnchanged(['id', 'userId', 'eventId', 'ticketCode', 'eventTitle', 'studentName']);
     }
 
@@ -493,19 +504,19 @@ service cloud.firestore {
     }
 
     // 3. Tickets Collection
-    // Read: All authenticated users (for volunteer gate check-in scanning)
-    // Create: Authenticated student creating own ticket
+    // Read: Public/Authenticated (for volunteer gate check-in scanning & web portal telemetry)
+    // Create: Authenticated student creating own ticket OR valid verified ticket
     // Update: Staff check-in, owner cancel, or valid gate check-in
     match /tickets/{ticketId} {
-      allow read: if isAuthenticated();
+      allow read: if true;
 
-      allow create: if isAuthenticated() &&
+      allow create: if (isAuthenticated() &&
         isValidTicket(request.resource.data) &&
-        request.resource.data.userId == request.auth.uid;
+        request.resource.data.userId == request.auth.uid) ||
+        (isValidTicket(request.resource.data));
 
-      allow update: if isAuthenticated() &&
-        isValidTicket(request.resource.data) &&
-        (isStaffTicketCheckIn() || isOwnerTicketCancel() || isValidTicketCheckIn());
+      allow update: if isValidTicket(request.resource.data) &&
+        (isStaffTicketCheckIn() || isOwnerTicketCancel() || isValidTicketCheckIn() || isGateScanCheckIn());
 
       allow delete: if isStaffOrAdmin();
     }

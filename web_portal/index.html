@@ -342,84 +342,54 @@
             <p class="page-subhead">Quy chuẩn TCVN 3890:2023 & Thông tư 149/2020/TT-BCA cho các sự kiện tập trung đông người</p>
           </div>
           <div class="header-actions">
-            <button class="btn btn-primary btn-sm" onclick="app.issueSafetyCertificate()">
-              Ký & Xuất Giấy Phép PCCC
-            </button>
+            <span class="pill pill-neutral" id="pccc-summary-pill" style="font-size: 12px; padding: 6px 12px;">Đang tải danh sách hội trường...</span>
           </div>
         </header>
 
-        <div class="grid-2">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Hồ Sơ An Toàn: Hội Trường Trịnh Công Sơn</div>
-              <span class="pill pill-positive" id="safety-score-pill">Đạt 100/100 Điểm</span>
-            </div>
-            <div class="panel-body">
-              <div class="checklist-item">
-                <input type="checkbox" id="check-1" checked onchange="app.updateSafetyScore()">
-                <div>
-                  <label for="check-1" class="checklist-title">Hệ Thống Lối Thoát Nạn Khẩn Cấp</label>
-                  <div class="checklist-desc">4 cửa thoát hiểm mở 2 chiều ra ban công và cầu thang bộ, biển Exit phát quang 100% hoạt động.</div>
-                </div>
-                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
-              </div>
-
-              <div class="checklist-item">
-                <input type="checkbox" id="check-2" checked onchange="app.updateSafetyScore()">
-                <div>
-                  <label for="check-2" class="checklist-title">Trang Bị Bình Chữa Cháy Tại Chỗ</label>
-                  <div class="checklist-desc">8 bình khí CO2 MT3 và bột khô ABC MFZ4 còn hạn kiểm định định kỳ quý 4/2026.</div>
-                </div>
-                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
-              </div>
-
-              <div class="checklist-item">
-                <input type="checkbox" id="check-3" checked onchange="app.updateSafetyScore()">
-                <div>
-                  <label for="check-3" class="checklist-title">Chuông & Cảm Biến Báo Cháy Tự Động</label>
-                  <div class="checklist-desc">Tủ trung tâm báo cháy tòa nhà Delta kết nối trực tuyến với trung tâm chỉ huy Campus.</div>
-                </div>
-                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
-              </div>
-
-              <div class="checklist-item">
-                <input type="checkbox" id="check-4" checked onchange="app.updateSafetyScore()">
-                <div>
-                  <label for="check-4" class="checklist-title">Kế Hoạch & Sơ Đồ Thoát Hiểm</label>
-                  <div class="checklist-desc">Đã niêm yết sơ đồ thoát nạn tại 3 vị trí mắt nhìn và phổ biến cho đội ngũ CTV cửa.</div>
-                </div>
-                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
-              </div>
-
-              <div class="checklist-item">
-                <input type="checkbox" id="check-5" checked onchange="app.updateSafetyScore()">
-                <div>
-                  <label for="check-5" class="checklist-title">Chốt Cứu Thương & Y Tế Hiện Trường</label>
-                  <div class="checklist-desc">2 cán bộ y tế túc trực cùng cơ số thuốc chống choáng, băng gạc tại cửa số 2.</div>
-                </div>
-                <div class="checklist-badge"><span class="pill pill-positive">Đạt</span></div>
-              </div>
-            </div>
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Số Địa Điểm</div>
+            <div class="kpi-value num" id="kpi-total-venues">0</div>
+            <div class="kpi-sub">Từ dữ liệu sự kiện thực tế</div>
           </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Quyết Định Thẩm Định Phòng CTSV</div>
-              <span class="pill pill-accent">Chính Thức</span>
-            </div>
-            <div class="panel-body">
-              <div style="background-color: var(--ground); border: 1px dashed var(--control-border); padding: 18px; border-radius: 6px; font-size: 13px; line-height: 1.7;">
-                <div style="font-weight: 700; margin-bottom: 6px; text-transform: uppercase;">BIÊN BẢN NGHIỆM THU AN TOÀN SỐ 108/BB-CTSV</div>
-                <div><strong>Đơn vị tổ chức:</strong> CLB Lập trình F-Code (Đại học FPT)</div>
-                <div><strong>Sự kiện:</strong> FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai</div>
-                <div><strong>Địa điểm:</strong> Hội trường Trịnh Công Sơn (Tòa Delta)</div>
-                <div><strong>Giới hạn an toàn:</strong> Tối đa 200 người có mặt đồng thời</div>
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
-                  <span class="pill pill-positive">KẾT LUẬN: ĐỦ ĐIỀU KIỆN TỔ CHỨC AN TOÀN</span>
-                </div>
-              </div>
-            </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đạt Chuẩn An Toàn (100đ)</div>
+            <div class="kpi-value num" id="kpi-qualified-venues" style="color: var(--positive);">0</div>
+            <div class="kpi-sub">Đủ 5/5 tiêu chuẩn nghiệm thu PCCC</div>
           </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Chưa Đạt Chuẩn (< 100đ)</div>
+            <div class="kpi-value num" id="kpi-unqualified-venues" style="color: var(--negative);">0</div>
+            <div class="kpi-sub">Cần bổ sung tiêu chí an toàn</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đã Cấp Giấy Phép PCCC</div>
+            <div class="kpi-value num" id="kpi-signed-licenses" style="color: var(--chart-primary);">0</div>
+            <div class="kpi-sub">Đã ký biên bản nghiệm thu CTSV</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="table-toolbar" style="margin-bottom: 20px; background: var(--surface); padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-card); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 280px;">
+            <input type="text" id="pccc-search" class="search-input" placeholder="🔍 Tìm theo tên hội trường, tòa nhà, sự kiện..." oninput="app.filterVenues()" style="flex: 1; max-width: 360px;">
+            <select id="pccc-filter" class="search-input" onchange="app.filterVenues()" style="width: auto; min-width: 190px;">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="qualified">Đạt chuẩn an toàn (100đ)</option>
+              <option value="unqualified">Chưa đạt chuẩn (< 100đ)</option>
+              <option value="signed">Đã cấp Giấy phép PCCC</option>
+              <option value="unsigned">Chưa ký cấp phép</option>
+            </select>
+          </div>
+          <div id="pccc-count-indicator" style="font-size: 12.5px; color: var(--muted); font-weight: 500;">
+            Đang hiển thị 0 địa điểm
+          </div>
+        </div>
+
+        <!-- Dynamic Venues List Container -->
+        <div id="pccc-venues-container">
+          <!-- Populated dynamically by app.renderVenues() -->
         </div>
       </section>
 
@@ -910,5 +880,27 @@
     </div>
   </div>
 
+
+  <!-- Modal: Safety & PCCC Inspection License View / Print -->
+  <div class="modal-backdrop" id="safety-license-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Giấy Phép An Toàn PCCC & Cơ Sở Vật Chất</h2>
+          <p class="modal-subtitle">Biên bản nghiệm thu chính thức phòng Công tác Sinh viên (CTSV) - Trường Đại học FPT</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeSafetyLicenseModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="safety-license-modal-body" style="padding: 24px;">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="app.closeSafetyLicenseModal()">Đóng</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>🖨️ In Giấy Phép</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

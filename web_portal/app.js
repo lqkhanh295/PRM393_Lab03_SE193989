@@ -52,7 +52,72 @@ const app = {
     registrations: [],
     announcements: [],
     liveEvents: [],
-    liveClubs: []
+    liveClubs: [],
+    venues: [
+      {
+        id: 'venue-01',
+        name: 'Hội trường Trịnh Công Sơn',
+        building: 'Tòa Delta',
+        capacity: 400,
+        eventId: 'EVT-2026-01',
+        eventTitle: 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
+        clubName: 'CLB Lập trình F-Code (Đại học FPT)',
+        licenseNumber: '108/BB-CTSV',
+        signed: true,
+        signedDate: '27/10/2026 16:30',
+        signatory: 'Thượng úy PCCC & Trưởng ban CTSV',
+        score: 100,
+        criteria: [
+          { id: 'exit', title: 'Hệ Thống Lối Thoát Nạn Khẩn Cấp', desc: '4 cửa thoát hiểm mở 2 chiều ra ban công và cầu thang bộ, biển Exit phát quang 100% hoạt động.', checked: true, points: 20 },
+          { id: 'extinguisher', title: 'Trang Bị Bình Chữa Cháy Tại Chỗ', desc: '8 bình khí CO2 MT3 và bột khô ABC MFZ4 còn hạn kiểm định định kỳ quý 4/2026.', checked: true, points: 20 },
+          { id: 'alarm', title: 'Chuông & Cảm Biến Báo Cháy Tự Động', desc: 'Tủ trung tâm báo cháy tòa nhà Delta kết nối trực tuyến với trung tâm chỉ huy Campus.', checked: true, points: 20 },
+          { id: 'evac_plan', title: 'Kế Hoạch & Sơ Đồ Thoát Hiểm', desc: 'Đã niêm yết sơ đồ thoát nạn tại 3 vị trí mắt nhìn và phổ biến cho đội ngũ CTV cửa.', checked: true, points: 20 },
+          { id: 'medical', title: 'Chốt Cứu Thương & Y Tế Hiện Trường', desc: '2 cán bộ y tế túc trực cùng cơ số thuốc chống choáng, băng gạc tại cửa số 2.', checked: true, points: 20 }
+        ]
+      },
+      {
+        id: 'venue-02',
+        name: 'Phòng Hội thảo Alpha Building (Phòng 301)',
+        building: 'Tòa Alpha',
+        capacity: 120,
+        eventId: 'EVT-2026-02',
+        eventTitle: 'Workshop: Thiết kế UI/UX Chuẩn Công Thái Học Di Động',
+        clubName: 'CLB Cóc Sài Gòn',
+        licenseNumber: '109/BB-CTSV',
+        signed: false,
+        signedDate: null,
+        signatory: null,
+        score: 100,
+        criteria: [
+          { id: 'exit', title: 'Hệ Thống Lối Thoát Nạn Khẩn Cấp', desc: '2 cửa đôi mở thông thoáng ra sảnh thang máy và thang bộ thoát hiểm số 1.', checked: true, points: 20 },
+          { id: 'extinguisher', title: 'Trang Bị Bình Chữa Cháy Tại Chỗ', desc: '4 bình bột chữa cháy MFZL4 đặt tại 2 góc phòng hội thảo, tem kiểm định còn hiệu lực.', checked: true, points: 20 },
+          { id: 'alarm', title: 'Chuông & Cảm Biến Báo Cháy Tự Động', desc: 'Đầu báo khói quang điện địa chỉ và hệ thống sprinkler tự động trần thạch cao.', checked: true, points: 20 },
+          { id: 'evac_plan', title: 'Kế Hoạch & Sơ Đồ Thoát Hiểm', desc: 'Sơ đồ thoát hiểm niêm yết cạnh cửa chính, lối đi rộng tối thiểu 1.5m thông thoáng.', checked: true, points: 20 },
+          { id: 'medical', title: 'Chốt Cứu Thương & Y Tế Hiện Trường', desc: 'Hộp sơ cấp cứu y tế chuẩn Bộ Y tế, có phân công 1 cán bộ y tế cơ sở hỗ trợ.', checked: true, points: 20 }
+        ]
+      },
+      {
+        id: 'venue-03',
+        name: 'Sân khấu Hội trường Lớn A2',
+        building: 'Tòa Gamma',
+        capacity: 300,
+        eventId: 'EVT-2026-03',
+        eventTitle: 'Giải Đấu Thể Thao Điện Tử FPTU Champions League',
+        clubName: 'CLB Thể thao FPTU',
+        licenseNumber: '110/BB-CTSV',
+        signed: false,
+        signedDate: null,
+        signatory: null,
+        score: 60,
+        criteria: [
+          { id: 'exit', title: 'Hệ Thống Lối Thoát Nạn Khẩn Cấp', desc: '3 cửa thoát hiểm hai bên cánh gà và sảnh sau sân khấu đảm bảo tiêu chuẩn TCVN.', checked: true, points: 20 },
+          { id: 'extinguisher', title: 'Trang Bị Bình Chữa Cháy Tại Chỗ', desc: '6 bình CO2 MT5 và bình bọt foam chữa cháy thiết bị điện tử sân khấu.', checked: true, points: 20 },
+          { id: 'alarm', title: 'Chuông & Cảm Biến Báo Cháy Tự Động', desc: 'Hệ thống báo cháy kết nối loa thông báo di tản khẩn cấp PA toàn khu Gamma.', checked: true, points: 20 },
+          { id: 'evac_plan', title: 'Kế Hoạch & Sơ Đồ Thoát Hiểm', desc: 'Chưa hoàn tất niêm yết sơ đồ thoát hiểm khu vực phòng kỹ thuật âm thanh và hậu đài.', checked: false, points: 20 },
+          { id: 'medical', title: 'Chốt Cứu Thương & Y Tế Hiện Trường', desc: 'Chưa bố trí nhân sự y tế túc trực trực tiếp tại bàn hậu cần sân khấu lớn.', checked: false, points: 20 }
+        ]
+      }
+    ]
   },
 
   // Initialize
@@ -65,6 +130,7 @@ const app = {
     this.renderReviewQueue();
     this.renderAnnouncementsHistory();
     this.renderGateChart();
+    this.renderVenues();
     
     // Wire up live Cloud Firestore pipelines (Backend API & Firestore Direct)
     await this.loadAllRealData();
@@ -129,6 +195,7 @@ const app = {
       if (events.length > 0) {
         this.state.liveEvents = events;
         this.renderLiveVenues(events);
+        this.syncVenuesFromEvents(events);
 
         const totalRegistered = events.reduce((sum, e) => sum + (e.registeredCount || 0), 0);
         const totalCap = events.reduce((sum, e) => sum + (e.capacity || 200), 0);
@@ -579,35 +646,387 @@ const app = {
     }).join('');
   },
 
-  // Update Safety Compliance Score
-  updateSafetyScore() {
-    const checkboxes = [
-      document.getElementById('check-1'),
-      document.getElementById('check-2'),
-      document.getElementById('check-3'),
-      document.getElementById('check-4'),
-      document.getElementById('check-5')
-    ];
+  // ==========================================================================
+  // VIEW 4: PCCC SAFETY & VENUE INSPECTION (MULTI-VENUE REAL-DATA CONTROLLER)
+  // ==========================================================================
 
-    const total = checkboxes.length;
-    const checked = checkboxes.filter(c => c && c.checked).length;
-    const score = Math.round((checked / total) * 100);
+  // Synchronize dynamic venues from loaded Cloud Firestore events
+  syncVenuesFromEvents(events) {
+    if (!events || events.length === 0) return;
 
-    const pill = document.getElementById('safety-score-pill');
-    if (pill) {
-      pill.innerText = `Đạt ${score}/100 Điểm`;
-      if (score === 100) {
-        pill.className = 'pill pill-positive';
-      } else if (score >= 60) {
-        pill.className = 'pill pill-warning';
+    events.forEach(evt => {
+      const locName = (evt.location || '').trim();
+      if (!locName) return;
+
+      // Check if this venue is already tracked in state.venues
+      const existing = this.state.venues.find(v => 
+        v.name.toLowerCase() === locName.toLowerCase() ||
+        locName.toLowerCase().includes(v.name.toLowerCase()) ||
+        v.name.toLowerCase().includes(locName.toLowerCase())
+      );
+
+      if (existing) {
+        // Update live event title, capacity, club name
+        existing.eventId = evt.id;
+        if (evt.title) existing.eventTitle = evt.title;
+        if (evt.capacity) existing.capacity = evt.capacity;
+        if (evt.clubName) existing.clubName = evt.clubName;
       } else {
-        pill.className = 'pill pill-negative';
+        // Register new venue from Firestore event
+        const newVenueId = 'venue-' + (this.state.venues.length + 1).toString().padStart(2, '0');
+        const licenseNo = (108 + this.state.venues.length) + '/BB-CTSV';
+        this.state.venues.push({
+          id: newVenueId,
+          name: locName,
+          building: locName.includes('Delta') ? 'Tòa Delta' : (locName.includes('Alpha') ? 'Tòa Alpha' : 'Tòa FPTU'),
+          capacity: evt.capacity || 200,
+          eventId: evt.id,
+          eventTitle: evt.title || 'Sự kiện FPTU',
+          clubName: evt.clubName || 'CLB Sinh viên FPTU',
+          licenseNumber: licenseNo,
+          signed: false,
+          signedDate: null,
+          signatory: null,
+          score: 80,
+          criteria: [
+            { id: 'exit', title: 'Hệ Thống Lối Thoát Nạn Khẩn Cấp', desc: 'Cửa thoát hiểm mở 2 chiều, biển Exit phát quang hoạt động tốt.', checked: true, points: 20 },
+            { id: 'extinguisher', title: 'Trang Bị Bình Chữa Cháy Tại Chỗ', desc: 'Bình bột MFZ4 và khí CO2 còn hạn kiểm định.', checked: true, points: 20 },
+            { id: 'alarm', title: 'Chuông & Cảm Biến Báo Cháy Tự Động', desc: 'Kết nối liên động trung tâm chỉ huy tòa nhà.', checked: true, points: 20 },
+            { id: 'evac_plan', title: 'Kế Hoạch & Sơ Đồ Thoát Hiểm', desc: 'Sơ đồ thoát hiểm niêm yết tại các vị trí dễ quan sát.', checked: true, points: 20 },
+            { id: 'medical', title: 'Chốt Cứu Thương & Y Tế Hiện Trường', desc: 'Cần phân công cán bộ y tế túc trực trực tiếp.', checked: false, points: 20 }
+          ]
+        });
       }
+    });
+
+    this.renderVenues();
+  },
+
+  // Update Safety KPI Counters & Header Summary Pill
+  updateSafetyKPIs() {
+    const total = this.state.venues.length;
+    const qualified = this.state.venues.filter(v => v.score === 100).length;
+    const unqualified = this.state.venues.filter(v => v.score < 100).length;
+    const signed = this.state.venues.filter(v => v.signed).length;
+
+    const elTotal = document.getElementById('kpi-total-venues');
+    const elQual = document.getElementById('kpi-qualified-venues');
+    const elUnqual = document.getElementById('kpi-unqualified-venues');
+    const elSigned = document.getElementById('kpi-signed-licenses');
+    const summaryPill = document.getElementById('pccc-summary-pill');
+
+    if (elTotal) elTotal.innerText = total;
+    if (elQual) elQual.innerText = qualified;
+    if (elUnqual) elUnqual.innerText = unqualified;
+    if (elSigned) elSigned.innerText = signed;
+
+    if (summaryPill) {
+      summaryPill.className = unqualified === 0 ? 'pill pill-positive' : 'pill pill-warning';
+      summaryPill.innerText = `Đã nghiệm thu ${total}/${total} địa điểm (${qualified} đạt chuẩn, ${unqualified} cần khắc phục)`;
     }
   },
 
-  issueSafetyCertificate() {
-    this.showToast('Đã cấp Giấy chứng nhận An toàn PCCC số 108/BB-CTSV thành công!');
+  // Render Venue Safety Cards
+  renderVenues(filteredList = null) {
+    const container = document.getElementById('pccc-venues-container');
+    if (!container) return;
+
+    const list = filteredList || this.state.venues;
+    this.updateSafetyKPIs();
+
+    const countIndicator = document.getElementById('pccc-count-indicator');
+    if (countIndicator) {
+      countIndicator.innerText = `Đang hiển thị ${list.length} / ${this.state.venues.length} địa điểm`;
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="panel" style="text-align: center; padding: 48px 24px; color: var(--muted);">
+          <div style="font-size: 32px; margin-bottom: 10px;">🔍</div>
+          <div style="font-weight: 600; font-size: 15px; color: var(--text);">Không tìm thấy hội trường phù hợp</div>
+          <div style="font-size: 13px; margin-top: 4px;">Vui lòng thử từ khóa tìm kiếm khác hoặc chọn bộ lọc "Tất cả trạng thái".</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = list.map(v => {
+      const is100 = v.score === 100;
+      const scoreBadgeClass = is100 ? 'pill-positive' : (v.score >= 60 ? 'pill-warning' : 'pill-negative');
+      const licenseBadgeClass = v.signed ? 'pill-accent' : (is100 ? 'pill-neutral' : 'pill-negative');
+      const licenseBadgeText = v.signed ? 'Đã Cấp Phép PCCC' : (is100 ? 'Chờ Ký Nghiệm Thu' : 'Chưa Đạt Điều Kiện');
+
+      // Checklist HTML
+      const checklistHtml = v.criteria.map(c => {
+        return `
+          <div class="checklist-item" style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border);">
+            <input type="checkbox" id="chk-${v.id}-${c.id}" ${c.checked ? 'checked' : ''} onchange="app.toggleVenueCriteria('${v.id}', '${c.id}')" style="margin-top: 3px; cursor: pointer; width: 16px; height: 16px;">
+            <div style="flex: 1;">
+              <label for="chk-${v.id}-${c.id}" class="checklist-title" style="font-weight: 600; font-size: 13.5px; cursor: pointer; color: var(--text);">${c.title}</label>
+              <div class="checklist-desc" style="font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5;">${c.desc}</div>
+            </div>
+            <div class="checklist-badge">
+              <span class="pill ${c.checked ? 'pill-positive' : 'pill-negative'}" style="font-size: 11px;">
+                ${c.checked ? 'Đạt' : 'Chưa đạt'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Sign / Action Button HTML
+      let actionBtnHtml = '';
+      if (v.signed) {
+        actionBtnHtml = `
+          <button class="btn btn-secondary" onclick="app.viewSafetyLicense('${v.id}')" style="width: 100%; margin-top: 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Xem & In Giấy Phép PCCC
+          </button>
+        `;
+      } else if (is100) {
+        actionBtnHtml = `
+          <button class="btn-pccc-sign" onclick="app.signSafetyLicense('${v.id}')" style="margin-top: 16px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            Ký & Xuất Giấy Phép PCCC
+          </button>
+        `;
+      } else {
+        actionBtnHtml = `
+          <button class="btn btn-secondary" onclick="app.warnIncompleteVenue('${v.id}')" style="width: 100%; margin-top: 16px; font-weight: 600; opacity: 0.65; cursor: pointer; color: var(--negative); border-color: var(--negative);">
+            ⚠️ Chưa đủ điều kiện ký (Cần 100/100đ)
+          </button>
+        `;
+      }
+
+      return `
+        <div class="panel venue-card" id="venue-card-${v.id}" style="margin-bottom: 24px; border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface);">
+          <div class="venue-card-header" style="padding: 16px 20px; background: var(--ground); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <div class="venue-card-title" style="font-size: 16px; font-weight: 700; color: var(--text);">${v.name} (${v.building})</div>
+              <div class="venue-card-sub" style="font-size: 12.5px; color: var(--muted); margin-top: 4px;">
+                Sự kiện: <strong style="color: var(--text);">${v.eventTitle}</strong> &bull; Đơn vị: ${v.clubName} &bull; Sức chứa: <strong style="color: var(--text);">${v.capacity} người</strong>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="pill ${scoreBadgeClass}" style="font-weight: 700; font-size: 12px;" id="pill-score-${v.id}">
+                Đạt ${v.score}/100 Điểm
+              </span>
+              <span class="pill ${licenseBadgeClass}" style="font-size: 12px;" id="pill-lic-${v.id}">
+                ${licenseBadgeText}
+              </span>
+            </div>
+          </div>
+
+          <div class="panel-body" style="padding: 20px;">
+            <div class="grid-2" style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 20px;">
+              <!-- 5 Tiêu chuẩn Checklist -->
+              <div>
+                <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 10px; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px;">
+                  5 Tiêu Chuẩn Nghiệm Thu PCCC Thực Địa
+                </div>
+                <div id="checklist-${v.id}">
+                  ${checklistHtml}
+                </div>
+              </div>
+
+              <!-- Quyết định Thẩm định & Ký Phép -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 10px; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px;">
+                    Quyết Định Thẩm Định Phòng CTSV
+                  </div>
+                  <div style="background-color: var(--ground); border: 1px dashed var(--control-border); padding: 18px; border-radius: 6px; font-size: 13px; line-height: 1.7;">
+                    <div style="font-weight: 700; margin-bottom: 6px; text-transform: uppercase; color: var(--text);">
+                      BIÊN BẢN NGHIỆM THU AN TOÀN SỐ ${v.licenseNumber}
+                    </div>
+                    <div><strong>Đơn vị tổ chức:</strong> ${v.clubName}</div>
+                    <div><strong>Sự kiện:</strong> ${v.eventTitle}</div>
+                    <div><strong>Địa điểm:</strong> ${v.name} (${v.building})</div>
+                    <div><strong>Giới hạn an toàn:</strong> Tối đa ${v.capacity} người có mặt đồng thời</div>
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+                      ${is100 
+                        ? '<span class="pill pill-positive">KẾT LUẬN: ĐỦ ĐIỀU KIỆN TỔ CHỨC AN TOÀN</span>' 
+                        : '<span class="pill pill-negative">KẾT LUẬN: CHƯA ĐẠT CHUẨN - THIẾU ' + (100 - v.score) + ' ĐIỂM</span>'}
+                    </div>
+                    <div style="margin-top: 8px; font-size: 11.5px; color: var(--muted);">
+                      ${v.signed 
+                        ? '✔️ Đã ký bởi: ' + v.signatory + ' (' + v.signedDate + ')' 
+                        : '⏳ Tình trạng: Biên bản chưa ký số chính thức'}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  ${actionBtnHtml}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  // Toggle criteria checkbox for a specific venue
+  toggleVenueCriteria(venueId, criteriaId) {
+    const venue = this.state.venues.find(v => v.id === venueId);
+    if (!venue) return;
+
+    const crit = venue.criteria.find(c => c.id === criteriaId);
+    if (!crit) return;
+
+    crit.checked = !crit.checked;
+
+    // Recalculate score (each checked item = 20 points)
+    const checkedCount = venue.criteria.filter(c => c.checked).length;
+    venue.score = checkedCount * 20;
+
+    // If score dropped below 100, revoke signed status until re-inspection
+    if (venue.score < 100 && venue.signed) {
+      venue.signed = false;
+      venue.signedDate = null;
+      this.showToast(`Hội trường "${venue.name}" bị giảm điểm (${venue.score}/100đ). Giấy phép đã được thu hồi chờ tái kiểm tra!`);
+    }
+
+    this.filterVenues();
+  },
+
+  // Filter & Search Venues
+  filterVenues() {
+    const searchInput = document.getElementById('pccc-search');
+    const filterSelect = document.getElementById('pccc-filter');
+
+    const query = (searchInput?.value || '').toLowerCase().trim();
+    const filter = filterSelect?.value || 'all';
+
+    let list = this.state.venues.filter(v => {
+      // Search matching
+      const matchesSearch = !query || 
+        v.name.toLowerCase().includes(query) ||
+        v.building.toLowerCase().includes(query) ||
+        v.eventTitle.toLowerCase().includes(query) ||
+        v.clubName.toLowerCase().includes(query);
+
+      if (!matchesSearch) return false;
+
+      // Status filter
+      if (filter === 'qualified') return v.score === 100;
+      if (filter === 'unqualified') return v.score < 100;
+      if (filter === 'signed') return v.signed === true;
+      if (filter === 'unsigned') return !v.signed;
+
+      return true;
+    });
+
+    this.renderVenues(list);
+  },
+
+  // Sign & Issue Safety License for a specific venue
+  signSafetyLicense(venueId) {
+    const venue = this.state.venues.find(v => v.id === venueId);
+    if (!venue) return;
+
+    if (venue.score < 100) {
+      this.warnIncompleteVenue(venueId);
+      return;
+    }
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+    venue.signed = true;
+    venue.signedDate = dateStr;
+    venue.signatory = 'Thượng úy PCCC & Trưởng ban CTSV FPTU';
+
+    this.showToast(`Đã ký số và ban hành Giấy phép PCCC số ${venue.licenseNumber} cho "${venue.name}" thành công!`);
+    this.filterVenues();
+    this.viewSafetyLicense(venueId);
+  },
+
+  // View Official Safety License Modal
+  viewSafetyLicense(venueId) {
+    const venue = this.state.venues.find(v => v.id === venueId);
+    if (!venue) return;
+
+    const modalBody = document.getElementById('safety-license-modal-body');
+    const modal = document.getElementById('safety-license-modal');
+    if (!modalBody || !modal) return;
+
+    modalBody.innerHTML = `
+      <div style="border: 2px solid #111827; padding: 24px; border-radius: 8px; background: #ffffff; color: #111827; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <div style="text-align: center; border-bottom: 2px solid #111827; padding-bottom: 16px; margin-bottom: 20px;">
+          <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+          <div style="font-size: 12px; font-weight: 600; text-decoration: underline; margin-top: 2px;">Độc lập - Tự do - Hạnh phúc</div>
+          <div style="margin-top: 14px; font-size: 13px; font-weight: 700; color: #0284c7;">TRƯỜNG ĐẠI HỌC FPT TP. HỒ CHÍ MINH</div>
+          <div style="font-size: 12px; font-weight: 600; color: #475569;">PHÒNG CÔNG TÁC SINH VIÊN (CTSV) - TỔ THẨM ĐỊNH PCCC</div>
+          <div style="margin-top: 18px; font-size: 18px; font-weight: 800; text-transform: uppercase; color: #111827; letter-spacing: 0.5px;">
+            BIÊN BẢN NGHIỆM THU AN TOÀN PCCC & CƠ SỞ VẬT CHẤT
+          </div>
+          <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
+            Số: <strong>${venue.licenseNumber}</strong> &bull; Quy chuẩn TCVN 3890:2023 &bull; Thông tư 149/2020/TT-BCA
+          </div>
+        </div>
+
+        <div style="font-size: 13.5px; line-height: 1.8; margin-bottom: 20px;">
+          <div>&bull; <strong>Đơn vị tổ chức sự kiện:</strong> ${venue.clubName}</div>
+          <div>&bull; <strong>Tên chương trình / sự kiện:</strong> ${venue.eventTitle}</div>
+          <div>&bull; <strong>Địa điểm thẩm định:</strong> ${venue.name} (${venue.building})</div>
+          <div>&bull; <strong>Giới hạn an toàn sức chứa:</strong> Tối đa <strong>${venue.capacity} người</strong> có mặt đồng thời.</div>
+          <div>&bull; <strong>Điểm số nghiệm thu thực địa:</strong> <span style="font-weight: 700; color: #16a34a;">${venue.score}/100 Điểm (5/5 Tiêu chuẩn ĐẠT)</span></div>
+        </div>
+
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px; margin-bottom: 20px; font-size: 12.5px;">
+          <div style="font-weight: 700; margin-bottom: 6px; color: #1e293b;">KẾT QUẢ KIỂM ĐỊNH CHI TIẾT 5 HẠNG MỤC:</div>
+          <div>1. Hệ thống cửa và lối thoát nạn khẩn cấp: <strong>ĐẠT</strong> (4 lối thoát 2 chiều, đèn Exit chuẩn quang).</div>
+          <div>2. Phương tiện PCCC tại chỗ: <strong>ĐẠT</strong> (Bình khí CO2 và bột ABC đầy đủ hạn kiểm định).</div>
+          <div>3. Hệ thống báo cháy & đầu phun nước Sprinkler: <strong>ĐẠT</strong> (Kết nối tủ chỉ huy Campus).</div>
+          <div>4. Sơ đồ chỉ dẫn thoát hiểm & phương án di tản: <strong>ĐẠT</strong> (Đã niêm yết và phổ biến CTV).</div>
+          <div>5. Chốt cứu thương y tế & cơ số thuốc sơ cứu: <strong>ĐẠT</strong> (Cán bộ y tế túc trực suốt sự kiện).</div>
+        </div>
+
+        <div style="border: 2px dashed #16a34a; background-color: #f0fdf4; padding: 14px; border-radius: 6px; text-align: center; margin-bottom: 24px;">
+          <div style="font-weight: 800; font-size: 14px; color: #15803d; text-transform: uppercase;">
+            KẾT LUẬN: ĐỦ ĐIỀU KIỆN TỔ CHỨC AN TOÀN THEO QUY ĐỊNH
+          </div>
+          <div style="font-size: 12px; color: #166534; margin-top: 3px;">
+            Ban Quản lý Tòa nhà & Đội An ninh phối hợp trực bảo đảm trật tự trong suốt thời gian diễn ra sự kiện.
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 20px; font-size: 13px;">
+          <div>
+            <div style="font-weight: 700;">ĐẠI DIỆN ĐƠN VỊ TỔ CHỨC</div>
+            <div style="font-size: 11.5px; color: #64748b;">(Ký & ghi rõ họ tên)</div>
+            <div style="height: 55px;"></div>
+            <div style="font-weight: 600;">${venue.clubName}</div>
+          </div>
+          <div>
+            <div style="font-weight: 700;">CÁN BỘ NGHIỆM THU CTSV & PCCC</div>
+            <div style="font-size: 11.5px; color: #64748b;">(Đã ký số điện tử)</div>
+            <div style="margin: 10px 0; color: #dc2626; font-weight: 800; border: 2px solid #dc2626; padding: 4px 10px; border-radius: 4px; display: inline-block;">
+              ĐÃ PHÊ DUYỆT CTSV FPTU
+            </div>
+            <div style="font-weight: 600;">${venue.signatory || 'Thượng úy PCCC & Trưởng ban CTSV'}</div>
+            <div style="font-size: 11px; color: #64748b;">Ngày cấp: ${venue.signedDate || '27/10/2026'}</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+  },
+
+  // Close Safety License Modal
+  closeSafetyLicenseModal() {
+    const modal = document.getElementById('safety-license-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  // Warn when venue does not meet 100/100 points
+  warnIncompleteVenue(venueId) {
+    const venue = this.state.venues.find(v => v.id === venueId);
+    const missing = venue ? venue.criteria.filter(c => !c.checked).map(c => c.title).join(', ') : '';
+    this.showToast(`Hội trường chưa đạt đủ 100 điểm (Hiện tại: ${venue?.score || 0}/100đ). Cần khắc phục: ${missing}`, 'warning');
   },
 
   // Render Students Table

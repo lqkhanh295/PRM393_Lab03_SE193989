@@ -692,9 +692,80 @@ html, body {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Hidden views */
-.view-section {
-  display: none;
+/* PCCC Safety Venue Cards */
+.venue-card {
+  margin-bottom: 24px;
+}
+
+.venue-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: var(--ground);
+  border-bottom: 1px solid var(--border);
+}
+
+.venue-card-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.venue-card-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.btn-pccc-sign {
+  background-color: #111827;
+  color: #ffffff;
+  border: 1px solid #111827;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.btn-pccc-sign:hover {
+  background-color: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #safety-license-modal, #safety-license-modal * {
+    visibility: visible;
+  }
+  #safety-license-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: transparent !important;
+  }
+  #safety-license-modal .modal-dialog {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  #safety-license-modal .modal-footer, #safety-license-modal .modal-close {
+    display: none !important;
+  }
 }
 
 .view-section.active {
