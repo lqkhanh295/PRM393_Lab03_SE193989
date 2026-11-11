@@ -550,6 +550,7 @@ const server = http.createServer(async (req, res) => {
           category: body.category || 'official',
           categoryLabel: body.categoryLabel || 'Phát thanh CTSV',
           message: body.message || body.content || '',
+          content: body.content || body.message || '',
           pinned: Boolean(body.pinned),
           createdAt: now,
           status: 'published'

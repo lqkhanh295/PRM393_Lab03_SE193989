@@ -37,7 +37,7 @@ class AnnouncementModel {
     return AnnouncementModel(
       id: id,
       title: map['title'] as String? ?? 'Thông báo từ Ban Tổ Chức',
-      content: map['content'] as String? ?? '',
+      content: (map['content'] ?? map['message']) as String? ?? '',
       category: map['category'] as String? ?? 'general',
       authorRole: map['authorRole'] as String? ?? 'staff',
       eventId: map['eventId'] as String?,

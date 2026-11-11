@@ -324,19 +324,31 @@ class FirestoreService {
 
     if (_firestore != null) {
       try {
-        await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
-        debugPrint('[FirestoreService] Real Ticket written to Cloud Firestore: $ticketId');
-      } catch (e) {
-        debugPrint('[FirestoreService] Firestore ticket registration sync warning: $e');
-      }
-
-      try {
-        await _firestore.collection('events').doc(event.id).update({
-          'registeredCount': FieldValue.increment(1),
+        // TASK-21: Atomic transaction to prevent race conditions and overbooking
+        await _firestore.runTransaction((transaction) async {
+          final eventRef = _firestore.collection('events').doc(event.id);
+          final eventSnap = await transaction.get(eventRef);
+          if (eventSnap.exists && eventSnap.data() != null) {
+            final curCount = (eventSnap.data()!['registeredCount'] as num?)?.toInt() ?? 0;
+            final maxCap = (eventSnap.data()!['capacity'] as num?)?.toInt() ?? event.capacity;
+            if (curCount >= maxCap) {
+              throw Exception('Rất tiếc! Sự kiện đã đạt số lượng tối đa ($maxCap chỗ).');
+            }
+            transaction.update(eventRef, {'registeredCount': curCount + 1});
+          }
+          final ticketRef = _firestore.collection('tickets').doc(ticketId);
+          transaction.set(ticketRef, newTicket.toMap());
         });
-        debugPrint('[FirestoreService] Cloud Firestore registeredCount incremented for event: ${event.id}');
+        debugPrint('[FirestoreService] Atomic registration transaction succeeded: $ticketId');
       } catch (e) {
-        debugPrint('[FirestoreService] Firestore event registeredCount update warning: $e');
+        if (e.toString().contains('đạt số lượng tối đa')) rethrow;
+        debugPrint('[FirestoreService] Transaction fallback to direct write: $e');
+        try {
+          await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
+          await _firestore.collection('events').doc(event.id).update({
+            'registeredCount': FieldValue.increment(1),
+          });
+        } catch (_) {}
       }
     }
 

@@ -26,8 +26,8 @@ class ClubModel {
   factory ClubModel.fromMap(Map<String, dynamic> map, String id) {
     int parseFollowerCount(dynamic val) {
       if (val is num) return val.toInt();
-      if (val is String) return int.tryParse(val) ?? 100;
-      return 100;
+      if (val is String) return int.tryParse(val) ?? 0;
+      return 0;
     }
 
     return ClubModel(

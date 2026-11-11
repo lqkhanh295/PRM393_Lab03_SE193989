@@ -13,6 +13,7 @@ class TicketModel {
   final String qrToken;
   final TicketStatus status;
   final DateTime? checkedInAt;
+  final DateTime? createdAt;
 
   const TicketModel({
     required this.id,
@@ -27,6 +28,7 @@ class TicketModel {
     required this.qrToken,
     this.status = TicketStatus.active,
     this.checkedInAt,
+    this.createdAt,
   });
 
   bool get isActive => status == TicketStatus.active;
@@ -66,6 +68,7 @@ class TicketModel {
       qrToken: map['qrToken'] as String? ?? 'TOKEN-$id',
       status: resolveStatus(map['status'] as String?),
       checkedInAt: resolveDateTime(map['checkedInAt']),
+      createdAt: resolveDateTime(map['createdAt']),
     );
   }
 
@@ -85,7 +88,7 @@ class TicketModel {
       'qrData': 'FPTU-CE-$eventId-$userId-$id',
       'status': status == TicketStatus.checkedIn ? 'checkedIn' : 'active',
       'checkInStatus': status == TicketStatus.checkedIn,
-      'createdAt': DateTime.now().toIso8601String(),
+      'createdAt': (createdAt ?? DateTime.now()).toIso8601String(),
     };
     if (checkedInAt != null) {
       map['checkedInAt'] = checkedInAt!.toIso8601String();
@@ -96,6 +99,7 @@ class TicketModel {
   TicketModel copyWith({
     TicketStatus? status,
     DateTime? checkedInAt,
+    DateTime? createdAt,
   }) {
     return TicketModel(
       id: id,
@@ -110,6 +114,7 @@ class TicketModel {
       qrToken: qrToken,
       status: status ?? this.status,
       checkedInAt: checkedInAt ?? this.checkedInAt,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

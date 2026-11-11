@@ -327,6 +327,28 @@ const app = {
           this.renderStudentsTable();
           this.renderRecentOverviewTable();
           this.renderReviewQueue();
+
+          // TASK-20: Dynamically compute hourly flow from real checked-in tickets
+          const checkedTickets = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus);
+          if (checkedTickets.length > 0) {
+            const timeBuckets = {};
+            checkedTickets.forEach(t => {
+              const rawTime = t.checkedInAt || '';
+              const match = rawTime.match(/(\d{1,2}):(\d{2})/);
+              let slot = '14:00';
+              if (match) {
+                const hour = match[1].padStart(2, '0');
+                const min = parseInt(match[2], 10) >= 30 ? '30' : '00';
+                slot = `${hour}:${min}`;
+              }
+              timeBuckets[slot] = (timeBuckets[slot] || 0) + 1;
+            });
+            const slots = Object.keys(timeBuckets).sort().map(h => ({ hour: h, count: timeBuckets[h] }));
+            if (slots.length > 0) {
+              this.state.hourlyFlow = slots;
+              this.renderGateChart();
+            }
+          }
         }
       } catch (e) {
         console.warn('[Tickets] Note:', e);
@@ -1464,7 +1486,7 @@ const app = {
   },
 
   // Send FCM Broadcast
-  sendFCMBroadcast() {
+  async sendFCMBroadcast() {
     const title = (document.getElementById('fcm-title')?.value || '').trim();
     const body = (document.getElementById('fcm-body')?.value || '').trim();
 
@@ -1473,19 +1495,43 @@ const app = {
       return;
     }
 
-    const historyList = document.getElementById('fcm-history-list');
-    if (historyList) {
-      const item = document.createElement('div');
-      item.style.fontSize = '11.5px';
-      item.style.color = 'var(--text)';
-      item.style.fontWeight = '500';
-      item.style.padding = '4px 0';
-      item.innerText = `• [Vừa gửi] ${title}: ${body}`;
-      historyList.prepend(item);
-    }
+    try {
+      this.showToast('Đang phát sóng thông báo và lưu lên Cloud Firestore...');
+      const res = await fetch('/api/announcements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          message: body,
+          content: body,
+          category: 'official',
+          categoryLabel: 'Phát thanh CTSV',
+          pinned: false
+        })
+      });
 
-    this.logAnalytics('fcm_notification_broadcast', { title, recipients: 1250 });
-    this.showToast(`Đã phát sóng Push Notification (FCM) đến 1.250 thiết bị sinh viên!`);
+      if (res.ok) {
+        const historyList = document.getElementById('fcm-history-list');
+        if (historyList) {
+          const item = document.createElement('div');
+          item.style.fontSize = '11.5px';
+          item.style.color = 'var(--text)';
+          item.style.fontWeight = '500';
+          item.style.padding = '4px 0';
+          item.innerText = `• [Đã lưu Firestore] ${title}: ${body}`;
+          historyList.prepend(item);
+        }
+
+        this.logAnalytics('fcm_notification_broadcast', { title, recipients: 1250 });
+        this.showToast(`Đã phát sóng Push Notification (FCM) và đồng bộ về Mobile Inbox thành công!`);
+        await this.loadAllRealData();
+      } else {
+        this.showToast('Lỗi lưu thông báo lên hệ thống.');
+      }
+    } catch (e) {
+      console.error('Send FCM Broadcast error:', e);
+      this.showToast(`Lỗi kết nối máy chủ: ${e.message}`);
+    }
   },
 
   // Toggle Remote Config
