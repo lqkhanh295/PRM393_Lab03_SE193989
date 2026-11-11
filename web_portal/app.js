@@ -858,7 +858,7 @@ const app = {
           }));
 
           // Synchronize Live KPI Count with Real Firestore Checked-in tickets
-          const checkedCount = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus).length;
+          const checkedCount = tickets.filter(t => t.status === 'checkedIn' || t.status === 'checked_in' || t.checkInStatus === true || t.checkInStatus === 'true').length;
           this.state.checkinCount = checkedCount;
           this.renderKPIs();
           this.renderStudentsTable();
@@ -999,6 +999,11 @@ const app = {
   renderKPIs() {
     const elCheckin = document.getElementById('kpi-checkin-count');
     if (elCheckin) elCheckin.innerText = this.state.checkinCount;
+    const elCheckinSub = document.getElementById('kpi-checkin-sub');
+    if (elCheckinSub) {
+      const totalReg = this.state.totalRegistered || 724;
+      elCheckinSub.innerHTML = `Đã quét trên <strong>${totalReg}</strong> đăng ký`;
+    }
 
     const elApproved = document.getElementById('kpi-budget-approved');
     if (elApproved) elApproved.innerText = this.formatVND(this.state.approvedBudget);
