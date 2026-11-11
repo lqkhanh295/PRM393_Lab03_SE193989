@@ -228,6 +228,8 @@ const app = {
           eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
             events.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
         }
+        this.populateTelemetryDropdown();
+        this.renderTelemetryView();
       }
 
       // 3. Fetch Clubs from Cloud Firestore
@@ -1533,6 +1535,8 @@ const app = {
   },
 
   renderTelemetryView() {
+    this.populateTelemetryDropdown();
+    this.updateTelemetryElapsedTimer();
     const selectedEventId = this.state.selectedTelemetryEvent || 'all';
     const isAll = selectedEventId === 'all';
     const events = this.state.liveEvents || [];
