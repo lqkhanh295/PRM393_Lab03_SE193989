@@ -38,9 +38,9 @@
 
         <div class="nav-group-label">Phê Duyệt & Pháp Lý</div>
         <a class="nav-item" data-view="review-queue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-          Hàng Chờ Duyệt Vé (Queue)
-          <span class="nav-badge" id="sidebar-pending-registrations" style="background-color: #fee2e2; color: #991b1b;">1</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><circle cx="8" cy="15" r="1.5"></circle><line x1="12" y1="15" x2="17" y2="15"></line></svg>
+          Sổ Đăng Ký Vé Sự Kiện
+          <span class="nav-badge" id="sidebar-pending-registrations">0</span>
         </a>
         <a class="nav-item" data-view="budget">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
@@ -244,26 +244,163 @@
         <header class="canvas-header">
           <div>
             <h1 class="page-headline">Trực Ban Điểm Danh & Giám Sát Cổng</h1>
-            <p class="page-subhead">Kiểm soát dòng người, ngăn ngừa quá tải và xác thực vé sinh viên</p>
+            <p class="page-subhead">Kiểm soát dòng người, đo lường thời gian quét vé, theo dõi lưu lượng và tiến độ theo từng sự kiện</p>
           </div>
           <div class="header-actions">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="telem-event-select" style="font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase;">Sự kiện:</label>
+              <select id="telem-event-select" class="select-input" onchange="app.handleTelemetryEventChange(this.value)" style="min-width: 270px; font-weight: 600;">
+                <option value="all">⚡ Tất cả sự kiện (Tổng hợp toàn trường)</option>
+              </select>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshData()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Làm mới
+            </button>
             <button class="btn btn-primary btn-sm" onclick="app.simulateIncomingCheckin()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
               Mô phỏng 1 lượt quét vé mới
             </button>
           </div>
         </header>
 
+        <!-- Dynamic Event Context & Reference Banner -->
+        <div id="telem-event-banner" class="panel" style="margin-bottom: 20px;">
+          <!-- Injected dynamically by app.renderTelemetryView() -->
+        </div>
+
+        <!-- 4 KPI Metrics: Scanned / Total, Elapsed Duration & Last Scan, Speed & Pace, Capacity & Safety -->
+        <div class="kpi-grid" style="margin-bottom: 24px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Số Vé Đã Quét / Phát Hành</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="telem-scanned-count">0</span>
+              <span class="kpi-unit" id="telem-total-tickets">/ 0 vé</span>
+            </div>
+            <div class="kpi-sub" id="telem-scanned-sub">
+              <span class="pill pill-positive" id="telem-scanned-rate">0.0%</span> hoàn thành điểm danh
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Thời Gian Vận Hành Ca Trực</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="telem-elapsed-time">00:00:00</span>
+              <span class="kpi-unit">thời gian mở</span>
+            </div>
+            <div class="kpi-sub" id="telem-last-scan-sub">
+              Lượt quét gần nhất: <span id="telem-last-scan-time" style="font-weight: 600; color: var(--text);">Chưa có</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Tốc Độ Xử Lý & Nhịp Độ Cổng</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="telem-avg-speed">1.2</span>
+              <span class="kpi-unit">giây / vé</span>
+            </div>
+            <div class="kpi-sub" id="telem-pace-sub">
+              Tần suất: <span id="telem-scan-pace" style="font-weight: 600; color: var(--positive);">~14 vé / 10 phút</span> | Lỗi: <span style="font-weight: 600;">0.0%</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">Sức Chứa Hội Trường & An Toàn</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="telem-hall-occupancy">0</span>
+              <span class="kpi-unit" id="telem-hall-capacity">/ 0 chỗ</span>
+            </div>
+            <div class="kpi-sub" id="telem-pccc-status">
+              <span class="pill pill-positive">An Toàn</span> Đạt chuẩn TCVN 3890
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Multi-Event Comparative Overview Table -->
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Bảng Đối Chiếu Tiến Độ Check-In Giữa Các Sự Kiện Campus</div>
+              <div class="panel-sub">So sánh số lượng đã quét, còn lại và sức chứa của từng sự kiện trên toàn trường</div>
+            </div>
+            <span class="pill pill-accent" id="telem-events-count-pill">Đang tải dữ liệu...</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="telem-multi-event-table">
+              <thead>
+                <tr>
+                  <th>Mã Sự Kiện</th>
+                  <th>Tên Sự Kiện & CLB Tổ Chức</th>
+                  <th>Địa Điểm / Hội Trường</th>
+                  <th>Thời Gian</th>
+                  <th class="num">Sức Chứa</th>
+                  <th class="num">Đã Quét</th>
+                  <th class="num">Chưa Quét</th>
+                  <th style="min-width: 140px;">Tiến Độ Có Mặt</th>
+                  <th>Trạng Thái Cổng</th>
+                  <th style="text-align: center;">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="telem-multi-event-tbody">
+                <tr><td colspan="10" style="text-align: center; color: var(--muted); padding: 24px;">Đang tải danh sách sự kiện từ Cloud Firestore...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 2: Realtime Live Gate Activity Stream / Audit Log -->
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+                <span class="live-pulse-dot"></span>
+                Nhật Ký Quét Vé Trực Tiếp Theo Thời Gian Thực (Live Gate Feed)
+              </div>
+              <div class="panel-sub">Ghi nhận tức thời từng lượt quét vé, mốc thời gian, độ trễ và kết quả xác thực Cloud Firestore</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <input type="text" id="telem-log-search" class="search-input" placeholder="Tìm theo MSSV, Họ tên hoặc Mã vé..." oninput="app.filterTelemetryFeed()" style="width: 250px;">
+              <select id="telem-log-filter" class="select-input" onchange="app.filterTelemetryFeed()">
+                <option value="all">Tất cả lượt quét</option>
+                <option value="checkedIn">Chỉ vé đã quét</option>
+                <option value="confirmed">Vé chưa quét</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="telem-live-feed-table">
+              <thead>
+                <tr>
+                  <th>Thời Điểm Quét</th>
+                  <th>Mã Vé</th>
+                  <th>Sự Kiện Tham Dự</th>
+                  <th>Sinh Viên (MSSV / Họ Tên)</th>
+                  <th>Chuyên Ngành</th>
+                  <th>Cổng Kiểm Soát</th>
+                  <th class="num">Thời Gian Xử Lý</th>
+                  <th>Kết Quả Xác Thực</th>
+                  <th>Mã Chứng Nhận e-Cert</th>
+                </tr>
+              </thead>
+              <tbody id="telem-live-feed-tbody">
+                <tr><td colspan="9" style="text-align: center; color: var(--muted); padding: 24px;">Chưa có lượt quét vé nào được ghi nhận.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 3: Cảnh Báo & Điều Phối An Toàn Hiện Trường -->
         <div class="grid-2">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">Thông Số Cửa Kiểm Soát Cổng 1 (Main Gate)</div>
+              <div class="panel-title">Thông Số Kỹ Thuật Cửa Kiểm Soát Cổng 1 (Main Gate)</div>
               <span class="pill pill-positive">Đang Mở Điểm Danh</span>
             </div>
             <div class="panel-body">
               <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px;">
                 <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
                   <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tốc độ xử lý cổng</div>
-                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text); margin-top: 4px;">1.4 giây / vé</div>
+                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text); margin-top: 4px;">1.2 giây / vé</div>
                 </div>
                 <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
                   <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tỷ lệ lỗi / trùng vé</div>
@@ -453,41 +590,80 @@
         </div>
       </section>
 
-      <!-- VIEW: REVIEW QUEUE (CROSS-ROLE FLOW) -->
+      <!-- VIEW: TICKET REGISTRY (REAL-TIME CLOUD FIRESTORE) -->
       <section id="view-review-queue" class="view-section">
         <header class="canvas-header">
           <div>
-            <h1 class="page-headline">Hàng Chờ Duyệt Vé (Cross-Role Review Queue)</h1>
-            <p class="page-subhead">Phê duyệt hoặc từ chối đơn đăng ký sự kiện từ Mobile App sinh viên trong thời gian thực</p>
+            <h1 class="page-headline">Sổ Đăng Ký & Quản Lý Vé Sự Kiện</h1>
+            <p class="page-subhead">Quản lý toàn bộ vé điện tử đăng ký từ Mobile App sinh viên, đối soát mã QR và trạng thái điểm danh thực tế</p>
           </div>
           <div class="header-actions">
-            <span class="pill pill-warning" id="queue-status-pill">1 Đơn Cần Duyệt</span>
+            <span class="pill pill-positive" id="queue-status-pill">Đang tải danh sách vé...</span>
           </div>
         </header>
 
-        <div class="panel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Đơn Đăng Ký Chờ Cán Bộ / Ban Tổ Chức Phê Duyệt</div>
-              <div class="panel-sub">Khi bấm "Duyệt & Cấp Vé", hệ thống tự động phát hành Vé QR và gửi thông báo Inbox đến Mobile App sinh viên</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="app.refreshReviewQueue()">Làm mới danh sách</button>
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Vé Đã Phát Hành</div>
+            <div class="kpi-value num" id="kpi-reg-total-tickets">0</div>
+            <div class="kpi-sub">Đăng ký tự động qua Mobile App</div>
           </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đang Chờ Check-in</div>
+            <div class="kpi-value num" id="kpi-reg-active-tickets" style="color: var(--chart-primary);">0</div>
+            <div class="kpi-sub">Vé hợp lệ chưa qua cổng</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đã Check-in Cổng</div>
+            <div class="kpi-value num" id="kpi-reg-checked-tickets" style="color: var(--positive);">0</div>
+            <div class="kpi-sub">Đã quét QR điểm danh thành công</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Tỷ Lệ Tham Gia</div>
+            <div class="kpi-value num" id="kpi-reg-checkin-rate" style="color: var(--text);">0%</div>
+            <div class="kpi-sub">Tỷ lệ điểm danh thực tế</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="table-toolbar" style="margin-bottom: 20px; background: var(--surface); padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-card); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 280px; flex-wrap: wrap;">
+            <input type="text" id="queue-ticket-search" class="search-input" placeholder="🔍 Tìm theo mã vé (CE2026-...), tên SV, email, sự kiện..." oninput="app.filterReviewQueue()" style="flex: 1; min-width: 240px; max-width: 360px;">
+            <select id="queue-event-filter" class="search-input" onchange="app.filterReviewQueue()" style="width: auto; min-width: 180px;">
+              <option value="all">Tất cả sự kiện (Cloud Firestore)</option>
+            </select>
+            <select id="queue-status-filter" class="search-input" onchange="app.filterReviewQueue()" style="width: auto; min-width: 160px;">
+              <option value="all">Tất cả trạng thái vé</option>
+              <option value="active">Chờ Check-in (Hợp lệ)</option>
+              <option value="checkedIn">Đã Check-in Cổng</option>
+              <option value="cancelled">Đã Thu Hồi / Hủy</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div id="queue-count-indicator" style="font-size: 12.5px; color: var(--muted); font-weight: 500;">
+              Đang hiển thị 0 vé
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshReviewQueue()">Làm mới dữ liệu</button>
+          </div>
+        </div>
+
+        <div class="panel">
           <div class="table-responsive">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Mã Đơn</th>
+                  <th>Mã Vé Điện Tử</th>
                   <th>Sinh Viên</th>
                   <th>Email FPT</th>
                   <th>Sự Kiện Đăng Ký</th>
-                  <th>Thời Gian Nộp</th>
-                  <th>Trạng Thái</th>
-                  <th style="text-align: right;">Thao Tác</th>
+                  <th>Thời Gian Cấp / Check-in</th>
+                  <th>Trạng Thái Vé</th>
+                  <th style="text-align: right;">Thao Tác Quản Trị</th>
                 </tr>
               </thead>
               <tbody id="review-queue-body">
-                <!-- Dynamically populated from registrations collection -->
+                <!-- Dynamically populated from real tickets -->
               </tbody>
             </table>
           </div>
@@ -899,6 +1075,25 @@
         <button type="button" class="btn btn-primary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 6px;">
           <span>🖨️ In Giấy Phép</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: View Ticket QR Code & Details -->
+  <div class="modal-backdrop" id="ticket-qr-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 480px; text-align: center;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Chi Tiết Vé Điện Tử QR Code</h2>
+          <p class="modal-subtitle">Hệ thống quản lý & xác thực vé chính thức FPTU Campus Event</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeTicketQrModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="ticket-qr-modal-body" style="padding: 24px;">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" onclick="app.closeTicketQrModal()">Đóng</button>
       </div>
     </div>
   </div>

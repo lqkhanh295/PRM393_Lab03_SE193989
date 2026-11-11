@@ -392,6 +392,171 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 200, { documents: tickets });
       }
 
+      // 9b. POST /api/tickets (Create or Upsert Ticket from Mobile or Registration)
+      if (pathname === '/api/tickets' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const ticketId = body.id || body.ticketCode || `CE2026-${Math.floor(100000 + Math.random() * 900000)}`;
+        const now = new Date().toISOString();
+        const ticketData = {
+          id: ticketId,
+          ticketCode: body.ticketCode || ticketId,
+          eventId: body.eventId || 'EVT-2026-01',
+          eventTitle: body.eventTitle || 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
+          eventDate: body.eventDate || '28/10/2026',
+          eventTime: body.eventTime || '13:30 - 17:30',
+          eventLocation: body.eventLocation || 'Hội trường Trịnh Công Sơn',
+          userId: body.userId || 'USR-STUDENT',
+          studentName: body.studentName || 'Sinh viên FPTU',
+          studentEmail: body.studentEmail || 'student@fpt.edu.vn',
+          studentId: body.studentId || (body.studentEmail || '').split('@')[0].toUpperCase(),
+          qrToken: body.qrToken || `QR-TOKEN-${ticketId}`,
+          qrData: body.qrData || `FPTU-CE-${body.eventId || 'EVT'}-${body.userId || 'USR'}-${ticketId}`,
+          status: body.status || 'active',
+          checkInStatus: Boolean(body.checkInStatus),
+          checkedInAt: body.checkedInAt || (body.checkInStatus ? new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN') : ''),
+          points: body.points !== undefined ? body.points : 5,
+          certId: body.certId || `CERT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+          createdAt: body.createdAt || now
+        };
+
+        const fields = toFirestoreFields(ticketData);
+        await firestoreRequest(`/tickets/${ticketId}`, 'PATCH', { fields });
+        console.log(`[Ticket Upsert] Synced ticket ${ticketId} for ${ticketData.studentName}`);
+        return sendJson(res, 200, { success: true, ticket: ticketData });
+      }
+
+      // 9d. POST /api/tickets/:id/revoke (Revoke / Cancel Ticket in Cloud Firestore)
+      const ticketRevokeMatch = pathname.match(/^\/api\/tickets\/([^\/]+)\/revoke$/);
+      if (ticketRevokeMatch && req.method === 'POST') {
+        const ticketId = decodeURIComponent(ticketRevokeMatch[1]);
+        const body = await parseBody(req);
+        const reason = body.reason || 'Cán bộ CTSV thu hồi theo quy chế';
+        await firestoreRequest(`/tickets/${ticketId}?updateMask.fieldPaths=status&updateMask.fieldPaths=cancelReason`, 'PATCH', {
+          fields: {
+            status: { stringValue: 'cancelled' },
+            cancelReason: { stringValue: reason }
+          }
+        });
+        console.log(`[Ticket Revoke] Revoked ticket ${ticketId}`);
+        return sendJson(res, 200, { success: true, message: `Đã thu hồi vé ${ticketId}` });
+      }
+
+      // 9c. POST /api/tickets/checkin (Gate Check-In Action - Real Cloud Firestore)
+      if (pathname === '/api/tickets/checkin' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const rawToken = (body.ticketCode || body.qrToken || body.id || '').trim();
+        if (!rawToken) {
+          return sendJson(res, 400, { error: 'Vui lòng cung cấp mã vé hoặc QR token.' });
+        }
+
+        // Fetch all tickets to find match
+        const data = await firestoreRequest('/tickets');
+        const tickets = (data.documents || []).map(fromFirestoreDoc);
+        
+        let match = tickets.find(t => 
+          t.id === rawToken || 
+          t.ticketCode === rawToken || 
+          t.qrToken === rawToken || 
+          t.qrData === rawToken ||
+          (t.qrData && t.qrData.includes(rawToken))
+        );
+
+        // Fallback: extract code like CE2026-xxxxxx
+        if (!match && rawToken.includes('CE2026-')) {
+          const m = rawToken.match(/CE2026-\d+/);
+          if (m) {
+            match = tickets.find(t => t.id === m[0] || t.ticketCode === m[0]);
+          }
+        }
+
+        if (!match) {
+          // If not found in existing documents, check if client sent student details to create it
+          if (body.studentName || body.userId) {
+            const m = rawToken.match(/CE2026-\d+/);
+            const ticketId = m ? m[0] : (rawToken.startsWith('CE2026') ? rawToken : `CE2026-${Math.floor(100000 + Math.random() * 900000)}`);
+            const now = new Date().toISOString();
+            const nowStr = new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN');
+            const newTicket = {
+              id: ticketId,
+              ticketCode: ticketId,
+              eventId: body.eventId || 'EVT-2026-01',
+              eventTitle: body.eventTitle || 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
+              eventDate: body.eventDate || '28/10/2026',
+              eventTime: body.eventTime || '13:30 - 17:30',
+              eventLocation: body.eventLocation || 'Hội trường Trịnh Công Sơn',
+              userId: body.userId || 'USR-STUDENT',
+              studentName: body.studentName || 'Sinh viên FPTU',
+              studentEmail: body.studentEmail || 'student@fpt.edu.vn',
+              studentId: body.studentId || (body.studentEmail || '').split('@')[0].toUpperCase(),
+              qrToken: rawToken,
+              qrData: `FPTU-CE-EVT-2026-01-${body.userId || 'USR'}-${ticketId}`,
+              status: 'checkedIn',
+              checkInStatus: true,
+              checkedInAt: nowStr,
+              points: 5,
+              certId: `CERT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+              createdAt: now
+            };
+            const fields = toFirestoreFields(newTicket);
+            await firestoreRequest(`/tickets/${ticketId}`, 'PATCH', { fields });
+            return sendJson(res, 200, { success: true, ticket: newTicket, message: 'Check-in thành công!' });
+          }
+          return sendJson(res, 404, { error: `Không tìm thấy vé hợp lệ với mã: ${rawToken}` });
+        }
+
+        if (match.status === 'checkedIn' || match.checkInStatus === true) {
+          return sendJson(res, 409, {
+            error: `CẢNH BÁO: Vé đã được check-in vào lúc ${match.checkedInAt || '14:02'} tại Cổng 1.`,
+            isDuplicate: true,
+            ticket: match
+          });
+        }
+
+        const nowStr = new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN');
+        const certId = match.certId || `CERT-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+        await firestoreRequest(`/tickets/${match.id}?updateMask.fieldPaths=status&updateMask.fieldPaths=checkInStatus&updateMask.fieldPaths=checkedInAt&updateMask.fieldPaths=points&updateMask.fieldPaths=certId`, 'PATCH', {
+          fields: {
+            status: { stringValue: 'checkedIn' },
+            checkInStatus: { booleanValue: true },
+            checkedInAt: { stringValue: nowStr },
+            points: { integerValue: '5' },
+            certId: { stringValue: certId }
+          }
+        });
+
+        // Award +5 points to student in users collection
+        if (match.userId) {
+          try {
+            const userDoc = await firestoreRequest(`/users/${match.userId}`);
+            const userData = fromFirestoreDoc(userDoc);
+            const currentPoints = parseInt(userData.activityPoints || 0, 10);
+            await firestoreRequest(`/users/${match.userId}?updateMask.fieldPaths=activityPoints`, 'PATCH', {
+              fields: {
+                activityPoints: { integerValue: String(currentPoints + 5) }
+              }
+            });
+            console.log(`[Check-in Points] Awarded +5 activity points to ${match.userId} (total: ${currentPoints + 5})`);
+          } catch (e) {
+            console.warn('[Checkin] Update user points note:', e.message);
+          }
+        }
+
+        console.log(`[Gate Check-in] Checked in ticket: ${match.id} - ${match.studentName}`);
+        return sendJson(res, 200, {
+          success: true,
+          ticket: {
+            ...match,
+            status: 'checkedIn',
+            checkInStatus: true,
+            checkedInAt: nowStr,
+            points: 5,
+            certId
+          },
+          message: `Check-in thành công! Chào mừng ${match.studentName}.`
+        });
+      }
+
       // 404 for unknown API
       return sendJson(res, 404, { error: 'API route not found' });
     } catch (err) {

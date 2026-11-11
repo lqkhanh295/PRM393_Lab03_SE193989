@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/event_model.dart';
@@ -348,7 +350,28 @@ class FirestoreService {
     _cachedTickets.insert(0, newTicket);
     ticketsNotifier.value++;
     debugPrint('[FirestoreService] Real Ticket issued: $ticketId');
+
+    // Notify local Web Portal backend of newly issued ticket
+    _notifyLocalWebPortalTicketCreated(newTicket);
+
     return newTicket;
+  }
+
+  void _notifyLocalWebPortalTicketCreated(TicketModel ticket) {
+    try {
+      final payload = jsonEncode(ticket.toMap());
+      final endpoints = [
+        'http://localhost:3000/api/tickets',
+        'http://10.0.2.2:3000/api/tickets',
+      ];
+      for (final ep in endpoints) {
+        http.post(
+          Uri.parse(ep),
+          headers: {'Content-Type': 'application/json'},
+          body: payload,
+        ).catchError((_) => http.Response('', 500));
+      }
+    } catch (_) {}
   }
 
   /// Gate Check-in QR Validation (BR-007, BR-008) - Real Cloud Firestore
@@ -363,20 +386,66 @@ class FirestoreService {
       try {
         DocumentSnapshot<Map<String, dynamic>>? targetDoc;
 
-        // Try lookup by qrToken
-        final querySnap = await _firestore
-            .collection('tickets')
-            .where('qrToken', isEqualTo: cleanToken)
-            .limit(1)
-            .get();
+        // Try lookup by doc ID (manual ticket ID)
+        final byIdDoc = await _firestore.collection('tickets').doc(cleanToken).get();
+        if (byIdDoc.exists) {
+          targetDoc = byIdDoc;
+        }
 
-        if (querySnap.docs.isNotEmpty) {
-          targetDoc = querySnap.docs.first;
-        } else {
-          // Try lookup by doc ID (manual ticket ID)
-          final byIdDoc = await _firestore.collection('tickets').doc(cleanToken).get();
-          if (byIdDoc.exists) {
-            targetDoc = byIdDoc;
+        // Try lookup by qrToken
+        if (targetDoc == null) {
+          final querySnap = await _firestore
+              .collection('tickets')
+              .where('qrToken', isEqualTo: cleanToken)
+              .limit(1)
+              .get();
+          if (querySnap.docs.isNotEmpty) {
+            targetDoc = querySnap.docs.first;
+          }
+        }
+
+        // Try lookup by ticketCode
+        if (targetDoc == null) {
+          final queryCode = await _firestore
+              .collection('tickets')
+              .where('ticketCode', isEqualTo: cleanToken)
+              .limit(1)
+              .get();
+          if (queryCode.docs.isNotEmpty) {
+            targetDoc = queryCode.docs.first;
+          }
+        }
+
+        // Try lookup by qrData
+        if (targetDoc == null) {
+          final queryData = await _firestore
+              .collection('tickets')
+              .where('qrData', isEqualTo: cleanToken)
+              .limit(1)
+              .get();
+          if (queryData.docs.isNotEmpty) {
+            targetDoc = queryData.docs.first;
+          }
+        }
+
+        // Try extracting CE2026-xxxxxx pattern (e.g. from QR-TOKEN-CE2026-083291-SECURE-HASH)
+        if (targetDoc == null && cleanToken.contains('CE2026-')) {
+          final match = RegExp(r'CE2026-\d+').firstMatch(cleanToken);
+          if (match != null) {
+            final extractedCode = match.group(0)!;
+            final queryExtracted = await _firestore
+                .collection('tickets')
+                .where('ticketCode', isEqualTo: extractedCode)
+                .limit(1)
+                .get();
+            if (queryExtracted.docs.isNotEmpty) {
+              targetDoc = queryExtracted.docs.first;
+            } else {
+              final docByExtracted = await _firestore.collection('tickets').doc(extractedCode).get();
+              if (docByExtracted.exists) {
+                targetDoc = docByExtracted;
+              }
+            }
           }
         }
 
@@ -406,11 +475,22 @@ class FirestoreService {
 
           // Valid check-in -> update real Firestore document
           final now = DateTime.now();
+          final nowStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')} ${now.day}/${now.month}/${now.year}';
           await _firestore.collection('tickets').doc(ticket.id).update({
             'status': 'checkedIn',
             'checkInStatus': true,
-            'checkedInAt': FieldValue.serverTimestamp(),
+            'checkedInAt': nowStr,
+            'points': 5,
           });
+
+          // Award +5 training points in Firestore user doc
+          if (ticket.userId.isNotEmpty) {
+            try {
+              await _firestore.collection('users').doc(ticket.userId).update({
+                'activityPoints': FieldValue.increment(5),
+              });
+            } catch (_) {}
+          }
 
           final updatedTicket = ticket.copyWith(
             status: TicketStatus.checkedIn,
@@ -426,6 +506,9 @@ class FirestoreService {
           }
           ticketsNotifier.value++;
 
+          // Asynchronously notify local web portal backend as well
+          _notifyLocalWebPortalCheckin(updatedTicket, cleanToken);
+
           return CheckInValidationResult(
             isValid: true,
             isDuplicate: false,
@@ -439,7 +522,11 @@ class FirestoreService {
     }
 
     // 2. Fallback to cache validation
-    final matchIndex = _cachedTickets.indexWhere((t) => t.qrToken == cleanToken || t.id == cleanToken);
+    final matchIndex = _cachedTickets.indexWhere((t) =>
+        t.qrToken == cleanToken ||
+        t.id == cleanToken ||
+        (cleanToken.contains(t.id) && t.id.isNotEmpty));
+
     if (matchIndex == -1) {
       return const CheckInValidationResult(
         isValid: false,
@@ -470,12 +557,42 @@ class FirestoreService {
       );
     }
 
+    final now = DateTime.now();
     final updatedTicket = ticket.copyWith(
       status: TicketStatus.checkedIn,
-      checkedInAt: DateTime.now(),
+      checkedInAt: now,
     );
     _cachedTickets[matchIndex] = updatedTicket;
     ticketsNotifier.value++;
+
+    // CRITICAL: Persist fallback check-in to Cloud Firestore
+    if (_firestore != null) {
+      try {
+        final nowStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')} ${now.day}/${now.month}/${now.year}';
+        final map = updatedTicket.toMap();
+        map['status'] = 'checkedIn';
+        map['checkInStatus'] = true;
+        map['checkedInAt'] = nowStr;
+        map['points'] = 5;
+        await _firestore.collection('tickets').doc(updatedTicket.id).set(
+          map,
+          SetOptions(merge: true),
+        );
+        debugPrint('[FirestoreService] Fallback check-in successfully synced to Cloud Firestore: ${updatedTicket.id}');
+        if (updatedTicket.userId.isNotEmpty) {
+          try {
+            await _firestore.collection('users').doc(updatedTicket.userId).update({
+              'activityPoints': FieldValue.increment(5),
+            });
+          } catch (_) {}
+        }
+      } catch (e) {
+        debugPrint('[FirestoreService] Firestore fallback check-in sync warning: $e');
+      }
+    }
+
+    // Also notify local web portal backend bridge as a failsafe
+    _notifyLocalWebPortalCheckin(updatedTicket, cleanToken);
 
     return CheckInValidationResult(
       isValid: true,
@@ -483,6 +600,39 @@ class FirestoreService {
       message: 'Check-in thành công! Chào mừng ${updatedTicket.studentName}.',
       ticket: updatedTicket,
     );
+  }
+
+  void _notifyLocalWebPortalCheckin(TicketModel ticket, String token) {
+    try {
+      final payload = jsonEncode({
+        'id': ticket.id,
+        'ticketCode': ticket.id,
+        'qrToken': token,
+        'eventId': ticket.eventId,
+        'eventTitle': ticket.eventTitle,
+        'userId': ticket.userId,
+        'studentName': ticket.studentName,
+        'studentEmail': ticket.studentEmail,
+        'status': 'checkedIn',
+        'checkInStatus': true,
+      });
+      final endpoints = [
+        'http://localhost:3000/api/tickets/checkin',
+        'http://10.0.2.2:3000/api/tickets/checkin',
+      ];
+      for (final ep in endpoints) {
+        http.post(
+          Uri.parse(ep),
+          headers: {'Content-Type': 'application/json'},
+          body: payload,
+        ).then((res) {
+          if (res.statusCode == 200) {
+            debugPrint('[FirestoreService] Successfully notified Web Portal backend of check-in: $ep');
+          }
+          return res;
+        }).catchError((_) => http.Response('', 500));
+      }
+    } catch (_) {}
   }
 
   /// Live Speaker Q&A questions from Cloud Firestore
