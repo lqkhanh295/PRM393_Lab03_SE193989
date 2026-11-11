@@ -45,7 +45,12 @@ function getFirebaseToken() {
           if (config.tokens.expires_at && Date.now() >= (config.tokens.expires_at - 60000)) {
             try {
               console.log('[Firebase Auth] Access token expiring, refreshing via firebase-tools...');
-              execSync('npx firebase-tools --version', { stdio: 'ignore', timeout: 8000 });
+              const directFirebaseCmd = path.join(process.env.LOCALAPPDATA || '', 'npm-cache', '_npx', '7750544ccf494d8b', 'node_modules', '.bin', 'firebase.cmd');
+              if (fs.existsSync(directFirebaseCmd)) {
+                execSync(`"${directFirebaseCmd}" projects:list`, { stdio: 'ignore', timeout: 15000 });
+              } else {
+                execSync('npx firebase-tools projects:list', { stdio: 'ignore', timeout: 20000 });
+              }
               const refreshed = JSON.parse(fs.readFileSync(configPath, 'utf8'));
               return { token: refreshed.tokens.access_token, user: refreshed.user?.email || 'Admin' };
             } catch (err) {
@@ -206,6 +211,42 @@ const server = http.createServer(async (req, res) => {
         const data = await firestoreRequest('/events');
         const events = (data.documents || []).map(fromFirestoreDoc);
         return sendJson(res, 200, { documents: events });
+      }
+
+      // 2b. POST /api/events (Create Event - Management Feature)
+      if (pathname === '/api/events' && req.method === 'POST') {
+        const body = await parseBody(req);
+        if (!body.title || !body.location || !body.date) {
+          return sendJson(res, 400, { error: 'Vui lòng điền đầy đủ tiêu đề, địa điểm và ngày tổ chức sự kiện.' });
+        }
+
+        const eventId = body.id || `EVT-2026-${Date.now().toString().slice(-4)}`;
+        const now = new Date().toISOString();
+
+        const eventData = {
+          id: eventId,
+          title: body.title.trim(),
+          description: (body.description || '').trim(),
+          category: body.category || 'Technology',
+          clubId: body.clubId || 'fcode',
+          clubName: body.clubName || 'CLB FPTU',
+          date: body.date.trim(),
+          time: (body.time || '14:00 - 17:00').trim(),
+          location: body.location.trim(),
+          capacity: parseInt(body.capacity || 200, 10),
+          registeredCount: 0,
+          bannerUrl: body.bannerUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200',
+          isFeatured: Boolean(body.isFeatured),
+          speakers: body.speakers || [],
+          sessions: body.sessions || [],
+          createdAt: now,
+          updatedAt: now
+        };
+
+        const fields = toFirestoreFields(eventData);
+        await firestoreRequest(`/events?documentId=${eventId}`, 'POST', { fields });
+        console.log(`[Event Created] Successfully created event: ${eventId} - ${eventData.title}`);
+        return sendJson(res, 200, { success: true, id: eventId, event: eventData });
       }
 
       // 3. GET /api/clubs

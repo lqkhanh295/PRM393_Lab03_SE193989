@@ -96,8 +96,12 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               Làm mới dữ liệu
             </button>
-            <button class="btn btn-primary btn-sm" onclick="app.switchView('export')">
-              Xuất Báo Cáo CTSV (.xlsx)
+            <button class="btn btn-primary btn-sm" onclick="app.openCreateEventModal()" style="background-color: var(--positive); border-color: var(--positive);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              + Tạo Sự Kiện Mới
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="app.switchView('export')">
+              Xuất Báo Cáo (.xlsx)
             </button>
           </div>
         </header>
@@ -813,5 +817,98 @@
   <!-- Scripts -->
   <script src="charts.js"></script>
   <script src="app.js"></script>
+
+  <!-- Modal Tạo Sự Kiện Mới (Final Assignment Management Feature) -->
+  <div class="modal-backdrop" id="create-event-modal" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Tạo Sự Kiện Campus Mới</h2>
+          <p class="modal-subtitle">Xuất bản sự kiện trực tiếp lên Cloud Firestore cho toàn thể sinh viên FPTU</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeCreateEventModal()">&times;</button>
+      </div>
+      <form id="create-event-form" onsubmit="app.handleCreateEventSubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="evt-title">Tiêu đề sự kiện <span style="color: var(--negative);">*</span></label>
+            <input type="text" id="evt-title" class="search-input" style="width: 100%;" placeholder="VD: FPTU AI & Robotics Summit 2026..." required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="evt-club">CLB Chủ Trì <span style="color: var(--negative);">*</span></label>
+              <select id="evt-club" class="search-input" style="width: 100%;" required>
+                <!-- Populated dynamically from 45 official FPTU clubs -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evt-category">Phân loại sự kiện</label>
+              <select id="evt-category" class="search-input" style="width: 100%;">
+                <option value="Technology">Công nghệ & Kỹ thuật (Technology)</option>
+                <option value="Business">Kinh doanh & Khởi nghiệp (Business)</option>
+                <option value="Languages">Ngôn ngữ & Kỹ năng (Languages)</option>
+                <option value="Media">Truyền thông & Đa phương tiện (Media)</option>
+                <option value="Arts">Nghệ thuật & Âm nhạc (Arts)</option>
+                <option value="Sports">Thể thao & Rèn luyện (Sports)</option>
+                <option value="Community">Cộng đồng & Tình nguyện (Community)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="evt-date">Ngày tổ chức <span style="color: var(--negative);">*</span></label>
+              <input type="date" id="evt-date" class="search-input" style="width: 100%;" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evt-time">Khung giờ <span style="color: var(--negative);">*</span></label>
+              <input type="text" id="evt-time" class="search-input" style="width: 100%;" placeholder="VD: 13:30 - 17:30" value="13:30 - 17:30" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 12px; margin-top: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="evt-location">Địa điểm tổ chức <span style="color: var(--negative);">*</span></label>
+              <select id="evt-location" class="search-input" style="width: 100%;">
+                <option value="Hội trường Trịnh Công Sơn">Hội trường Trịnh Công Sơn (Tòa Alpha)</option>
+                <option value="Innovation Hall - Tòa Delta">Innovation Hall (Tòa Delta)</option>
+                <option value="Hội trường B - Tòa Epsilon">Hội trường B (Tòa Epsilon)</option>
+                <option value="Sân bóng đá FPTU HCMC">Sân bóng đá FPTU HCMC</option>
+                <option value="Thư viện Đại học FPT TP.HCM">Thư viện Đại học FPT TP.HCM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="evt-capacity">Sức chứa tối đa <span style="color: var(--negative);">*</span></label>
+              <input type="number" id="evt-capacity" class="search-input" style="width: 100%;" min="10" max="2000" value="200" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 12px;">
+            <label class="form-label" for="evt-banner">URL Ảnh Banner (Tùy chọn)</label>
+            <input type="url" id="evt-banner" class="search-input" style="width: 100%;" placeholder="https://images.unsplash.com/... (để trống sẽ dùng banner mặc định)">
+          </div>
+
+          <div class="form-group" style="margin-top: 12px;">
+            <label class="form-label" for="evt-description">Mô tả sự kiện & Quyền lợi điểm rèn luyện</label>
+            <textarea id="evt-description" class="search-input" style="width: 100%; height: 80px; resize: vertical;" placeholder="Nhập mô tả sự kiện, diễn giả, cộng +5 điểm rèn luyện..."></textarea>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="evt-featured" style="cursor: pointer;">
+            <label for="evt-featured" style="font-size: 12.5px; color: var(--text); cursor: pointer;">Ghim làm Sự kiện nổi bật (Featured Banner) trên trang chủ Mobile</label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="app.closeCreateEventModal()">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-event" style="background-color: var(--positive); border-color: var(--positive);">
+            Xuất Bản Lên Cloud Firestore
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

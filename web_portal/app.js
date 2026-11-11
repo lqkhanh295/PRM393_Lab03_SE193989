@@ -900,6 +900,135 @@ const app = {
     this.showToast('Đã xuất file Excel (.xls) báo cáo gửi Ban Giám Hiệu & CTSV!');
   },
 
+
+  // ==========================================
+  // EVENT MANAGEMENT: CREATE EVENT MODAL
+  // ==========================================
+  openCreateEventModal() {
+    const modal = document.getElementById('create-event-modal');
+    const clubSelect = document.getElementById('evt-club');
+    const dateInput = document.getElementById('evt-date');
+    if (!modal) return;
+
+    // Populate official clubs dropdown
+    if (clubSelect) {
+      if (this.state.liveClubs && this.state.liveClubs.length > 0) {
+        clubSelect.innerHTML = this.state.liveClubs.map(c => `<option value="${c.id}" data-name="${c.name}">${c.name} (${c.category})</option>`).join('');
+      } else {
+        clubSelect.innerHTML = '<option value="fcode" data-name="CLB Lập trình F-Code">CLB Học thuật F-Code (Technology)</option>' +
+          '<option value="media_club" data-name="CLB Cóc Sài Gòn">CLB Truyền thông Cóc Sài Gòn (Media)</option>' +
+          '<option value="jsclub" data-name="CLB Kỹ sư phần mềm Nhật Bản">CLB Kỹ sư phần mềm Nhật Bản (Technology)</option>';
+      }
+    }
+
+    // Set default date to 7 days from now
+    if (dateInput && !dateInput.value) {
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      dateInput.value = d.toISOString().split('T')[0];
+    }
+
+    modal.style.display = 'flex';
+  },
+
+  closeCreateEventModal() {
+    const modal = document.getElementById('create-event-modal');
+    if (modal) modal.style.display = 'none';
+  },
+
+  async handleCreateEventSubmit(e) {
+    e.preventDefault();
+    const titleInput = document.getElementById('evt-title');
+    const clubSelect = document.getElementById('evt-club');
+    const categorySelect = document.getElementById('evt-category');
+    const dateInput = document.getElementById('evt-date');
+    const timeInput = document.getElementById('evt-time');
+    const locationSelect = document.getElementById('evt-location');
+    const capacityInput = document.getElementById('evt-capacity');
+    const bannerInput = document.getElementById('evt-banner');
+    const descInput = document.getElementById('evt-description');
+    const featuredInput = document.getElementById('evt-featured');
+    const submitBtn = document.getElementById('btn-submit-event');
+
+    if (!titleInput || !dateInput) return;
+
+    const title = titleInput.value.trim();
+    const rawDate = dateInput.value; // YYYY-MM-DD
+    // Format date as DD/MM/YYYY for Mobile App compatibility
+    let formattedDate = rawDate;
+    if (rawDate && rawDate.includes('-')) {
+      const parts = rawDate.split('-');
+      formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    const selectedOption = clubSelect ? clubSelect.options[clubSelect.selectedIndex] : null;
+    const clubId = clubSelect ? clubSelect.value : 'fcode';
+    const clubName = selectedOption ? (selectedOption.getAttribute('data-name') || selectedOption.text.split(' (')[0]) : 'CLB FPTU';
+    const category = categorySelect ? categorySelect.value : 'Technology';
+    const time = timeInput ? timeInput.value.trim() : '14:00 - 17:00';
+    const location = locationSelect ? locationSelect.value : 'Hội trường Trịnh Công Sơn';
+    const capacity = parseInt(capacityInput ? capacityInput.value : '200', 10);
+    const bannerUrl = (bannerInput && bannerInput.value.trim()) 
+      ? bannerInput.value.trim() 
+      : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200';
+    const description = descInput ? descInput.value.trim() : '';
+    const isFeatured = featuredInput ? featuredInput.checked : false;
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Đang xuất bản...';
+    }
+
+    this.showToast(`Đang ghi sự kiện "${title}" lên Cloud Firestore...`);
+
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          description,
+          category,
+          clubId,
+          clubName,
+          date: formattedDate,
+          time,
+          location,
+          capacity,
+          bannerUrl,
+          isFeatured,
+          speakers: [
+            { name: 'Ban Chủ Nhiệm CLB', role: clubName, avatarUrl: 'https://i.pravatar.cc/100' }
+          ],
+          sessions: [
+            { time: '13:30', title: 'Đón tiếp sinh viên & Check-in QR', speakerName: 'Ban Hậu cần' },
+            { time: '14:00', title: 'Phiên thảo luận & Trải nghiệm thực chiến', speakerName: 'Diễn giả khách mời' },
+            { time: '16:30', title: 'Q&A trực tiếp & Trao chứng nhận e-Certificate', speakerName: 'Chủ nhiệm CLB' }
+          ]
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        this.showToast(`Xuất bản thành công sự kiện "${title}" (Mã: ${data.id}) lên Cloud Firestore!`);
+        this.closeCreateEventModal();
+        document.getElementById('create-event-form')?.reset();
+        await this.loadAllRealData();
+        this.switchView('overview');
+      } else {
+        this.showToast(`Lỗi khi tạo sự kiện: ${data.error || 'Vui lòng thử lại'}`);
+      }
+    } catch (err) {
+      console.error('Create Event error:', err);
+      this.showToast(`Lỗi kết nối máy chủ: ${err.message}`);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Xuất Bản Lên Cloud Firestore';
+      }
+    }
+  },
+
   // Toast
   showToast(message) {
     const container = document.getElementById('toast-container');
