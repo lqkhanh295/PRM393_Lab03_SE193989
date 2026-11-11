@@ -28,7 +28,7 @@ class UserModel {
       email: map['email'] as String? ?? '',
       avatarUrl: map['avatarUrl'] as String? ?? 'https://i.pravatar.cc/150?u=$id',
       major: map['major'] as String? ?? 'Kỹ thuật Phần mềm (SE)',
-      activityPoints: (map['activityPoints'] as num?)?.toInt() ?? 15,
+      activityPoints: (map['activityPoints'] as num?)?.toInt() ?? 0,
       role: map['role'] as String? ?? 'student',
       followedClubs: List<String>.from(map['followedClubs'] ?? []),
     );

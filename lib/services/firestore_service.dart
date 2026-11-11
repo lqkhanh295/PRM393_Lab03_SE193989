@@ -41,6 +41,9 @@ class FirestoreService {
   final List<AnnouncementModel> _cachedAnnouncements = [];
   final List<RegistrationModel> _cachedRegistrations = [];
 
+  // Reactive notifier for ticket state changes across the application
+  final ValueNotifier<int> ticketsNotifier = ValueNotifier<int>(0);
+
   FirestoreService([this._firestore]) {
     _cachedClubs.addAll(
       FirestoreSeeder.officialClubs.map(
@@ -173,7 +176,7 @@ class FirestoreService {
         );
   }
 
-  /// Get user registered tickets directly from Cloud Firestore
+  /// Get user registered tickets directly from Cloud Firestore with cache merge
   Future<List<TicketModel>> getUserTickets(String userId) async {
     try {
       if (_firestore != null) {
@@ -192,13 +195,49 @@ class FirestoreService {
               _cachedTickets.insert(0, t);
             }
           }
-          return liveTickets;
+          final merged = List<TicketModel>.from(liveTickets);
+          for (final ct in _cachedTickets) {
+            if (ct.userId == userId && !merged.any((m) => m.id == ct.id)) {
+              merged.add(ct);
+            }
+          }
+          return merged;
         }
       }
     } catch (e) {
       debugPrint('[FirestoreService] getUserTickets error: $e');
     }
     return _cachedTickets.where((t) => t.userId == userId).toList();
+  }
+
+  /// Real-time stream of user tickets directly from Cloud Firestore (BR-004, BR-005)
+  Stream<List<TicketModel>> streamUserTickets(String userId) {
+    if (_firestore == null) {
+      final cached = _cachedTickets.where((t) => t.userId == userId).toList();
+      return Stream.value(cached);
+    }
+    return _firestore
+        .collection('tickets')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) {
+          final liveTickets = snapshot.docs.map((d) => TicketModel.fromMap(d.data(), d.id)).toList();
+          for (final t in liveTickets) {
+            final idx = _cachedTickets.indexWhere((old) => old.id == t.id);
+            if (idx >= 0) {
+              _cachedTickets[idx] = t;
+            } else {
+              _cachedTickets.insert(0, t);
+            }
+          }
+          final merged = List<TicketModel>.from(liveTickets);
+          for (final ct in _cachedTickets) {
+            if (ct.userId == userId && !merged.any((m) => m.id == ct.id)) {
+              merged.add(ct);
+            }
+          }
+          return merged;
+        });
   }
 
   /// Real-time single ticket document stream (BR-004, BR-005)
@@ -304,6 +343,7 @@ class FirestoreService {
     }
 
     _cachedTickets.insert(0, newTicket);
+    ticketsNotifier.value++;
     debugPrint('[FirestoreService] Real Ticket issued: $ticketId');
     return newTicket;
   }
@@ -364,7 +404,8 @@ class FirestoreService {
           // Valid check-in -> update real Firestore document
           final now = DateTime.now();
           await _firestore.collection('tickets').doc(ticket.id).update({
-            'status': TicketStatus.checkedIn.name,
+            'status': 'checkedIn',
+            'checkInStatus': true,
             'checkedInAt': FieldValue.serverTimestamp(),
           });
 
@@ -380,6 +421,7 @@ class FirestoreService {
           } else {
             _cachedTickets.insert(0, updatedTicket);
           }
+          ticketsNotifier.value++;
 
           return CheckInValidationResult(
             isValid: true,
@@ -430,6 +472,7 @@ class FirestoreService {
       checkedInAt: DateTime.now(),
     );
     _cachedTickets[matchIndex] = updatedTicket;
+    ticketsNotifier.value++;
 
     return CheckInValidationResult(
       isValid: true,
@@ -577,6 +620,7 @@ class FirestoreService {
     required String userId,
     required int rating,
     required String comments,
+    UserModel? user,
   }) async {
     try {
       if (_firestore != null) {

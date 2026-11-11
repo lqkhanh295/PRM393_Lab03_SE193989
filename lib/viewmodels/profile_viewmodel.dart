@@ -88,6 +88,15 @@ class ProfileViewModel extends ChangeNotifier {
   // FIREBASE DEMO AREA ACTIONS (LAB 3 SECTION 3)
   // ==========================================
 
+  /// Opens native print & PDF preview / save dialog directly on mobile
+  Future<void> viewAndDownloadCertificatePdf(CertificateModel certificate) async {
+    try {
+      await _pdfExportService.openAndDownloadCertificatePdf(certificate);
+    } catch (e) {
+      debugPrint('[ProfileViewModel] viewAndDownloadCertificatePdf error: $e');
+    }
+  }
+
   /// Action 1: Generate PDF and Upload to Firebase Storage
   Future<void> generateAndUploadPdfSummary(CertificateModel certificate) async {
     _isUploading = true;

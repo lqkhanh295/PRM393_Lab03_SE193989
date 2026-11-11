@@ -12,8 +12,24 @@ import 'digital_ticket_screen.dart';
 
 /// S19: My Events & Tickets Hub Screen
 /// Anti-slop Editorial Pass Wallet: flat hairline containers, monospace ticket codes, tabular dates.
-class MyTicketsScreen extends StatelessWidget {
+class MyTicketsScreen extends StatefulWidget {
   const MyTicketsScreen({super.key});
+
+  @override
+  State<MyTicketsScreen> createState() => _MyTicketsScreenState();
+}
+
+class _MyTicketsScreenState extends State<MyTicketsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = context.read<AuthViewModel>().currentUser;
+      if (user != null) {
+        context.read<MyTicketsViewModel>().loadUserTickets(user.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

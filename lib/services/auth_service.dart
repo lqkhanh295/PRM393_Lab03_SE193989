@@ -14,6 +14,7 @@ class AuthService {
 
   UserModel? _currentUser;
   final _authStateController = StreamController<UserModel?>.broadcast();
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _userDocSubscription;
 
   AuthService([this._firebaseAuth, this._firestore]) {
     // If Firebase Auth is provided, listen to its auth state changes
@@ -31,11 +32,37 @@ class AuthService {
           role: 'student',
         );
         _currentUser = await _syncUserWithFirestore(basicUser);
+        _listenToUserDocument(_currentUser!.id);
       } else {
+        _userDocSubscription?.cancel();
         _currentUser = null;
       }
       _authStateController.add(_currentUser);
     });
+  }
+
+  void _listenToUserDocument(String userId) {
+    _userDocSubscription?.cancel();
+    if (_firestore != null) {
+      _userDocSubscription = _firestore
+          .collection('users')
+          .doc(userId)
+          .snapshots()
+          .listen((snap) {
+        if (snap.exists && snap.data() != null && _currentUser != null) {
+          final updated = UserModel.fromMap(snap.data()!, userId);
+          if (updated.activityPoints != _currentUser!.activityPoints ||
+              updated.role != _currentUser!.role ||
+              updated.name != _currentUser!.name) {
+            _currentUser = updated;
+            _authStateController.add(_currentUser);
+            debugPrint('[AuthService] Realtime Firestore points update: ${_currentUser?.activityPoints}');
+          }
+        }
+      }, onError: (e) {
+        debugPrint('[AuthService] User doc stream error: $e');
+      });
+    }
   }
 
   Future<UserModel> _syncUserWithFirestore(UserModel basicUser) async {
@@ -82,7 +109,7 @@ class AuthService {
         if (user != null) {
           final prefix = (user.email ?? googleUser.email).split('@').first;
           final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
-          _currentUser = UserModel(
+          final basicUser = UserModel(
             id: user.uid,
             name: user.displayName ?? googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
             email: user.email ?? googleUser.email,
@@ -91,11 +118,13 @@ class AuthService {
             activityPoints: 0,
             role: 'student',
           );
+          _currentUser = await _syncUserWithFirestore(basicUser);
+          _listenToUserDocument(_currentUser!.id);
         }
       } else {
         final prefix = googleUser.email.split('@').first;
         final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
-        _currentUser = UserModel(
+        final basicUser = UserModel(
           id: googleUser.id,
           name: googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
           email: googleUser.email,
@@ -104,6 +133,8 @@ class AuthService {
           activityPoints: 0,
           role: 'student',
         );
+        _currentUser = await _syncUserWithFirestore(basicUser);
+        _listenToUserDocument(_currentUser!.id);
       }
 
       _authStateController.add(_currentUser);
@@ -165,7 +196,7 @@ class AuthService {
           final prefix = cleanEmail.split('@').first;
           final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
 
-          _currentUser = UserModel(
+          final basicUser = UserModel(
             id: user.uid,
             name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
             email: user.email ?? cleanEmail,
@@ -174,13 +205,15 @@ class AuthService {
             activityPoints: 0,
             role: 'student',
           );
+          _currentUser = await _syncUserWithFirestore(basicUser);
+          _listenToUserDocument(_currentUser!.id);
         }
       } else {
         // Standalone fallback
         final prefix = cleanEmail.split('@').first;
         final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
 
-        _currentUser = UserModel(
+        final basicUser = UserModel(
           id: 'USR-${cleanEmail.hashCode.abs()}',
           name: formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU',
           email: cleanEmail,
@@ -189,6 +222,8 @@ class AuthService {
           activityPoints: 0,
           role: 'student',
         );
+        _currentUser = await _syncUserWithFirestore(basicUser);
+        _listenToUserDocument(_currentUser!.id);
       }
 
       _authStateController.add(_currentUser);
@@ -226,8 +261,51 @@ class AuthService {
       followedClubs: const ['fcode', 'media_club'],
     );
     _currentUser = await _syncUserWithFirestore(demo);
+    _listenToUserDocument(_currentUser!.id);
     _authStateController.add(_currentUser);
     return _currentUser!;
+  }
+
+  /// Add activity points directly and synchronize with Cloud Firestore
+  Future<void> addActivityPoints(int points) async {
+    if (_currentUser == null) return;
+    final updatedPoints = _currentUser!.activityPoints + points;
+    _currentUser = _currentUser!.copyWith(activityPoints: updatedPoints);
+    _authStateController.add(_currentUser);
+
+    if (_firestore != null) {
+      try {
+        await _firestore.collection('users').doc(_currentUser!.id).set({
+          'id': _currentUser!.id,
+          'name': _currentUser!.name,
+          'email': _currentUser!.email,
+          'major': _currentUser!.major,
+          'role': _currentUser!.role,
+          'activityPoints': FieldValue.increment(points),
+        }, SetOptions(merge: true));
+        debugPrint('[AuthService] Incremented points by $points for ${_currentUser!.id}');
+      } catch (e) {
+        debugPrint('[AuthService] addActivityPoints error: $e');
+      }
+    }
+  }
+
+  /// Manually reload user document from Cloud Firestore
+  Future<UserModel?> reloadCurrentUser() async {
+    if (_currentUser == null) return null;
+    if (_firestore != null) {
+      try {
+        final snap = await _firestore.collection('users').doc(_currentUser!.id).get();
+        if (snap.exists && snap.data() != null) {
+          _currentUser = UserModel.fromMap(snap.data()!, _currentUser!.id);
+          _authStateController.add(_currentUser);
+          return _currentUser;
+        }
+      } catch (e) {
+        debugPrint('[AuthService] reloadCurrentUser error: $e');
+      }
+    }
+    return _currentUser;
   }
 
   /// Toggle staff/leader role for demo testing
@@ -242,6 +320,8 @@ class AuthService {
   /// Sign out & purge local user session data
   Future<void> signOut() async {
     try {
+      _userDocSubscription?.cancel();
+      _userDocSubscription = null;
       await _googleSignIn.signOut();
       await _firebaseAuth?.signOut();
     } catch (e) {
@@ -254,6 +334,7 @@ class AuthService {
   }
 
   void dispose() {
+    _userDocSubscription?.cancel();
     _authStateController.close();
   }
 }

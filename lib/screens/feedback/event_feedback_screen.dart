@@ -196,12 +196,15 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
                 icon: Icons.send_rounded,
                 onPressed: () async {
                   if (user != null) {
-                    await feedbackVM.submitFeedback(
+                    final success = await feedbackVM.submitFeedback(
                       eventId: widget.ticket.eventId,
                       eventTitle: widget.ticket.eventTitle,
                       user: user,
                       comment: _commentController.text,
                     );
+                    if (success) {
+                      await authVM.addActivityPoints(5);
+                    }
                   }
                 },
               ),
@@ -251,12 +254,13 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
               CertificateCard(
                 certificate: (feedbackVM.state as StateData).data,
                 onDownload: () async {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Đang khởi tạo bản in / lưu file PDF Chứng nhận...'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                   await feedbackVM.exportCertificatePdf((feedbackVM.state as StateData).data);
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Đang tạo và tải file PDF chứng nhận...')),
-                    );
-                  }
                 },
               ),
               const SizedBox(height: 12),

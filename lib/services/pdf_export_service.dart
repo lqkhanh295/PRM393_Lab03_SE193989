@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import '../models/ticket_model.dart';
 import '../models/certificate_model.dart';
 import 'storage_service.dart';
@@ -16,8 +17,22 @@ class PdfExportService {
   Future<Uint8List> generateCertificatePdf(CertificateModel cert) async {
     final pdf = pw.Document();
 
+    pw.Font? roboto;
+    pw.Font? robotoBold;
+    try {
+      roboto = await PdfGoogleFonts.robotoRegular();
+      robotoBold = await PdfGoogleFonts.robotoBold();
+    } catch (_) {
+      // Offline fallback: will continue with standard fonts
+    }
+
+    final theme = (roboto != null && robotoBold != null)
+        ? pw.ThemeData.withFont(base: roboto, bold: robotoBold)
+        : null;
+
     pdf.addPage(
       pw.Page(
+        theme: theme,
         pageFormat: PdfPageFormat.a4.landscape,
         build: (pw.Context context) {
           return pw.Container(
@@ -32,7 +47,7 @@ class PdfExportService {
                 pw.Column(
                   children: [
                     pw.Text(
-                      'DAI HOC FPT TP. HO CHI MINH',
+                      'ĐẠI HỌC FPT TP. HỒ CHÍ MINH',
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,
@@ -41,7 +56,7 @@ class PdfExportService {
                     ),
                     pw.SizedBox(height: 6),
                     pw.Text(
-                      'GIAY CHUNG NHAN THAM GIA SU KIEN',
+                      'GIẤY CHỨNG NHẬN THAM GIA SỰ KIỆN',
                       style: pw.TextStyle(
                         fontSize: 26,
                         fontWeight: pw.FontWeight.bold,
@@ -59,7 +74,7 @@ class PdfExportService {
                 pw.Column(
                   children: [
                     pw.Text(
-                      'Chung nhan sinh vien:',
+                      'Chứng nhận sinh viên:',
                       style: const pw.TextStyle(fontSize: 14, color: PdfColors.grey700),
                     ),
                     pw.SizedBox(height: 8),
@@ -73,7 +88,7 @@ class PdfExportService {
                     ),
                     pw.SizedBox(height: 12),
                     pw.Text(
-                      'Da tham gia day du va hoan thanh xuat sac noi dung su kien:',
+                      'Đã tham gia đầy đủ và hoàn thành xuất sắc nội dung sự kiện:',
                       style: const pw.TextStyle(fontSize: 13, color: PdfColors.grey800),
                     ),
                     pw.SizedBox(height: 6),
@@ -94,8 +109,8 @@ class PdfExportService {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('Ngay cap: ${cert.issueDate}', style: const pw.TextStyle(fontSize: 11)),
-                        pw.Text('Ma xac thuc: ${cert.verificationHash}', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
+                        pw.Text('Ngày cấp: ${cert.issueDate}', style: const pw.TextStyle(fontSize: 11)),
+                        pw.Text('Mã xác thực: ${cert.verificationHash}', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
                       ],
                     ),
                     pw.Container(
@@ -119,6 +134,15 @@ class PdfExportService {
     );
 
     return pdf.save();
+  }
+
+  /// Opens native print & PDF preview / save dialog directly on mobile
+  Future<void> openAndDownloadCertificatePdf(CertificateModel certificate) async {
+    final pdfBytes = await generateCertificatePdf(certificate);
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdfBytes,
+      name: 'ChungNhan_${certificate.id}',
+    );
   }
 
   /// Generates a PDF ticket summary for offline storage

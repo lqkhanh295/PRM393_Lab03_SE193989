@@ -25,9 +25,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user = context.read<AuthViewModel>().currentUser;
-      if (user != null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final authVM = context.read<AuthViewModel>();
+      await authVM.refreshProfile();
+      final user = authVM.currentUser;
+      if (user != null && mounted) {
         context.read<ProfileViewModel>().loadProfileCertificates(user.id);
         context.read<ProfileViewModel>().loadFollowedClubs(user.followedClubs);
       }
@@ -49,9 +51,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Divider(height: 1, thickness: 1, color: AppTheme.hairline),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
-        child: Column(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<AuthViewModel>().refreshProfile();
+          final u = context.read<AuthViewModel>().currentUser;
+          if (u != null) {
+            await Future.wait([
+              context.read<ProfileViewModel>().loadProfileCertificates(u.id),
+              context.read<ProfileViewModel>().loadFollowedClubs(u.followedClubs),
+            ]);
+          }
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(AppTheme.spacingScreenPadding),
+          child: Column(
           children: [
             // Student Profile Header Card
             Container(
@@ -601,11 +615,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         size: 20,
                                         color: AppTheme.obsidian,
                                       ),
-                                      tooltip: 'Tải chứng nhận PDF',
+                                      tooltip: 'Tải / In chứng nhận PDF',
                                       onPressed: () {
-                                        profileVM.generateAndUploadPdfSummary(
-                                          c,
-                                        );
+                                        profileVM.viewAndDownloadCertificatePdf(c);
                                       },
                                     ),
                                   ],

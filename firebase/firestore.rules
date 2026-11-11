@@ -281,7 +281,7 @@ service cloud.firestore {
         (!('qrToken' in data) || (data.qrToken is string && data.qrToken.size() <= 500)) &&
         (!('qrData' in data) || (data.qrData is string && data.qrData.size() <= 500)) &&
         (!('checkInStatus' in data) || data.checkInStatus is bool) &&
-        (!('checkedInAt' in data) || data.checkedInAt is string || data.checkedInAt is timestamp) &&
+        (!('checkedInAt' in data) || data.checkedInAt == null || data.checkedInAt is string || data.checkedInAt is timestamp) &&
         (!('createdAt' in data) || data.createdAt is string || data.createdAt is timestamp);
     }
 
@@ -298,6 +298,15 @@ service cloud.firestore {
     function isStaffTicketCheckIn() {
       return isStaffOrAdmin() &&
         areImmutableFieldsUnchanged(['id', 'userId', 'eventId', 'ticketCode']);
+    }
+
+    // Check if ticket update is a safe gate check-in transition
+    function isValidTicketCheckIn() {
+      return isAuthenticated() &&
+        resource.data.status in ['active', 'confirmed'] &&
+        request.resource.data.status == 'checkedIn' &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'checkedInAt', 'checkInStatus']) &&
+        areImmutableFieldsUnchanged(['id', 'userId', 'eventId', 'ticketCode', 'eventTitle', 'studentName']);
     }
 
     // Domain validator for events/{eventId}/questions/{questionId}
@@ -424,7 +433,8 @@ service cloud.firestore {
       allow create: if isAuthenticated() &&
         isValidUser(request.resource.data) &&
         (
-          (isOwner(userId) && request.resource.data.role == 'student') ||
+          (isOwner(userId) && request.resource.data.role == 'student' &&
+            (!('activityPoints' in request.resource.data) || request.resource.data.activityPoints == 0)) ||
           isAdmin()
         );
 
@@ -434,9 +444,10 @@ service cloud.firestore {
           (
             isOwner(userId) &&
             request.resource.data.role == resource.data.role &&
-            areImmutableFieldsUnchanged(['id', 'email', 'createdAt'])
+            areImmutableFieldsUnchanged(['id', 'email', 'createdAt', 'activityPoints'])
           ) ||
-          isStaffOrAdmin()
+          (isStaffOrAdmin() && areImmutableFieldsUnchanged(['role'])) ||
+          isAdmin()
         );
 
       allow delete: if isAdmin();
@@ -478,12 +489,11 @@ service cloud.firestore {
     }
 
     // 3. Tickets Collection
-    // Read: Ticket owner or staff
+    // Read: All authenticated users (for volunteer gate check-in scanning)
     // Create: Authenticated student creating own ticket
-    // Update: Staff check-in or Ticket owner cancelling
+    // Update: Staff check-in, owner cancel, or valid gate check-in
     match /tickets/{ticketId} {
-      allow read: if isAuthenticated() &&
-        (resource.data.userId == request.auth.uid || isStaffOrAdmin());
+      allow read: if isAuthenticated();
 
       allow create: if isAuthenticated() &&
         isValidTicket(request.resource.data) &&
@@ -491,7 +501,7 @@ service cloud.firestore {
 
       allow update: if isAuthenticated() &&
         isValidTicket(request.resource.data) &&
-        (isStaffTicketCheckIn() || isOwnerTicketCancel());
+        (isStaffTicketCheckIn() || isOwnerTicketCancel() || isValidTicketCheckIn());
 
       allow delete: if isStaffOrAdmin();
     }

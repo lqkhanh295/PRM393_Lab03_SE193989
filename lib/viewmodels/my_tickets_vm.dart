@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../models/screen_state.dart';
 import '../models/ticket_model.dart';
@@ -6,6 +7,8 @@ import '../services/firestore_service.dart';
 /// MVVM MyTicketsViewModel
 class MyTicketsViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
+  StreamSubscription<List<TicketModel>>? _streamSubscription;
+  String? _subscribedUserId;
 
   ScreenState<List<TicketModel>> _state = const StateInitial();
   ScreenState<List<TicketModel>> get state => _state;
@@ -16,7 +19,15 @@ class MyTicketsViewModel extends ChangeNotifier {
   int get selectedTabIndex => _selectedTabIndex;
 
   MyTicketsViewModel({required FirestoreService firestoreService})
-      : _firestoreService = firestoreService;
+      : _firestoreService = firestoreService {
+    _firestoreService.ticketsNotifier.addListener(_onTicketsNotifierChanged);
+  }
+
+  void _onTicketsNotifierChanged() {
+    if (_subscribedUserId != null) {
+      _refreshTicketsSilently(_subscribedUserId!);
+    }
+  }
 
   void selectTab(int index) {
     _selectedTabIndex = index;
@@ -24,6 +35,9 @@ class MyTicketsViewModel extends ChangeNotifier {
   }
 
   Future<void> loadUserTickets(String userId) async {
+    _subscribedUserId = userId;
+    _streamSubscription?.cancel();
+
     _state = const StateLoading('Đang tải danh sách vé điện tử...');
     notifyListeners();
 
@@ -33,6 +47,26 @@ class MyTicketsViewModel extends ChangeNotifier {
     } catch (e) {
       _state = StateError('Không thể tải danh sách vé: $e');
       notifyListeners();
+    }
+
+    // Connect to real-time Cloud Firestore ticket stream
+    _streamSubscription = _firestoreService.streamUserTickets(userId).listen(
+      (liveList) {
+        _allTickets = liveList;
+        _filterTicketsByTab();
+      },
+      onError: (err) {
+        debugPrint('[MyTicketsViewModel] Stream notice: $err');
+      },
+    );
+  }
+
+  Future<void> _refreshTicketsSilently(String userId) async {
+    try {
+      _allTickets = await _firestoreService.getUserTickets(userId);
+      _filterTicketsByTab();
+    } catch (e) {
+      debugPrint('[MyTicketsViewModel] Silent refresh notice: $e');
     }
   }
 
@@ -53,5 +87,12 @@ class MyTicketsViewModel extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+    _firestoreService.ticketsNotifier.removeListener(_onTicketsNotifierChanged);
+    super.dispose();
   }
 }

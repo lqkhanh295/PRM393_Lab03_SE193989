@@ -13,6 +13,12 @@ import 'package:campus_event/viewmodels/explore_viewmodel.dart';
 import 'package:campus_event/services/firestore_service.dart';
 import 'package:campus_event/services/analytics_service.dart';
 import 'package:campus_event/services/auth_service.dart';
+import 'package:campus_event/services/storage_service.dart';
+import 'package:campus_event/services/pdf_export_service.dart';
+import 'package:campus_event/models/certificate_model.dart';
+import 'package:campus_event/models/user_model.dart';
+import 'package:campus_event/models/screen_state.dart';
+import 'package:campus_event/viewmodels/my_tickets_vm.dart';
 import 'package:campus_event/screens/tickets/digital_ticket_screen.dart';
 
 void main() {
@@ -409,5 +415,88 @@ void main() {
     expect(find.text('Đánh giá sự kiện & Nhận Điểm Rèn Luyện'), findsOneWidget);
     expect(find.byIcon(Icons.star_rate_rounded), findsOneWidget);
     expect(find.textContaining('Đã điểm danh tại cổng'), findsOneWidget);
+  });
+
+  test('generateCertificatePdf handles Vietnamese diacritics without crashing', () async {
+    final storageService = StorageService(null);
+    final pdfService = PdfExportService(storageService);
+    const cert = CertificateModel(
+      id: 'CERT-123456',
+      eventId: 'evt-1',
+      eventTitle: 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
+      userId: 'usr-1',
+      studentName: 'Nguyễn Quốc Khánh',
+      issueDate: '28/10/2026',
+      verificationHash: 'HASH-TEST-123',
+      downloadUrl: '',
+    );
+
+    final bytes = await pdfService.generateCertificatePdf(cert);
+    expect(bytes, isNotEmpty);
+  });
+
+  test('MyTicketsViewModel reacts to check-in and transitions ticket from upcoming to attended tab', () async {
+    final firestoreService = FirestoreService(null);
+    final myTicketsVM = MyTicketsViewModel(firestoreService: firestoreService);
+
+    // Register a ticket for test student
+    const event = EventModel(
+      id: 'EVT-TEST-1',
+      title: 'FPTU Tech Expo 2026',
+      description: 'Test Event',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '28/10/2026',
+      time: '13:30 - 17:30',
+      location: 'Hội trường Trịnh Công Sơn',
+      capacity: 100,
+      registeredCount: 10,
+      bannerUrl: '',
+    );
+    const user = UserModel(
+      id: 'student_tester_01',
+      name: 'Nguyen Van Test',
+      email: 'test@fpt.edu.vn',
+      avatarUrl: '',
+      major: 'Software Engineering',
+      role: 'student',
+      activityPoints: 0,
+    );
+
+    final ticket = await firestoreService.registerForEvent(event: event, user: user);
+    await myTicketsVM.loadUserTickets(user.id);
+
+    // Tab 0: Upcoming
+    myTicketsVM.selectTab(0);
+    expect(myTicketsVM.state, isA<StateData<List<TicketModel>>>());
+    final upcoming = (myTicketsVM.state as StateData<List<TicketModel>>).data;
+    expect(upcoming.any((t) => t.id == ticket.id), isTrue);
+
+    // Tab 1: Attended (should be empty initially)
+    myTicketsVM.selectTab(1);
+    expect(myTicketsVM.state, isA<StateEmpty<List<TicketModel>>>());
+
+    // Perform check-in at gate desk
+    final result = await firestoreService.validateAndCheckInTicket(
+      qrToken: ticket.qrToken,
+      eventId: event.id,
+    );
+    expect(result.isValid, isTrue);
+
+    // Allow event loop / ValueNotifier to notify MyTicketsViewModel
+    await Future.delayed(const Duration(milliseconds: 10));
+
+    // In Tab 1: Attended, ticket must now appear with checkedIn status
+    myTicketsVM.selectTab(1);
+    expect(myTicketsVM.state, isA<StateData<List<TicketModel>>>());
+    final attended = (myTicketsVM.state as StateData<List<TicketModel>>).data;
+    expect(attended.any((t) => t.id == ticket.id && t.isCheckedIn), isTrue);
+
+    // In Tab 0: Upcoming, ticket must no longer appear
+    myTicketsVM.selectTab(0);
+    expect(myTicketsVM.state, isA<StateEmpty<List<TicketModel>>>());
+
+    myTicketsVM.dispose();
   });
 }

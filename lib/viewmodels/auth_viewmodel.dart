@@ -116,6 +116,24 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Add activity points (+5) upon completing event feedback
+  Future<void> addActivityPoints(int points) async {
+    await _authService.addActivityPoints(points);
+    if (_authService.currentUser != null) {
+      _state = StateData(_authService.currentUser);
+      notifyListeners();
+    }
+  }
+
+  /// Reload latest user profile data from Cloud Firestore
+  Future<void> refreshProfile() async {
+    final updated = await _authService.reloadCurrentUser();
+    if (updated != null) {
+      _state = StateData(updated);
+      notifyListeners();
+    }
+  }
+
   Future<void> signOut() async {
     try {
       await _analyticsService.logLogout(sessionMinutes: 15);

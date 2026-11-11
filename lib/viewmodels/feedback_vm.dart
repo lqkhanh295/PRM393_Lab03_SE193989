@@ -67,6 +67,7 @@ class FeedbackViewModel extends ChangeNotifier {
           userId: user.id,
           rating: _rating,
           comments: comment,
+          user: user,
         );
         await firestoreService.saveCertificate(cert);
       }
@@ -83,7 +84,17 @@ class FeedbackViewModel extends ChangeNotifier {
 
   Future<void> exportCertificatePdf(CertificateModel cert) async {
     try {
-      await _pdfExportService.exportAndUploadCertificate(certificate: cert);
+      // 1. Open native PDF viewer & Save-as-PDF sheet directly on device
+      await _pdfExportService.openAndDownloadCertificatePdf(cert);
+
+      // 2. Background upload to Cloud Storage
+      () async {
+        try {
+          await _pdfExportService.exportAndUploadCertificate(certificate: cert);
+        } catch (e) {
+          debugPrint('[FeedbackViewModel] Cloud Storage background upload note: $e');
+        }
+      }();
     } catch (e) {
       debugPrint('[FeedbackViewModel] Export error: $e');
     }

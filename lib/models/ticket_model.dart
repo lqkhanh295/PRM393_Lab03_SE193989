@@ -34,8 +34,9 @@ class TicketModel {
 
   factory TicketModel.fromMap(Map<String, dynamic> map, String id) {
     TicketStatus resolveStatus(String? val) {
-      if (val == 'checkedIn' || val == 'CHECKED_IN') return TicketStatus.checkedIn;
-      if (val == 'expired' || val == 'EXPIRED') return TicketStatus.expired;
+      final s = val?.toLowerCase() ?? '';
+      if (s == 'checkedin' || s == 'checked_in') return TicketStatus.checkedIn;
+      if (s == 'expired') return TicketStatus.expired;
       return TicketStatus.active;
     }
 
