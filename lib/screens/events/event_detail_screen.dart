@@ -378,11 +378,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.3,
-                        color: event.isFull ? AppTheme.error : AppTheme.success,
+                        color: event.isPast ? AppTheme.textMuted : (event.isFull ? AppTheme.error : AppTheme.success),
                       ),
                     ),
-                    const Text(
-                      'Miễn phí tham gia',
+                    Text(
+                      event.isPast ? 'Đã đóng đăng ký' : 'Miễn phí tham gia',
                       style: TextStyle(
                         fontSize: 11,
                         color: AppTheme.textMuted,
@@ -407,6 +407,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                               ),
                             );
                           },
+                        );
+                      }
+                      if (event.isPast) {
+                        return const AppPrimaryButton(
+                          label: 'Sự kiện đã kết thúc',
+                          onPressed: null,
                         );
                       }
                       return AppPrimaryButton(

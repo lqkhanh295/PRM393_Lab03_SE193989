@@ -92,6 +92,104 @@ class EventModel {
   bool get isFull => registeredCount >= capacity;
   int get spotsRemaining => (capacity - registeredCount).clamp(0, capacity);
 
+  /// Parse string date supporting DD/MM/YYYY, YYYY-MM-DD, or ISO 8601
+  DateTime? get parsedDate {
+    if (date.trim().isEmpty) return null;
+    final trimmed = date.trim();
+    try {
+      if (trimmed.contains('/')) {
+        final parts = trimmed.split('/');
+        if (parts.length == 3) {
+          final p0 = int.parse(parts[0]);
+          final p1 = int.parse(parts[1]);
+          final p2 = int.parse(parts[2]);
+          if (p0 > 1000) {
+            return DateTime(p0, p1, p2);
+          } else {
+            return DateTime(p2, p1, p0);
+          }
+        }
+      }
+      if (trimmed.contains('-')) {
+        final parts = trimmed.split('-');
+        if (parts.length == 3) {
+          final p0 = int.parse(parts[0]);
+          final p1 = int.parse(parts[1]);
+          final p2 = int.parse(parts[2]);
+          if (p0 > 1000) {
+            return DateTime(p0, p1, p2);
+          } else {
+            return DateTime(p2, p1, p0);
+          }
+        }
+      }
+      return DateTime.tryParse(trimmed);
+    } catch (_) {}
+    return null;
+  }
+
+  /// Parse start DateTime from date and time
+  DateTime? get startDateTime {
+    final d = parsedDate;
+    if (d == null) return null;
+    if (time.trim().isEmpty) return DateTime(d.year, d.month, d.day);
+    try {
+      final timePart = time.split('-').first.trim();
+      final hm = timePart.split(':');
+      if (hm.length >= 2) {
+        final hour = int.parse(hm[0].trim());
+        final minute = int.parse(hm[1].trim());
+        return DateTime(d.year, d.month, d.day, hour, minute);
+      }
+    } catch (_) {}
+    return DateTime(d.year, d.month, d.day);
+  }
+
+  /// Parse end DateTime from date and time
+  DateTime? get endDateTime {
+    final d = parsedDate;
+    if (d == null) return null;
+    if (time.trim().isEmpty) return DateTime(d.year, d.month, d.day, 23, 59, 59);
+    try {
+      final parts = time.split('-');
+      final timePart = (parts.length > 1 ? parts.last : parts.first).trim();
+      final hm = timePart.split(':');
+      if (hm.length >= 2) {
+        final hour = int.parse(hm[0].trim());
+        final minute = int.parse(hm[1].trim());
+        return DateTime(d.year, d.month, d.day, hour, minute);
+      }
+    } catch (_) {}
+    return DateTime(d.year, d.month, d.day, 23, 59, 59);
+  }
+
+  /// Determines whether the event has already concluded based on current runtime date/time
+  bool get isPast {
+    final end = endDateTime;
+    if (end != null) {
+      return DateTime.now().isAfter(end);
+    }
+    final d = parsedDate;
+    if (d != null) {
+      return DateTime.now().isAfter(DateTime(d.year, d.month, d.day, 23, 59, 59));
+    }
+    return false;
+  }
+
+  /// Determines whether the event is currently in progress
+  bool get isOngoing {
+    final start = startDateTime;
+    final end = endDateTime;
+    if (start != null && end != null) {
+      final now = DateTime.now();
+      return now.isAfter(start) && now.isBefore(end);
+    }
+    return false;
+  }
+
+  /// Registration is open ONLY IF the event is not past and not full
+  bool get isRegistrationOpen => !isPast && !isFull;
+
   factory EventModel.fromMap(Map<String, dynamic> map, String id) {
     return EventModel(
       id: id,

@@ -299,7 +299,12 @@ class FirestoreService {
       throw Exception('Bạn đã đăng ký sự kiện này trước đó. Vui lòng kiểm tra mục Vé của tôi.');
     }
 
-    // 2. Check capacity (BR-004)
+    // 2. Check past event
+    if (event.isPast) {
+      throw Exception('Rất tiếc! Sự kiện đã kết thúc, không thể đăng ký tham gia.');
+    }
+
+    // 3. Check capacity (BR-004)
     if (event.isFull) {
       throw Exception('Rất tiếc! Sự kiện đã đạt số lượng tối đa (${event.capacity} chỗ).');
     }
@@ -1036,6 +1041,9 @@ class FirestoreService {
     required EventModel event,
     required UserModel user,
   }) async {
+    if (event.isPast) {
+      throw Exception('Rất tiếc! Sự kiện đã kết thúc, không thể gửi yêu cầu đăng ký.');
+    }
     final regId = 'REG-${DateTime.now().millisecondsSinceEpoch}';
     final registration = RegistrationModel(
       id: regId,

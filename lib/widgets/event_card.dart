@@ -82,23 +82,25 @@ class EventGlassCard extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: event.isFull
-                                    ? AppTheme.errorSoft
-                                    : AppTheme.successSoft,
+                                color: event.isPast
+                                    ? AppTheme.surfaceContainer
+                                    : (event.isFull ? AppTheme.errorSoft : AppTheme.successSoft),
                                 borderRadius: BorderRadius.circular(AppTheme.radiusBadge),
                                 border: Border.all(
-                                  color: event.isFull
-                                      ? AppTheme.errorBorder
-                                      : AppTheme.successBorder,
+                                  color: event.isPast
+                                      ? AppTheme.outlineVariant
+                                      : (event.isFull ? AppTheme.errorBorder : AppTheme.successBorder),
                                   width: 1,
                                 ),
                               ),
                               child: Text(
-                                event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ',
+                                event.isPast
+                                    ? 'ĐÃ KẾT THÚC'
+                                    : (event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ'),
                                 style: TextStyle(
-                                  color: event.isFull
-                                      ? AppTheme.errorInk
-                                      : AppTheme.successInk,
+                                  color: event.isPast
+                                      ? AppTheme.textMuted
+                                      : (event.isFull ? AppTheme.errorInk : AppTheme.successInk),
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.2,
@@ -142,7 +144,40 @@ class EventGlassCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (!event.isFull)
+                            if (event.isPast)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.surfaceContainer,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: AppTheme.outlineVariant, width: 1),
+                                ),
+                                child: const Text(
+                                  'ĐÃ KẾT THÚC',
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppTheme.textMuted,
+                                  ),
+                                ),
+                              )
+                            else if (event.isFull)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.errorSoft,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  'HẾT CHỖ',
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppTheme.errorInk,
+                                  ),
+                                ),
+                              )
+                            else
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(

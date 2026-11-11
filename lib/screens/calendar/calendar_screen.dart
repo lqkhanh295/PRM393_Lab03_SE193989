@@ -563,7 +563,7 @@ class _CampusCalendarScreenState extends State<CampusCalendarScreen> {
                                         style: TextStyle(
                                           fontSize: 9,
                                           fontWeight: FontWeight.w700,
-                                          color: event.isFull ? AppTheme.error : AppTheme.primary,
+                                          color: event.isPast ? AppTheme.textMuted : (event.isFull ? AppTheme.error : AppTheme.primary),
                                         ),
                                       ),
                                     ),

@@ -1,8 +1,132 @@
 {
   "GET:/events": {
-    "timestamp": 1794394976710,
+    "timestamp": 1794414547738,
     "data": {
       "documents": [
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/doc_1794414547738",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-05"
+            },
+            "title": {
+              "stringValue": "FPTU Music Festival & Gala Chào Tân Sinh Viên 2026"
+            },
+            "description": {
+              "stringValue": "Đại nhạc hội sinh viên chào đón K20 với sự góp mặt của các ban nhạc acoustic và vũ đoàn Cóc Sài Gòn."
+            },
+            "category": {
+              "stringValue": "Entertainment"
+            },
+            "clubId": {
+              "stringValue": "media_club"
+            },
+            "clubName": {
+              "stringValue": "CLB Cóc Sài Gòn"
+            },
+            "date": {
+              "stringValue": "28/11/2026"
+            },
+            "time": {
+              "stringValue": "18:30 - 22:00"
+            },
+            "location": {
+              "stringValue": "Sân khấu Hội trường Lớn A2"
+            },
+            "capacity": {
+              "integerValue": "350"
+            },
+            "registeredCount": {
+              "integerValue": "0"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800"
+            },
+            "isFeatured": {
+              "booleanValue": true
+            },
+            "speakers": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "sessions": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "createdAt": {
+              "stringValue": "2026-11-11T16:29:07.390Z"
+            },
+            "updatedAt": {
+              "stringValue": "2026-11-11T16:29:07.390Z"
+            }
+          },
+          "createTime": "2026-11-11T16:29:07.738Z",
+          "updateTime": "2026-11-11T16:29:07.738Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/events/doc_1794414543859",
+          "fields": {
+            "id": {
+              "stringValue": "EVT-2026-04"
+            },
+            "title": {
+              "stringValue": "FPT Hackathon 2026: Sáng Tạo Ứng Dụng Di Động & AI"
+            },
+            "description": {
+              "stringValue": "Cuộc thi lập trình 24 giờ thử thách sinh viên FPT xây dựng ứng dụng di động thông minh tích hợp AI Agent và Cloud Firestore."
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "clubId": {
+              "stringValue": "fcode"
+            },
+            "clubName": {
+              "stringValue": "CLB F-Code"
+            },
+            "date": {
+              "stringValue": "25/11/2026"
+            },
+            "time": {
+              "stringValue": "08:00 - 17:30"
+            },
+            "location": {
+              "stringValue": "Hội trường Trịnh Công Sơn"
+            },
+            "capacity": {
+              "integerValue": "200"
+            },
+            "registeredCount": {
+              "integerValue": "0"
+            },
+            "bannerUrl": {
+              "stringValue": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800"
+            },
+            "isFeatured": {
+              "booleanValue": true
+            },
+            "speakers": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "sessions": {
+              "arrayValue": {
+                "values": []
+              }
+            },
+            "createdAt": {
+              "stringValue": "2026-11-11T16:29:02.248Z"
+            },
+            "updatedAt": {
+              "stringValue": "2026-11-11T16:29:02.248Z"
+            }
+          },
+          "createTime": "2026-11-11T16:29:03.859Z",
+          "updateTime": "2026-11-11T16:29:03.859Z"
+        },
         {
           "name": "projects/campus-event-48443/databases/(default)/documents/events/EVT-2026-01",
           "fields": {
@@ -694,7 +818,7 @@
     }
   },
   "GET:/clubs": {
-    "timestamp": 1794394976710,
+    "timestamp": 1794414566557,
     "data": {
       "documents": [
         {
@@ -704,20 +828,671 @@
               "stringValue": "fcode"
             },
             "name": {
-              "stringValue": "CLB F-Code"
+              "stringValue": "F-Code"
+            },
+            "acronym": {
+              "stringValue": "F-Code"
             },
             "category": {
-              "stringValue": "Học thuật"
+              "stringValue": "Technology"
             },
-            "membersCount": {
-              "integerValue": "120"
+            "description": {
+              "stringValue": "Câu lạc bộ Học thuật Lập trình và Thuật toán hàng đầu Đại học FPT TP.HCM."
             },
-            "foundedYear": {
-              "integerValue": "2014"
+            "followerCount": {
+              "integerValue": "2450"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-f-code.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/f-code/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/fcodefpt/"
+            },
+            "email": {
+              "stringValue": "fcode.fptuhcm@gmail.com"
             }
           },
-          "createTime": "2026-11-11T10:00:00.000000Z",
-          "updateTime": "2026-11-11T10:00:00.000000Z"
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/ai_95",
+          "fields": {
+            "id": {
+              "stringValue": "ai_95"
+            },
+            "name": {
+              "stringValue": "Câu lạc bộ 9.5AI – FPTU HCM AI Club"
+            },
+            "acronym": {
+              "stringValue": "9.5AI"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Cộng đồng nghiên cứu và phát triển Trí tuệ Nhân tạo tại FPTU HCM."
+            },
+            "followerCount": {
+              "integerValue": "1320"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/01/logo-9.5ai.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/cau-lac-bo-9-5ai-fptu-hcm-ai-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/cau-lac-bo-sinh-vien/cau-lac-bo-9-5ai/"
+            },
+            "email": {
+              "stringValue": "9.5aifptuclub@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/ai4sd",
+          "fields": {
+            "id": {
+              "stringValue": "ai4sd"
+            },
+            "name": {
+              "stringValue": "Exploring AI Applications in Software Development Club"
+            },
+            "acronym": {
+              "stringValue": "AI4SD"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Nghiên cứu ứng dụng thực chiến của AI và LLM trong quy trình phát triển phần mềm."
+            },
+            "followerCount": {
+              "integerValue": "980"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/03/logo-ai4sd.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/exploring-ai-applications-in-software-development-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/exploring-ai-applications-in-software-development-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/farpc",
+          "fields": {
+            "id": {
+              "stringValue": "farpc"
+            },
+            "name": {
+              "stringValue": "AIoT Research Pioneer Club"
+            },
+            "acronym": {
+              "stringValue": "FARPC"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Nghiên cứu kết hợp Trí tuệ Nhân tạo và Internet vạn vật (AIoT)."
+            },
+            "followerCount": {
+              "integerValue": "870"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/02/logo-farpc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/aiot-research-pioneer-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/aiot-research-pioneer-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/gdoc",
+          "fields": {
+            "id": {
+              "stringValue": "gdoc"
+            },
+            "name": {
+              "stringValue": "Google Developer Group on Campus FPTU"
+            },
+            "acronym": {
+              "stringValue": "GDGoC"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Cộng đồng lập trình viên sinh viên do Google hỗ trợ tại Đại học FPT TP.HCM."
+            },
+            "followerCount": {
+              "integerValue": "3100"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-gdgoc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/google-developer-group-on-campus-fptu/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://gdg.community.dev/events/details/google-gdg-on-campus-fpt-university-ho-chi-minh-city-vietnam-presents-gdgoc-fptu-hcmc-core-members-recruitment-gen-20/"
+            },
+            "email": {
+              "stringValue": "gdsc.fpt.hcm23@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fia",
+          "fields": {
+            "id": {
+              "stringValue": "fia"
+            },
+            "name": {
+              "stringValue": "FPT Information Assurance Club"
+            },
+            "acronym": {
+              "stringValue": "FIA"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Cộng đồng nghiên cứu An toàn thông tin, Cyber Security và CTF tại FPTU HCM."
+            },
+            "followerCount": {
+              "integerValue": "1950"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-fia.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-information-assurance-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/fptinformationassurance/"
+            },
+            "email": {
+              "stringValue": "fiafptinformationassurance@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/blockuni",
+          "fields": {
+            "id": {
+              "stringValue": "blockuni"
+            },
+            "name": {
+              "stringValue": "BlockUni – The Blockchain Academic Community"
+            },
+            "acronym": {
+              "stringValue": "BlockUni"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Cộng đồng học thuật nghiên cứu công nghệ Blockchain, Web3 và Smart Contract."
+            },
+            "followerCount": {
+              "integerValue": "1120"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/01/logo-blockuni.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/blockuni-the-blockchain-academic-community/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/hm/blockuni-the-blockchain-academic-community/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/icd",
+          "fields": {
+            "id": {
+              "stringValue": "icd"
+            },
+            "name": {
+              "stringValue": "FPT Integrated Circuit Club"
+            },
+            "acronym": {
+              "stringValue": "ICD"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Câu lạc bộ Thiết kế Vi mạch và Bán dẫn tại Đại học FPT TP.HCM."
+            },
+            "followerCount": {
+              "integerValue": "760"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/04/logo-icd.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-integrated-circuit-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/hm/FPT-Integrated-Circuit-Club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/devsecops_02h",
+          "fields": {
+            "id": {
+              "stringValue": "devsecops_02h"
+            },
+            "name": {
+              "stringValue": "DevSecOps Club"
+            },
+            "acronym": {
+              "stringValue": "02H"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Thực hành văn hóa DevOps, tự động hóa CI/CD và an toàn hạ tầng đám mây."
+            },
+            "followerCount": {
+              "integerValue": "890"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/03/logo-devsecops.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/devsecops-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/cau-lac-bo-tp-ho-chi-minh/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/mtc",
+          "fields": {
+            "id": {
+              "stringValue": "mtc"
+            },
+            "name": {
+              "stringValue": "Mathematics Thinking Club"
+            },
+            "acronym": {
+              "stringValue": "MTC"
+            },
+            "category": {
+              "stringValue": "Academic"
+            },
+            "description": {
+              "stringValue": "Rèn luyện và phát triển tư duy toán học ứng dụng trong khoa học máy tính."
+            },
+            "followerCount": {
+              "integerValue": "1050"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/12/logo-mtc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/mathematics-thinking-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/mathematics-thinking-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/dac",
+          "fields": {
+            "id": {
+              "stringValue": "dac"
+            },
+            "name": {
+              "stringValue": "Dynamic Art Club"
+            },
+            "acronym": {
+              "stringValue": "DAC"
+            },
+            "category": {
+              "stringValue": "Design"
+            },
+            "description": {
+              "stringValue": "Sáng tạo mỹ thuật số, thiết kế đồ họa 2D/3D và nghệ thuật thị giác."
+            },
+            "followerCount": {
+              "integerValue": "1750"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-dac.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/dynamic-art-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/student-club/dynamic-art-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/bec",
+          "fields": {
+            "id": {
+              "stringValue": "bec"
+            },
+            "name": {
+              "stringValue": "Business Economics Club"
+            },
+            "acronym": {
+              "stringValue": "BEC"
+            },
+            "category": {
+              "stringValue": "Business"
+            },
+            "description": {
+              "stringValue": "Cộng đồng sinh viên đam mê kinh tế, tài chính và phân tích kinh doanh."
+            },
+            "followerCount": {
+              "integerValue": "2100"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-bec.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/business-economics-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/bec.fptuhcm/"
+            },
+            "email": {
+              "stringValue": "bec.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fip",
+          "fields": {
+            "id": {
+              "stringValue": "fip"
+            },
+            "name": {
+              "stringValue": "FPT Innovation Path Club"
+            },
+            "acronym": {
+              "stringValue": "FIP"
+            },
+            "category": {
+              "stringValue": "Business"
+            },
+            "description": {
+              "stringValue": "Thúc đẩy tinh thần khởi nghiệp, sáng tạo dự án kinh doanh công nghệ sinh viên."
+            },
+            "followerCount": {
+              "integerValue": "930"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/02/logo-fip.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-innovation-path-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-innovation-path-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/flsc",
+          "fields": {
+            "id": {
+              "stringValue": "flsc"
+            },
+            "name": {
+              "stringValue": "FPT Logistics & Supply Chain Club"
+            },
+            "acronym": {
+              "stringValue": "F-LSC"
+            },
+            "category": {
+              "stringValue": "Business"
+            },
+            "description": {
+              "stringValue": "Chia sẻ chuyên môn về quản lý chuỗi cung ứng, xuất nhập khẩu và logistics."
+            },
+            "followerCount": {
+              "integerValue": "1420"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/12/logo-flsc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-logistics-supply-chain-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-logistics-supply-chain-club/"
+            },
+            "email": {
+              "stringValue": "flsc.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/skillcetera",
+          "fields": {
+            "id": {
+              "stringValue": "skillcetera"
+            },
+            "name": {
+              "stringValue": "Skillcetera – Skills and Languages Club"
+            },
+            "acronym": {
+              "stringValue": "Skillcetera"
+            },
+            "category": {
+              "stringValue": "Languages"
+            },
+            "description": {
+              "stringValue": "Rèn luyện kỹ năng mềm, thuyết trình và giao tiếp ngoại ngữ đa văn hóa."
+            },
+            "followerCount": {
+              "integerValue": "1680"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-skillcetera.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/skillcetera-skills-and-languages-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/skillcetera/"
+            },
+            "email": {
+              "stringValue": "skillcetera@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/ssc",
+          "fields": {
+            "id": {
+              "stringValue": "ssc"
+            },
+            "name": {
+              "stringValue": "Soft Skills Club"
+            },
+            "acronym": {
+              "stringValue": "SSC"
+            },
+            "category": {
+              "stringValue": "Skills"
+            },
+            "description": {
+              "stringValue": "Môi trường phát triển kỹ năng lãnh đạo, làm việc nhóm và giao tiếp chuyên nghiệp."
+            },
+            "followerCount": {
+              "integerValue": "1850"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-ssc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/soft-skills-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/soft-skills-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/eac",
+          "fields": {
+            "id": {
+              "stringValue": "eac"
+            },
+            "name": {
+              "stringValue": "ELF Academic Club"
+            },
+            "acronym": {
+              "stringValue": "EAC"
+            },
+            "category": {
+              "stringValue": "Languages"
+            },
+            "description": {
+              "stringValue": "Nâng cao năng lực tiếng Anh học thuật qua trải nghiệm thực tế và cuộc thi Skill Show."
+            },
+            "followerCount": {
+              "integerValue": "1290"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-eac.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/elf-academic-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-skill-show-mua-3-hoc-tieng-anh-qua-trai-nghiem-thuc-te/"
+            },
+            "email": {
+              "stringValue": "eldepartmentfptu@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/jcl",
+          "fields": {
+            "id": {
+              "stringValue": "jcl"
+            },
+            "name": {
+              "stringValue": "Japanese Chinese Language"
+            },
+            "acronym": {
+              "stringValue": "JCL"
+            },
+            "category": {
+              "stringValue": "Languages"
+            },
+            "description": {
+              "stringValue": "Giao lưu ngôn ngữ, văn hóa và nâng cao năng lực tiếng Nhật và tiếng Trung."
+            },
+            "followerCount": {
+              "integerValue": "1150"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2024/01/logo-jcl.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/japanese-chinese-language/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/japanese-chinese-language/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/csg",
+          "fields": {
+            "id": {
+              "stringValue": "csg"
+            },
+            "name": {
+              "stringValue": "Câu lạc bộ Truyền thông Cóc Sài Gòn"
+            },
+            "acronym": {
+              "stringValue": "CSG"
+            },
+            "category": {
+              "stringValue": "Media"
+            },
+            "description": {
+              "stringValue": "Kênh thông tin truyền thông sinh viên hàng đầu tại Đại học FPT TP.HCM."
+            },
+            "followerCount": {
+              "integerValue": "5200"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-coc-sai-gon.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/cau-lac-bo-truyen-thong-coc-sai-gon-2/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/cocsaigonfuhcm/"
+            },
+            "email": {
+              "stringValue": "csg.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
         },
         {
           "name": "projects/campus-event-48443/databases/(default)/documents/clubs/media_club",
@@ -726,42 +1501,967 @@
               "stringValue": "media_club"
             },
             "name": {
-              "stringValue": "CLB Cóc Sài Gòn"
+              "stringValue": "Câu lạc bộ Truyền thông Cóc Sài Gòn (Legacy ID)"
+            },
+            "acronym": {
+              "stringValue": "CSG"
             },
             "category": {
-              "stringValue": "Truyền thông"
+              "stringValue": "Media"
             },
-            "membersCount": {
-              "integerValue": "85"
+            "description": {
+              "stringValue": "Kênh thông tin truyền thông sinh viên hàng đầu tại Đại học FPT TP.HCM."
             },
-            "foundedYear": {
-              "integerValue": "2016"
+            "followerCount": {
+              "integerValue": "5200"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-coc-sai-gon.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/cau-lac-bo-truyen-thong-coc-sai-gon-2/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/cocsaigonfuhcm/"
+            },
+            "email": {
+              "stringValue": "csg.fptuhcm@gmail.com"
             }
           },
-          "createTime": "2026-11-11T10:00:00.000000Z",
-          "updateTime": "2026-11-11T10:00:00.000000Z"
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
         },
         {
-          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fpt_dance",
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fev",
           "fields": {
             "id": {
-              "stringValue": "fpt_dance"
+              "stringValue": "fev"
             },
             "name": {
-              "stringValue": "CLB FPT Dance Crew"
+              "stringValue": "Câu lạc bộ Tổ chức Sự kiện Trường Đại học FPT"
+            },
+            "acronym": {
+              "stringValue": "FEV"
             },
             "category": {
-              "stringValue": "Nghệ thuật"
+              "stringValue": "Media"
             },
-            "membersCount": {
-              "integerValue": "65"
+            "description": {
+              "stringValue": "Chuyên nghiệp trong tổ chức các đại nhạc hội và ngày hội văn hóa sinh viên."
             },
-            "foundedYear": {
-              "integerValue": "2017"
+            "followerCount": {
+              "integerValue": "4600"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fev.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/cau-lac-bo-to-chuc-su-kien-truong-dai-hoc-fpt/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FPTEventClub/"
+            },
+            "email": {
+              "stringValue": "fpteventclub@gmail.com"
             }
           },
-          "createTime": "2026-11-11T10:00:00.000000Z",
-          "updateTime": "2026-11-11T10:00:00.000000Z"
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/mec",
+          "fields": {
+            "id": {
+              "stringValue": "mec"
+            },
+            "name": {
+              "stringValue": "MEC – Multimedia & Entertainment Club"
+            },
+            "acronym": {
+              "stringValue": "MEC"
+            },
+            "category": {
+              "stringValue": "Media"
+            },
+            "description": {
+              "stringValue": "Sản xuất hình ảnh, video và nội dung giải trí đa phương tiện sinh viên."
+            },
+            "followerCount": {
+              "integerValue": "2300"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-mec.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/mec-multimedia-entertainment-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/Mec.Fptuhcm/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/frc",
+          "fields": {
+            "id": {
+              "stringValue": "frc"
+            },
+            "name": {
+              "stringValue": "FPT RadiSound Club"
+            },
+            "acronym": {
+              "stringValue": "FRC"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Câu lạc bộ phát thanh, sản xuất podcast và âm thanh cảm xúc kết nối sinh viên."
+            },
+            "followerCount": {
+              "integerValue": "1350"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-frc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-radisound-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-radisound-club/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fstyle",
+          "fields": {
+            "id": {
+              "stringValue": "fstyle"
+            },
+            "name": {
+              "stringValue": "FStyle Hiphop Club (FStyle Crew)"
+            },
+            "acronym": {
+              "stringValue": "FStyle"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Đội nhóm vũ đạo Hip-hop năng động, biểu diễn tại các sân khấu lớn của trường."
+            },
+            "followerCount": {
+              "integerValue": "3400"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-fstyle.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fstyle-hiphop-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FStyleFamily/"
+            },
+            "email": {
+              "stringValue": "fstyle.hcmfptu@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.558Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fsharp",
+          "fields": {
+            "id": {
+              "stringValue": "fsharp"
+            },
+            "name": {
+              "stringValue": "F# Live Music Club"
+            },
+            "acronym": {
+              "stringValue": "F#"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Ban nhạc sinh viên FPTU, nơi hội tụ các tài năng thanh nhạc và nhạc cụ."
+            },
+            "followerCount": {
+              "integerValue": "2950"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fsharp.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/f-live-music-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FsharpLiveMusicClub/"
+            },
+            "email": {
+              "stringValue": "fsharp.fpthcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fbk",
+          "fields": {
+            "id": {
+              "stringValue": "fbk"
+            },
+            "name": {
+              "stringValue": "FPT Beat King Club"
+            },
+            "acronym": {
+              "stringValue": "FBK"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Cộng đồng Beatbox, Rap và âm nhạc đường phố năng động tại FPTU."
+            },
+            "followerCount": {
+              "integerValue": "1870"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-fbk.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-beat-king-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FPTBeatKingClub/"
+            },
+            "email": {
+              "stringValue": "fbk.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fti",
+          "fields": {
+            "id": {
+              "stringValue": "fti"
+            },
+            "name": {
+              "stringValue": "FPTU Traditional Instruments"
+            },
+            "acronym": {
+              "stringValue": "FTI"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Bảo tồn và biểu diễn nhạc cụ truyền thống dân tộc: Tranh, Bầu, Sáo, Nhị, Nguyệt."
+            },
+            "followerCount": {
+              "integerValue": "2150"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fti.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fptu-traditional-instruments/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/ftihcm/"
+            },
+            "email": {
+              "stringValue": "fti.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/jsclub",
+          "fields": {
+            "id": {
+              "stringValue": "jsclub"
+            },
+            "name": {
+              "stringValue": "Japan Style Club – CLB Phong Cách Nhật Bản"
+            },
+            "acronym": {
+              "stringValue": "JSC"
+            },
+            "category": {
+              "stringValue": "Culture"
+            },
+            "description": {
+              "stringValue": "Cộng đồng giao lưu văn hóa Nhật Bản, Cosplay, Anime và tổ chức lễ hội văn hóa."
+            },
+            "followerCount": {
+              "integerValue": "2600"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-jsc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/japan-style-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/clbJSC/"
+            },
+            "email": {
+              "stringValue": "jsc.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fcf",
+          "fields": {
+            "id": {
+              "stringValue": "fcf"
+            },
+            "name": {
+              "stringValue": "FPT Cooking Forever (Cộng đồng FCF)"
+            },
+            "acronym": {
+              "stringValue": "FCF"
+            },
+            "category": {
+              "stringValue": "Lifestyle"
+            },
+            "description": {
+              "stringValue": "Cộng đồng giao lưu ẩm thực, chia sẻ công thức nấu ăn và gắn kết sinh viên."
+            },
+            "followerCount": {
+              "integerValue": "1250"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-fcf.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-cooking-forever/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/hm/FPT-Cooking-Forever/"
+            },
+            "email": {
+              "stringValue": "fptcookingforever.host@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fvc",
+          "fields": {
+            "id": {
+              "stringValue": "fvc"
+            },
+            "name": {
+              "stringValue": "FPT Vovinam Club"
+            },
+            "acronym": {
+              "stringValue": "FVC"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Rèn luyện thể lực và tinh thần võ đạo Việt Võ Đạo đặc trưng của FPT."
+            },
+            "followerCount": {
+              "integerValue": "3800"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-fvc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-vovinam-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/fvchcm/"
+            },
+            "email": {
+              "stringValue": "fptuvovinamclub@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/ffc",
+          "fields": {
+            "id": {
+              "stringValue": "ffc"
+            },
+            "name": {
+              "stringValue": "FFC – Câu Lạc Bộ Bóng Đá FPTU HCM"
+            },
+            "acronym": {
+              "stringValue": "FFC"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Sân chơi bóng đá phong trào và đại diện thi đấu các giải sinh viên toàn thành."
+            },
+            "followerCount": {
+              "integerValue": "3100"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-ffc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/ffc-cau-lac-bo-bong-da-fptu-hcm/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FFC.FPTUHCM/"
+            },
+            "email": {
+              "stringValue": "ffc.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fvb",
+          "fields": {
+            "id": {
+              "stringValue": "fvb"
+            },
+            "name": {
+              "stringValue": "FPT Volleyball Club"
+            },
+            "acronym": {
+              "stringValue": "FVB"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Cộng đồng đam mê bóng chuyền nam & nữ, rèn luyện thể lực và tinh thần đồng đội."
+            },
+            "followerCount": {
+              "integerValue": "2250"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fvb.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-volleyball-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/volleyballfpt/"
+            },
+            "email": {
+              "stringValue": "fptuhcmfvb@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fuv",
+          "fields": {
+            "id": {
+              "stringValue": "fuv"
+            },
+            "name": {
+              "stringValue": "FPT University Volleyball"
+            },
+            "acronym": {
+              "stringValue": "FUV"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Đội tuyển và nhóm rèn luyện bóng chuyền nâng cao tại cơ sở TP.HCM."
+            },
+            "followerCount": {
+              "integerValue": "1400"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-fuv.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/cau-lac-bo-sinh-vien/clbhcm/the-thao/fpt-university-volleyball/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/chuyen-muc/cau-lac-bo-sinh-vien/clbhcm/the-thao/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fbc",
+          "fields": {
+            "id": {
+              "stringValue": "fbc"
+            },
+            "name": {
+              "stringValue": "FPTU HCM Basketball Club"
+            },
+            "acronym": {
+              "stringValue": "FBC"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Cộng đồng bóng rổ sôi động, giao lưu thi đấu và nâng cao kỹ năng bóng rổ."
+            },
+            "followerCount": {
+              "integerValue": "2500"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fbc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/danh-sach-cac-cau-lac-bo/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/fptuhcmbasketballclub/"
+            },
+            "email": {
+              "stringValue": "fbc.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fba",
+          "fields": {
+            "id": {
+              "stringValue": "fba"
+            },
+            "name": {
+              "stringValue": "FBA – FPTU HCM Badminton Club"
+            },
+            "acronym": {
+              "stringValue": "FBA"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Sân chơi cầu lông năng động cho sinh viên giao lưu, giải trí và rèn luyện thể thao."
+            },
+            "followerCount": {
+              "integerValue": "2380"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-fba.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/student-experience/student-activities/list-of-clubs/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/en/student-experience/student-activities/list-of-clubs/"
+            },
+            "email": {
+              "stringValue": "fptuba0123@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fcc",
+          "fields": {
+            "id": {
+              "stringValue": "fcc"
+            },
+            "name": {
+              "stringValue": "FPT Chess Club"
+            },
+            "acronym": {
+              "stringValue": "FCC"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Bộ môn cờ vua, cờ tướng và rèn luyện tư duy chiến thuật bàn cờ."
+            },
+            "followerCount": {
+              "integerValue": "1320"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-fcc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-chess-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FptChessClubFcc/"
+            },
+            "email": {
+              "stringValue": "fcc.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fbg",
+          "fields": {
+            "id": {
+              "stringValue": "fbg"
+            },
+            "name": {
+              "stringValue": "FBG – FPT Boardgame Club"
+            },
+            "acronym": {
+              "stringValue": "FBG"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Sân chơi gắn kết sinh viên qua các trò chơi board game chiến thuật và tương tác."
+            },
+            "followerCount": {
+              "integerValue": "1650"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-fbg.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hoat-dong-sinh-vien-2/sinh-vien-truong-f-noi-gi-ve-bo-mon-boardgame/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/danh-sach-cac-cau-lac-bo/"
+            },
+            "email": {
+              "stringValue": "fbghcm.fptboardgameclub@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fsc",
+          "fields": {
+            "id": {
+              "stringValue": "fsc"
+            },
+            "name": {
+              "stringValue": "FPT Southern Calisthenics (FPT Styles and Calisthenics)"
+            },
+            "acronym": {
+              "stringValue": "FSC"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Bộ môn thể hình đường phố (Calisthenics), rèn luyện sức bền và thể lực tự nhiên."
+            },
+            "followerCount": {
+              "integerValue": "1200"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/12/logo-fsc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-southern-calisthenics/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/cau-lac-bo-sinh-vien/fpt-southern-calisthenics/"
+            },
+            "email": {
+              "stringValue": "fsc.fptuhcm23@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/esf",
+          "fields": {
+            "id": {
+              "stringValue": "esf"
+            },
+            "name": {
+              "stringValue": "ESports FPTU HCMC"
+            },
+            "acronym": {
+              "stringValue": "ESF"
+            },
+            "category": {
+              "stringValue": "Sports"
+            },
+            "description": {
+              "stringValue": "Cộng đồng thể thao điện tử, tổ chức giải đấu Liên Minh Huyền Thoại, Valorant."
+            },
+            "followerCount": {
+              "integerValue": "3600"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-esf.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/esports-fptu-hcmc/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/chuyen-muc/cau-lac-bo-sinh-vien/clbhcm/the-thao/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/sitigroup",
+          "fields": {
+            "id": {
+              "stringValue": "sitigroup"
+            },
+            "name": {
+              "stringValue": "Cộng đồng Sinh viên Tình nguyện SiTiGroup"
+            },
+            "acronym": {
+              "stringValue": "SiTiGroup"
+            },
+            "category": {
+              "stringValue": "Community"
+            },
+            "description": {
+              "stringValue": "Cộng đồng sinh viên tình nguyện lớn nhất FPTU TP.HCM với các dự án vì cộng đồng."
+            },
+            "followerCount": {
+              "integerValue": "4900"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/07/logo-sitigroup.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/cong-dong-sinh-vien-tinh-nguyen-sitigroup/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/sititgroupfuhcm/"
+            },
+            "email": {
+              "stringValue": "sitigroup.fptuhcm@gmail.com"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/elf4c",
+          "fields": {
+            "id": {
+              "stringValue": "elf4c"
+            },
+            "name": {
+              "stringValue": "ELF for Community Club"
+            },
+            "acronym": {
+              "stringValue": "ELF-4-C"
+            },
+            "category": {
+              "stringValue": "Community"
+            },
+            "description": {
+              "stringValue": "Dự án mang giáo dục tiếng Anh và trải nghiệm đến các trường học và cộng đồng địa phương."
+            },
+            "followerCount": {
+              "integerValue": "1180"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/12/logo-elf4c.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/elf-for-community-club/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/fpt-university-and-its-students-bring-educational-activities-to-local-schools-and-communities-through-lectures-demonstrations-classes-and-outreach-projects-organised-on-a-programmed-and-ad-hoc-basis/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fsa",
+          "fields": {
+            "id": {
+              "stringValue": "fsa"
+            },
+            "name": {
+              "stringValue": "CLB Đại Sứ Sinh Viên"
+            },
+            "acronym": {
+              "stringValue": "FSA"
+            },
+            "category": {
+              "stringValue": "Community"
+            },
+            "description": {
+              "stringValue": "Đại sứ hình ảnh, dẫn đoàn và hỗ trợ các chương trình tiếp đón đối tác của nhà trường."
+            },
+            "followerCount": {
+              "integerValue": "2200"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-fsa.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/hcm/clb-dai-su-sinh-vien/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/cau-lac-bo-sinh-vien/clb-dai-su-sinh-vien/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/hnf",
+          "fields": {
+            "id": {
+              "stringValue": "hnf"
+            },
+            "name": {
+              "stringValue": "Hardware Network FPTU"
+            },
+            "acronym": {
+              "stringValue": "HNF"
+            },
+            "category": {
+              "stringValue": "Technology"
+            },
+            "description": {
+              "stringValue": "Nghiên cứu kiến trúc máy tính, mạng máy tính và phần cứng hệ thống."
+            },
+            "followerCount": {
+              "integerValue": "950"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/09/logo-hnf.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/diem-danh-tat-tan-tat-cac-clb-tai-dai-hoc-fpt-3-mien/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/hnffptu/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fps",
+          "fields": {
+            "id": {
+              "stringValue": "fps"
+            },
+            "name": {
+              "stringValue": "FPTU Public Speaking"
+            },
+            "acronym": {
+              "stringValue": "FPS"
+            },
+            "category": {
+              "stringValue": "Skills"
+            },
+            "description": {
+              "stringValue": "Rèn luyện kỹ năng diễn thuyết, tranh biện và thuyết phục trước đám đông."
+            },
+            "followerCount": {
+              "integerValue": "1480"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/10/logo-fps.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/diem-danh-tat-tan-tat-cac-clb-tai-dai-hoc-fpt-3-mien/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/FPTUPublicSpeakingClub/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/fac",
+          "fields": {
+            "id": {
+              "stringValue": "fac"
+            },
+            "name": {
+              "stringValue": "FPT Art and Culture Community"
+            },
+            "acronym": {
+              "stringValue": "FAC"
+            },
+            "category": {
+              "stringValue": "Culture"
+            },
+            "description": {
+              "stringValue": "Kết nối và lan tỏa các giá trị văn hóa nghệ thuật truyền thống và đương đại."
+            },
+            "followerCount": {
+              "integerValue": "1360"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/11/logo-fac.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/diem-danh-tat-tan-tat-cac-clb-tai-dai-hoc-fpt-3-mien/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/fac.fptuhcm/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
+        },
+        {
+          "name": "projects/campus-event-48443/databases/(default)/documents/clubs/udc",
+          "fields": {
+            "id": {
+              "stringValue": "udc"
+            },
+            "name": {
+              "stringValue": "Unity Dance Crew"
+            },
+            "acronym": {
+              "stringValue": "UDC"
+            },
+            "category": {
+              "stringValue": "Arts"
+            },
+            "description": {
+              "stringValue": "Nhóm nhảy hiện đại phong trào, cống hiến những màn vũ đạo sôi động cho sinh viên."
+            },
+            "followerCount": {
+              "integerValue": "1890"
+            },
+            "logoUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/wp-content/uploads/2023/08/logo-udc.png"
+            },
+            "officialUrl": {
+              "stringValue": "https://daihoc.fpt.edu.vn/trai-nghiem-sinh-vien/hoat-dong-sinh-vien/diem-danh-tat-tan-tat-cac-clb-tai-dai-hoc-fpt-3-mien/"
+            },
+            "fanpageUrl": {
+              "stringValue": "https://www.facebook.com/udcsg.fpt/"
+            }
+          },
+          "createTime": "2026-11-01T00:00:00.000Z",
+          "updateTime": "2026-11-11T16:29:26.559Z"
         }
       ]
     }

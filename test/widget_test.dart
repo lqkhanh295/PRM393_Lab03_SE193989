@@ -121,7 +121,7 @@ void main() {
       title: 'Workshop: Lập trình Ứng dụng Di động với Flutter & Firebase Toàn diện',
       description: 'Mô tả chi tiết sự kiện',
       category: 'Công nghệ',
-      date: '28/10/2026',
+      date: '28/11/2026',
       time: '13:30 - 17:30',
       location: 'Phòng Lab 204 Tòa nhà Alpha',
       bannerUrl: 'https://picsum.photos/600/300',
@@ -449,7 +449,7 @@ void main() {
       category: 'Technology',
       clubId: 'fcode',
       clubName: 'CLB F-Code',
-      date: '28/10/2026',
+      date: '28/11/2026',
       time: '13:30 - 17:30',
       location: 'Hội trường Trịnh Công Sơn',
       capacity: 100,
@@ -528,4 +528,76 @@ void main() {
 
     authVM.dispose();
   });
+  test('EventModel.isPast and isRegistrationOpen accurately track expiration based on current runtime date', () {
+    const pastEvent = EventModel(
+      id: 'EVT-PAST',
+      title: 'Past Event',
+      description: 'Already finished',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '28/10/2026',
+      time: '13:30 - 17:30',
+      location: 'Halls',
+      capacity: 100,
+      registeredCount: 10,
+      bannerUrl: '',
+    );
+    expect(pastEvent.isPast, isTrue);
+    expect(pastEvent.isRegistrationOpen, isFalse);
+
+    const futureEvent = EventModel(
+      id: 'EVT-FUTURE',
+      title: 'Future Event',
+      description: 'Upcoming',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '28/11/2026',
+      time: '13:30 - 17:30',
+      location: 'Halls',
+      capacity: 100,
+      registeredCount: 10,
+      bannerUrl: '',
+    );
+    expect(futureEvent.isPast, isFalse);
+    expect(futureEvent.isRegistrationOpen, isTrue);
+  });
+
+  test('FirestoreService blocks registration for past events (BR-004)', () async {
+    final firestoreService = FirestoreService(null);
+    const pastEvent = EventModel(
+      id: 'EVT-PAST-2',
+      title: 'Past Event 2',
+      description: 'Already finished',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '28/10/2026',
+      time: '13:30 - 17:30',
+      location: 'Halls',
+      capacity: 100,
+      registeredCount: 10,
+      bannerUrl: '',
+    );
+    const user = UserModel(
+      id: 'student_tester_02',
+      name: 'Nguyen Van Test',
+      email: 'test2@fpt.edu.vn',
+      avatarUrl: '',
+      major: 'Software Engineering',
+      role: 'student',
+      activityPoints: 0,
+    );
+
+    expect(
+      () => firestoreService.registerForEvent(event: pastEvent, user: user),
+      throwsA(isA<Exception>().having(
+        (e) => e.toString(),
+        'message',
+        contains('Sự kiện đã kết thúc, không thể đăng ký tham gia'),
+      )),
+    );
+  });
+
 }
