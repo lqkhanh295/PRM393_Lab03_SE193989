@@ -444,7 +444,11 @@ service cloud.firestore {
           (
             isOwner(userId) &&
             request.resource.data.role == resource.data.role &&
-            areImmutableFieldsUnchanged(['id', 'email', 'createdAt', 'activityPoints'])
+            areImmutableFieldsUnchanged(['id', 'email', 'createdAt']) &&
+            (
+              request.resource.data.activityPoints == resource.data.activityPoints ||
+              request.resource.data.activityPoints == resource.data.activityPoints + 5
+            )
           ) ||
           (isStaffOrAdmin() && areImmutableFieldsUnchanged(['role'])) ||
           isAdmin()
@@ -526,7 +530,11 @@ service cloud.firestore {
       allow read: if isAuthenticated() &&
         (resource.data.userId == request.auth.uid || isStaffOrAdmin());
 
-      allow create, update: if isStaffOrAdmin() &&
+      allow create: if isAuthenticated() &&
+        isValidCertificate(request.resource.data) &&
+        (request.resource.data.userId == request.auth.uid || isStaffOrAdmin());
+
+      allow update: if isStaffOrAdmin() &&
         isValidCertificate(request.resource.data);
 
       allow delete: if isStaffOrAdmin();

@@ -583,8 +583,10 @@ class FirestoreService {
     }
   }
 
-  /// User Certificates from Cloud Firestore
+  /// User Certificates from Cloud Firestore with auto-issuance for checked-in events
   Future<List<CertificateModel>> getUserCertificates(String userId) async {
+    final List<CertificateModel> result = [];
+
     try {
       if (_firestore != null) {
         final snap = await _firestore
@@ -592,17 +594,84 @@ class FirestoreService {
             .where('userId', isEqualTo: userId)
             .get();
         if (snap.docs.isNotEmpty) {
-          final list = snap.docs
+          final liveList = snap.docs
               .map((d) => CertificateModel.fromMap(d.data(), d.id))
               .toList();
-          return list;
+          for (final c in liveList) {
+            final idx = _cachedCertificates.indexWhere((old) => old.id == c.id);
+            if (idx >= 0) {
+              _cachedCertificates[idx] = c;
+            } else {
+              _cachedCertificates.insert(0, c);
+            }
+          }
+          result.addAll(liveList);
         }
       }
     } catch (e) {
       debugPrint('[FirestoreService] getUserCertificates cloud error: $e');
     }
 
-    return _cachedCertificates.where((c) => c.userId == userId).toList();
+    // Merge cached certificates for this user
+    for (final c in _cachedCertificates) {
+      if (c.userId == userId && !result.any((r) => r.id == c.id || r.eventId == c.eventId)) {
+        result.add(c);
+      }
+    }
+
+    // Auto-generate e-Certificate for any checked-in event tickets belonging to this student
+    final userTickets = await getUserTickets(userId);
+    for (final ticket in userTickets) {
+      if (ticket.isCheckedIn && !result.any((c) => c.eventId == ticket.eventId)) {
+        final certId = 'CERT-${ticket.id}';
+        final newCert = CertificateModel(
+          id: certId,
+          eventId: ticket.eventId,
+          eventTitle: ticket.eventTitle,
+          userId: userId,
+          studentName: ticket.studentName,
+          issueDate: ticket.eventDate.isNotEmpty ? ticket.eventDate : '28/10/2026',
+          verificationHash: 'HASH-FPTU-${ticket.id}',
+          downloadUrl: '',
+        );
+        result.add(newCert);
+        // Persist to Cloud Firestore and cache
+        saveCertificate(newCert);
+      }
+    }
+
+    return result;
+  }
+
+  /// Real-time stream of user certificates directly from Cloud Firestore (BR-004, BR-005)
+  Stream<List<CertificateModel>> streamUserCertificates(String userId) {
+    if (_firestore == null) {
+      return Stream.value(_cachedCertificates.where((c) => c.userId == userId).toList());
+    }
+    return _firestore
+        .collection('certificates')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snap) {
+          final liveList = snap.docs
+              .map((d) => CertificateModel.fromMap(d.data(), d.id))
+              .toList();
+          for (final c in liveList) {
+            final idx = _cachedCertificates.indexWhere((old) => old.id == c.id);
+            if (idx >= 0) {
+              _cachedCertificates[idx] = c;
+            } else {
+              _cachedCertificates.insert(0, c);
+            }
+          }
+          final merged = List<CertificateModel>.from(liveList);
+          for (final c in _cachedCertificates) {
+            if (c.userId == userId && !merged.any((m) => m.id == c.id)) {
+              merged.add(c);
+            }
+          }
+          return merged;
+        });
   }
 
   /// Save Certificate to Cloud Firestore
@@ -610,11 +679,18 @@ class FirestoreService {
     try {
       if (_firestore != null) {
         await _firestore.collection('certificates').doc(cert.id).set(cert.toMap());
+        debugPrint('[FirestoreService] Real Certificate saved to Firestore: ${cert.id}');
       }
     } catch (e) {
       debugPrint('[FirestoreService] saveCertificate error: $e');
     }
-    _cachedCertificates.insert(0, cert);
+    final idx = _cachedCertificates.indexWhere((c) => c.id == cert.id);
+    if (idx >= 0) {
+      _cachedCertificates[idx] = cert;
+    } else {
+      _cachedCertificates.insert(0, cert);
+    }
+    certificatesNotifier.value++;
   }
 
   /// Submit Real Event Feedback & Grant Activity Points

@@ -31,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final user = authVM.currentUser;
       if (user != null && mounted) {
         context.read<ProfileViewModel>().loadProfileCertificates(user.id);
-        context.read<ProfileViewModel>().loadFollowedClubs(user.followedClubs);
       }
     });
   }
@@ -58,10 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           await auth.refreshProfile();
           final u = auth.currentUser;
           if (u != null && mounted) {
-            await Future.wait([
-              prof.loadProfileCertificates(u.id),
-              prof.loadFollowedClubs(u.followedClubs),
-            ]);
+            await prof.loadProfileCertificates(u.id);
           }
         },
         child: SingleChildScrollView(
@@ -630,133 +626,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-
-            // Câu lạc bộ đang theo dõi
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: AppTheme.surface,
-                borderRadius: BorderRadius.circular(AppTheme.radiusCard),
-                border: Border.all(color: AppTheme.hairline, width: 1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surfaceSubtle,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: AppTheme.hairline,
-                            width: 1,
-                          ),
-                        ),
-                        child: const Text(
-                          'CLB ĐANG THEO DÕI',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppTheme.obsidian,
-                            letterSpacing: 0.6,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        '${profileVM.followedClubs.length} CLB',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  if (profileVM.followedClubs.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        'Bạn chưa theo dõi câu lạc bộ nào.',
-                        style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
-                      ),
-                    )
-                  else
-                    ...profileVM.followedClubs.map((club) => Column(
-                      children: [
-                        ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: SizedBox(
-                              width: 40,
-                              height: 40,
-                              child: (club.logoUrl.trim().isNotEmpty && club.logoUrl.trim().startsWith('http'))
-                                  ? Image.network(
-                                      club.logoUrl.trim(),
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) => Container(
-                                        color: AppTheme.surfaceSubtle,
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                            color: AppTheme.obsidian,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      color: AppTheme.surfaceSubtle,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        (club.acronym ?? club.name).characters.take(3).toString().toUpperCase(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: AppTheme.obsidian,
-                                        ),
-                                      ),
-                                    ),
-                            ),
-                          ),
-                          title: Text(
-                            club.name,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          subtitle: Text(
-                            '${club.followerCount} người theo dõi · ${club.category}',
-                            style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
-                          ),
-                          trailing: const Icon(
-                            Icons.check_circle_rounded,
-                            size: 18,
-                            color: AppTheme.primary,
-                          ),
-                        ),
-                        if (club != profileVM.followedClubs.last)
-                          const Divider(
-                            height: 1,
-                            thickness: 1,
-                            color: AppTheme.hairline,
-                          ),
-                      ],
-                    )),
                 ],
               ),
             ),

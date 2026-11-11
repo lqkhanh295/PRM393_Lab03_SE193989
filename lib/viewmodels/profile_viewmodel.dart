@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../models/screen_state.dart';
@@ -43,6 +44,9 @@ class ProfileViewModel extends ChangeNotifier {
   String? _statusMessage;
   String? get statusMessage => _statusMessage;
 
+  StreamSubscription<List<CertificateModel>>? _certSubscription;
+  String? _subscribedUserId;
+
   ProfileViewModel({
     required FirestoreService firestoreService,
     required StorageService storageService,
@@ -57,9 +61,20 @@ class ProfileViewModel extends ChangeNotifier {
        _crashlyticsService = crashlyticsService,
        _fcmService = fcmService,
        _analyticsService = analyticsService,
-       _pdfExportService = pdfExportService;
+       _pdfExportService = pdfExportService {
+    _firestoreService.certificatesNotifier.addListener(_onCertificatesChanged);
+  }
+
+  void _onCertificatesChanged() {
+    if (_subscribedUserId != null) {
+      _refreshCertificatesSilently(_subscribedUserId!);
+    }
+  }
 
   Future<void> loadProfileCertificates(String userId) async {
+    _subscribedUserId = userId;
+    _certSubscription?.cancel();
+
     _certificatesState = const StateLoading();
     notifyListeners();
 
@@ -71,6 +86,33 @@ class ProfileViewModel extends ChangeNotifier {
       _certificatesState = StateError('Lỗi tải chứng nhận: $e');
       notifyListeners();
     }
+
+    _certSubscription = _firestoreService.streamUserCertificates(userId).listen(
+      (liveList) {
+        _certificatesState = StateData(liveList);
+        notifyListeners();
+      },
+      onError: (err) {
+        debugPrint('[ProfileViewModel] stream cert error: $err');
+      },
+    );
+  }
+
+  Future<void> _refreshCertificatesSilently(String userId) async {
+    try {
+      final certs = await _firestoreService.getUserCertificates(userId);
+      _certificatesState = StateData(certs);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('[ProfileViewModel] silent cert error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _certSubscription?.cancel();
+    _firestoreService.certificatesNotifier.removeListener(_onCertificatesChanged);
+    super.dispose();
   }
 
   /// Load clubs followed by the active student directly from Cloud Firestore
