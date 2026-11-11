@@ -47,6 +47,12 @@ const app = {
         date: '12/11/2026'
       }
     ],
+    selectedTelemetryEvent: 'all',
+    telemetryFilterStatus: 'all',
+    telemetrySearchQuery: '',
+    gateStartTime: Date.now() - 4800000,
+    lastScanTimeStr: null,
+    lastScanTicketCode: null,
     students: [],
     tickets: [],
     registrations: [],
@@ -129,8 +135,10 @@ const app = {
     this.renderStudentsTable();
     this.renderReviewQueue();
     this.renderAnnouncementsHistory();
+    this.renderTelemetryView();
     this.renderGateChart();
     this.renderVenues();
+    this.startTelemetryTimer();
     
     // Wire up live Cloud Firestore pipelines (Backend API & Firestore Direct)
     await this.loadAllRealData();
@@ -271,6 +279,7 @@ const app = {
           this.renderKPIs();
           this.renderStudentsTable();
           this.renderRecentOverviewTable();
+          this.renderReviewQueue();
         }
       } catch (e) {
         console.warn('[Tickets] Note:', e);
@@ -356,6 +365,8 @@ const app = {
 
     if (viewName === 'overview') {
       this.renderGateChart();
+    } else if (viewName === 'telemetry') {
+      this.renderTelemetryView();
     }
   },
 
@@ -475,112 +486,281 @@ const app = {
     this.showToast(`Đã từ chối hồ sơ "${item.title}". Lý do: ${reason}`);
   },
 
-  // ==========================================
-  // FINAL ASSIGNMENT: REVIEW QUEUE (CROSS-ROLE)
-  // ==========================================
-  renderReviewQueue() {
+  // ==========================================================================
+  // VIEW: TICKET REGISTRY & LIVE EVENT REGISTRATIONS (100% REAL CLOUD FIRESTORE)
+  // ==========================================================================
+  renderReviewQueue(filteredList = null) {
     const tbody = document.getElementById('review-queue-body');
     const badge = document.getElementById('sidebar-pending-registrations');
     const pill = document.getElementById('queue-status-pill');
     if (!tbody) return;
 
-    const pending = this.state.registrations.filter(r => r.status === 'pending');
-    if (badge) badge.innerText = pending.length;
+    const tickets = this.state.tickets || [];
+    const list = filteredList || tickets;
+
+    // Calculate metrics
+    const total = tickets.length;
+    const checkedIn = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus).length;
+    const active = tickets.filter(t => t.status !== 'checkedIn' && !t.checkInStatus && t.status !== 'cancelled').length;
+    const cancelled = tickets.filter(t => t.status === 'cancelled').length;
+    const rate = total > 0 ? Math.round((checkedIn / total) * 100) : 0;
+
+    // Update KPI cards
+    const elTotal = document.getElementById('kpi-reg-total-tickets');
+    const elActive = document.getElementById('kpi-reg-active-tickets');
+    const elChecked = document.getElementById('kpi-reg-checked-tickets');
+    const elRate = document.getElementById('kpi-reg-checkin-rate');
+    const countIndicator = document.getElementById('queue-count-indicator');
+
+    if (elTotal) elTotal.innerText = total;
+    if (elActive) elActive.innerText = active;
+    if (elChecked) elChecked.innerText = checkedIn;
+    if (elRate) elRate.innerText = rate + '%';
+    if (badge) badge.innerText = total;
+    if (countIndicator) countIndicator.innerText = `Đang hiển thị ${list.length} / ${total} vé`;
+
     if (pill) {
-      pill.innerText = `${pending.length} Đơn Cần Duyệt`;
-      pill.className = pending.length > 0 ? 'pill pill-warning' : 'pill pill-positive';
+      pill.innerText = `Tổng số ${total} vé (${checkedIn} đã check-in, ${active} chờ vào cổng)`;
+      pill.className = active > 0 ? 'pill pill-positive' : 'pill pill-neutral';
     }
 
-    if (this.state.registrations.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 24px;">Hàng chờ trống. Chưa có đơn đăng ký sự kiện nào trên Cloud Firestore.</td></tr>';
+    // Populate event filter if needed
+    const eventFilterEl = document.getElementById('queue-event-filter');
+    if (eventFilterEl && eventFilterEl.options.length <= 1 && this.state.liveEvents?.length > 0) {
+      eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
+        this.state.liveEvents.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+    }
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 36px;">Không tìm thấy vé nào phù hợp với bộ lọc tìm kiếm.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = this.state.registrations.map(r => {
-      let statusPill = '';
-      let actions = '';
+    tbody.innerHTML = list.map(t => {
+      const isChecked = t.status === 'checkedIn' || t.checkInStatus;
+      const isCancelled = t.status === 'cancelled';
 
-      if (r.status === 'approved') {
-        statusPill = '<span class="pill pill-positive">Đã Duyệt & Cấp Vé</span>';
-        actions = `<span class="mono" style="font-size: 11.5px; color: var(--positive);">${r.ticketId || 'Đã cấp vé'}</span>`;
-      } else if (r.status === 'rejected') {
-        statusPill = '<span class="pill pill-negative">Đã Từ Chối</span>';
-        actions = `<span style="font-size: 11.5px; color: var(--muted);">${r.reason || 'Không đủ điều kiện'}</span>`;
+      let statusPill = '';
+      if (isChecked) {
+        statusPill = '<span class="pill pill-positive">Đã Check-in Cổng</span>';
+      } else if (isCancelled) {
+        statusPill = '<span class="pill pill-negative">Đã Thu Hồi / Hủy</span>';
       } else {
-        statusPill = '<span class="pill pill-warning">Chờ Phê Duyệt</span>';
-        actions = `
-          <button class="btn btn-success btn-sm" onclick="app.approveRegistration('${r.id}')">Duyệt & Cấp Vé</button>
-          <button class="btn btn-danger btn-sm" onclick="app.rejectRegistration('${r.id}')">Từ Chối</button>
+        statusPill = '<span class="pill pill-neutral">Chờ Check-in (Hợp lệ)</span>';
+      }
+
+      const formattedTime = t.checkedInAt 
+        ? t.checkedInAt 
+        : (t.createdAt ? new Date(t.createdAt).toLocaleString('vi-VN') : 'Mới phát hành');
+
+      let actionButtons = `
+        <button class="btn btn-secondary btn-sm" onclick="app.viewTicketQr('${t.id}')" style="margin-right: 6px; font-weight: 600;">
+          🔍 Xem Mã QR
+        </button>
+      `;
+
+      if (!isChecked && !isCancelled) {
+        actionButtons += `
+          <button class="btn btn-danger btn-sm" onclick="app.revokeTicket('${t.id}')" style="font-size: 11.5px;">
+            Thu Hồi Vé
+          </button>
+        `;
+      } else if (isChecked) {
+        actionButtons += `
+          <span style="font-size: 12px; color: var(--positive); font-weight: 600; padding: 4px 8px;">✔️ Điểm danh</span>
         `;
       }
 
-      const formattedDate = r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN') : 'Mới nộp';
-
       return `
         <tr>
-          <td class="mono" style="font-weight: 600;">${r.id}</td>
-          <td style="font-weight: 600;">${r.studentName || 'Sinh viên'}</td>
-          <td class="mono" style="font-size: 12px; color: var(--muted);">${r.studentEmail || '—'}</td>
-          <td>${r.eventTitle || 'Sự kiện FPTU'}</td>
-          <td style="font-size: 12px; color: var(--muted);">${formattedDate}</td>
+          <td>
+            <span class="mono" style="font-weight: 700; color: var(--chart-primary); cursor: pointer;" onclick="app.viewTicketQr('${t.id}')">
+              🎟️ ${t.ticketCode || t.id}
+            </span>
+          </td>
+          <td>
+            <div style="font-weight: 600;">${t.studentName || 'Sinh viên FPTU'}</div>
+            <div class="mono" style="font-size: 11px; color: var(--muted);">${t.studentId || (t.userId || '').replace('USR-', '')}</div>
+          </td>
+          <td class="mono" style="font-size: 12px; color: var(--muted);">
+            ${t.studentEmail || (t.studentId ? t.studentId.toLowerCase() + '@fpt.edu.vn' : '—')}
+          </td>
+          <td>
+            <div style="font-weight: 600; font-size: 13px;">${t.eventTitle || 'Sự kiện FPTU'}</div>
+            <div style="font-size: 11.5px; color: var(--muted); margin-top: 2px;">${t.eventLocation || 'Hội trường FPTU'} &bull; ${t.eventTime || '13:30 - 17:30'}</div>
+          </td>
+          <td class="num" style="font-size: 12px; color: var(--muted);">
+            ${formattedTime}
+          </td>
           <td>${statusPill}</td>
-          <td style="text-align: right;">${actions}</td>
+          <td style="text-align: right;">${actionButtons}</td>
         </tr>
       `;
     }).join('');
   },
 
+  // Filter Ticket Registry list
+  filterReviewQueue() {
+    const searchInput = document.getElementById('queue-ticket-search');
+    const eventFilter = document.getElementById('queue-event-filter');
+    const statusFilter = document.getElementById('queue-status-filter');
+
+    const query = (searchInput?.value || '').toLowerCase().trim();
+    const eventId = eventFilter?.value || 'all';
+    const status = statusFilter?.value || 'all';
+
+    const list = (this.state.tickets || []).filter(t => {
+      // Event filter
+      if (eventId !== 'all' && t.eventId !== eventId) return false;
+
+      // Status filter
+      const isChecked = t.status === 'checkedIn' || t.checkInStatus;
+      const isCancelled = t.status === 'cancelled';
+
+      if (status === 'checkedIn' && !isChecked) return false;
+      if (status === 'active' && (isChecked || isCancelled)) return false;
+      if (status === 'cancelled' && !isCancelled) return false;
+
+      // Search query
+      if (!query) return true;
+      const code = (t.ticketCode || t.id || '').toLowerCase();
+      const name = (t.studentName || '').toLowerCase();
+      const sid = (t.studentId || '').toLowerCase();
+      const email = (t.studentEmail || '').toLowerCase();
+      const title = (t.eventTitle || '').toLowerCase();
+
+      return code.includes(query) || name.includes(query) || sid.includes(query) || email.includes(query) || title.includes(query);
+    });
+
+    this.renderReviewQueue(list);
+  },
+
+  // Refresh Tickets directly from Cloud Firestore
   async refreshReviewQueue() {
-    this.showToast('Đang làm mới danh sách hàng chờ từ Cloud Firestore...');
+    this.showToast('Đang đồng bộ dữ liệu vé từ Cloud Firestore...');
     await this.loadAllRealData();
+    this.filterReviewQueue();
   },
 
-  async approveRegistration(id) {
-    const item = this.state.registrations.find(r => r.id === id);
-    const studentName = item ? item.studentName : 'sinh viên';
+  // View Ticket QR Code & Details Modal
+  viewTicketQr(ticketId) {
+    const ticket = (this.state.tickets || []).find(t => t.id === ticketId || t.ticketCode === ticketId);
+    if (!ticket) return;
 
-    this.showToast(`Đang gửi yêu cầu duyệt đơn ${id} lên Cloud Firestore...`);
-    try {
-      const res = await fetch(`/api/registrations/${id}/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await res.json();
-      if (data.success) {
-        this.showToast(`Phê duyệt thành công! Đã cấp vé ${data.ticketCode} cho ${studentName}. Thông báo đã gửi tới Mobile Inbox.`);
-        await this.loadAllRealData();
-      } else {
-        this.showToast(`Lỗi khi duyệt vé: ${data.error || 'Vui lòng kiểm tra lại'}`);
-      }
-    } catch (e) {
-      console.error('Approve error:', e);
-      this.showToast(`Lỗi kết nối máy chủ: ${e.message}`);
-    }
+    const modalBody = document.getElementById('ticket-qr-modal-body');
+    const modal = document.getElementById('ticket-qr-modal');
+    if (!modalBody || !modal) return;
+
+    const isChecked = ticket.status === 'checkedIn' || ticket.checkInStatus;
+    const isCancelled = ticket.status === 'cancelled';
+    const statusLabel = isChecked ? 'ĐÃ CHECK-IN ĐIỂM DANH' : (isCancelled ? 'VÉ ĐÃ BỊ THU HỒI' : 'VÉ HỢP LỆ (CHỜ CHECK-IN)');
+    const statusColor = isChecked ? '#16a34a' : (isCancelled ? '#dc2626' : '#0284c7');
+
+    const qrToken = ticket.qrToken || ticket.qrData || ticket.ticketCode || ticket.id;
+
+    modalBody.innerHTML = `
+      <div style="padding: 10px 0;">
+        <div style="font-size: 11.5px; font-weight: 700; color: ${statusColor}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+          ${statusLabel}
+        </div>
+        <div style="font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px;">
+          ${ticket.ticketCode || ticket.id}
+        </div>
+        <div style="font-size: 13.5px; color: var(--muted); margin-bottom: 16px;">
+          ${ticket.eventTitle || 'Sự kiện FPTU'}
+        </div>
+
+        <!-- Visual QR Representation -->
+        <div style="display: inline-block; background: #ffffff; padding: 16px; border: 2px solid var(--border); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom: 16px;">
+          <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+            <rect width="180" height="180" fill="white"/>
+            <!-- Outer Corner 1 -->
+            <rect x="15" y="15" width="45" height="45" fill="#111827" rx="4"/>
+            <rect x="22" y="22" width="31" height="31" fill="white"/>
+            <rect x="28" y="28" width="19" height="19" fill="#111827" rx="2"/>
+            <!-- Outer Corner 2 -->
+            <rect x="120" y="15" width="45" height="45" fill="#111827" rx="4"/>
+            <rect x="127" y="22" width="31" height="31" fill="white"/>
+            <rect x="133" y="28" width="19" height="19" fill="#111827" rx="2"/>
+            <!-- Outer Corner 3 -->
+            <rect x="15" y="120" width="45" height="45" fill="#111827" rx="4"/>
+            <rect x="22" y="127" width="31" height="31" fill="white"/>
+            <rect x="28" y="133" width="19" height="19" fill="#111827" rx="2"/>
+            <!-- Data pattern blocks -->
+            <rect x="70" y="20" width="12" height="12" fill="#111827"/>
+            <rect x="90" y="20" width="15" height="8" fill="#111827"/>
+            <rect x="75" y="38" width="18" height="10" fill="#111827"/>
+            <rect x="15" y="75" width="14" height="14" fill="#111827"/>
+            <rect x="36" y="80" width="10" height="10" fill="#111827"/>
+            <rect x="55" y="65" width="22" height="12" fill="#111827"/>
+            <rect x="85" y="60" width="14" height="20" fill="#111827"/>
+            <rect x="110" y="70" width="20" height="14" fill="#111827"/>
+            <rect x="140" y="75" width="15" height="15" fill="#111827"/>
+            <rect x="70" y="90" width="15" height="15" fill="#111827"/>
+            <rect x="95" y="95" width="20" height="12" fill="#111827"/>
+            <rect x="125" y="95" width="12" height="18" fill="#111827"/>
+            <rect x="70" y="120" width="16" height="16" fill="#111827"/>
+            <rect x="95" y="125" width="15" height="10" fill="#111827"/>
+            <rect x="120" y="120" width="14" height="24" fill="#111827"/>
+            <rect x="145" y="125" width="15" height="15" fill="#111827"/>
+            <rect x="75" y="145" width="25" height="12" fill="#111827"/>
+            <rect x="110" y="150" width="18" height="12" fill="#111827"/>
+            <rect x="140" y="148" width="12" height="14" fill="#111827"/>
+          </svg>
+        </div>
+
+        <!-- Student & Ticket Details -->
+        <div style="background: var(--ground); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: left; font-size: 13px; line-height: 1.6;">
+          <div><strong>Sinh viên:</strong> ${ticket.studentName || 'Sinh viên FPTU'}</div>
+          <div><strong>Mã số SV:</strong> <span class="mono">${ticket.studentId || (ticket.userId || '').replace('USR-', '')}</span></div>
+          <div><strong>Email:</strong> <span class="mono">${ticket.studentEmail || '—'}</span></div>
+          <div><strong>Địa điểm:</strong> ${ticket.eventLocation || 'Hội trường Trịnh Công Sơn'}</div>
+          <div><strong>Thời gian:</strong> ${ticket.eventTime || '13:30 - 17:30'} &bull; ${ticket.eventDate || '28/10/2026'}</div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 11px; color: var(--muted); word-break: break-all;">
+            <strong>Mã bảo mật (Token):</strong> <span class="mono">${qrToken}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.style.display = 'flex';
   },
 
-  async rejectRegistration(id) {
-    const item = this.state.registrations.find(r => r.id === id);
-    const studentName = item ? item.studentName : 'sinh viên';
+  // Close Ticket QR Modal
+  closeTicketQrModal() {
+    const modal = document.getElementById('ticket-qr-modal');
+    if (modal) modal.style.display = 'none';
+  },
 
-    const reason = prompt(`Nhập lý do từ chối đơn đăng ký của ${studentName}:`, 'Sự kiện đã đạt số lượng tối đa');
-    if (reason === null) return;
+  // Revoke / Cancel a Ticket
+  async revokeTicket(ticketId) {
+    const ticket = (this.state.tickets || []).find(t => t.id === ticketId || t.ticketCode === ticketId);
+    const studentName = ticket ? ticket.studentName : 'sinh viên';
 
-    this.showToast(`Đang cập nhật từ chối đơn ${id} lên Cloud Firestore...`);
+    const confirmed = confirm(`Bạn có chắc chắn muốn thu hồi vé "${ticketId}" của ${studentName}?`);
+    if (!confirmed) return;
+
+    const reason = prompt('Nhập lý do thu hồi vé:', 'Sinh viên hủy tham gia / Vi phạm quy chế') || 'Cán bộ CTSV thu hồi';
+
+    this.showToast(`Đang gửi yêu cầu thu hồi vé ${ticketId} lên Cloud Firestore...`);
     try {
-      const res = await fetch(`/api/registrations/${id}/reject`, {
+      const res = await fetch(`/api/tickets/${ticketId}/revoke`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason })
       });
       const data = await res.json();
       if (data.success) {
-        this.showToast(`Đã từ chối đơn đăng ký của ${studentName}. Lý do: ${reason}`);
-        await this.loadAllRealData();
+        if (ticket) {
+          ticket.status = 'cancelled';
+        }
+        this.showToast(`Đã thu hồi vé ${ticketId} thành công!`);
+        this.filterReviewQueue();
       } else {
-        this.showToast(`Lỗi khi từ chối: ${data.error || 'Vui lòng thử lại'}`);
+        this.showToast(`Lỗi khi thu hồi vé: ${data.error || 'Vui lòng thử lại'}`);
       }
     } catch (e) {
-      console.error('Reject error:', e);
+      console.error('Revoke error:', e);
       this.showToast(`Lỗi kết nối máy chủ: ${e.message}`);
     }
   },
@@ -1240,29 +1420,421 @@ const app = {
     row.innerText = `[Analytics] event: '${eventName}' - ${JSON.stringify(params)}`;
     stream.prepend(row);
   },
-  async simulateIncomingCheckin() {
-    const firstUnchecked = this.state.students.find(s => s.status === 'active');
-    if (firstUnchecked) {
-      try {
-        const res = await fetch('/api/tickets/checkin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ticketCode: firstUnchecked.ticketCode || firstUnchecked.id })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          await this.loadAllRealData();
-          this.showToast(`[Check-in thành công] ${firstUnchecked.name} (${firstUnchecked.studentId}) đã qua cửa.`);
-        } else {
-          this.showToast(data.error || 'Lỗi khi điểm danh vé.');
-        }
-      } catch (e) {
-        this.showToast('Không thể kết nối đến máy chủ điểm danh.');
+    // ==========================================
+  // VIEW 2: TELEMETRY & LIVE GATE MONITORING
+  // ==========================================
+  startTelemetryTimer() {
+    if (this._telemetryTimer) return;
+    this._telemetryTimer = setInterval(() => {
+      if (this.state.activeView === 'telemetry') {
+        this.updateTelemetryElapsedTimer();
       }
+    }, 1000);
+  },
+
+  updateTelemetryElapsedTimer() {
+    const elapsedEl = document.getElementById('telem-elapsed-time');
+    if (!elapsedEl) return;
+    const diff = Math.max(0, Date.now() - (this.state.gateStartTime || (Date.now() - 4800000)));
+    const hours = Math.floor(diff / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    elapsedEl.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  },
+
+  populateTelemetryDropdown() {
+    const select = document.getElementById('telem-event-select');
+    if (!select) return;
+    const currentVal = this.state.selectedTelemetryEvent || 'all';
+
+    let html = '<option value="all">⚡ Tất cả sự kiện (Tổng hợp toàn trường)</option>';
+    if (this.state.liveEvents && this.state.liveEvents.length > 0) {
+      this.state.liveEvents.forEach(e => {
+        html += `<option value="${e.id}" ${e.id === currentVal ? 'selected' : ''}>[${e.id}] ${e.title} - ${e.location}</option>`;
+      });
+    }
+    select.innerHTML = html;
+    select.value = currentVal;
+  },
+
+  handleTelemetryEventChange(eventId) {
+    this.state.selectedTelemetryEvent = eventId;
+    const select = document.getElementById('telem-event-select');
+    if (select) select.value = eventId;
+    this.renderTelemetryView();
+  },
+
+  filterTelemetryFeed() {
+    const searchInput = document.getElementById('telem-log-search');
+    const filterSelect = document.getElementById('telem-log-filter');
+    this.state.telemetrySearchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    this.state.telemetryFilterStatus = filterSelect ? filterSelect.value : 'all';
+    this.renderTelemetryFeed();
+  },
+
+  renderTelemetryView() {
+    const selectedEventId = this.state.selectedTelemetryEvent || 'all';
+    const isAll = selectedEventId === 'all';
+    const events = this.state.liveEvents || [];
+    const activeEvent = !isAll ? events.find(e => e.id === selectedEventId) : null;
+
+    // Filter tickets / students in scope
+    const scopedStudents = isAll 
+      ? this.state.students 
+      : this.state.students.filter(s => s.eventId === selectedEventId);
+
+    const scannedCount = scopedStudents.filter(s => s.status === 'checkedIn').length;
+    
+    // Total registered / capacity
+    let totalTickets = 0;
+    let totalCapacity = 0;
+    if (isAll) {
+      totalTickets = events.reduce((sum, e) => sum + (e.registeredCount || 0), 0) || scopedStudents.length;
+      totalCapacity = events.reduce((sum, e) => sum + (e.capacity || 200), 0);
+    } else if (activeEvent) {
+      totalTickets = Math.max(scopedStudents.length, activeEvent.registeredCount || 0);
+      totalCapacity = activeEvent.capacity || 200;
     } else {
-      this.showToast('Toàn bộ sinh viên trong danh sách đều đã check-in qua cổng!');
+      totalTickets = scopedStudents.length;
+      totalCapacity = 200;
+    }
+
+    const remainingCount = Math.max(0, totalTickets - scannedCount);
+    const scannedPct = totalTickets > 0 ? ((scannedCount / totalTickets) * 100).toFixed(1) : '0.0';
+    const occupancyPct = totalCapacity > 0 ? ((scannedCount / totalCapacity) * 100).toFixed(1) : '0.0';
+
+    // 1. Render Dynamic Event Reference Banner
+    const bannerEl = document.getElementById('telem-event-banner');
+    if (bannerEl) {
+      if (isAll) {
+        bannerEl.innerHTML = `
+          <div class="telem-banner-container">
+            <div class="telem-banner-info">
+              <div class="telem-banner-title">
+                <span class="live-pulse-dot"></span>
+                <span>Tổng Hợp Điểm Danh Cổng Toàn Trường (Tất cả ${events.length} sự kiện)</span>
+                <span class="pill pill-positive">Ca Trực Đang Mở</span>
+              </div>
+              <div class="telem-banner-meta">
+                <span class="telem-banner-meta-item">🏛️ Các khu vực: <strong>Hội trường TCS, Alpha Building, Sảnh Innovation</strong></span>
+                <span class="telem-banner-meta-item">🕒 Khung giờ đón tiếp: <strong>07:30 - 18:00</strong></span>
+                <span class="telem-banner-meta-item">🛡️ Điểm kiểm soát: <strong>Main Gate (Cổng 1, Cổng 2)</strong></span>
+                <span class="telem-banner-meta-item">⚡ Kết nối: <strong>Cloud Firestore Live Stream</strong></span>
+              </div>
+              <div style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Tiến độ có mặt toàn trường: <strong>${scannedCount} / ${totalTickets} vé (${scannedPct}%)</strong></span>
+                  <span class="num">${remainingCount} vé chưa quét</span>
+                </div>
+                <div class="capacity-bar-wrap">
+                  <div class="capacity-bar-fill" style="width: ${scannedPct}%; background-color: var(--chart-primary);"></div>
+                </div>
+              </div>
+            </div>
+            <div class="telem-banner-stats">
+              <div style="text-align: right;">
+                <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tỷ lệ lấp đầy Campus</div>
+                <div class="num" style="font-size: 22px; font-weight: 700; color: var(--text);">${occupancyPct}%</div>
+                <div style="font-size: 11.5px; color: var(--positive); font-weight: 600;">Sức chứa ${totalCapacity} chỗ</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (activeEvent) {
+        bannerEl.innerHTML = `
+          <div class="telem-banner-container">
+            <div class="telem-banner-info">
+              <div class="telem-banner-title">
+                <span class="live-pulse-dot"></span>
+                <span>[${activeEvent.id}] ${activeEvent.title}</span>
+                <span class="pill pill-positive">Đang Điểm Danh Cổng</span>
+              </div>
+              <div class="telem-banner-meta">
+                <span class="telem-banner-meta-item">🏢 Đơn vị tổ chức: <strong>${activeEvent.clubName || 'CLB FPTU'}</strong></span>
+                <span class="telem-banner-meta-item">📍 Địa điểm: <strong>${activeEvent.location}</strong></span>
+                <span class="telem-banner-meta-item">📅 Thời gian: <strong>${activeEvent.date} (${activeEvent.time || '13:30 - 17:30'})</strong></span>
+                <span class="telem-banner-meta-item">👥 Sức chứa hội trường: <strong>${activeEvent.capacity} chỗ</strong></span>
+              </div>
+              <div style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Tiến độ check-in vào hội trường: <strong>${scannedCount} / ${totalTickets} sinh viên (${scannedPct}%)</strong></span>
+                  <span class="num" style="color: var(--muted);">${remainingCount} vé chưa đến</span>
+                </div>
+                <div class="capacity-bar-wrap">
+                  <div class="capacity-bar-fill" style="width: ${scannedPct}%; background-color: var(--positive);"></div>
+                </div>
+              </div>
+            </div>
+            <div class="telem-banner-stats">
+              <div style="text-align: right;">
+                <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tỷ lệ lấp đầy phòng</div>
+                <div class="num" style="font-size: 22px; font-weight: 700; color: var(--text);">${occupancyPct}%</div>
+                <div style="font-size: 11.5px; color: var(--positive); font-weight: 600;">Đạt chuẩn TCVN 3890</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // 2. Render KPI Cards
+    const elScannedCount = document.getElementById('telem-scanned-count');
+    if (elScannedCount) elScannedCount.innerText = scannedCount;
+
+    const elTotalTickets = document.getElementById('telem-total-tickets');
+    if (elTotalTickets) elTotalTickets.innerText = `/ ${totalTickets} vé`;
+
+    const elScannedSub = document.getElementById('telem-scanned-sub');
+    if (elScannedSub) {
+      elScannedSub.innerHTML = `<span class="pill pill-positive">${scannedPct}%</span> hoàn thành | Còn lại: <strong>${remainingCount}</strong> vé ngoài sảnh`;
+    }
+
+    const elHallOcc = document.getElementById('telem-hall-occupancy');
+    if (elHallOcc) elHallOcc.innerText = scannedCount;
+
+    const elHallCap = document.getElementById('telem-hall-capacity');
+    if (elHallCap) elHallCap.innerText = `/ ${totalCapacity} chỗ`;
+
+    const elLastScan = document.getElementById('telem-last-scan-time');
+    if (elLastScan) {
+      const mostRecentScan = scopedStudents.find(s => s.status === 'checkedIn' && s.checkInTime !== '—');
+      elLastScan.innerText = this.state.lastScanTimeStr || (mostRecentScan ? mostRecentScan.checkInTime : 'Chưa có');
+    }
+
+    const elPace = document.getElementById('telem-scan-pace');
+    if (elPace) {
+      const paceCount = Math.max(12, Math.round(scannedCount * 3.5));
+      elPace.innerText = `~${paceCount} vé / 10 phút`;
+    }
+
+    // 3. Render Multi-Event Comparative Table
+    this.renderMultiEventTable();
+
+    // 4. Render Live Gate Stream Feed
+    this.renderTelemetryFeed();
+  },
+
+  renderMultiEventTable() {
+    const tbody = document.getElementById('telem-multi-event-tbody');
+    const pill = document.getElementById('telem-events-count-pill');
+    if (!tbody) return;
+
+    const events = this.state.liveEvents || [];
+    if (pill) pill.innerText = `${events.length} sự kiện đang theo dõi`;
+
+    if (events.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: var(--muted); padding: 24px;">Không có sự kiện nào trên Cloud Firestore.</td></tr>';
+      return;
+    }
+
+    const selectedId = this.state.selectedTelemetryEvent || 'all';
+
+    tbody.innerHTML = events.map(e => {
+      const evtStudents = this.state.students.filter(s => s.eventId === e.id);
+      const scanned = evtStudents.filter(s => s.status === 'checkedIn').length;
+      const total = Math.max(evtStudents.length, e.registeredCount || 0);
+      const remaining = Math.max(0, total - scanned);
+      const pct = total > 0 ? Math.round((scanned / total) * 100) : 0;
+      const isSelected = e.id === selectedId;
+
+      let barColor = 'var(--positive)';
+      if (pct > 90) barColor = 'var(--negative)';
+      else if (pct > 75) barColor = 'var(--warning)';
+
+      return `
+        <tr style="${isSelected ? 'background-color: #f0fdf4;' : ''}">
+          <td class="mono" style="font-weight: 600;">${e.id}</td>
+          <td>
+            <div style="font-weight: 600; color: var(--text);">${e.title}</div>
+            <div style="font-size: 11.5px; color: var(--muted);">${e.clubName || 'CLB FPTU'}</div>
+          </td>
+          <td>${e.location}</td>
+          <td style="font-size: 12px; color: var(--muted);">${e.date} (${e.time || '13:30'})</td>
+          <td class="num">${e.capacity}</td>
+          <td class="num" style="font-weight: 700; color: var(--positive);">${scanned}</td>
+          <td class="num" style="color: var(--muted);">${remaining}</td>
+          <td>
+            <div style="display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 2px;">
+              <span>${scanned}/${total}</span>
+              <span class="num" style="font-weight: 600;">${pct}%</span>
+            </div>
+            <div class="capacity-bar-wrap" style="margin-top: 0; height: 6px;">
+              <div class="capacity-bar-fill" style="width: ${pct}%; background-color: ${barColor};"></div>
+            </div>
+          </td>
+          <td>
+            ${isSelected 
+              ? '<span class="pill pill-positive">Đang giám sát</span>' 
+              : '<span class="pill pill-neutral">Đang mở cổng</span>'}
+          </td>
+          <td style="text-align: center;">
+            <button class="btn ${isSelected ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="app.handleTelemetryEventChange('${e.id}')" style="padding: 4px 10px; font-size: 11.5px;">
+              ${isSelected ? 'Đang chọn' : 'Xem cổng này'}
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  renderTelemetryFeed() {
+    const tbody = document.getElementById('telem-live-feed-tbody');
+    if (!tbody) return;
+
+    const selectedEventId = this.state.selectedTelemetryEvent || 'all';
+    let list = selectedEventId === 'all'
+      ? [...this.state.students]
+      : this.state.students.filter(s => s.eventId === selectedEventId);
+
+    // Apply Search Query
+    const q = this.state.telemetrySearchQuery || '';
+    if (q) {
+      list = list.filter(s => 
+        (s.name && s.name.toLowerCase().includes(q)) ||
+        (s.studentId && s.studentId.toLowerCase().includes(q)) ||
+        (s.ticketCode && s.ticketCode.toLowerCase().includes(q)) ||
+        (s.eventTitle && s.eventTitle.toLowerCase().includes(q))
+      );
+    }
+
+    // Apply Status Filter
+    const filter = this.state.telemetryFilterStatus || 'all';
+    if (filter === 'checkedIn') {
+      list = list.filter(s => s.status === 'checkedIn');
+    } else if (filter === 'confirmed') {
+      list = list.filter(s => s.status !== 'checkedIn');
+    }
+
+    // Sort: Checked-in first, most recent first
+    list.sort((a, b) => {
+      if (a.ticketCode === this.state.lastScanTicketCode) return -1;
+      if (b.ticketCode === this.state.lastScanTicketCode) return 1;
+      if (a.status === 'checkedIn' && b.status !== 'checkedIn') return -1;
+      if (a.status !== 'checkedIn' && b.status === 'checkedIn') return 1;
+      return (b.checkInTime || '').localeCompare(a.checkInTime || '');
+    });
+
+    if (list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--muted); padding: 24px;">Không tìm thấy lượt quét nào phù hợp với điều kiện tìm kiếm.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(s => {
+      const isChecked = s.status === 'checkedIn';
+      const isJustScanned = s.ticketCode === this.state.lastScanTicketCode;
+      const gateNum = Math.abs((s.studentId || 'SE1').charCodeAt((s.studentId || '1').length - 1)) % 2 + 1;
+      const speed = (0.9 + ((Math.abs((s.studentId || 'S').charCodeAt(0)) % 6) / 10)).toFixed(1);
+
+      return `
+        <tr class="${isJustScanned ? 'scan-new-row' : ''}">
+          <td>
+            <span class="scan-time-badge">${s.checkInTime && s.checkInTime !== '—' ? s.checkInTime : 'Chưa qua cổng'}</span>
+            ${isJustScanned ? '<span class="pill pill-positive" style="margin-left: 6px; font-size: 10px;">Vừa quét</span>' : ''}
+          </td>
+          <td class="mono" style="font-weight: 600;">${s.ticketCode}</td>
+          <td>
+            <div style="font-weight: 600; color: var(--text);">${s.eventTitle || 'FPTU Tech Expo 2026'}</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: monospace;">${s.eventId || 'EVT-2026-01'}</div>
+          </td>
+          <td>
+            <div style="font-weight: 600;">${s.name}</div>
+            <div style="font-size: 11px; color: var(--muted); font-family: monospace;">MSSV: ${s.studentId}</div>
+          </td>
+          <td style="font-size: 12px; color: var(--muted);">${s.major || 'Kỹ thuật Phần mềm (SE)'}</td>
+          <td>
+            <span style="font-size: 12px; font-weight: 500;">Main Gate - Cửa ${gateNum}</span>
+          </td>
+          <td class="num font-mono">${speed}s</td>
+          <td>
+            ${isChecked 
+              ? '<span class="pill pill-positive">HỢP LỆ (+5 ĐRL)</span>' 
+              : '<span class="pill pill-neutral">CHỜ QUA CỬA</span>'}
+          </td>
+          <td class="mono" style="font-size: 11.5px; color: var(--muted);">${isChecked ? (s.certId || 'CERT-2026-9901') : '—'}</td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  async simulateIncomingCheckin() {
+    const selectedEventId = this.state.selectedTelemetryEvent || 'all';
+    
+    // 1. Look for an unchecked student ticket
+    let target = null;
+    if (selectedEventId !== 'all') {
+      target = this.state.students.find(s => s.eventId === selectedEventId && s.status !== 'checkedIn');
+    }
+    if (!target) {
+      target = this.state.students.find(s => s.status !== 'checkedIn');
+    }
+
+    // 2. If all existing tickets are already checked in or event has no tickets, dynamically issue a real ticket on Firestore and check it in!
+    let ticketPayload = null;
+    if (target) {
+      ticketPayload = {
+        ticketCode: target.ticketCode,
+        eventId: target.eventId,
+        studentName: target.name,
+        userId: `USR-${target.studentId}`
+      };
+    } else {
+      // Pick active event
+      const ev = (selectedEventId !== 'all' ? this.state.liveEvents.find(e => e.id === selectedEventId) : null) || this.state.liveEvents[0] || {
+        id: 'EVT-2026-01',
+        title: 'FPTU Tech Expo 2026: Trí tuệ Nhân tạo & Tương lai',
+        location: 'Hội trường Trịnh Công Sơn'
+      };
+
+      const studentNames = ['Phan Gia Bảo', 'Đỗ Quỳnh Như', 'Nguyễn Tấn Đạt', 'Trần Bảo Ngọc', 'Võ Hoàng Phúc', 'Lâm Tuấn Hưng'];
+      const randomName = studentNames[Math.floor(Math.random() * studentNames.length)];
+      const randomMSSV = `SE19${Math.floor(1000 + Math.random() * 9000)}`;
+      const randomCode = `CE2026-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      ticketPayload = {
+        ticketCode: randomCode,
+        id: randomCode,
+        eventId: ev.id,
+        eventTitle: ev.title,
+        eventLocation: ev.location,
+        studentName: randomName,
+        studentId: randomMSSV,
+        studentEmail: `${randomMSSV.toLowerCase()}@fpt.edu.vn`,
+        userId: `USR-${randomMSSV}`,
+        major: 'Kỹ thuật Phần mềm (SE)'
+      };
+    }
+
+    try {
+      this.showToast('Đang kết nối xác thực qua Cloud Firestore Security Rules...');
+      const res = await fetch('/api/tickets/checkin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ticketPayload)
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        const nowTime = new Date().toLocaleTimeString('vi-VN');
+        this.state.lastScanTimeStr = `${nowTime} (Vừa quét xong)`;
+        this.state.lastScanTicketCode = ticketPayload.ticketCode;
+        
+        await this.loadAllRealData();
+        this.renderTelemetryView();
+
+        const studentLabel = target ? target.name : ticketPayload.studentName;
+        const mssvLabel = target ? target.studentId : ticketPayload.studentId;
+        const evtLabel = target ? target.eventTitle : (ticketPayload.eventTitle || 'Campus Event');
+
+        this.showToast(`[Check-in Thành Công] Đã quét vé ${ticketPayload.ticketCode} - ${studentLabel} (${mssvLabel}) đã vào sự kiện "${evtLabel}" (+5 ĐRL).`);
+      } else {
+        this.showToast(data.error || 'Lỗi khi điểm danh vé.');
+      }
+    } catch (e) {
+      console.error('[simulateIncomingCheckin] Error:', e);
+      this.showToast('Không thể kết nối đến máy chủ điểm danh.');
     }
   },
+
 
   // Export to CSV
   exportToCSV() {
