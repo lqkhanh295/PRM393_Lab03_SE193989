@@ -423,12 +423,47 @@ const app = {
     `).join('');
   },
 
-  // Render Budget Table
-  renderBudgetTable() {
+  // ==========================================================================
+  // VIEW 3: BUDGET APPROVALS & GRANTS (WITH SEARCH & STATUS FILTER)
+  // ==========================================================================
+  renderBudgetTable(filteredList = null) {
     const tbody = document.getElementById('budget-table-body');
+    const badge = document.getElementById('sidebar-pending-budget');
+    const summaryPill = document.getElementById('budget-summary-pill');
+    const countIndicator = document.getElementById('budget-count-indicator');
     if (!tbody) return;
 
-    tbody.innerHTML = this.state.budgetProposals.map(p => {
+    const list = filteredList || this.state.budgetProposals;
+    const pendingCount = this.state.budgetProposals.filter(b => b.status === 'pending').length;
+
+    if (badge) badge.innerText = pendingCount;
+    if (summaryPill) summaryPill.innerText = `${pendingCount} Hồ sơ chờ thẩm định`;
+    if (countIndicator) countIndicator.innerText = `Đang hiển thị ${list.length} / ${this.state.budgetProposals.length} hồ sơ`;
+
+    // Populate club filter if needed
+    const clubFilterEl = document.getElementById('budget-club-filter');
+    if (clubFilterEl && clubFilterEl.options.length <= 1) {
+      const clubs = Array.from(new Set(this.state.budgetProposals.map(p => p.club).filter(Boolean)));
+      clubs.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.innerText = c;
+        clubFilterEl.appendChild(opt);
+      });
+    }
+
+    if (list.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 28px; color: var(--muted); font-size: 13px;">
+            Không tìm thấy hồ sơ ngân sách nào phù hợp với điều kiện tìm kiếm.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = list.map(p => {
       let statusPill = '';
       let actions = '';
 
@@ -460,6 +495,31 @@ const app = {
     }).join('');
   },
 
+  // Filter Budget Proposals
+  filterBudget() {
+    const query = (document.getElementById('budget-search')?.value || '').toLowerCase().trim();
+    const clubFilter = document.getElementById('budget-club-filter')?.value || 'all';
+    const statusFilter = document.getElementById('budget-status-filter')?.value || 'all';
+
+    const filtered = this.state.budgetProposals.filter(p => {
+      const matchQuery = (p.id || '').toLowerCase().includes(query) ||
+        (p.title || '').toLowerCase().includes(query) ||
+        (p.club || '').toLowerCase().includes(query) ||
+        (p.source || '').toLowerCase().includes(query);
+      const matchClub = clubFilter === 'all' || p.club === clubFilter;
+      const matchStatus = statusFilter === 'all' || p.status === statusFilter;
+      return matchQuery && matchClub && matchStatus;
+    });
+
+    this.renderBudgetTable(filtered);
+  },
+
+  // Refresh Budget Table
+  refreshBudget() {
+    this.showToast('Đang làm mới danh sách hồ sơ ngân sách...');
+    this.renderBudgetTable();
+  },
+
   // Approve Budget
   approveBudget(id) {
     const item = this.state.budgetProposals.find(p => p.id === id);
@@ -468,7 +528,7 @@ const app = {
     item.status = 'approved';
     this.state.approvedBudget += item.budget;
     this.renderKPIs();
-    this.renderBudgetTable();
+    this.filterBudget();
     this.showToast(`Đã duyệt ngân sách ${this.formatVND(item.budget)} ₫ cho "${item.title}"`);
   },
 
@@ -482,164 +542,145 @@ const app = {
 
     item.status = 'rejected';
     this.renderKPIs();
-    this.renderBudgetTable();
+    this.filterBudget();
     this.showToast(`Đã từ chối hồ sơ "${item.title}". Lý do: ${reason}`);
   },
 
   // ==========================================================================
-  // VIEW: TICKET REGISTRY & LIVE EVENT REGISTRATIONS (100% REAL CLOUD FIRESTORE)
+  // VIEW: REGISTRATION REVIEW QUEUE (CROSS-ROLE REVIEW QUEUE WITH SEARCH & FILTER)
   // ==========================================================================
   renderReviewQueue(filteredList = null) {
     const tbody = document.getElementById('review-queue-body');
     const badge = document.getElementById('sidebar-pending-registrations');
-    const pill = document.getElementById('queue-status-pill');
+    const headerBadge = document.getElementById('review-pending-badge');
+    const countIndicator = document.getElementById('reg-count-indicator');
     if (!tbody) return;
 
-    const tickets = this.state.tickets || [];
-    const list = filteredList || tickets;
+    const list = filteredList || this.state.registrations;
+    const pendingCount = this.state.registrations.filter(r => r.status === 'pending').length;
 
-    // Calculate metrics
-    const total = tickets.length;
-    const checkedIn = tickets.filter(t => t.status === 'checkedIn' || t.checkInStatus).length;
-    const active = tickets.filter(t => t.status !== 'checkedIn' && !t.checkInStatus && t.status !== 'cancelled').length;
-    const cancelled = tickets.filter(t => t.status === 'cancelled').length;
-    const rate = total > 0 ? Math.round((checkedIn / total) * 100) : 0;
-
-    // Update KPI cards
-    const elTotal = document.getElementById('kpi-reg-total-tickets');
-    const elActive = document.getElementById('kpi-reg-active-tickets');
-    const elChecked = document.getElementById('kpi-reg-checked-tickets');
-    const elRate = document.getElementById('kpi-reg-checkin-rate');
-    const countIndicator = document.getElementById('queue-count-indicator');
-
-    if (elTotal) elTotal.innerText = total;
-    if (elActive) elActive.innerText = active;
-    if (elChecked) elChecked.innerText = checkedIn;
-    if (elRate) elRate.innerText = rate + '%';
-    if (badge) badge.innerText = total;
-    if (countIndicator) countIndicator.innerText = `Đang hiển thị ${list.length} / ${total} vé`;
-
-    if (pill) {
-      pill.innerText = `Tổng số ${total} vé (${checkedIn} đã check-in, ${active} chờ vào cổng)`;
-      pill.className = active > 0 ? 'pill pill-positive' : 'pill pill-neutral';
-    }
+    if (badge) badge.innerText = pendingCount;
+    if (headerBadge) headerBadge.innerText = `${pendingCount} Đơn Chờ Duyệt`;
+    if (countIndicator) countIndicator.innerText = `Đang hiển thị ${list.length} / ${this.state.registrations.length} đơn`;
 
     // Populate event filter if needed
-    const eventFilterEl = document.getElementById('queue-event-filter');
-    if (eventFilterEl && eventFilterEl.options.length <= 1 && this.state.liveEvents?.length > 0) {
-      eventFilterEl.innerHTML = '<option value="all">Tất cả sự kiện (Cloud Firestore)</option>' +
-        this.state.liveEvents.map(e => `<option value="${e.id}">${e.title}</option>`).join('');
+    const eventFilterEl = document.getElementById('reg-event-filter');
+    if (eventFilterEl && eventFilterEl.options.length <= 1) {
+      const distinctEvents = Array.from(new Set(this.state.registrations.map(r => r.eventTitle).filter(Boolean)));
+      distinctEvents.forEach(evt => {
+        const opt = document.createElement('option');
+        opt.value = evt;
+        opt.innerText = evt;
+        eventFilterEl.appendChild(opt);
+      });
     }
 
     if (list.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 36px;">Không tìm thấy vé nào phù hợp với bộ lọc tìm kiếm.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 32px;">Không tìm thấy đơn đăng ký nào phù hợp với bộ lọc tìm kiếm.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = list.map(t => {
-      const isChecked = t.status === 'checkedIn' || t.checkInStatus;
-      const isCancelled = t.status === 'cancelled';
-
+    tbody.innerHTML = list.map(reg => {
       let statusPill = '';
-      if (isChecked) {
-        statusPill = '<span class="pill pill-positive">Đã Check-in Cổng</span>';
-      } else if (isCancelled) {
-        statusPill = '<span class="pill pill-negative">Đã Thu Hồi / Hủy</span>';
+      let actions = '';
+
+      if (reg.status === 'approved') {
+        statusPill = '<span class="pill pill-positive">Đã Cấp Vé</span>';
+        actions = `<span class="mono" style="font-size: 11.5px; color: var(--chart-primary); font-weight: 600;">Vé: ${reg.ticketId || 'CE2026-OK'}</span>`;
+      } else if (reg.status === 'rejected') {
+        statusPill = '<span class="pill pill-negative">Từ Chối</span>';
+        actions = `<span style="font-size: 12px; color: var(--muted);">${reg.reason || 'Không đủ điều kiện'}</span>`;
       } else {
-        statusPill = '<span class="pill pill-neutral">Chờ Check-in (Hợp lệ)</span>';
-      }
-
-      const formattedTime = t.checkedInAt 
-        ? t.checkedInAt 
-        : (t.createdAt ? new Date(t.createdAt).toLocaleString('vi-VN') : 'Mới phát hành');
-
-      let actionButtons = `
-        <button class="btn btn-secondary btn-sm" onclick="app.viewTicketQr('${t.id}')" style="margin-right: 6px; font-weight: 600;">
-          🔍 Xem Mã QR
-        </button>
-      `;
-
-      if (!isChecked && !isCancelled) {
-        actionButtons += `
-          <button class="btn btn-danger btn-sm" onclick="app.revokeTicket('${t.id}')" style="font-size: 11.5px;">
-            Thu Hồi Vé
-          </button>
-        `;
-      } else if (isChecked) {
-        actionButtons += `
-          <span style="font-size: 12px; color: var(--positive); font-weight: 600; padding: 4px 8px;">✔️ Điểm danh</span>
+        statusPill = '<span class="pill pill-warning">Chờ Phê Duyệt</span>';
+        actions = `
+          <button class="btn btn-success btn-sm" onclick="app.approveRegistration('${reg.id}')">Duyệt & Cấp Vé</button>
+          <button class="btn btn-danger btn-sm" onclick="app.rejectRegistration('${reg.id}')">Từ Chối</button>
         `;
       }
+
+      const timeStr = reg.reviewedAt || (reg.createdAt ? new Date(reg.createdAt).toLocaleTimeString('vi-VN') + ' ' + new Date(reg.createdAt).toLocaleDateString('vi-VN') : '01:52:10 11/11/2026');
 
       return `
         <tr>
-          <td>
-            <span class="mono" style="font-weight: 700; color: var(--chart-primary); cursor: pointer;" onclick="app.viewTicketQr('${t.id}')">
-              🎟️ ${t.ticketCode || t.id}
-            </span>
-          </td>
-          <td>
-            <div style="font-weight: 600;">${t.studentName || 'Sinh viên FPTU'}</div>
-            <div class="mono" style="font-size: 11px; color: var(--muted);">${t.studentId || (t.userId || '').replace('USR-', '')}</div>
-          </td>
-          <td class="mono" style="font-size: 12px; color: var(--muted);">
-            ${t.studentEmail || (t.studentId ? t.studentId.toLowerCase() + '@fpt.edu.vn' : '—')}
-          </td>
-          <td>
-            <div style="font-weight: 600; font-size: 13px;">${t.eventTitle || 'Sự kiện FPTU'}</div>
-            <div style="font-size: 11.5px; color: var(--muted); margin-top: 2px;">${t.eventLocation || 'Hội trường FPTU'} &bull; ${t.eventTime || '13:30 - 17:30'}</div>
-          </td>
-          <td class="num" style="font-size: 12px; color: var(--muted);">
-            ${formattedTime}
-          </td>
+          <td class="mono" style="font-weight: 600;">${reg.id}</td>
+          <td style="font-weight: 600;">${reg.studentName || 'Sinh viên FPTU'}</td>
+          <td class="mono" style="color: var(--muted); font-size: 12px;">${reg.studentEmail || '—'}</td>
+          <td style="font-size: 13px;">${reg.eventTitle || 'Sự kiện FPTU'}</td>
+          <td class="num" style="font-size: 12px; color: var(--muted);">${timeStr}</td>
           <td>${statusPill}</td>
-          <td style="text-align: right;">${actionButtons}</td>
+          <td style="text-align: right;">${actions}</td>
         </tr>
       `;
     }).join('');
   },
 
-  // Filter Ticket Registry list
+  // Filter Registrations in Review Queue
   filterReviewQueue() {
-    const searchInput = document.getElementById('queue-ticket-search');
-    const eventFilter = document.getElementById('queue-event-filter');
-    const statusFilter = document.getElementById('queue-status-filter');
+    const query = (document.getElementById('reg-search')?.value || '').toLowerCase().trim();
+    const eventFilter = document.getElementById('reg-event-filter')?.value || 'all';
+    const statusFilter = document.getElementById('reg-status-filter')?.value || 'all';
 
-    const query = (searchInput?.value || '').toLowerCase().trim();
-    const eventId = eventFilter?.value || 'all';
-    const status = statusFilter?.value || 'all';
-
-    const list = (this.state.tickets || []).filter(t => {
-      // Event filter
-      if (eventId !== 'all' && t.eventId !== eventId) return false;
-
-      // Status filter
-      const isChecked = t.status === 'checkedIn' || t.checkInStatus;
-      const isCancelled = t.status === 'cancelled';
-
-      if (status === 'checkedIn' && !isChecked) return false;
-      if (status === 'active' && (isChecked || isCancelled)) return false;
-      if (status === 'cancelled' && !isCancelled) return false;
-
-      // Search query
-      if (!query) return true;
-      const code = (t.ticketCode || t.id || '').toLowerCase();
-      const name = (t.studentName || '').toLowerCase();
-      const sid = (t.studentId || '').toLowerCase();
-      const email = (t.studentEmail || '').toLowerCase();
-      const title = (t.eventTitle || '').toLowerCase();
-
-      return code.includes(query) || name.includes(query) || sid.includes(query) || email.includes(query) || title.includes(query);
+    const filtered = this.state.registrations.filter(r => {
+      const matchQuery = (r.id || '').toLowerCase().includes(query) ||
+        (r.studentName || '').toLowerCase().includes(query) ||
+        (r.studentEmail || '').toLowerCase().includes(query) ||
+        (r.eventTitle || '').toLowerCase().includes(query);
+      const matchEvent = eventFilter === 'all' || r.eventTitle === eventFilter;
+      const matchStatus = statusFilter === 'all' || r.status === statusFilter;
+      return matchQuery && matchEvent && matchStatus;
     });
 
-    this.renderReviewQueue(list);
+    this.renderReviewQueue(filtered);
   },
 
-  // Refresh Tickets directly from Cloud Firestore
-  async refreshReviewQueue() {
-    this.showToast('Đang đồng bộ dữ liệu vé từ Cloud Firestore...');
+  // Refresh Registrations from Cloud Firestore
+  async refreshRegistrations() {
+    this.showToast('Đang làm mới danh sách đơn đăng ký từ Cloud Firestore...');
     await this.loadAllRealData();
     this.filterReviewQueue();
+  },
+
+  // Cross-Role Action: Approve Registration
+  async approveRegistration(id) {
+    try {
+      this.showToast('Đang phê duyệt đơn và phát hành vé điện tử...');
+      const res = await fetch(`/api/registrations/${encodeURIComponent(id)}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        this.showToast(`Đã duyệt đơn ${id}! Vé ${data.ticketCode} đã phát hành và gửi thông báo tới sinh viên.`);
+        await this.loadAllRealData();
+      } else {
+        this.showToast(data.error || 'Lỗi khi duyệt đơn.');
+      }
+    } catch (e) {
+      this.showToast('Lỗi kết nối máy chủ.');
+    }
+  },
+
+  // Cross-Role Action: Reject Registration
+  async rejectRegistration(id) {
+    const reason = prompt('Nhập lý do từ chối đơn đăng ký sự kiện:', 'Sự kiện đã đạt số lượng tối đa');
+    if (reason === null) return;
+    try {
+      this.showToast('Đang xử lý từ chối đơn...');
+      const res = await fetch(`/api/registrations/${encodeURIComponent(id)}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        this.showToast(`Đã từ chối đơn ${id}. Thông báo đã gửi tới Mobile App.`);
+        await this.loadAllRealData();
+      } else {
+        this.showToast(data.error || 'Lỗi khi từ chối đơn.');
+      }
+    } catch (e) {
+      this.showToast('Lỗi kết nối máy chủ.');
+    }
   },
 
   // View Ticket QR Code & Details Modal
