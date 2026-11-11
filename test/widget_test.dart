@@ -19,6 +19,8 @@ import 'package:campus_event/models/certificate_model.dart';
 import 'package:campus_event/models/user_model.dart';
 import 'package:campus_event/models/screen_state.dart';
 import 'package:campus_event/viewmodels/my_tickets_vm.dart';
+import 'package:campus_event/services/crashlytics_service.dart';
+import 'package:campus_event/viewmodels/auth_viewmodel.dart';
 import 'package:campus_event/screens/tickets/digital_ticket_screen.dart';
 
 void main() {
@@ -498,5 +500,32 @@ void main() {
     expect(myTicketsVM.state, isA<StateEmpty<List<TicketModel>>>());
 
     myTicketsVM.dispose();
+  });
+
+  test('AuthViewModel and AuthService update activity points (+5) and sync with user state', () async {
+    final authService = AuthService();
+    final analyticsService = AnalyticsService();
+    final crashlyticsService = CrashlyticsService();
+    final authVM = AuthViewModel(
+      authService: authService,
+      analyticsService: analyticsService,
+      crashlyticsService: crashlyticsService,
+    );
+
+    await authVM.signInWithEmailPassword(
+      email: 'student.test@fpt.edu.vn',
+      password: 'password123',
+    );
+    expect(authVM.currentUser?.activityPoints, equals(0));
+
+    // Submit feedback grants +5 points
+    await authVM.addActivityPoints(5);
+    expect(authVM.currentUser?.activityPoints, equals(5));
+
+    // Another feedback grants another +5 points
+    await authVM.addActivityPoints(5);
+    expect(authVM.currentUser?.activityPoints, equals(10));
+
+    authVM.dispose();
   });
 }

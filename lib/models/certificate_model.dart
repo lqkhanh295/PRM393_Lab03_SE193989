@@ -34,6 +34,7 @@ class CertificateModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'eventId': eventId,
       'eventTitle': eventTitle,
       'userId': userId,
@@ -41,6 +42,7 @@ class CertificateModel {
       'issueDate': issueDate,
       'verificationHash': verificationHash,
       'downloadUrl': downloadUrl,
+      'createdAt': DateTime.now().toIso8601String(),
     };
   }
 }

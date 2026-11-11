@@ -4,6 +4,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/ticket_model.dart';
 import '../models/certificate_model.dart';
+import '../viewmodels/explore_viewmodel.dart';
 import 'storage_service.dart';
 
 /// PDF Generation & Cloud Export Service
@@ -26,7 +27,13 @@ class PdfExportService {
       // Offline fallback: will continue with standard fonts
     }
 
-    final theme = (roboto != null && robotoBold != null)
+    final hasFont = roboto != null &&
+        !roboto.fontName.toLowerCase().contains('helvetica') &&
+        robotoBold != null &&
+        !robotoBold.fontName.toLowerCase().contains('helvetica');
+    String t(String str) => hasFont ? str : ExploreViewModel.stripDiacritics(str);
+
+    final theme = hasFont
         ? pw.ThemeData.withFont(base: roboto, bold: robotoBold)
         : null;
 
@@ -47,7 +54,7 @@ class PdfExportService {
                 pw.Column(
                   children: [
                     pw.Text(
-                      'ĐẠI HỌC FPT TP. HỒ CHÍ MINH',
+                      t('ĐẠI HỌC FPT TP. HỒ CHÍ MINH'),
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,
@@ -56,7 +63,7 @@ class PdfExportService {
                     ),
                     pw.SizedBox(height: 6),
                     pw.Text(
-                      'GIẤY CHỨNG NHẬN THAM GIA SỰ KIỆN',
+                      t('GIẤY CHỨNG NHẬN THAM GIA SỰ KIỆN'),
                       style: pw.TextStyle(
                         fontSize: 26,
                         fontWeight: pw.FontWeight.bold,
@@ -74,12 +81,12 @@ class PdfExportService {
                 pw.Column(
                   children: [
                     pw.Text(
-                      'Chứng nhận sinh viên:',
+                      t('Chứng nhận sinh viên:'),
                       style: const pw.TextStyle(fontSize: 14, color: PdfColors.grey700),
                     ),
                     pw.SizedBox(height: 8),
                     pw.Text(
-                      cert.studentName.toUpperCase(),
+                      t(cert.studentName.toUpperCase()),
                       style: pw.TextStyle(
                         fontSize: 24,
                         fontWeight: pw.FontWeight.bold,
@@ -88,12 +95,12 @@ class PdfExportService {
                     ),
                     pw.SizedBox(height: 12),
                     pw.Text(
-                      'Đã tham gia đầy đủ và hoàn thành xuất sắc nội dung sự kiện:',
+                      t('Đã tham gia đầy đủ và hoàn thành xuất sắc nội dung sự kiện:'),
                       style: const pw.TextStyle(fontSize: 13, color: PdfColors.grey800),
                     ),
                     pw.SizedBox(height: 6),
                     pw.Text(
-                      cert.eventTitle,
+                      t(cert.eventTitle),
                       style: pw.TextStyle(
                         fontSize: 18,
                         fontWeight: pw.FontWeight.bold,
@@ -109,8 +116,8 @@ class PdfExportService {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('Ngày cấp: ${cert.issueDate}', style: const pw.TextStyle(fontSize: 11)),
-                        pw.Text('Mã xác thực: ${cert.verificationHash}', style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
+                        pw.Text(t('Ngày cấp: ${cert.issueDate}'), style: const pw.TextStyle(fontSize: 11)),
+                        pw.Text(t('Mã xác thực: ${cert.verificationHash}'), style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600)),
                       ],
                     ),
                     pw.Container(

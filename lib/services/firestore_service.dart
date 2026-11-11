@@ -44,6 +44,9 @@ class FirestoreService {
   // Reactive notifier for ticket state changes across the application
   final ValueNotifier<int> ticketsNotifier = ValueNotifier<int>(0);
 
+  // Reactive notifier for certificate issuance across the application
+  final ValueNotifier<int> certificatesNotifier = ValueNotifier<int>(0);
+
   FirestoreService([this._firestore]) {
     _cachedClubs.addAll(
       FirestoreSeeder.officialClubs.map(

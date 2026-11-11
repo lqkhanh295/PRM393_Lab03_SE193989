@@ -53,12 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await context.read<AuthViewModel>().refreshProfile();
-          final u = context.read<AuthViewModel>().currentUser;
-          if (u != null) {
+          final auth = context.read<AuthViewModel>();
+          final prof = context.read<ProfileViewModel>();
+          await auth.refreshProfile();
+          final u = auth.currentUser;
+          if (u != null && mounted) {
             await Future.wait([
-              context.read<ProfileViewModel>().loadProfileCertificates(u.id),
-              context.read<ProfileViewModel>().loadFollowedClubs(u.followedClubs),
+              prof.loadProfileCertificates(u.id),
+              prof.loadFollowedClubs(u.followedClubs),
             ]);
           }
         },
@@ -791,8 +793,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   // ─── TASK 4 (ĐẠT): ANALYTICS 7-EVENT TRIGGER PANEL ──────────────────────────
   /// Renders a card with 7 labeled buttons, one per mandatory Analytics event.
