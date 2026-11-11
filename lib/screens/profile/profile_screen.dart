@@ -31,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final user = authVM.currentUser;
       if (user != null && mounted) {
         context.read<ProfileViewModel>().loadProfileCertificates(user.id);
+        context.read<ProfileViewModel>().loadGateAssignments(user.email);
       }
     });
   }
@@ -58,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           final u = auth.currentUser;
           if (u != null && mounted) {
             await prof.loadProfileCertificates(u.id);
+            await prof.loadGateAssignments(u.email);
           }
         },
         child: SingleChildScrollView(
@@ -195,121 +197,297 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                  // 1. Leader / CTV: Bàn Điểm Danh Cổng (Phân công ca trực Cloud Firestore)
+                  Builder(
+                    builder: (ctx) {
+                      final assignments = profileVM.gateAssignments;
+                      final hasAssignment = assignments.isNotEmpty;
+                      final userEmail = user?.email.toLowerCase() ?? '';
+                      final isCtsvStaff = userEmail.contains('ctsv') ||
+                          userEmail.contains('@fe.edu.vn') ||
+                          userEmail == 'quachhoatg2020@gmail.com' ||
+                          userEmail == 'lqkhanh292005@gmail.com';
+
+                      return Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: hasAssignment
+                              ? const Color(0xFFF0FDF4)
+                              : AppTheme.surfaceSubtle,
+                          borderRadius:
+                              BorderRadius.circular(AppTheme.radiusInput),
+                          border: Border.all(
+                            color: hasAssignment
+                                ? AppTheme.successBorder
+                                : AppTheme.hairline,
+                            width: 1,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: AppTheme.obsidian,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: const Icon(
-                                Icons.qr_code_scanner_rounded,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                            Row(
+                              children: [
+                                Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: hasAssignment
+                                        ? AppTheme.successInk
+                                        : AppTheme.obsidian,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Icon(
+                                    Icons.qr_code_scanner_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        'Bàn Điểm Danh Cổng',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppTheme.obsidian,
-                                        ),
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'Bàn Điểm Danh Cổng',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppTheme.obsidian,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 5,
+                                              vertical: 1.5,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: hasAssignment
+                                                  ? AppTheme.successSoft
+                                                  : const Color(0xFFFEF3C7),
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              border: Border.all(
+                                                color: hasAssignment
+                                                    ? AppTheme.successBorder
+                                                    : const Color(0xFFFDE68A),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              hasAssignment
+                                                  ? 'ĐÃ PHÂN CÔNG'
+                                                  : (isCtsvStaff
+                                                      ? 'CTSV ADMIN'
+                                                      : 'CHƯA PHÂN CÔNG'),
+                                              style: TextStyle(
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.w800,
+                                                color: hasAssignment
+                                                    ? AppTheme.successInk
+                                                    : const Color(0xFF92400E),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(width: 6),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                          vertical: 1.5,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFFEF3C7),
-                                          borderRadius: BorderRadius.circular(
-                                            3,
-                                          ),
-                                          border: Border.all(
-                                            color: const Color(0xFFFDE68A),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          '1.5s SCAN',
-                                          style: TextStyle(
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.w800,
-                                            color: Color(0xFF92400E),
-                                          ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        hasAssignment
+                                            ? '${assignments.first.role} • ${assignments.first.gateName}'
+                                            : (isCtsvStaff
+                                                ? 'Cán bộ CTSV toàn quyền giám sát'
+                                                : 'Chỉ CTV được phân công mới có thể quét'),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: hasAssignment
+                                              ? FontWeight.w600
+                                              : FontWeight.normal,
+                                          color: hasAssignment
+                                              ? AppTheme.successInk
+                                              : AppTheme.textMuted,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 2),
-                                  const Text(
-                                    'Dành cho Leader / CTV tại cửa hội trường',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: AppTheme.textMuted,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            if (hasAssignment) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: AppTheme.successBorder,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.event_available_rounded,
+                                          size: 14,
+                                          color: AppTheme.successInk,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Expanded(
+                                          child: Text(
+                                            assignments.first.eventTitle,
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppTheme.obsidian,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Vị trí: ${assignments.first.gateName} | Ca trực: ${assignments.first.shiftTime}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: AppTheme.textMuted,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ] else if (!isCtsvStaff) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFBEB),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: const Color(0xFFFDE68A),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  'Tài khoản ${user?.email ?? ''} chưa được phân công ca trực cổng. Vui lòng liên hệ Phòng CTSV để được cấp quyền trên Web Portal.',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Color(0xFF92400E),
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: hasAssignment || isCtsvStaff
+                                      ? AppTheme.obsidian
+                                      : Colors.grey.shade400,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      AppTheme.radiusInput,
                                     ),
                                   ),
-                                ],
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                ),
+                                onPressed: () {
+                                  if (hasAssignment) {
+                                    if (assignments.length == 1) {
+                                      final a = assignments.first;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (ctx) => MobileDeskScreen(
+                                            eventId: a.eventId,
+                                            eventTitle: a.eventTitle,
+                                            gateName: a.gateName,
+                                            staffRole: a.role,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      _showDutySelectorBottomSheet(
+                                          context, assignments);
+                                    }
+                                  } else if (isCtsvStaff) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) =>
+                                            const MobileDeskScreen(),
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (c) => AlertDialog(
+                                        title: const Text(
+                                            'Chưa Phân Công Ca Trực'),
+                                        content: Text(
+                                          'Tài khoản ${user?.email ?? ''} hiện chưa có ca trực điểm danh nào được kích hoạt trên Cloud Firestore.\n\nNếu bạn là CTV của CLB, vui lòng liên hệ Cán bộ Phòng CTSV để phân công ca trực tại tab "Phân Công Ca Trực Cổng" trên Web Portal Quản Trị.',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(c);
+                                              if (user?.email != null) {
+                                                profileVM.loadGateAssignments(
+                                                    user!.email);
+                                              }
+                                            },
+                                            child: const Text(
+                                                'Làm mới kiểm tra lại'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(c),
+                                            child: const Text('Đã hiểu'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: Icon(
+                                  hasAssignment || isCtsvStaff
+                                      ? Icons.camera_alt_outlined
+                                      : Icons.lock_outline_rounded,
+                                  size: 16,
+                                ),
+                                label: Text(
+                                  hasAssignment
+                                      ? 'Mở Bàn Điểm Danh: ${assignments.first.gateName}'
+                                      : (isCtsvStaff
+                                          ? 'Mở Bàn Điểm Danh (Toàn trường)'
+                                          : 'Chưa có phân công ca trực'),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Mục đích duy nhất: Quét mã vé cho sinh viên bước qua cửa trong 1.5 giây mà không làm tắc nghẽn hàng chờ, cảnh báo vé trùng lập tức.',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            color: AppTheme.onSurface,
-                            height: 1.35,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppTheme.obsidian,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  AppTheme.radiusInput,
-                                ),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => const MobileDeskScreen(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 16,
-                            ),
-                            label: const Text(
-                              'Mở Bàn Điểm Danh Cổng (Quét vé)',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
+                      );
+                    },
+                  ),
                       ],
                     ),
                   ),

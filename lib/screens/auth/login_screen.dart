@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    isLoading: isLoading && authVM.state is StateLoading && (authVM.state as StateLoading).message.contains('Google'),
+                    isLoading: isLoading && authVM.state is StateLoading && ((authVM.state as StateLoading).message?.contains('Google') ?? false),
                     onPressed: isLoading
                         ? null
                         : () async {

@@ -12,7 +12,17 @@ import '../../widgets/app_text_field.dart';
 /// Staff Tooling HUD: high-contrast reticle, tabular figures, instant validation feedback.
 class MobileDeskScreen extends StatefulWidget {
   final String? eventId;
-  const MobileDeskScreen({super.key, this.eventId});
+  final String? eventTitle;
+  final String? gateName;
+  final String? staffRole;
+
+  const MobileDeskScreen({
+    super.key,
+    this.eventId,
+    this.eventTitle,
+    this.gateName,
+    this.staffRole,
+  });
 
   @override
   State<MobileDeskScreen> createState() => _MobileDeskScreenState();
@@ -58,19 +68,23 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
         ),
         title: Column(
           children: [
-            const Text(
-              'Bàn Điểm Danh Cổng',
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
+            Text(
+              widget.gateName ?? 'Bàn Điểm Danh Cổng',
+              style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 2),
             Text(
-              'Đã vào: ${deskVM.checkedInCount}/${deskVM.totalCapacity} (${(deskVM.attendanceRate * 100).toInt()}%)',
+              widget.eventTitle != null
+                  ? '${widget.eventTitle!} • ${deskVM.checkedInCount}/${deskVM.totalCapacity}'
+                  : 'Đã vào: ${deskVM.checkedInCount}/${deskVM.totalCapacity} (${(deskVM.attendanceRate * 100).toInt()}%)',
               style: const TextStyle(
                 color: Color(0xFFA1A1AA),
                 fontSize: 11,
                 fontFeatures: [FontFeature.tabularFigures()],
                 fontWeight: FontWeight.w500,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -226,9 +240,12 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
     final deskVM = context.read<MobileDeskViewModel>();
     if (deskVM.isProcessing) return;
 
+    final homeVM = context.read<HomeViewModel>();
+    final targetEventId = widget.eventId ?? (homeVM.allEvents.isNotEmpty ? homeVM.allEvents.first.id : '');
+
     final result = await deskVM.processCheckInScan(
       qrToken: rawToken,
-      eventId: 'EVT-2026-01',
+      eventId: targetEventId,
     );
 
     if (!context.mounted) return;
