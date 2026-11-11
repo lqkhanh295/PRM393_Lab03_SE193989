@@ -768,6 +768,11 @@ html, body {
   }
 }
 
+/* Hidden views */
+.view-section {
+  display: none;
+}
+
 .view-section.active {
   display: block;
 }
