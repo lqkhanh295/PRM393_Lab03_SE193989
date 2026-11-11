@@ -13,6 +13,7 @@ import 'package:campus_event/viewmodels/explore_viewmodel.dart';
 import 'package:campus_event/services/firestore_service.dart';
 import 'package:campus_event/services/analytics_service.dart';
 import 'package:campus_event/services/auth_service.dart';
+import 'package:campus_event/screens/tickets/digital_ticket_screen.dart';
 
 void main() {
   testWidgets('AppPrimaryButton renders label and triggers onPressed', (WidgetTester tester) async {
@@ -354,5 +355,59 @@ void main() {
     // Search "coc sai gon" (matches both official 'csg' and legacy 'media_club')
     await vm.searchEvents(query: 'coc sai gon');
     expect(vm.filteredClubs.any((c) => c.id == 'csg' || c.id == 'media_club'), isTrue);
+  });
+
+  testWidgets('DigitalTicketScreen locks feedback button when ticket is not checked in (BR-005)', (WidgetTester tester) async {
+    const unCheckedInTicket = TicketModel(
+      id: 'CE2026-111111',
+      eventId: 'fcode_ai_challenge_2026',
+      eventTitle: 'F-Code AI Challenge 2026',
+      eventDate: '28/10/2026',
+      eventTime: '13:30 - 17:30',
+      eventLocation: 'Hội trường Trịnh Công Sơn',
+      userId: 'test_user',
+      studentName: 'Nguyen Van A',
+      studentEmail: 'a.nv@fpt.edu.vn',
+      qrToken: 'TOKEN-CE2026-111111',
+      status: TicketStatus.active,
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: DigitalTicketScreen(ticket: unCheckedInTicket),
+      ),
+    );
+
+    // Should indicate the locked button
+    expect(find.text('Đánh giá & Nhận Điểm Rèn Luyện (Đang khóa)'), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline_rounded), findsOneWidget);
+  });
+
+  testWidgets('DigitalTicketScreen unlocks feedback button when ticket is checked in (BR-005)', (WidgetTester tester) async {
+    final checkedInTicket = TicketModel(
+      id: 'CE2026-222222',
+      eventId: 'fcode_ai_challenge_2026',
+      eventTitle: 'F-Code AI Challenge 2026',
+      eventDate: '28/10/2026',
+      eventTime: '13:30 - 17:30',
+      eventLocation: 'Hội trường Trịnh Công Sơn',
+      userId: 'test_user',
+      studentName: 'Nguyen Van A',
+      studentEmail: 'a.nv@fpt.edu.vn',
+      qrToken: 'TOKEN-CE2026-222222',
+      status: TicketStatus.checkedIn,
+      checkedInAt: DateTime.now(),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: DigitalTicketScreen(ticket: checkedInTicket),
+      ),
+    );
+
+    // Should show the unlocked evaluation button and success banner
+    expect(find.text('Đánh giá sự kiện & Nhận Điểm Rèn Luyện'), findsOneWidget);
+    expect(find.byIcon(Icons.star_rate_rounded), findsOneWidget);
+    expect(find.textContaining('Đã điểm danh tại cổng'), findsOneWidget);
   });
 }
