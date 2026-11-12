@@ -12,18 +12,25 @@ import '../../widgets/app_button.dart';
 import 'registration_result_screen.dart';
 import 'registration_pending_screen.dart';
 
-/// S15: 1-Tap Registration Bottom Sheet Modal (Supporting Slide 18 Cross-Role Flow)
-/// Anti-slop Editorial Sheet: flat hairline surfaces, high-contrast verified student details.
+/// Hộp thoại Bottom Sheet xác nhận thông tin đăng ký giữ chỗ sự kiện (1-Tap Registration).
+///
+/// Hỗ trợ cả hai chế độ: Cấp vé điện tử ngay lập tức hoặc nộp hồ sơ chờ cán bộ thẩm định
+/// (Cross-Role Approval Flow), hiển thị thông tin sinh viên đã xác thực.
 class RegistrationModal extends StatefulWidget {
+  /// Thông tin sự kiện [EventModel].
   final EventModel event;
+
+  /// Thông tin hồ sơ sinh viên nộp đơn [UserModel].
   final UserModel user;
 
+  /// Khởi tạo [RegistrationModal] với [event] và [user].
   const RegistrationModal({
     super.key,
     required this.event,
     required this.user,
   });
 
+  /// Tạo state quản lý tùy chọn duyệt đơn và tiến trình gửi đăng ký.
   @override
   State<RegistrationModal> createState() => _RegistrationModalState();
 }

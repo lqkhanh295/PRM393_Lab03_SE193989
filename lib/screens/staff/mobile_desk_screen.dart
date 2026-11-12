@@ -8,14 +8,24 @@ import '../../services/firestore_service.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 
-/// EL02: Mobile Gate Check-in Desk & QR Scanner Screen
-/// Staff Tooling HUD: high-contrast reticle, tabular figures, instant validation feedback.
+/// Màn hình Bàn trực cổng soát vé & Quét mã QR di động (Mobile Gate Check-in Desk).
+///
+/// Dành cho cộng tác viên và cán bộ trực cổng để quét mã QR điểm danh sinh viên,
+/// kiểm tra tính hợp lệ của vé trong thời gian dưới 1 giây và xem thống kê lưu lượng người vào cổng.
 class MobileDeskScreen extends StatefulWidget {
+  /// Mã sự kiện đang trực cổng (tùy chọn).
   final String? eventId;
+
+  /// Tên sự kiện đang trực cổng (tùy chọn).
   final String? eventTitle;
+
+  /// Tên cổng soát vé (ví dụ: `Cổng 1 (Main Gate)`).
   final String? gateName;
+
+  /// Vai trò của nhân viên trực (ví dụ: `CTV Soát Vé Cổng`).
   final String? staffRole;
 
+  /// Khởi tạo [MobileDeskScreen].
   const MobileDeskScreen({
     super.key,
     this.eventId,
@@ -24,6 +34,7 @@ class MobileDeskScreen extends StatefulWidget {
     this.staffRole,
   });
 
+  /// Tạo state quản lý camera quét mã [MobileScannerController] và ô nhập mã thủ công.
   @override
   State<MobileDeskScreen> createState() => _MobileDeskScreenState();
 }

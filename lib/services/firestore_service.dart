@@ -73,6 +73,7 @@ class FirestoreService {
   }
 
   /// Auto-initialize and ensure Cloud Firestore has all official FPTU documents
+  /// Tự động khởi tạo và nạp dữ liệu mẫu ban đầu (seeding) nếu database Cloud Firestore còn trống.
   Future<void> ensureDatabaseInitialized() async {
     if (_isInitialized || _firestore == null) return;
     _isInitialized = true;
@@ -91,6 +92,7 @@ class FirestoreService {
     }
   }
 
+  /// Đồng bộ dữ liệu sự kiện từ Cloud Firestore về bộ nhớ đệm (in-memory cache) của ứng dụng.
   Future<void> _syncFromCloud({bool force = false}) async {
     if (_firestore == null) return;
     try {
@@ -109,7 +111,7 @@ class FirestoreService {
     }
   }
 
-  /// Get list of events directly from Cloud Firestore with fallback sync and smart quota cache
+  /// Lấy danh sách sự kiện từ Cloud Firestore có lọc theo [category], giới hạn [limit] và bộ nhớ đệm quota.
   Future<List<EventModel>> getEvents({String? category, int? limit, bool forceRefresh = false}) async {
     final isCacheFresh = _cachedEvents.isNotEmpty &&
         _lastEventsFetch != null &&
@@ -195,7 +197,7 @@ class FirestoreService {
     return list;
   }
 
-  /// Get event details by ID directly from Cloud Firestore
+  /// Lấy thông tin chi tiết sự kiện theo mã định danh [eventId].
   Future<EventModel?> getEventById(String eventId) async {
     try {
       if (_firestore != null) {
@@ -220,7 +222,7 @@ class FirestoreService {
         );
   }
 
-  /// Get user registered tickets directly from Cloud Firestore with cache merge
+  /// Lấy toàn bộ danh sách vé điện tử đã đăng ký của sinh viên có mã [userId].
   Future<List<TicketModel>> getUserTickets(String userId) async {
     try {
       if (_firestore != null) {
@@ -284,6 +286,7 @@ class FirestoreService {
   }
 
   /// Real-time stream of user tickets directly from Cloud Firestore (BR-004, BR-005)
+  /// Luồng (Stream) dữ liệu thời gian thực theo dõi danh sách vé của sinh viên [userId].
   Stream<List<TicketModel>> streamUserTickets(String userId) {
     if (_firestore == null) {
       final cached = _cachedTickets.where((t) => t.userId == userId).toList();
@@ -314,6 +317,7 @@ class FirestoreService {
   }
 
   /// Real-time single ticket document stream (BR-004, BR-005)
+  /// Luồng thời gian thực theo dõi trạng thái của một chiếc vé cụ thể [ticketId].
   Stream<TicketModel?> streamTicket(String ticketId) {
     if (_firestore == null) {
       final cached = _cachedTickets.where((t) => t.id == ticketId).firstOrNull;
@@ -338,7 +342,7 @@ class FirestoreService {
         });
   }
 
-  /// 1-Tap Registration Transaction (BR-001, BR-002, BR-004) - Real Cloud Firestore
+  /// Đăng ký vé sự kiện 1 chạm theo quy tắc nghiệp vụ BR-001, BR-002 (chống trùng lặp) và BR-004 (chặn sự kiện quá khứ).
   Future<TicketModel> registerForEvent({
     required EventModel event,
     required UserModel user,
@@ -442,6 +446,7 @@ class FirestoreService {
     return newTicket;
   }
 
+  /// Đồng bộ thông tin vé mới phát hành sang Web Portal nội bộ phục vụ giám sát thời gian thực.
   void _notifyLocalWebPortalTicketCreated(TicketModel ticket) async {
     try {
       final payload = jsonEncode(ticket.toMap());
@@ -465,7 +470,7 @@ class FirestoreService {
     } catch (_) {}
   }
 
-  /// Gate Check-in QR Validation (BR-007, BR-008) - Real Cloud Firestore
+  /// Xác thực và điểm danh vé tại cổng trong 1.5s, ngăn chặn vé trùng/giả và tự động cộng +5 điểm rèn luyện.
   Future<CheckInValidationResult> validateAndCheckInTicket({
     required String qrToken,
     required String eventId,
@@ -693,6 +698,7 @@ class FirestoreService {
     );
   }
 
+  /// Gửi thông báo kết quả lượt quét vé thành công sang Web Portal quản trị cổng.
   void _notifyLocalWebPortalCheckin(TicketModel ticket, String token) async {
     try {
       final payload = jsonEncode({
@@ -727,7 +733,7 @@ class FirestoreService {
     } catch (_) {}
   }
 
-  /// Live Speaker Q&A questions from Cloud Firestore
+  /// Lấy danh sách câu hỏi đặt cho diễn giả trong sự kiện [eventId] sắp xếp theo lượt upvote.
   Future<List<SpeakerQuestionModel>> getSpeakerQuestions(String eventId) async {
     try {
       if (_firestore != null) {
@@ -772,6 +778,7 @@ class FirestoreService {
       ..sort((a, b) => b.upvotes.compareTo(a.upvotes));
   }
 
+  /// Gửi câu hỏi mới của sinh viên đến diễn giả trong chế độ tương tác trực tiếp (Live Companion).
   Future<void> askSpeakerQuestion({
     required String eventId,
     required UserModel user,
@@ -832,6 +839,7 @@ class FirestoreService {
     _cachedQuestions.insert(0, q);
   }
 
+  /// Tăng số lượt bình chọn (upvote) cho câu hỏi của diễn giả [questionId].
   Future<void> upvoteSpeakerQuestion(String eventId, String questionId) async {
     try {
       if (_firestore != null) {
@@ -864,7 +872,7 @@ class FirestoreService {
     }
   }
 
-  /// User Certificates from Cloud Firestore with auto-issuance for checked-in events
+  /// Lấy danh sách giấy chứng nhận điện tử (e-Certificate) mà sinh viên [userId] đã hoàn thành.
   Future<List<CertificateModel>> getUserCertificates(String userId) async {
     final List<CertificateModel> result = [];
 
@@ -948,6 +956,7 @@ class FirestoreService {
   }
 
   /// Real-time stream of user certificates directly from Cloud Firestore (BR-004, BR-005)
+  /// Luồng thời gian thực theo dõi danh sách giấy chứng nhận của sinh viên [userId].
   Stream<List<CertificateModel>> streamUserCertificates(String userId) {
     if (_firestore == null) {
       return Stream.value(_cachedCertificates.where((c) => c.userId == userId).toList());
@@ -979,6 +988,7 @@ class FirestoreService {
   }
 
   /// Save Certificate to Cloud Firestore
+  /// Lưu bản ghi Giấy chứng nhận điện tử [cert] vào Cloud Firestore.
   Future<void> saveCertificate(CertificateModel cert) async {
     try {
       if (_firestore != null) {
@@ -1009,8 +1019,7 @@ class FirestoreService {
     certificatesNotifier.value++;
   }
 
-  /// Submit Real Event Feedback & Grant Activity Points
-  /// Returns true if first-time submission (points awarded), false if duplicate update.
+  /// Gửi đánh giá khảo sát chất lượng sự kiện và tự động mở khóa cộng điểm rèn luyện (chỉ sau khi đã check-in theo BR-005).
   Future<bool> submitEventFeedback({
     required String eventId,
     required String userId,
@@ -1098,7 +1107,7 @@ class FirestoreService {
     }
   }
 
-  /// Clubs from Cloud Firestore with smart quota cache
+  /// Lấy danh mục 46 Câu lạc bộ chính thức của FPT University TP.HCM kèm bộ đệm chống cạn quota.
   Future<List<ClubModel>> getClubs({bool forceRefresh = false}) async {
     final isCacheFresh = _cachedClubs.isNotEmpty &&
         _lastClubsFetch != null &&
@@ -1161,7 +1170,7 @@ class FirestoreService {
     return _cachedClubs;
   }
 
-  /// Get real-time checked-in count for an event
+  /// Đếm tổng số lượng sinh viên đã check-in qua cổng thành công của sự kiện [eventId].
   Future<int> getCheckedInCount(String eventId) async {
     try {
       if (_firestore != null) {
@@ -1182,7 +1191,7 @@ class FirestoreService {
   // FINAL ASSIGNMENT: ANNOUNCEMENTS INBOX
   // ==========================================
 
-  /// Real-time stream of official announcements, filtered by userId for privacy (BR-003)
+  /// Luồng thời gian thực theo dõi các thông báo khẩn cấp từ Ban tổ chức sự kiện.
   Stream<List<AnnouncementModel>> streamAnnouncements({String? currentUserId}) {
     if (_firestore != null) {
       return _firestore
@@ -1198,7 +1207,7 @@ class FirestoreService {
         .asyncMap((_) => getAnnouncements(currentUserId: currentUserId));
   }
 
-  /// Get list of announcements directly from Cloud Firestore, filtered by userId
+  /// Tải danh sách thông báo phát thanh của Ban tổ chức với cơ chế đệm thông minh.
   Future<List<AnnouncementModel>> getAnnouncements({String? currentUserId, bool forceRefresh = false}) async {
     final isCacheFresh = _cachedAnnouncements.isNotEmpty &&
         _lastAnnouncementsFetch != null &&
@@ -1256,7 +1265,7 @@ class FirestoreService {
     return _cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList();
   }
 
-  /// Broadcast announcement from Web Admin or Staff HUD
+  /// Phát đi thông báo mới [announcement] từ Ban tổ chức đến toàn thể người tham dự.
   Future<void> sendAnnouncement(AnnouncementModel announcement) async {
     try {
       if (_firestore != null) {
@@ -1275,7 +1284,7 @@ class FirestoreService {
   // FINAL ASSIGNMENT: CROSS-ROLE REGISTRATION FLOW
   // ==========================================
 
-  /// Submit event registration requiring Organizer approval (status: pending)
+  /// Nộp đơn đăng ký tham gia sự kiện vào hàng chờ phê duyệt của Cán bộ (Cross-role Queue).
   Future<RegistrationModel> submitRegistration({
     required EventModel event,
     required UserModel user,
@@ -1319,7 +1328,7 @@ class FirestoreService {
     return registration;
   }
 
-  /// Stream a user's registration status for an event in real-time
+  /// Luồng theo dõi trạng thái duyệt đơn đăng ký của sinh viên [userId] đối với sự kiện [eventId].
   Stream<RegistrationModel?> streamUserRegistration(String eventId, String userId) {
     if (_firestore != null) {
       return _firestore
@@ -1342,7 +1351,7 @@ class FirestoreService {
     return Stream.value(match);
   }
 
-  /// Stream all pending registrations for Organizer Web Admin Review Queue
+  /// Luồng danh sách các đơn đăng ký đang chờ Cán bộ/Ban tổ chức xét duyệt.
   Stream<List<RegistrationModel>> streamPendingRegistrations() {
     if (_firestore != null) {
       return _firestore
@@ -1358,7 +1367,7 @@ class FirestoreService {
     );
   }
 
-  /// Review registration: Approve or Reject with reason (Organizer on Web Admin)
+  /// Xét duyệt đơn đăng ký: Chấp thuận (tự động phát hành vé QR) hoặc Từ chối kèm lý do.
   Future<void> reviewRegistration(
     String regId, {
     required bool approve,
@@ -1439,7 +1448,7 @@ class FirestoreService {
     }
   }
 
-  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore with Web Portal Fallback Bridge & Quota Cache
+  /// Lấy danh sách phân công ca trực bàn điểm danh tại cổng cho nhân sự theo [email].
   Future<List<GateAssignmentModel>> getGateAssignments({String? email, bool forceRefresh = false}) async {
     final cacheKey = email?.toLowerCase().trim() ?? 'all';
     final lastFetch = _lastGateAssignmentsFetch[cacheKey];

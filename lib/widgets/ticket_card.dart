@@ -3,18 +3,25 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../models/ticket_model.dart';
 import '../theme/app_theme.dart';
 
-/// Pass-Style Digital Ticket Card
-/// Anti-Slop Architecture: Perforated pass aesthetics, tabular typography, high-contrast QR.
+/// Thẻ vé điện tử (Digital Ticket Card) mô phỏng kiểu dáng vé sự kiện có đường xé cuống vé.
+///
+/// Tích hợp hiển thị mã QR độ phân giải cao phục vụ quét check-in tại cổng,
+/// thông tin thời gian, địa điểm, mã số vé monospace và trạng thái điểm danh tức thời.
 class TicketCard extends StatelessWidget {
+  /// Dữ liệu vé điện tử [TicketModel].
   final TicketModel ticket;
+
+  /// Hàm gọi lại khi người dùng bấm nút tăng độ sáng màn hình để quét mã QR dễ hơn.
   final VoidCallback? onBoostBrightness;
 
+  /// Khởi tạo [TicketCard] với dữ liệu vé [ticket] và tùy chọn tăng sáng [onBoostBrightness].
   const TicketCard({
     super.key,
     required this.ticket,
     this.onBoostBrightness,
   });
 
+  /// Xây dựng giao diện thẻ vé điện tử kèm mã QR.
   @override
   Widget build(BuildContext context) {
     final isCheckedIn = ticket.isCheckedIn;

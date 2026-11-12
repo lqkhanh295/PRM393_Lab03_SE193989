@@ -4,13 +4,18 @@ import '../../models/ticket_model.dart';
 import '../../widgets/app_button.dart';
 import '../tickets/digital_ticket_screen.dart';
 
-/// S17: Registration Success Screen
-/// Anti-slop Editorial Success: high-contrast ticket matriculation, monospace pass code, zero blur.
+/// Màn hình Kết quả đăng ký thành công (Registration Result Screen).
+///
+/// Thể hiện mã vé vừa khởi tạo, tóm tắt thông tin sự kiện và các tùy chọn:
+/// xem vé điện tử ngay hoặc quay về trang chủ.
 class RegistrationResultScreen extends StatelessWidget {
+  /// Thông tin vé điện tử vừa được cấp [TicketModel].
   final TicketModel ticket;
 
+  /// Khởi tạo [RegistrationResultScreen] với thông tin vé [ticket].
   const RegistrationResultScreen({super.key, required this.ticket});
 
+  /// Xây dựng giao diện thông báo đăng ký thành công.
   @override
   Widget build(BuildContext context) {
     return PopScope(

@@ -14,11 +14,15 @@ import '../../viewmodels/inbox_viewmodel.dart';
 import '../events/event_detail_screen.dart';
 import '../inbox/announcements_inbox_screen.dart';
 
-/// S07: Home Campus Pulse Screen
-/// Anti-Slop Architecture: High typographic contrast, hairline rules, zero fuzzy blur.
+/// Màn hình Trang chủ (Campus Pulse) phản ánh nhịp sống sự kiện Đại học FPT TP.HCM.
+///
+/// Thể hiện hồ sơ nhanh của sinh viên, huy hiệu điểm rèn luyện, nút hộp thư thông báo,
+/// banner sự kiện nổi bật điều khiển bởi Remote Config và danh sách các sự kiện sắp diễn ra.
 class HomeScreen extends StatelessWidget {
+  /// Khởi tạo [HomeScreen].
   const HomeScreen({super.key});
 
+  /// Xây dựng giao diện màn hình trang chủ.
   @override
   Widget build(BuildContext context) {
     final homeVM = context.watch<HomeViewModel>();

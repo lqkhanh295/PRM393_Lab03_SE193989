@@ -5,29 +5,43 @@ import '../models/club_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 
+/// Tab hiển thị trên màn hình Khám phá (Sự kiện hoặc Câu lạc bộ).
 enum ExploreTab { events, clubs }
 
-/// MVVM ExploreViewModel
-/// Manages category filtering, keyword searching, and club directory browsing.
+/// ViewModel quản lý tìm kiếm, lọc danh mục và tra cứu 46 Câu lạc bộ FPTU.
+///
+/// Hỗ trợ tìm kiếm thông minh không phân biệt chữ hoa/thường và không dấu (Accent-Insensitive)
+/// nhằm tối ưu hóa trải nghiệm tìm kiếm sự kiện của sinh viên Việt Nam.
 class ExploreViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final AnalyticsService _analyticsService;
 
   ScreenState<List<EventModel>> _state = const StateInitial();
+
+  /// Trạng thái dữ liệu danh sách sự kiện trên màn hình Khám phá.
   ScreenState<List<EventModel>> get state => _state;
 
   List<ClubModel> _clubs = [];
+
+  /// Danh sách các câu lạc bộ chính thức FPTU được tải về từ hệ thống.
   List<ClubModel> get clubs => _clubs;
 
   ExploreTab _currentTab = ExploreTab.events;
+
+  /// Tab hiện tại đang được chọn (Sự kiện hoặc Câu lạc bộ).
   ExploreTab get currentTab => _currentTab;
 
   String _selectedCategory = 'Tất cả';
+
+  /// Danh mục sự kiện/CLB hiện đang được chọn để lọc.
   String get selectedCategory => _selectedCategory;
 
   String _currentQuery = '';
+
+  /// Từ khóa tìm kiếm hiện tại do người dùng nhập vào ô tìm kiếm.
   String get currentQuery => _currentQuery;
 
+  /// Danh sách các danh mục sự kiện và câu lạc bộ hỗ trợ lọc.
   final List<String> categories = [
     'Tất cả',
     'Technology',
@@ -41,12 +55,14 @@ class ExploreViewModel extends ChangeNotifier {
     'Community',
   ];
 
+  /// Khởi tạo [ExploreViewModel] với các phụ thuộc dịch vụ.
   ExploreViewModel({
     required FirestoreService firestoreService,
     required AnalyticsService analyticsService,
   })  : _firestoreService = firestoreService,
         _analyticsService = analyticsService;
 
+  /// Chuyển đổi tab hiển thị giữa Sự kiện và Câu lạc bộ [tab].
   void setTab(ExploreTab tab) {
     if (_currentTab != tab) {
       _currentTab = tab;
@@ -58,7 +74,7 @@ class ExploreViewModel extends ChangeNotifier {
     }
   }
 
-  /// Sets search query and handles instant filtering for clubs or async search for events
+  /// Cập nhật từ khóa tìm kiếm [query] và thực hiện lọc dữ liệu ngay lập tức.
   void setQuery(String query) {
     _currentQuery = query;
     if (_currentTab == ExploreTab.clubs) {
@@ -68,7 +84,7 @@ class ExploreViewModel extends ChangeNotifier {
     }
   }
 
-  /// Helper function to strip Vietnamese diacritics for accent-insensitive search
+  /// Hàm tiện ích loại bỏ dấu thanh tiếng Việt phục vụ tìm kiếm không dấu.
   static String stripDiacritics(String str) {
     const withDiacritics = 'àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ'
         'ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ';
@@ -81,7 +97,7 @@ class ExploreViewModel extends ChangeNotifier {
     return result;
   }
 
-  /// Get clubs filtered by current query and selected category with Vietnamese accent support
+  /// Danh sách các câu lạc bộ đã được lọc theo từ khóa và danh mục đã chọn.
   List<ClubModel> get filteredClubs {
     var result = _clubs;
 
@@ -124,6 +140,7 @@ class ExploreViewModel extends ChangeNotifier {
     return result;
   }
 
+  /// Nạp toàn bộ dữ liệu ban đầu cho màn hình Khám phá bao gồm CLB và sự kiện.
   Future<void> loadExploreData() async {
     _state = const StateLoading('Đang tải danh mục sự kiện...');
     notifyListeners();
@@ -137,11 +154,13 @@ class ExploreViewModel extends ChangeNotifier {
     }
   }
 
+  /// Chọn một danh mục [category] mới và kích hoạt lọc lại danh sách.
   void selectCategory(String category) {
     _selectedCategory = category;
     searchEvents(query: _currentQuery, category: _selectedCategory);
   }
 
+  /// Tìm kiếm sự kiện theo từ khóa [query] và danh mục [category], hỗ trợ tiếng Việt không dấu.
   Future<void> searchEvents({String query = '', String? category}) async {
     _currentQuery = query;
     _state = const StateLoading('Đang tìm kiếm sự kiện...');

@@ -12,12 +12,16 @@ import '../../widgets/points_badge.dart';
 import '../auth/login_screen.dart';
 import '../staff/mobile_desk_screen.dart';
 
-/// S27: Student Profile Screen & Mandatory Lab 3 Firebase Demo Area
-/// Anti-slop Editorial Profile: flat hairline cards, clean diagnostic terminal for Firebase verification.
-/// Task 4 (Đạt): Analytics DebugView 7-event trigger panel + Crashlytics verification controls.
+/// Màn hình Hồ sơ cá nhân sinh viên và Khu vực Thử nghiệm Demo Firebase Lab 3.
+///
+/// Quản lý thông tin tài khoản, điểm rèn luyện, danh sách chứng nhận e-Certificate,
+/// phân công ca trực cổng soát vé và toàn bộ bảng điều khiển kiểm thử 7 sự kiện Analytics DebugView,
+/// Crashlytics, Storage PDF, FCM Push Notification và Remote Config.
 class ProfileScreen extends StatefulWidget {
+  /// Khởi tạo [ProfileScreen].
   const ProfileScreen({super.key});
 
+  /// Tạo state quản lý làm mới dữ liệu hồ sơ cá nhân và chứng nhận.
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }

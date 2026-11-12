@@ -13,11 +13,13 @@ import '../services/fcm_service.dart';
 import '../services/analytics_service.dart';
 import '../services/pdf_export_service.dart';
 
-/// MVVM ProfileViewModel
-/// Manages student profile data and hosts the mandatory Lab 3 Firebase Demo Area.
+/// Quản lý dữ liệu trang cá nhân sinh viên, chứng nhận hoạt động, câu lạc bộ theo dõi,
+/// phân công ca trực cổng soát vé và toàn bộ kịch bản kiểm thử tích hợp Firebase Lab 3.
 class ProfileViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final StorageService _storageService;
+
+  /// Cung cấp instance của [StorageService] để xử lý tải tệp tin lên Firebase Storage.
   StorageService get storageService => _storageService;
   final RemoteConfigService _remoteConfigService;
   final CrashlyticsService _crashlyticsService;
@@ -26,18 +28,27 @@ class ProfileViewModel extends ChangeNotifier {
   final PdfExportService _pdfExportService;
 
   ScreenState<List<CertificateModel>> _certificatesState = const StateInitial();
+
+  /// Trạng thái tải danh sách chứng nhận e-Certificate của sinh viên.
   ScreenState<List<CertificateModel>> get certificatesState =>
       _certificatesState;
 
   List<ClubModel> _followedClubs = [];
+
+  /// Danh sách các câu lạc bộ mà sinh viên đang theo dõi.
   List<ClubModel> get followedClubs => _followedClubs;
 
   // Gate Check-in Duty Assignments (Phân công ca trực cổng)
   List<GateAssignmentModel> _gateAssignments = [];
+
+  /// Danh sách phân công ca trực cổng soát vé được gán cho tài khoản cộng tác viên/cán bộ.
   List<GateAssignmentModel> get gateAssignments => _gateAssignments;
   bool _isLoadingAssignments = false;
+
+  /// Cho biết trạng thái đang tải dữ liệu phân công ca trực cổng.
   bool get isLoadingAssignments => _isLoadingAssignments;
 
+  /// Tải danh sách phân công ca trực cổng soát vé theo địa chỉ [email] của người dùng.
   Future<void> loadGateAssignments(String email) async {
     if (email.isEmpty) return;
     _isLoadingAssignments = true;
@@ -54,20 +65,29 @@ class ProfileViewModel extends ChangeNotifier {
 
   // Firebase Demo Area State
   double _uploadProgress = 0.0;
+
+  /// Tiến độ tải lên Cloud Storage từ 0.0 đến 1.0.
   double get uploadProgress => _uploadProgress;
 
   String? _lastUploadedUrl;
+
+  /// Đường dẫn URL tải về của tệp tin vừa tải lên Firebase Storage thành công gần nhất.
   String? get lastUploadedUrl => _lastUploadedUrl;
 
   bool _isUploading = false;
+
+  /// Cờ báo hiệu quá trình xuất PDF hoặc tải lên Firebase Storage đang diễn ra.
   bool get isUploading => _isUploading;
 
   String? _statusMessage;
+
+  /// Thông điệp trạng thái kết quả của hành động demo Firebase vừa thực hiện.
   String? get statusMessage => _statusMessage;
 
   StreamSubscription<List<CertificateModel>>? _certSubscription;
   String? _subscribedUserId;
 
+  /// Khởi tạo [ProfileViewModel] và đăng ký lắng nghe bộ thông báo chứng nhận từ [FirestoreService].
   ProfileViewModel({
     required FirestoreService firestoreService,
     required StorageService storageService,
@@ -86,12 +106,14 @@ class ProfileViewModel extends ChangeNotifier {
     _firestoreService.certificatesNotifier.addListener(_onCertificatesChanged);
   }
 
+  /// Lắng nghe sự kiện phát hành chứng nhận mới từ [FirestoreService] và cập nhật ngầm.
   void _onCertificatesChanged() {
     if (_subscribedUserId != null) {
       _refreshCertificatesSilently(_subscribedUserId!);
     }
   }
 
+  /// Tải danh sách và thiết lập stream lắng nghe e-Certificate của sinh viên [userId] từ Cloud Firestore.
   Future<void> loadProfileCertificates(String userId) async {
     _subscribedUserId = userId;
     _certSubscription?.cancel();
@@ -119,6 +141,7 @@ class ProfileViewModel extends ChangeNotifier {
     );
   }
 
+  /// Tải ngầm danh sách chứng nhận của [userId] mà không hiển thị vòng xoay loading.
   Future<void> _refreshCertificatesSilently(String userId) async {
     try {
       final certs = await _firestoreService.getUserCertificates(userId);
@@ -129,6 +152,7 @@ class ProfileViewModel extends ChangeNotifier {
     }
   }
 
+  /// Hủy đăng ký stream và xóa bộ lắng nghe sự kiện khi ViewModel bị hủy.
   @override
   void dispose() {
     _certSubscription?.cancel();
@@ -136,7 +160,7 @@ class ProfileViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  /// Load clubs followed by the active student directly from Cloud Firestore
+  /// Tải thông tin các câu lạc bộ mà người dùng đang theo dõi dựa vào danh sách ID [followedIds].
   Future<void> loadFollowedClubs(List<String> followedIds) async {
     try {
       final allClubs = await _firestoreService.getClubs();
@@ -151,7 +175,7 @@ class ProfileViewModel extends ChangeNotifier {
   // FIREBASE DEMO AREA ACTIONS (LAB 3 SECTION 3)
   // ==========================================
 
-  /// Opens native print & PDF preview / save dialog directly on mobile
+  /// Mở hộp thoại xem trước và in PDF hoặc tải chứng nhận [certificate] trực tiếp trên thiết bị di động.
   Future<void> viewAndDownloadCertificatePdf(CertificateModel certificate) async {
     try {
       await _pdfExportService.openAndDownloadCertificatePdf(certificate);
@@ -160,7 +184,7 @@ class ProfileViewModel extends ChangeNotifier {
     }
   }
 
-  /// Action 1: Generate PDF and Upload to Firebase Storage
+  /// Sinh tệp PDF chứng nhận [certificate], tải lên Firebase Storage và ghi nhận Analytics.
   Future<void> generateAndUploadPdfSummary(CertificateModel certificate) async {
     _isUploading = true;
     _uploadProgress = 0.0;
@@ -205,7 +229,7 @@ class ProfileViewModel extends ChangeNotifier {
     }
   }
 
-  /// Action 2: Trigger Simulated Push Notification
+  /// Kích hoạt mô phỏng nhận thông báo đẩy FCM (foreground notification) từ hệ thống.
   void triggerDemoPushNotification() {
     _fcmService.simulateConsolePush(
       title: 'Thông báo mới từ Phòng CTSV',
@@ -216,7 +240,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Action 3: Trigger Crashlytics Non-Fatal Handled Error
+  /// Kích hoạt ghi nhận ngoại lệ phi nghiêm trọng (non-fatal error) có kiểm soát lên Firebase Crashlytics.
   Future<void> triggerHandledErrorDemo() async {
     try {
       throw FormatException(
@@ -237,12 +261,12 @@ class ProfileViewModel extends ChangeNotifier {
     }
   }
 
-  /// Action 4: Trigger Crashlytics Verification Test Crash
+  /// Kích hoạt lỗi crash ứng dụng để kiểm tra crash report trên Firebase Crashlytics dashboard.
   void triggerTestCrash() {
     _crashlyticsService.triggerTestCrash();
   }
 
-  /// Action 5: Live Toggle Remote Config Values (max_featured_events)
+  /// Chuyển đổi qua lại giá trị cấu hình động `max_featured_events` (2 hoặc 5) từ Firebase Remote Config.
   Future<void> toggleRemoteConfigDemo() async {
     final currentMax = _remoteConfigService.maxFeaturedEvents;
     final nextMax = currentMax == 5 ? 2 : 5;
@@ -258,14 +282,14 @@ class ProfileViewModel extends ChangeNotifier {
   // Strictly zero-PII: chỉ ghi anonymous entity IDs và counters.
   // ==========================================
 
-  /// Event 1 — login: ghi nhận đăng nhập Email FPT (demo trigger từ Profile)
+  /// Kích hoạt sự kiện Analytics `login` ghi nhận đăng nhập bằng Email FPT trên DebugView.
   Future<void> triggerAnalyticsLogin() async {
     await _analyticsService.logLogin(method: 'email_fpt', role: 'student');
     _statusMessage = '✅ [1/7] login — method="email_fpt", role="student" → DebugView';
     notifyListeners();
   }
 
-  /// Event 2 — search: tìm kiếm sự kiện theo từ khóa "AI"
+  /// Kích hoạt sự kiện Analytics `search` tìm kiếm sự kiện theo từ khóa "AI" trên DebugView.
   Future<void> triggerAnalyticsSearch() async {
     await _analyticsService.logSearch(
       searchTerm: 'AI',
@@ -276,7 +300,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Event 3 — view_item: xem chi tiết sự kiện demo (ID không chứa PII)
+  /// Kích hoạt sự kiện Analytics `view_item` xem chi tiết sự kiện demo trên DebugView.
   Future<void> triggerAnalyticsViewItem() async {
     await _analyticsService.logViewItem(
       itemId: 'evt_tech_expo_2026',
@@ -288,7 +312,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Event 4 — register_event: đăng ký giữ chỗ 1-chạm thành công
+  /// Kích hoạt sự kiện Analytics `register_event` đăng ký sự kiện thành công trên DebugView.
   Future<void> triggerAnalyticsRegisterEvent() async {
     await _analyticsService.logRegisterEvent(
       eventId: 'evt_tech_expo_2026',
@@ -300,7 +324,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Event 5 — live_interact: upvote câu hỏi trong Live Q&A
+  /// Kích hoạt sự kiện Analytics `live_interact` tương tác đặt câu hỏi hoặc upvote trong Live Q&A trên DebugView.
   Future<void> triggerAnalyticsLiveInteract() async {
     await _analyticsService.logLiveInteract(
       eventId: 'evt_tech_expo_2026',
@@ -311,7 +335,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Event 6 — submit_feedback: đánh giá 5 sao sau sự kiện
+  /// Kích hoạt sự kiện Analytics `submit_feedback` gửi đánh giá phản hồi sự kiện trên DebugView.
   Future<void> triggerAnalyticsSubmitFeedback() async {
     await _analyticsService.logSubmitFeedback(
       eventId: 'evt_tech_expo_2026',
@@ -322,7 +346,7 @@ class ProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Event 7 — export_report: xuất e-Certificate PDF & upload Cloud Storage
+  /// Kích hoạt sự kiện Analytics `export_report` xuất chứng nhận PDF lên Cloud Storage trên DebugView.
   Future<void> triggerAnalyticsExportReport() async {
     await _analyticsService.logExportReport(
       exportType: 'certificate',

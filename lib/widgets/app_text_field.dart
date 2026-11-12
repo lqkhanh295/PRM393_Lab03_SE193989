@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Design System Text Input Field
-/// Anti-Slop Architecture: High-contrast focus, crisp hairline outline, subtle hint.
+/// Ô nhập liệu văn bản chuẩn của hệ thống Campus Event.
+///
+/// Độ tương phản cao khi focus, đường viền sắc nét, hỗ trợ nhãn, gợi ý mờ,
+/// biểu tượng đầu/cuối ô và bộ kiểm tra tính hợp lệ [validator].
 class AppTextField extends StatelessWidget {
+  /// Bộ điều khiển trường nhập liệu [TextEditingController].
   final TextEditingController? controller;
+
+  /// Nhãn hiển thị của trường nhập liệu.
   final String label;
+
+  /// Văn bản gợi ý mờ khi ô nhập còn trống.
   final String? hintText;
+
+  /// Biểu tượng hiển thị ở đầu trường nhập.
   final IconData? prefixIcon;
+
+  /// Widget hiển thị ở cuối trường nhập (ví dụ: nút ẩn/hiện mật khẩu).
   final Widget? suffixIcon;
+
+  /// Ẩn nội dung văn bản nhập (sử dụng cho mật khẩu).
   final bool obscureText;
+
+  /// Hàm kiểm tra tính hợp lệ của dữ liệu nhập.
   final String? Function(String?)? validator;
+
+  /// Hàm gọi lại khi nội dung văn bản thay đổi.
   final ValueChanged<String>? onChanged;
+
+  /// Kiểu bàn phím hiển thị trên thiết bị di động.
   final TextInputType? keyboardType;
 
+  /// Khởi tạo [AppTextField] với nhãn [label] và các cấu hình nhập liệu.
   const AppTextField({
     super.key,
     this.controller,
@@ -27,6 +47,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
   });
 
+  /// Xây dựng trường nhập liệu [TextFormField].
   @override
   Widget build(BuildContext context) {
     return TextFormField(

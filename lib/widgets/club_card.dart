@@ -3,18 +3,25 @@ import 'package:flutter/services.dart';
 import '../models/club_model.dart';
 import '../theme/app_theme.dart';
 
-/// ClubCard Widget
-/// Clean Anti-slop Editorial card presenting an official FPTU Club profile.
+/// Thẻ hiển thị hồ sơ câu lạc bộ sinh viên (ClubCard) theo phong cách biên tập hiện đại.
+///
+/// Thể hiện tên câu lạc bộ, tên viết tắt, nhóm danh mục hoạt động, logo chính thức
+/// và mở bảng chi tiết thông tin liên hệ khi người dùng tương tác.
 class ClubCard extends StatelessWidget {
+  /// Dữ liệu câu lạc bộ [ClubModel].
   final ClubModel club;
+
+  /// Hành động tùy chỉnh khi bấm vào thẻ câu lạc bộ.
   final VoidCallback? onTap;
 
+  /// Khởi tạo [ClubCard] với thông tin [club] và tùy chọn bấm [onTap].
   const ClubCard({
     super.key,
     required this.club,
     this.onTap,
   });
 
+  /// Xác định mã màu thương hiệu đại diện cho từng nhóm danh mục [category] của câu lạc bộ.
   Color _getCategoryColor(String category) {
     switch (category.toLowerCase()) {
       case 'technology':
@@ -37,6 +44,7 @@ class ClubCard extends StatelessWidget {
     }
   }
 
+  /// Xây dựng avatar câu lạc bộ hiển thị hình ảnh logo mạng hoặc monogram chữ viết tắt làm fallback.
   Widget _buildClubAvatar({
     required double size,
     required Color catColor,
@@ -104,6 +112,7 @@ class ClubCard extends StatelessWidget {
     );
   }
 
+  /// Hiển thị bảng chi tiết hồ sơ câu lạc bộ dưới dạng BottomSheet với liên kết mạng xã hội.
   void _showClubDetails(BuildContext context) {
     showModalBottomSheet(
       context: context,

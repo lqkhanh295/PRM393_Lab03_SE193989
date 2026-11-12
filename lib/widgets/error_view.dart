@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 
-/// Explicit Error State View (Anti-slop Editorial)
-/// Nielsen Heuristic #9 compliant: clearly states error diagnosis with high contrast and provides retry.
+/// Giao diện hiển thị trạng thái xảy ra lỗi hoặc gián đoạn kết nối.
+///
+/// Tuân thủ nguyên lý Nielsen #9 (giúp người dùng nhận biết, chẩn đoán và khắc phục lỗi)
+/// với thông điệp rõ ràng và nút bấm thử lại kết nối [onRetry].
 class ErrorView extends StatelessWidget {
+  /// Tiêu đề chẩn đoán lỗi.
   final String title;
+
+  /// Nội dung thông báo lỗi chi tiết.
   final String errorMessage;
+
+  /// Hàm gọi lại xử lý tải lại dữ liệu khi người dùng bấm nút "Thử lại kết nối".
   final VoidCallback? onRetry;
 
+  /// Khởi tạo [ErrorView] với thông báo lỗi [errorMessage] và nút thử lại [onRetry].
   const ErrorView({
     super.key,
     this.title = 'Đã xảy ra sự cố',
@@ -16,6 +24,7 @@ class ErrorView extends StatelessWidget {
     this.onRetry,
   });
 
+  /// Xây dựng khung hiển thị thông báo lỗi và nút thử lại.
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -7,8 +7,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 
-/// Authentication Service Wrapper
-/// Provides Google Sign-In, Email/Password, and Real Firestore Profile synchronization.
+/// Dịch vụ quản lý xác thực người dùng (Authentication Service).
+///
+/// Cung cấp cơ chế đăng nhập bằng Google Sign-In, Email/Password trường FPT,
+/// và tự động đồng bộ hồ sơ, vai trò, điểm rèn luyện thời gian thực với Cloud Firestore.
 class AuthService {
   final FirebaseAuth? _firebaseAuth;
   final FirebaseFirestore? _firestore;
@@ -25,6 +27,7 @@ class AuthService {
   final _authStateController = StreamController<UserModel?>.broadcast();
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _userDocSubscription;
 
+  /// Khởi tạo [AuthService] và thiết lập lắng nghe luồng thay đổi trạng thái xác thực.
   AuthService([this._firebaseAuth, this._firestore]) {
     // If Firebase Auth is provided, listen to its auth state changes
     _firebaseAuth?.authStateChanges().listen((User? user) async {
@@ -50,6 +53,7 @@ class AuthService {
     });
   }
 
+  /// Lắng nghe các thay đổi thời gian thực trên tài liệu người dùng [userId] từ Cloud Firestore.
   void _listenToUserDocument(String userId) {
     _userDocSubscription?.cancel();
     if (_firestore != null) {
@@ -74,6 +78,7 @@ class AuthService {
     }
   }
 
+  /// Đồng bộ thông tin [basicUser] với bộ sưu tập `users` trên Cloud Firestore.
   Future<UserModel> _syncUserWithFirestore(UserModel basicUser) async {
     if (_firestore == null) return basicUser;
     try {
@@ -91,11 +96,16 @@ class AuthService {
     }
   }
 
+  /// Thông tin đối tượng người dùng hiện tại đang đăng nhập.
   UserModel? get currentUser => _currentUser;
+
+  /// Cho biết người dùng đã đăng nhập vào hệ thống hay chưa.
   bool get isAuthenticated => _currentUser != null;
+
+  /// Luồng phát tín hiệu khi có sự thay đổi về phiên đăng nhập hoặc dữ liệu hồ sơ người dùng.
   Stream<UserModel?> get authStateChanges => _authStateController.stream;
 
-  /// Google Sign-In implementation
+  /// Đăng nhập tài khoản bằng cơ chế Google Sign-In với xác thực OAuth 2.0.
   Future<UserModel?> signInWithGoogle() async {
     try {
       debugPrint('[AuthService] Initiating Google Sign-In...');
@@ -172,7 +182,10 @@ class AuthService {
     }
   }
 
-  /// Sign-in with FPT Email & Password implementation
+  /// Đăng nhập tài khoản bằng [email] trường FPT và [password].
+  ///
+  /// Kiểm tra chặt chẽ tên miền (@fpt.edu.vn, @fe.edu.vn, @fptu.edu.vn)
+  /// và tự động cấp tài khoản nếu người dùng đăng nhập lần đầu tiên.
   Future<UserModel?> signInWithEmailPassword({
     required String email,
     required String password,
@@ -324,7 +337,7 @@ class AuthService {
     }
   }
 
-  /// Add activity points directly and synchronize with Cloud Firestore
+  /// Cộng điểm rèn luyện [points] trực tiếp vào hồ sơ sinh viên và đồng bộ nguyên tử lên Cloud Firestore.
   Future<void> addActivityPoints(int points) async {
     if (_currentUser == null) return;
     final updatedPoints = _currentUser!.activityPoints + points;
@@ -344,7 +357,7 @@ class AuthService {
     }
   }
 
-  /// Manually reload user document from Cloud Firestore
+  /// Tải lại bản ghi hồ sơ sinh viên mới nhất từ Cloud Firestore.
   Future<UserModel?> reloadCurrentUser() async {
     if (_currentUser == null) return null;
     if (_firestore != null) {
@@ -362,7 +375,7 @@ class AuthService {
     return _currentUser;
   }
 
-  /// Toggle staff/leader role for demo testing
+  /// Chuyển đổi vai trò người dùng [newRole] linh hoạt phục vụ mục đích kiểm thử và demo đồ án.
   void switchDemoRole(String newRole) {
     if (_currentUser != null) {
       _currentUser = _currentUser!.copyWith(role: newRole);
@@ -371,7 +384,7 @@ class AuthService {
     }
   }
 
-  /// Sign out & purge local user session data
+  /// Đăng xuất khỏi tài khoản, hủy các kết nối thời gian thực và xóa sạch phiên làm việc trên máy.
   Future<void> signOut() async {
     try {
       _userDocSubscription?.cancel();
@@ -387,6 +400,7 @@ class AuthService {
     }
   }
 
+  /// Giải phóng tài nguyên và đóng luồng phát tín hiệu xác thực.
   void dispose() {
     _userDocSubscription?.cancel();
     _authStateController.close();

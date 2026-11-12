@@ -1,14 +1,22 @@
+/// Thông tin diễn giả hoặc khách mời đặc biệt tham gia sự kiện.
 class EventSpeaker {
+  /// Họ tên của diễn giả.
   final String name;
+
+  /// Vai trò hoặc chức danh chuyên môn của diễn giả.
   final String role;
+
+  /// Đường dẫn ảnh đại diện của diễn giả.
   final String avatarUrl;
 
+  /// Khởi tạo một đối tượng [EventSpeaker].
   const EventSpeaker({
     required this.name,
     required this.role,
     required this.avatarUrl,
   });
 
+  /// Chuyển đổi dữ liệu Map thành đối tượng [EventSpeaker].
   factory EventSpeaker.fromMap(Map<String, dynamic> map) {
     return EventSpeaker(
       name: map['name'] as String? ?? 'Diễn giả',
@@ -17,6 +25,7 @@ class EventSpeaker {
     );
   }
 
+  /// Chuyển đổi đối tượng [EventSpeaker] thành Map.
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -26,17 +35,25 @@ class EventSpeaker {
   }
 }
 
+/// Thông tin một phiên nội dung trong lịch trình của sự kiện.
 class EventSession {
+  /// Khung giờ diễn ra phiên (ví dụ: `09:00 - 10:00`).
   final String time;
+
+  /// Tiêu đề hoặc chủ đề của phiên.
   final String title;
+
+  /// Tên diễn giả hoặc ban tổ chức chủ trì phiên.
   final String speakerName;
 
+  /// Khởi tạo một đối tượng [EventSession].
   const EventSession({
     required this.time,
     required this.title,
     required this.speakerName,
   });
 
+  /// Chuyển đổi dữ liệu Map thành đối tượng [EventSession].
   factory EventSession.fromMap(Map<String, dynamic> map) {
     return EventSession(
       time: map['time'] as String? ?? '09:00',
@@ -45,6 +62,7 @@ class EventSession {
     );
   }
 
+  /// Chuyển đổi đối tượng [EventSession] thành Map.
   Map<String, dynamic> toMap() {
     return {
       'time': time,
@@ -54,23 +72,57 @@ class EventSession {
   }
 }
 
+/// Mô hình sự kiện hoàn chỉnh trong hệ thống Campus Event.
+///
+/// Quản lý toàn bộ thông tin về thời gian, địa điểm, sức chứa, câu lạc bộ chủ trì,
+/// danh sách diễn giả, lịch trình các phiên và tính toán trạng thái sự kiện tự động theo thời gian thực.
 class EventModel {
+  /// Mã định danh duy nhất của sự kiện trên Cloud Firestore.
   final String id;
+
+  /// Tiêu đề chính thức của sự kiện.
   final String title;
+
+  /// Nội dung mô tả chi tiết, thể lệ và quyền lợi sinh viên tham gia.
   final String description;
+
+  /// Danh mục sự kiện (ví dụ: `Technology`, `Academic`, `Art & Music`, `Sports`, `Career`).
   final String category;
+
+  /// Mã định danh câu lạc bộ chủ trì tổ chức sự kiện.
   final String clubId;
+
+  /// Tên câu lạc bộ chủ trì.
   final String clubName;
+
+  /// Ngày diễn ra sự kiện (chuỗi định dạng `YYYY-MM-DD` hoặc `DD/MM/YYYY`).
   final String date;
+
+  /// Khung giờ tổ chức sự kiện (ví dụ: `13:30 - 17:30`).
   final String time;
+
+  /// Địa điểm tổ chức tại cơ sở Campus (ví dụ: `Hội trường Trịnh Công Sơn`).
   final String location;
+
+  /// Sức chứa hoặc số lượng vé tối đa được phép đăng ký.
   final int capacity;
+
+  /// Số lượng sinh viên đã đăng ký thành công tính đến thời điểm hiện tại.
   final int registeredCount;
+
+  /// Đường dẫn hình ảnh banner quảng bá sự kiện.
   final String bannerUrl;
+
+  /// Cờ đánh dấu sự kiện nổi bật được ghim tại trang chủ Mobile.
   final bool isFeatured;
+
+  /// Danh sách diễn giả khách mời tham gia sự kiện.
   final List<EventSpeaker> speakers;
+
+  /// Lịch trình các phiên làm việc trong sự kiện.
   final List<EventSession> sessions;
 
+  /// Khởi tạo một đối tượng [EventModel].
   const EventModel({
     required this.id,
     required this.title,
@@ -89,10 +141,13 @@ class EventModel {
     this.sessions = const [],
   });
 
+  /// Kiểm tra xem sự kiện đã hết chỗ đăng ký hay chưa.
   bool get isFull => registeredCount >= capacity;
+
+  /// Số lượng suất đăng ký còn lại của sự kiện.
   int get spotsRemaining => (capacity - registeredCount).clamp(0, capacity);
 
-  /// Parse string date supporting DD/MM/YYYY, YYYY-MM-DD, or ISO 8601
+  /// Phân tích chuỗi ngày [date] thành đối tượng [DateTime] hỗ trợ nhiều định dạng (DD/MM/YYYY, YYYY-MM-DD, ISO 8601).
   DateTime? get parsedDate {
     if (date.trim().isEmpty) return null;
     final trimmed = date.trim();
@@ -128,7 +183,7 @@ class EventModel {
     return null;
   }
 
-  /// Parse start DateTime from date and time
+  /// Phân tích thời điểm bắt đầu sự kiện từ [date] và phần đầu của [time].
   DateTime? get startDateTime {
     final d = parsedDate;
     if (d == null) return null;
@@ -145,7 +200,7 @@ class EventModel {
     return DateTime(d.year, d.month, d.day);
   }
 
-  /// Parse end DateTime from date and time
+  /// Phân tích thời điểm kết thúc sự kiện từ [date] và phần sau của [time].
   DateTime? get endDateTime {
     final d = parsedDate;
     if (d == null) return null;
@@ -163,7 +218,7 @@ class EventModel {
     return DateTime(d.year, d.month, d.day, 23, 59, 59);
   }
 
-  /// Determines whether the event has already concluded based on current runtime date/time
+  /// Xác định xem sự kiện đã diễn ra và kết thúc hay chưa dựa vào thời gian thực hiện tại.
   bool get isPast {
     final end = endDateTime;
     if (end != null) {
@@ -176,7 +231,7 @@ class EventModel {
     return false;
   }
 
-  /// Determines whether the event is currently in progress
+  /// Xác định xem sự kiện hiện có đang trong khung giờ diễn ra hay không.
   bool get isOngoing {
     final start = startDateTime;
     final end = endDateTime;
@@ -187,9 +242,10 @@ class EventModel {
     return false;
   }
 
-  /// Registration is open ONLY IF the event is not past and not full
+  /// Cổng đăng ký sự kiện chỉ mở khi sự kiện chưa kết thúc và chưa đầy chỗ.
   bool get isRegistrationOpen => !isPast && !isFull;
 
+  /// Chuyển đổi dữ liệu Map từ Cloud Firestore thành đối tượng [EventModel].
   factory EventModel.fromMap(Map<String, dynamic> map, String id) {
     return EventModel(
       id: id,
@@ -218,6 +274,7 @@ class EventModel {
     );
   }
 
+  /// Chuyển đổi đối tượng [EventModel] thành Map để cập nhật hoặc lưu trữ trên Firestore.
   Map<String, dynamic> toMap() {
     return {
       'title': title,
@@ -237,6 +294,7 @@ class EventModel {
     };
   }
 
+  /// Tạo bản sao [EventModel] mới với các thuộc tính được thay thế có chủ đích.
   EventModel copyWith({
     String? id,
     String? title,

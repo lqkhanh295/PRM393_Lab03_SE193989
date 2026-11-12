@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Explicit Loading State View (Anti-slop Editorial)
+/// Giao diện hiển thị trạng thái đang tải dữ liệu đồng nhất toàn hệ thống.
+///
+/// Thể hiện vòng xoay tiến trình [CircularProgressIndicator] kèm thông điệp giải thích tiến độ [message].
 class LoadingView extends StatelessWidget {
+  /// Thông điệp mô tả nội dung đang tải.
   final String? message;
 
+  /// Khởi tạo [LoadingView] với thông điệp tùy chọn [message].
   const LoadingView({super.key, this.message});
 
+  /// Xây dựng khung hiển thị trạng thái đang tải.
   @override
   Widget build(BuildContext context) {
     return Center(

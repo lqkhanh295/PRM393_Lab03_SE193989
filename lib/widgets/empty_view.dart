@@ -2,14 +2,24 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 
-/// Explicit Empty State View (Anti-slop Editorial)
-/// Keeps its frame, communicates honest status without frivolous floating pastel orbs.
+/// Giao diện hiển thị trạng thái danh sách trống hoặc chưa có dữ liệu.
+///
+/// Tuân thủ nguyên tắc thiết kế tối giản, thông báo trung thực tình trạng dữ liệu
+/// kèm nút hành động bổ sung nếu có [actionLabel] và [onAction].
 class EmptyView extends StatelessWidget {
+  /// Tiêu đề của thông báo trạng thái rỗng.
   final String title;
+
+  /// Mô tả chi tiết lý do danh sách trống hoặc hướng dẫn thao tác tiếp theo.
   final String message;
+
+  /// Nhãn hiển thị trên nút hành động đề xuất.
   final String? actionLabel;
+
+  /// Hàm xử lý khi người dùng nhấn vào nút hành động.
   final VoidCallback? onAction;
 
+  /// Khởi tạo [EmptyView] với thông điệp [message] và các tham số tùy chọn.
   const EmptyView({
     super.key,
     this.title = 'Chưa có dữ liệu',
@@ -18,6 +28,7 @@ class EmptyView extends StatelessWidget {
     this.onAction,
   });
 
+  /// Xây dựng khung hiển thị danh sách rỗng.
   @override
   Widget build(BuildContext context) {
     return Center(

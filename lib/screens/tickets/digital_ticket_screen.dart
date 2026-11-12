@@ -8,14 +8,18 @@ import '../../widgets/app_button.dart';
 import '../live/live_companion_screen.dart';
 import '../feedback/event_feedback_screen.dart';
 
-/// S20: Digital Ticket Screen with Dynamic QR Token
-/// Enforces Business Rule BR-005: Event Feedback & +5 Training Points
-/// are strictly unlocked only after a successful gate check-in.
+/// Màn hình Chi tiết vé điện tử kèm mã QR quét check-in tại cổng sự kiện.
+///
+/// Thực thi quy tắc nghiệp vụ BR-005: nút gửi đánh giá phản hồi và nhận +5 điểm rèn luyện
+/// chỉ được mở khóa sau khi sinh viên đã quét mã điểm danh thành công tại cổng soát vé.
 class DigitalTicketScreen extends StatelessWidget {
+  /// Dữ liệu vé điện tử [TicketModel].
   final TicketModel ticket;
 
+  /// Khởi tạo [DigitalTicketScreen] với thông tin vé [ticket].
   const DigitalTicketScreen({super.key, required this.ticket});
 
+  /// Xây dựng giao diện vé điện tử và các nút tác vụ trực tiếp trong sự kiện.
   @override
   Widget build(BuildContext context) {
     final firestoreService = context.watch<FirestoreService?>();

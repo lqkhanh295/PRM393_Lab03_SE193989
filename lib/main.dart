@@ -34,6 +34,11 @@ import 'viewmodels/inbox_viewmodel.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/main_navigation_screen.dart';
 
+/// Điểm khởi nhập chính (entry point) của ứng dụng di động Campus Event FPTU.
+///
+/// Thiết lập môi trường thực thi Flutter, khởi tạo bộ dịch vụ Firebase Cloud
+/// (Authentication, Firestore, Storage, Cloud Messaging, Analytics, Crashlytics, Remote Config),
+/// cài đặt trình bắt lỗi toàn cục và cấu hình cây phụ thuộc MultiProvider (DI) cho toàn bộ ứng dụng.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -180,9 +185,12 @@ void main() async {
   );
 }
 
+/// Widget gốc của ứng dụng Campus Event quản lý cấu hình giao diện chung và điều hướng ban đầu.
 class CampusEventApp extends StatelessWidget {
+  /// Khởi tạo [CampusEventApp].
   const CampusEventApp({super.key});
 
+  /// Xây dựng cây Widget [MaterialApp] dựa trên trạng thái xác thực người dùng từ [AuthViewModel].
   @override
   Widget build(BuildContext context) {
     final authVM = context.watch<AuthViewModel>();

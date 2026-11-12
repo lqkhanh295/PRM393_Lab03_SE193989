@@ -7,14 +7,20 @@ import '../models/certificate_model.dart';
 import '../viewmodels/explore_viewmodel.dart';
 import 'storage_service.dart';
 
-/// PDF Generation & Cloud Export Service
-/// Generates verifiable student PDF documents and uploads them to Cloud Storage.
+/// Dịch vụ xuất tài liệu PDF và đồng bộ lưu trữ đám mây.
+///
+/// Khởi tạo các mẫu Giấy chứng nhận điện tử (e-Certificate) và Vé tham dự (e-Ticket)
+/// có mã hash xác thực, hỗ trợ font chữ tiếng Việt có dấu và tải lên Firebase Storage.
 class PdfExportService {
   final StorageService _storageService;
 
+  /// Khởi tạo [PdfExportService] với phụ thuộc [StorageService].
   PdfExportService(this._storageService);
 
-  /// Generates a formal e-Certificate PDF document
+  /// Tạo mảng byte dữ liệu của file PDF Giấy chứng nhận tham gia từ [cert].
+  ///
+  /// Tự động tải font Roboto hỗ trợ tiếng Việt có dấu; nếu ở chế độ offline,
+  /// tự động kích hoạt bộ chuyển đổi loại bỏ dấu thanh để đảm bảo file PDF không bị lỗi font.
   Future<Uint8List> generateCertificatePdf(CertificateModel cert) async {
     final pdf = pw.Document();
 
@@ -143,7 +149,7 @@ class PdfExportService {
     return pdf.save();
   }
 
-  /// Opens native print & PDF preview / save dialog directly on mobile or browser download
+  /// Mở hộp thoại in ấn hoặc lưu trực tiếp file PDF chứng nhận [certificate] về máy thiết bị.
   Future<void> openAndDownloadCertificatePdf(CertificateModel certificate) async {
     final pdfBytes = await generateCertificatePdf(certificate);
     try {
@@ -159,7 +165,7 @@ class PdfExportService {
     }
   }
 
-  /// Generates a PDF ticket summary for offline storage
+  /// Tạo bản PDF tóm tắt thông tin vé điện tử [ticket] dùng để lưu trữ ngoại tuyến.
   Future<Uint8List> generateTicketPdf(TicketModel ticket) async {
     final pdf = pw.Document();
 
@@ -221,7 +227,7 @@ class PdfExportService {
     return pdf.save();
   }
 
-  /// High-level method: generates Certificate PDF and uploads to Cloud Storage
+  /// Sinh file PDF giấy chứng nhận [certificate] và tải lên Firebase Cloud Storage với tiến trình [onProgress].
   Future<UploadResult> exportAndUploadCertificate({
     required CertificateModel certificate,
     Function(double progress)? onProgress,

@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import '../models/event_model.dart';
 import '../theme/app_theme.dart';
 
-/// Editorial Campus Event Card
-/// Anti-Slop Architecture: Flat surface, 1px crisp rule, distinct typographic hierarchy.
+/// Thẻ hiển thị sự kiện dạng khối biên tập (Editorial Campus Event Card).
+///
+/// Thể hiện ảnh bìa tỷ lệ 16:9, nhãn phân loại, huy hiệu trạng thái (Đang mở ĐK, Hết chỗ, Đã kết thúc),
+/// tiêu đề sự kiện, tên câu lạc bộ chủ trì cùng lưới thông tin thời gian - địa điểm trực quan.
 class EventGlassCard extends StatelessWidget {
+  /// Dữ liệu sự kiện [EventModel].
   final EventModel event;
+
+  /// Hàm gọi lại khi người dùng bấm vào thẻ sự kiện để chuyển sang trang chi tiết.
   final VoidCallback onTap;
 
+  /// Khởi tạo [EventGlassCard] với sự kiện [event] và sự kiện bấm [onTap].
   const EventGlassCard({
     super.key,
     required this.event,
     required this.onTap,
   });
 
+  /// Xây dựng giao diện thẻ sự kiện.
   @override
   Widget build(BuildContext context) {
     return Semantics(

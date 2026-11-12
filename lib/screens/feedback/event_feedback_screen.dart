@@ -11,13 +11,18 @@ import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/certificate_card.dart';
 
-/// S23: Event Feedback & Rating Screen
-/// Anti-slop Editorial Survey: flat hairline surfaces, high-contrast star ratings, verified academic credential output.
+/// Màn hình Đánh giá và Phản hồi sự kiện sau khi đã check-in thành công.
+///
+/// Hỗ trợ chấm điểm sao, nhập ý kiến đóng góp, tự động cộng +5 điểm rèn luyện
+/// và phát hành chứng nhận e-Certificate ngay trên ứng dụng di động.
 class EventFeedbackScreen extends StatefulWidget {
+  /// Thông tin vé sự kiện đã check-in của sinh viên [TicketModel].
   final TicketModel ticket;
 
+  /// Khởi tạo [EventFeedbackScreen] với [ticket].
   const EventFeedbackScreen({super.key, required this.ticket});
 
+  /// Tạo state quản lý nội dung phản hồi và tiến trình gửi đánh giá.
   @override
   State<EventFeedbackScreen> createState() => _EventFeedbackScreenState();
 }

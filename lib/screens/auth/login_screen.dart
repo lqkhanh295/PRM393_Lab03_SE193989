@@ -7,11 +7,15 @@ import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../main_navigation_screen.dart';
 
-/// S01: Login Screen
-/// Supports both Google SSO and FPT University Email/Password Authentication.
+/// Màn hình đăng nhập tài khoản hệ thống Campus Event FPTU.
+///
+/// Hỗ trợ phương thức đăng nhập bằng Google Sign-In hoặc Email/Mật khẩu sinh viên FPT,
+/// kiểm tra miền `@fpt.edu.vn` và điều hướng tự động khi xác thực thành công.
 class LoginScreen extends StatefulWidget {
+  /// Khởi tạo [LoginScreen].
   const LoginScreen({super.key});
 
+  /// Tạo state quản lý form nhập liệu và trạng thái đăng nhập.
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }

@@ -16,13 +16,18 @@ import '../../widgets/loading_view.dart';
 import '../../widgets/empty_view.dart';
 import '../../widgets/app_button.dart';
 
-/// S21 & S22: Live Event Companion & Speaker Q&A Screen
-/// Anti-slop Live Conference Companion: flat hairline cards, crisp live badge, tactile Q&A input.
+/// Màn hình Đồng hành trực tiếp trong sự kiện (Live Event Companion & Speaker Q&A).
+///
+/// Cung cấp lịch trình diễn biến trực tiếp từng phiên, gửi câu hỏi tới diễn giả,
+/// bình chọn câu hỏi theo thời gian thực và in vé PDF kỷ niệm.
 class LiveCompanionScreen extends StatefulWidget {
+  /// Vé sự kiện mà sinh viên đang sử dụng tham dự [TicketModel].
   final TicketModel ticket;
 
+  /// Khởi tạo [LiveCompanionScreen] với [ticket].
   const LiveCompanionScreen({super.key, required this.ticket});
 
+  /// Tạo state quản lý các tab lịch trình phiên và phiên hỏi đáp Q&A.
   @override
   State<LiveCompanionScreen> createState() => _LiveCompanionScreenState();
 }

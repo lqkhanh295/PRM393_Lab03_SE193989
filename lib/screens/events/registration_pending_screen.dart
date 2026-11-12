@@ -11,14 +11,21 @@ import '../../viewmodels/my_tickets_vm.dart';
 import '../../widgets/app_button.dart';
 import '../tickets/digital_ticket_screen.dart';
 
-/// Screen S18-Pending: Cross-Role Registration Approval Status Screen (Slide 18)
-/// Anti-slop Editorial Screen: Clean typography, high contrast state indicators,
-/// zero mock data, binds directly to Cloud Firestore Stream in real-time.
+/// Màn hình Theo dõi trạng thái xét duyệt hồ sơ đăng ký theo thời gian thực (Slide 18 Cross-Role Flow).
+///
+/// Lắng nghe stream Firestore trực tiếp khi cán bộ/ban tổ chức thẩm định đơn từ Web Portal,
+/// tự động chuyển trạng thái từ "Chờ phê duyệt" sang "Đã cấp vé" hoặc "Từ chối" kèm lý do.
 class RegistrationPendingScreen extends StatefulWidget {
+  /// Bản ghi đơn đăng ký ban đầu [RegistrationModel].
   final RegistrationModel registration;
+
+  /// Dữ liệu sự kiện sinh viên đăng ký [EventModel].
   final EventModel event;
+
+  /// Dữ liệu sinh viên nộp đơn [UserModel].
   final UserModel user;
 
+  /// Khởi tạo [RegistrationPendingScreen].
   const RegistrationPendingScreen({
     super.key,
     required this.registration,
@@ -26,6 +33,7 @@ class RegistrationPendingScreen extends StatefulWidget {
     required this.user,
   });
 
+  /// Tạo state lắng nghe thay đổi trạng thái xét duyệt qua stream.
   @override
   State<RegistrationPendingScreen> createState() => _RegistrationPendingScreenState();
 }

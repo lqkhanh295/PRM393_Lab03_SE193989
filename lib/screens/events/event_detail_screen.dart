@@ -14,13 +14,18 @@ import 'registration_modal.dart';
 import '../tickets/digital_ticket_screen.dart';
 import '../../viewmodels/my_tickets_vm.dart';
 
-/// S13: Event Detail Screen
-/// Anti-Slop Architecture: Clear timeline, clean speaker badges, fixed bottom bar.
+/// Màn hình Chi tiết sự kiện (Event Detail Screen).
+///
+/// Thể hiện toàn bộ thông tin về nghị trình, danh sách diễn giả, vị trí tổ chức,
+/// tích hợp thẻ AI Gemini Insight phân tích nội dung và thanh tác vụ cố định đáy màn hình để giữ chỗ.
 class EventDetailScreen extends StatefulWidget {
+  /// Mã định danh sự kiện cần xem chi tiết.
   final String eventId;
 
+  /// Khởi tạo [EventDetailScreen] với [eventId].
   const EventDetailScreen({super.key, required this.eventId});
 
+  /// Tạo state quản lý tải dữ liệu sự kiện qua [EventDetailViewModel].
   @override
   State<EventDetailScreen> createState() => _EventDetailScreenState();
 }

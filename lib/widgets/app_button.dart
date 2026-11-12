@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Design System Primary Action Button
-/// Anti-Slop Architecture: High-contrast, tactile, WCAG 2.1 AA compliant.
+/// Nút bấm hành động chính (Primary Action Button) trong toàn bộ ứng dụng.
+///
+/// Độ tương phản cao, vùng chạm tối thiểu 48dp chuẩn tiếp cận WCAG 2.1 AA SC 2.5.5,
+/// hỗ trợ hiển thị vòng xoay tiến trình [isLoading] và biểu tượng đi kèm [icon].
 class AppPrimaryButton extends StatelessWidget {
+  /// Nhãn văn bản hiển thị trên nút.
   final String label;
+
+  /// Hàm gọi lại khi người dùng bấm nút (vô hiệu hóa nếu null hoặc đang tải).
   final VoidCallback? onPressed;
+
+  /// Cho biết nút có đang trong trạng thái tải tiến trình hay không.
   final bool isLoading;
+
+  /// Biểu tượng tùy chọn hiển thị trước nhãn văn bản.
   final IconData? icon;
+
+  /// Màu nền tùy chỉnh của nút (mặc định lấy theo [AppTheme.primary]).
   final Color? backgroundColor;
+
+  /// Màu chữ và biểu tượng tùy chỉnh (mặc định lấy theo [AppTheme.onPrimary]).
   final Color? foregroundColor;
 
+  /// Khởi tạo [AppPrimaryButton] với nhãn [label] và các thuộc tính tương tác.
   const AppPrimaryButton({
     super.key,
     required this.label,
@@ -21,6 +35,7 @@ class AppPrimaryButton extends StatelessWidget {
     this.foregroundColor,
   });
 
+  /// Xây dựng giao diện nút bấm chính.
   @override
   Widget build(BuildContext context) {
     final bg = backgroundColor ?? AppTheme.primary;
@@ -82,16 +97,30 @@ class AppPrimaryButton extends StatelessWidget {
   }
 }
 
-/// Design System Secondary Outlined Button
+/// Nút bấm dạng đường viền (Outlined Action Button) cho các tác vụ phụ hoặc điều hướng thứ cấp.
 class AppOutlinedButton extends StatelessWidget {
+  /// Nhãn văn bản hiển thị trên nút.
   final String label;
+
+  /// Hàm gọi lại khi bấm nút.
   final VoidCallback? onPressed;
+
+  /// Biểu tượng tùy chọn hiển thị trước nhãn.
   final IconData? icon;
+
+  /// Widget tùy biến hiển thị phía trước thay cho [icon] (ví dụ: Google logo).
   final Widget? leadingWidget;
+
+  /// Cho biết nút có đang trong trạng thái xử lý tiến trình hay không.
   final bool isLoading;
+
+  /// Màu đường viền tùy chỉnh.
   final Color? borderColor;
+
+  /// Màu chữ tùy chỉnh.
   final Color? textColor;
 
+  /// Khởi tạo [AppOutlinedButton] với nhãn [label] và các tham số cấu hình.
   const AppOutlinedButton({
     super.key,
     required this.label,
@@ -103,6 +132,7 @@ class AppOutlinedButton extends StatelessWidget {
     this.textColor,
   });
 
+  /// Xây dựng giao diện nút viền phụ.
   @override
   Widget build(BuildContext context) {
     final border = borderColor ?? AppTheme.outline;

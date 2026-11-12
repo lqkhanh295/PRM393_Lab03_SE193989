@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Design System Category Filter Chip
+/// Chip lọc danh mục sự kiện trong thanh lọc ngang.
+///
+/// Định dạng hình con nhộng bo tròn (stadium shape) với phản hồi xúc giác và khả năng tiếp cận ngữ nghĩa.
 class AppFilterChip extends StatelessWidget {
+  /// Tên nhãn danh mục (ví dụ: `Tất cả`, `Technology`, `Sports`).
   final String label;
+
+  /// Trạng thái danh mục hiện tại có đang được chọn hay không.
   final bool isSelected;
+
+  /// Hàm gọi lại khi trạng thái lựa chọn thay đổi.
   final ValueChanged<bool> onSelected;
 
+  /// Khởi tạo [AppFilterChip] với nhãn [label], trạng thái [isSelected] và hàm [onSelected].
   const AppFilterChip({
     super.key,
     required this.label,
@@ -14,6 +22,7 @@ class AppFilterChip extends StatelessWidget {
     required this.onSelected,
   });
 
+  /// Xây dựng giao diện chip lọc danh mục.
   @override
   Widget build(BuildContext context) {
     return Semantics(

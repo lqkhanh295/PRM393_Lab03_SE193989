@@ -3,21 +3,25 @@ import '../models/certificate_model.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 
-/// Digital Academic Certificate Card
-/// Designed with Anti-slop Academic Credential aesthetics:
-/// - 1px hairline slate border
-/// - Monospace verification stamp
-/// - High-contrast editorial typography
+/// Thẻ hiển thị chứng nhận điện tử (e-Certificate) của sinh viên.
+///
+/// Thể hiện chứng chỉ hoàn thành sự kiện với đường viền mảnh học thuật,
+/// mã băm xác thực chống làm giả và nút tải hoặc xem trước tài liệu PDF.
 class CertificateCard extends StatelessWidget {
+  /// Đối tượng chứng nhận điện tử [CertificateModel].
   final CertificateModel certificate;
+
+  /// Hàm gọi lại khi sinh viên bấm nút tải chứng chỉ PDF.
   final VoidCallback onDownload;
 
+  /// Khởi tạo [CertificateCard] với dữ liệu [certificate] và hành động tải [onDownload].
   const CertificateCard({
     super.key,
     required this.certificate,
     required this.onDownload,
   });
 
+  /// Xây dựng giao diện thẻ chứng nhận.
   @override
   Widget build(BuildContext context) {
     return Container(

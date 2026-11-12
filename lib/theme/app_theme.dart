@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Design Tokens & Theme Specification for Campus Event App
-/// Built following Anti-Slop Frontend Architecture (tasteskill v2 - Accent Ladder).
-/// Identity: FPT University Collegiate Tech & Event Companion.
+/// Hệ thống Design Tokens và cấu hình ThemeData cho toàn bộ ứng dụng Campus Event.
+///
+/// Tuân thủ nguyên tắc thiết kế cao cấp Anti-Slop (tasteskill v2 - Accent Ladder),
+/// lấy màu cam FPT Vermilion (#C2410C) làm điểm nhấn và màu đá phiến Obsidian làm nền mực văn bản.
 class AppTheme {
   // Brand & Semantic Colors
   static const Color primary = Color(0xFFC2410C); // FPT Vermilion (bold accent)
@@ -76,6 +77,7 @@ class AppTheme {
   // Min Tap Target Dimension (WCAG 2.1 AA)
   static const double minTouchTarget = 48.0;
 
+  /// Cấu hình chủ đề sáng [ThemeData] với các thông số kiểu chữ, màu sắc và component styles.
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,

@@ -6,18 +6,18 @@ import '../models/event_ai_insight_model.dart';
 import '../services/gemini_ai_service.dart';
 import '../services/remote_config_service.dart';
 
-/// Gemini AI Event Insight Card
-/// Level 2 Structured Output from Google Gemini Developer API.
-/// Fulfills Final Assignment Section 8 requirements:
-/// - Reads model & toggle from Remote Config.
-/// - Zero-PII input.
-/// - Graceful offline / quota fallback.
-/// - Allows user confirmation and interaction.
+/// Thẻ phân tích thông minh sự kiện bằng Google Gemini AI (Level 2 Structured Output).
+///
+/// Tích hợp cấu hình động từ Remote Config, tuân thủ nguyên tắc Zero-PII,
+/// tự động fallback khi mất mạng và cho phép sinh viên tương tác sao chép câu hỏi gợi ý vào Live Q&A.
 class GeminiEventInsightCard extends StatefulWidget {
+  /// Dữ liệu sự kiện cần phân tích [EventModel].
   final EventModel event;
 
+  /// Khởi tạo [GeminiEventInsightCard] cho sự kiện [event].
   const GeminiEventInsightCard({super.key, required this.event});
 
+  /// Tạo state quản lý tiến trình tạo nội dung thông minh.
   @override
   State<GeminiEventInsightCard> createState() => _GeminiEventInsightCardState();
 }
@@ -27,6 +27,7 @@ class _GeminiEventInsightCardState extends State<GeminiEventInsightCard> {
   EventAiInsightModel? _insight;
   bool _isExpanded = false;
 
+  /// Kích hoạt [GeminiAiService] để sinh phân tích thông minh sự kiện hoặc lấy bản dự phòng nội bộ.
   Future<void> _fetchInsights() async {
     setState(() {
       _isLoading = true;

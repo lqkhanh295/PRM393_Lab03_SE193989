@@ -3,11 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 
+/// Kết quả của thao tác tải file lên dịch vụ lưu trữ đám mây.
 class UploadResult {
+  /// Đường dẫn lưu trữ nội bộ của file trên Cloud Storage (vd: `reports/uid/file.pdf`).
   final String path;
+
+  /// Đường dẫn tải trực tiếp công khai hoặc URL bảo mật có chữ ký.
   final String downloadUrl;
+
+  /// Kích thước file được tải lên tính theo byte.
   final int fileSizeBytes;
 
+  /// Khởi tạo [UploadResult] với đầy đủ thuộc tính kết quả.
   const UploadResult({
     required this.path,
     required this.downloadUrl,
@@ -15,13 +22,20 @@ class UploadResult {
   });
 }
 
-/// Firebase Cloud Storage Service Wrapper
-/// Uploads files strictly under per-user directories: reports/{uid}/...
+/// Dịch vụ quản lý tệp tin và lưu trữ đám mây qua Firebase Cloud Storage.
+///
+/// Quản lý phân quyền lưu trữ theo thư mục riêng biệt của từng sinh viên: `reports/{uid}/...`
+/// và hỗ trợ cơ chế cầu nối dự phòng (bridge fallback) khi chạy trên Web/Emulator.
 class StorageService {
   final FirebaseStorage? _storage;
 
+  /// Khởi tạo [StorageService] với tùy chọn [FirebaseStorage] phục vụ kiểm thử.
   StorageService([this._storage]);
 
+  /// Tải mảng byte dữ liệu [bytes] lên Firebase Storage theo thư mục của [userId].
+  ///
+  /// Nhận vào tên tệp [fileName], thư mục gốc [folder] (mặc định là `reports`),
+  /// và hàm gọi lại theo dõi tiến trình tải lên [onProgress].
   Future<UploadResult> uploadFileBytes({
     required String userId,
     required String fileName,
@@ -98,7 +112,7 @@ class StorageService {
         );
       }
     } catch (e) {
-      debugPrint('[StorageService] Upload error: $e');
+      debugPrint('[StorageService] Error uploading file: $e');
       rethrow;
     }
   }

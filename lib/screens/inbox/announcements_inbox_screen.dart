@@ -10,12 +10,15 @@ import '../../widgets/loading_view.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/empty_view.dart';
 
-/// Announcements Inbox Screen
-/// Displays official broadcast messages from Web Admin & Event Organizers in real-time.
-/// Fulfills Final Assignment Section 3 & 7 requirements.
+/// Màn hình Hộp thư thông báo (Announcements Inbox) của sinh viên.
+///
+/// Lắng nghe trực tiếp các thông báo phát thanh thời gian thực từ Web Admin Portal,
+/// hỗ trợ lọc theo danh mục, hiển thị huy hiệu vai trò người gửi và thông điệp ghim quan trọng.
 class AnnouncementsInboxScreen extends StatefulWidget {
+  /// Khởi tạo [AnnouncementsInboxScreen].
   const AnnouncementsInboxScreen({super.key});
 
+  /// Tạo state quản lý cập nhật người dùng và ghi nhận analytics khi mở màn hình.
   @override
   State<AnnouncementsInboxScreen> createState() => _AnnouncementsInboxScreenState();
 }

@@ -5,15 +5,21 @@ import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 import '../services/crashlytics_service.dart';
 
-/// MVVM EventDetailViewModel
+/// ViewModel quản lý dữ liệu chi tiết sự kiện trên màn hình Event Detail.
+///
+/// Xử lý tải thông tin sự kiện, danh sách diễn giả, lịch trình chi tiết,
+/// hỗ trợ cập nhật lạc quan (Optimistic Update) số lượng chỗ và làm mới ngầm.
 class EventDetailViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final AnalyticsService _analyticsService;
   final CrashlyticsService _crashlyticsService;
 
   ScreenState<EventModel> _state = const StateInitial();
+
+  /// Trạng thái hiển thị của màn hình Chi tiết Sự kiện.
   ScreenState<EventModel> get state => _state;
 
+  /// Khởi tạo [EventDetailViewModel] với các dịch vụ cần thiết.
   EventDetailViewModel({
     required FirestoreService firestoreService,
     required AnalyticsService analyticsService,
@@ -22,6 +28,7 @@ class EventDetailViewModel extends ChangeNotifier {
         _analyticsService = analyticsService,
         _crashlyticsService = crashlyticsService;
 
+  /// Tải thông tin chi tiết sự kiện theo [eventId] và ghi nhận sự kiện Analytics `view_item`.
   Future<void> loadEvent(String eventId) async {
     _state = const StateLoading('Đang tải chi tiết sự kiện...');
     notifyListeners();
@@ -47,7 +54,7 @@ class EventDetailViewModel extends ChangeNotifier {
     }
   }
 
-  /// Optimistically increment registered count for immediate zero-lag UI feedback
+  /// Tăng số lượng người đăng ký theo kiểu lạc quan (Optimistic Update) giúp UI phản hồi tức thì.
   void incrementRegistration() {
     if (_state is StateData<EventModel>) {
       final current = (_state as StateData<EventModel>).data;
@@ -58,7 +65,7 @@ class EventDetailViewModel extends ChangeNotifier {
     }
   }
 
-  /// Silently refresh event data from Cloud Firestore / Cache without resetting to StateLoading
+  /// Làm mới ngầm dữ liệu sự kiện [eventId] từ Cloud Firestore mà không hiện vòng xoay tải trang.
   Future<void> refreshEvent(String eventId) async {
     try {
       final event = await _firestoreService.getEventById(eventId);

@@ -1,18 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Announcement Model for Campus Event System
-/// Displayed in the Mobile App Inbox in real-time and broadcasted from Web Admin.
+/// Mô hình thông báo (Announcement) trong hệ thống Campus Event.
+///
+/// Đại diện cho các bản tin được phát thanh từ Web Admin Portal tới ứng dụng di động
+/// của sinh viên theo thời gian thực trên Cloud Firestore collection `announcements`.
 class AnnouncementModel {
+  /// Mã định danh duy nhất của thông báo trên Cloud Firestore.
   final String id;
+
+  /// Tiêu đề ngắn gọn của thông báo.
   final String title;
+
+  /// Nội dung chi tiết hoặc thông điệp gửi tới sinh viên.
   final String content;
+
+  /// Phân loại thông báo (ví dụ: `general`, `urgent`, `event`, `budget`).
   final String category;
+
+  /// Vai trò của người phát hành thông báo (ví dụ: `staff`, `admin`, `leader`).
   final String authorRole;
+
+  /// Mã sự kiện liên quan (nếu thông báo dành riêng cho một sự kiện cụ thể).
   final String? eventId;
+
+  /// Mã người nhận cụ thể (để trống nếu thông báo phát rộng rãi cho toàn trường).
   final String userId;
+
+  /// Cờ đánh dấu thông báo quan trọng được ghim lên đầu danh sách.
   final bool isPinned;
+
+  /// Thời điểm thông báo được tạo hoặc phát thanh.
   final DateTime createdAt;
 
+  /// Khởi tạo một đối tượng [AnnouncementModel].
   const AnnouncementModel({
     required this.id,
     required this.title,
@@ -25,6 +45,7 @@ class AnnouncementModel {
     required this.createdAt,
   });
 
+  /// Chuyển đổi dữ liệu từ Firestore Map và [id] thành đối tượng [AnnouncementModel].
   factory AnnouncementModel.fromMap(Map<String, dynamic> map, String id) {
     DateTime parseDate(dynamic val) {
       if (val is Timestamp) return val.toDate();
@@ -47,6 +68,7 @@ class AnnouncementModel {
     );
   }
 
+  /// Chuyển đổi đối tượng [AnnouncementModel] thành Map để lưu trữ trên Cloud Firestore.
   Map<String, dynamic> toMap() {
     return {
       'title': title,

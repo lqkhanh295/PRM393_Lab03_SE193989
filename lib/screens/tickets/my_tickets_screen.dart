@@ -10,11 +10,15 @@ import '../../widgets/empty_view.dart';
 import '../../widgets/error_view.dart';
 import 'digital_ticket_screen.dart';
 
-/// S19: My Events & Tickets Hub Screen
-/// Anti-slop Editorial Pass Wallet: flat hairline containers, monospace ticket codes, tabular dates.
+/// Màn hình Ví vé sự kiện của sinh viên (My Events & Tickets Hub).
+///
+/// Hỗ trợ chuyển đổi giữa hai danh mục vé Đang hoạt động (Sắp diễn ra) và Lịch sử vé (Đã tham gia),
+/// hiển thị mã vé dạng monospace và liên kết tới màn hình vé điện tử chi tiết.
 class MyTicketsScreen extends StatefulWidget {
+  /// Khởi tạo [MyTicketsScreen].
   const MyTicketsScreen({super.key});
 
+  /// Tạo state quản lý tải danh sách vé của người dùng hiện tại.
   @override
   State<MyTicketsScreen> createState() => _MyTicketsScreenState();
 }

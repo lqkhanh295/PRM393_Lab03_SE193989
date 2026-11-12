@@ -12,11 +12,15 @@ import '../../widgets/empty_view.dart';
 import '../../widgets/error_view.dart';
 import '../events/event_detail_screen.dart';
 
-/// S08: Explore Events Screen with Multi-Category Filter
-/// Anti-slop Editorial catalog view: crisp hairline filters, accurate counts, zero blur.
+/// Màn hình Khám phá danh mục sự kiện và 43 câu lạc bộ FPTU.
+///
+/// Hỗ trợ chuyển đổi giữa hai tab Sự kiện và Câu lạc bộ, tìm kiếm tức thì theo từ khóa,
+/// lọc đa danh mục linh hoạt và liên kết xem chi tiết.
 class ExploreScreen extends StatefulWidget {
+  /// Khởi tạo [ExploreScreen].
   const ExploreScreen({super.key});
 
+  /// Tạo state quản lý ô tìm kiếm và bộ lọc danh mục.
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
 }

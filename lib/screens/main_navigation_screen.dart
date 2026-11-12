@@ -11,13 +11,18 @@ import 'tickets/my_tickets_screen.dart';
 import 'calendar/calendar_screen.dart';
 import 'profile/profile_screen.dart';
 
-/// Main Navigation Destination with Anti-slop Accent Navigation Bar
-/// Clean 1px hairline top rule, zero elevation, crisp typography.
+/// Màn hình điều hướng chính chứa thanh Bottom Navigation Bar 5 tab.
+///
+/// Quản lý chuyển đổi giữa các phân hệ: Trang chủ, Khám phá sự kiện, Vé của tôi,
+/// Lịch biểu học đường và Trang cá nhân / Demo Firebase.
 class MainNavigationScreen extends StatefulWidget {
+  /// Chỉ mục tab bắt đầu hiển thị (mặc định là 0 - Trang chủ).
   final int initialIndex;
 
+  /// Khởi tạo [MainNavigationScreen] với chỉ mục ban đầu [initialIndex].
   const MainNavigationScreen({super.key, this.initialIndex = 0});
 
+  /// Tạo state quản lý tab đang được chọn và kích hoạt tải dữ liệu nền.
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }

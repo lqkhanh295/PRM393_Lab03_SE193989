@@ -3,9 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:http/http.dart' as http;
 
-/// Firebase Remote Config Service Wrapper
-/// Supplies in-app defaults and fetches dynamic overrides without app rebuilds.
-/// Supports both Lab 3 UI flags and Final Assignment Gemini AI parameters.
+/// Dịch vụ quản lý cấu hình động từ xa qua Firebase Remote Config.
+///
+/// Cho phép cập nhật tham số giao diện và mô hình AI Gemini theo thời gian thực
+/// mà không cần phải phát hành lại ứng dụng lên kho ứng dụng.
 class RemoteConfigService {
   final FirebaseRemoteConfig? _remoteConfig;
 
@@ -19,16 +20,28 @@ class RemoteConfigService {
   String _geminiPromptTemplate =
       'Phân tích sự kiện sau và trả về JSON tóm tắt, điểm nổi bật, đối tượng phù hợp và câu hỏi gợi ý.';
 
+  /// Khởi tạo [RemoteConfigService] với tùy chọn [FirebaseRemoteConfig].
   RemoteConfigService([this._remoteConfig]);
 
+  /// Số lượng sự kiện nổi bật tối đa được phép hiển thị trên màn hình Trang chủ.
   int get maxFeaturedEvents => _maxFeaturedEvents;
+
+  /// Cờ bật/tắt tính năng hỏi đáp trực tiếp (Live Q&A) trong màn hình sự kiện.
   bool get enableLiveQA => _enableLiveQA;
+
+  /// Tiêu đề chữ hiển thị trên thanh biểu ngữ chính (Featured Banner) ở Trang chủ.
   String get featuredBannerTitle => _featuredBannerTitle;
 
+  /// Cờ kiểm soát việc bật hoặc tắt trợ lý phân tích Gemini AI từ xa.
   bool get enableGeminiInsights => _enableGeminiInsights;
+
+  /// Tên phiên bản mô hình Gemini đang được kích hoạt (mặc định: `gemini-3.5-flash-lite`).
   String get geminiModelName => _geminiModelName;
+
+  /// Khuôn mẫu câu lệnh chỉ đạo (Prompt Template) truyền cho Gemini AI.
   String get geminiPromptTemplate => _geminiPromptTemplate;
 
+  /// Thiết lập các giá trị mặc định nội bộ và khởi chạy quá trình kéo cấu hình mới nhất.
   Future<void> initialize() async {
     try {
       if (_remoteConfig != null) {
@@ -55,6 +68,7 @@ class RemoteConfigService {
     await fetchAndActivate();
   }
 
+  /// Kéo dữ liệu cấu hình mới nhất từ Firebase Console và kích hoạt áp dụng ngay vào ứng dụng.
   Future<bool> fetchAndActivate() async {
     try {
       if (_remoteConfig != null) {
@@ -105,7 +119,7 @@ class RemoteConfigService {
     return false;
   }
 
-  /// Demo helper to simulate console toggle live in demo area / presentation
+  /// Gán giá trị cấu hình mô phỏng nhanh phục vụ cho việc trình chiếu demo và kiểm thử runtime.
   void setSimulatedConfig({
     int? maxEvents,
     bool? liveQA,

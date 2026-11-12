@@ -5,19 +5,28 @@ import '../services/auth_service.dart';
 import '../services/analytics_service.dart';
 import '../services/crashlytics_service.dart';
 
-/// MVVM AuthViewModel
-/// Coordinates user authentication lifecycle and emits explicit screen states.
+/// ViewModel quản lý toàn bộ vòng đời xác thực người dùng trong mô hình MVVM.
+///
+/// Điều phối đăng nhập Google, Email FPT, đồng bộ hồ sơ, phát ra các trạng thái
+/// màn hình rõ ràng ([StateInitial], [StateLoading], [StateData], [StateError])
+/// và ghi nhận nhật ký chẩn đoán qua Firebase Analytics & Crashlytics.
 class AuthViewModel extends ChangeNotifier {
   final AuthService _authService;
   final AnalyticsService _analyticsService;
   final CrashlyticsService _crashlyticsService;
 
   ScreenState<UserModel?> _state = const StateInitial();
+
+  /// Trạng thái hiện tại của màn hình xác thực (Initial, Loading, Data, Error).
   ScreenState<UserModel?> get state => _state;
 
+  /// Đối tượng người dùng hiện tại đang đăng nhập trong hệ thống.
   UserModel? get currentUser => _authService.currentUser;
+
+  /// Cho biết người dùng hiện tại đã đăng nhập hay chưa.
   bool get isAuthenticated => _authService.isAuthenticated;
 
+  /// Khởi tạo [AuthViewModel] và đăng ký lắng nghe các thay đổi trạng thái xác thực.
   AuthViewModel({
     required AuthService authService,
     required AnalyticsService analyticsService,
@@ -35,6 +44,9 @@ class AuthViewModel extends ChangeNotifier {
     });
   }
 
+  /// Thực hiện đăng nhập bằng tài khoản Google với OAuth 2.0.
+  ///
+  /// Trả về `true` nếu đăng nhập thành công, ngược lại trả về `false`.
   Future<bool> signInWithGoogle() async {
     _state = const StateLoading('Đang kết nối tài khoản Google FPT...');
     notifyListeners();
@@ -67,6 +79,9 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  /// Thực hiện đăng nhập bằng [email] trường FPT và [password].
+  ///
+  /// Trả về `true` nếu xác thực thành công, ngược lại trả về `false` và cập nhật thông báo lỗi.
   Future<bool> signInWithEmailPassword({
     required String email,
     required String password,
@@ -99,12 +114,13 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  /// Chuyển đổi vai trò người dùng [role] linh hoạt trong quá trình thuyết trình demo nghiệm thu.
   void switchDemoRole(String role) {
     _authService.switchDemoRole(role);
     notifyListeners();
   }
 
-  /// Add activity points (+5) upon completing event feedback
+  /// Cộng điểm rèn luyện [points] sau khi sinh viên hoàn tất đánh giá sự kiện.
   Future<void> addActivityPoints(int points) async {
     await _authService.addActivityPoints(points);
     if (_authService.currentUser != null) {
@@ -113,7 +129,7 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  /// Reload latest user profile data from Cloud Firestore
+  /// Tải lại dữ liệu hồ sơ sinh viên mới nhất từ Cloud Firestore và cập nhật giao diện.
   Future<void> refreshProfile() async {
     final updated = await _authService.reloadCurrentUser();
     if (updated != null) {
@@ -122,6 +138,7 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  /// Đăng xuất khỏi tài khoản, xóa phiên làm việc và đưa giao diện về trạng thái ban đầu.
   Future<void> signOut() async {
     try {
       await _analyticsService.logLogout(sessionMinutes: 15);

@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import '../models/speaker_question_model.dart';
 import '../theme/app_theme.dart';
 
-/// Speaker Q&A Question Card
-/// Anti-Slop Architecture: Tactile vote button, clean typography, honest states.
+/// Thẻ hiển thị câu hỏi trong phiên Live Q&A tương tác với diễn giả.
+///
+/// Hỗ trợ nút bấm bình chọn (upvote) dạng Reddit/Hacker News, số lượt upvote trực tiếp,
+/// và đánh dấu nhãn khi câu hỏi đã được diễn giả giải đáp.
 class QuestionCard extends StatelessWidget {
+  /// Dữ liệu câu hỏi [SpeakerQuestionModel].
   final SpeakerQuestionModel question;
+
+  /// Hàm gọi lại khi người dùng bấm bình chọn cho câu hỏi này.
   final VoidCallback onUpvote;
 
+  /// Khởi tạo [QuestionCard] với dữ liệu câu hỏi [question] và hàm bình chọn [onUpvote].
   const QuestionCard({
     super.key,
     required this.question,
     required this.onUpvote,
   });
 
+  /// Xây dựng giao diện thẻ câu hỏi Q&A.
   @override
   Widget build(BuildContext context) {
     return Container(

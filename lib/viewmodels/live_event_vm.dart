@@ -6,18 +6,25 @@ import '../models/event_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 
-/// MVVM LiveEventViewModel
-/// Coordinates the In-Event Live Companion experience, Realtime Agenda, and Speaker Q&A stream.
+/// ViewModel điều phối chế độ đồng hành trong sự kiện trực tiếp (Live Companion).
+///
+/// Quản lý theo dõi phiên đang diễn ra theo thời gian thực (Realtime Agenda Tracking)
+/// và luồng câu hỏi hỏi đáp (Q&A) tương tác trực tiếp với diễn giả hội trường.
 class LiveEventViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final AnalyticsService _analyticsService;
 
   ScreenState<List<SpeakerQuestionModel>> _questionsState = const StateInitial();
+
+  /// Trạng thái danh sách câu hỏi đặt cho diễn giả (Initial, Loading, Data, Empty, Error).
   ScreenState<List<SpeakerQuestionModel>> get questionsState => _questionsState;
 
   int _currentSessionIndex = 0;
+
+  /// Chỉ mục của phiên sự kiện hiện đang diễn ra trong danh sách lịch trình.
   int get currentSessionIndex => _currentSessionIndex;
 
+  /// Tự động cập nhật chỉ mục phiên đang diễn ra dựa trên giờ hiện tại của thiết bị và [sessions].
   void updateCurrentSessionIndex(List<EventSession> sessions) {
     if (sessions.isEmpty) {
       _currentSessionIndex = 0;
@@ -52,12 +59,14 @@ class LiveEventViewModel extends ChangeNotifier {
     }
   }
 
+  /// Khởi tạo [LiveEventViewModel] với các phụ thuộc dịch vụ.
   LiveEventViewModel({
     required FirestoreService firestoreService,
     required AnalyticsService analyticsService,
   })  : _firestoreService = firestoreService,
         _analyticsService = analyticsService;
 
+  /// Tải danh sách câu hỏi Q&A trực tiếp của sự kiện [eventId] từ Cloud Firestore.
   Future<void> loadLiveQuestions(String eventId) async {
     _questionsState = const StateLoading('Đang tải câu hỏi trực tiếp...');
     notifyListeners();
@@ -76,6 +85,7 @@ class LiveEventViewModel extends ChangeNotifier {
     }
   }
 
+  /// Gửi câu hỏi mới [question] của sinh viên [user] tới diễn giả sự kiện [eventId].
   Future<void> askQuestion({
     required String eventId,
     required UserModel user,
@@ -91,8 +101,8 @@ class LiveEventViewModel extends ChangeNotifier {
       );
       await _analyticsService.logLiveInteract(
         eventId: eventId,
-        actionType: 'ask',
-        length: question.length,
+        actionType: 'ask_question',
+        length: question.trim().length,
       );
       await loadLiveQuestions(eventId);
     } catch (e) {
@@ -100,6 +110,7 @@ class LiveEventViewModel extends ChangeNotifier {
     }
   }
 
+  /// Tăng số lượt bình chọn (upvote) cho câu hỏi [questionId] trong sự kiện [eventId].
   Future<void> upvoteQuestion({
     required String eventId,
     required String questionId,
@@ -108,7 +119,7 @@ class LiveEventViewModel extends ChangeNotifier {
       await _firestoreService.upvoteSpeakerQuestion(eventId, questionId);
       await _analyticsService.logLiveInteract(
         eventId: eventId,
-        actionType: 'upvote',
+        actionType: 'upvote_question',
         length: 0,
       );
       await loadLiveQuestions(eventId);

@@ -8,15 +8,18 @@ import '../../viewmodels/my_tickets_vm.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../events/event_detail_screen.dart';
 
+/// Chế độ hiển thị của lịch biểu Campus ([month]: xem lưới cả tháng, [week]: xem tuần 7 ngày).
 enum CalendarViewMode { month, week }
 
-/// S25: Campus Calendar Screen (Lịch biểu Campus)
-/// Supports Full Month Grid View and 7-day Week View.
-/// Dynamically queries real Cloud Firestore events and tickets.
-/// Strictly enforces Zero-Mock Data Policy.
+/// Màn hình Lịch biểu Campus tổng hợp các sự kiện diễn ra tại trường FPTU.
+///
+/// Hỗ trợ chuyển đổi giữa chế độ xem tháng và xem tuần, đánh dấu chấm sự kiện theo ngày,
+/// hiển thị danh sách chi tiết các sự kiện và vé đã đăng ký trong ngày được chọn.
 class CampusCalendarScreen extends StatefulWidget {
+  /// Khởi tạo [CampusCalendarScreen].
   const CampusCalendarScreen({super.key});
 
+  /// Tạo state quản lý tháng đang chọn, ngày đang chọn và chế độ xem.
   @override
   State<CampusCalendarScreen> createState() => _CampusCalendarScreenState();
 }

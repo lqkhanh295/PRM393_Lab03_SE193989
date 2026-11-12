@@ -8,16 +8,21 @@ import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 import '../services/crashlytics_service.dart';
 
-/// MVVM RegistrationViewModel
-/// Coordinates the 1-Tap event registration pipeline with simulated security encoding.
+/// ViewModel điều phối tiến trình đăng ký tham gia sự kiện của sinh viên (Registration Pipeline).
+///
+/// Hỗ trợ cả 2 luồng: Đăng ký vé tức thời 1-Tap (sinh vé QR ngay) và
+/// Đăng ký có phê duyệt qua hàng chờ của Cán bộ (Cross-role Approval Queue).
 class RegistrationViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final AnalyticsService _analyticsService;
   final CrashlyticsService _crashlyticsService;
 
   ScreenState<TicketModel> _state = const StateInitial();
+
+  /// Trạng thái kết quả phát hành vé điện tử (Initial, Loading, Data, Error).
   ScreenState<TicketModel> get state => _state;
 
+  /// Khởi tạo [RegistrationViewModel] với các phụ thuộc cần thiết.
   RegistrationViewModel({
     required FirestoreService firestoreService,
     required AnalyticsService analyticsService,
@@ -26,7 +31,9 @@ class RegistrationViewModel extends ChangeNotifier {
         _analyticsService = analyticsService,
         _crashlyticsService = crashlyticsService;
 
-  /// 1-Tap Instant Registration (Creates Ticket Immediately)
+  /// Thực hiện đăng ký 1 chạm (1-Tap Registration) và sinh ngay vé điện tử kèm mã QR Token.
+  ///
+  /// Nhận vào [event] và thông tin [user], tự động đo thời gian đăng ký và ghi log Analytics.
   Future<bool> register({
     required EventModel event,
     required UserModel user,
@@ -71,7 +78,7 @@ class RegistrationViewModel extends ChangeNotifier {
     }
   }
 
-  /// Cross-Role Approval Flow (Slide 18: Student submits pending request -> Admin reviews)
+  /// Nộp hồ sơ đăng ký vào hàng chờ xét duyệt của Cán bộ/Ban tổ chức (Cross-role Review).
   Future<RegistrationModel?> submitPendingRegistration({
     required EventModel event,
     required UserModel user,
@@ -110,6 +117,7 @@ class RegistrationViewModel extends ChangeNotifier {
     }
   }
 
+  /// Đưa trạng thái phát hành vé về mặc định ban đầu ([StateInitial]).
   void reset() {
     _state = const StateInitial();
     notifyListeners();

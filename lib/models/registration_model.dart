@@ -1,28 +1,57 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Trạng thái đơn đăng ký giữ chỗ tham gia sự kiện.
 enum RegistrationStatus {
+  /// Đang chờ ban tổ chức hoặc cán bộ CTSV xét duyệt.
   pending,
+
+  /// Đã được phê duyệt và tự động cấp vé điện tử có QR code.
   approved,
+
+  /// Bị từ chối duyệt kèm lý do phản hồi.
   rejected,
 }
 
-/// Registration Model for Cross-Role Flow
-/// Flow: Student registers on Mobile (status: pending)
-///    -> Organizer reviews on Web Admin (approved / rejected)
-///    -> Student's Mobile updates in real-time stream + Inbox notification.
+/// Mô hình đơn đăng ký sự kiện hỗ trợ luồng xét duyệt liên vai trò (Cross-Role Flow).
+///
+/// Luồng xử lý: Sinh viên nộp đơn trên Mobile (`pending`) -> Cán bộ/Ban tổ chức thẩm định
+/// trên Web Portal (`approved` hoặc `rejected`) -> Ứng dụng di động của sinh viên cập nhật tức thời
+/// kèm vé điện tử và thông báo Inbox.
 class RegistrationModel {
+  /// Mã định danh duy nhất của đơn đăng ký trên Cloud Firestore.
   final String id;
+
+  /// Mã sự kiện sinh viên đăng ký tham gia.
   final String eventId;
+
+  /// Tên sự kiện đăng ký.
   final String eventTitle;
+
+  /// Mã người dùng của sinh viên nộp đơn.
   final String userId;
+
+  /// Họ tên đầy đủ của sinh viên.
   final String studentName;
+
+  /// Địa chỉ email trường FPT của sinh viên.
   final String studentEmail;
+
+  /// Trạng thái xét duyệt hiện tại ([RegistrationStatus.pending], [RegistrationStatus.approved], [RegistrationStatus.rejected]).
   final RegistrationStatus status;
+
+  /// Lý do từ chối đơn hoặc ghi chú bổ sung từ ban tổ chức.
   final String? reason;
+
+  /// Mã vé điện tử được cấp phát sau khi đơn được duyệt thành công.
   final String? ticketId;
+
+  /// Thời điểm sinh viên gửi đơn đăng ký.
   final DateTime createdAt;
+
+  /// Thời điểm cán bộ hoặc ban tổ chức hoàn tất thẩm định đơn.
   final DateTime? reviewedAt;
 
+  /// Khởi tạo một đối tượng [RegistrationModel].
   const RegistrationModel({
     required this.id,
     required this.eventId,
@@ -37,6 +66,7 @@ class RegistrationModel {
     this.reviewedAt,
   });
 
+  /// Chuyển đổi dữ liệu Map từ Cloud Firestore thành đối tượng [RegistrationModel].
   factory RegistrationModel.fromMap(Map<String, dynamic> map, String id) {
     DateTime parseDate(dynamic val) {
       if (val is Timestamp) return val.toDate();
@@ -65,6 +95,7 @@ class RegistrationModel {
     );
   }
 
+  /// Chuyển đổi đối tượng [RegistrationModel] thành Map để cập nhật trên Cloud Firestore.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
