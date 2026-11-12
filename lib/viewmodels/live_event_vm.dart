@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../models/screen_state.dart';
 import '../models/speaker_question_model.dart';
 import '../models/user_model.dart';
+import '../models/event_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 
@@ -14,8 +15,42 @@ class LiveEventViewModel extends ChangeNotifier {
   ScreenState<List<SpeakerQuestionModel>> _questionsState = const StateInitial();
   ScreenState<List<SpeakerQuestionModel>> get questionsState => _questionsState;
 
-  final int _currentSessionIndex = 1; // 2nd session is currently active
+  int _currentSessionIndex = 0;
   int get currentSessionIndex => _currentSessionIndex;
+
+  void updateCurrentSessionIndex(List<EventSession> sessions) {
+    if (sessions.isEmpty) {
+      _currentSessionIndex = 0;
+      return;
+    }
+    final now = DateTime.now();
+    final nowMinutes = now.hour * 60 + now.minute;
+    int activeIdx = 0;
+
+    for (int i = 0; i < sessions.length; i++) {
+      final s = sessions[i];
+      final timeStr = s.time;
+      final parts = timeStr.split('-');
+      if (parts.length >= 2) {
+        final startParts = parts[0].trim().split(':');
+        final endParts = parts[1].trim().split(':');
+        if (startParts.length == 2 && endParts.length == 2) {
+          final startMin = (int.tryParse(startParts[0]) ?? 0) * 60 + (int.tryParse(startParts[1]) ?? 0);
+          final endMin = (int.tryParse(endParts[0]) ?? 0) * 60 + (int.tryParse(endParts[1]) ?? 0);
+          if (nowMinutes >= startMin && nowMinutes <= endMin) {
+            activeIdx = i;
+            break;
+          } else if (nowMinutes > endMin) {
+            activeIdx = (i + 1 < sessions.length) ? i + 1 : i;
+          }
+        }
+      }
+    }
+    if (_currentSessionIndex != activeIdx) {
+      _currentSessionIndex = activeIdx;
+      notifyListeners();
+    }
+  }
 
   LiveEventViewModel({
     required FirestoreService firestoreService,

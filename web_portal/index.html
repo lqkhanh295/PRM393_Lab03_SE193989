@@ -125,10 +125,10 @@
           <div class="kpi-card">
             <div class="kpi-label">Tổng Ngân Sách Đã Phê Duyệt</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="kpi-budget-approved">48.500.000</span>
+              <span class="kpi-value num" id="kpi-budget-approved">18.000.000</span>
               <span class="kpi-unit">VND</span>
             </div>
-            <div class="kpi-sub">3 dự toán từ quỹ Hoạt động Sinh viên</div>
+            <div class="kpi-sub">Dự toán đã duyệt từ quỹ Hoạt động Sinh viên</div>
           </div>
 
           <div class="kpi-card">
@@ -211,6 +211,37 @@
                 Hệ số an toàn: Đạt chuẩn TCVN 3890 (Tối thiểu 1.25m²/người)
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- CTSV Events Management Table -->
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Quản Lý Danh Sách Sự Kiện Campus</div>
+              <div class="panel-sub">Theo dõi toàn bộ các sự kiện do CTSV & CLB khởi tạo và đồng bộ với Mobile App</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="app.openCreateEventModal()" style="background-color: var(--positive); border-color: var(--positive);">
+              + Tạo Sự Kiện Mới
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Sự Kiện</th>
+                  <th>Tên Sự Kiện</th>
+                  <th>CLB Tổ Chức</th>
+                  <th>Ngày & Giờ</th>
+                  <th>Địa Điểm</th>
+                  <th>Đăng Ký / Sức Chứa</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="overview-events-table">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -968,6 +999,15 @@
                   <div class="checklist-desc">Bật banner khảo sát chất lượng tổ chức sau sự kiện</div>
                 </div>
                 <div class="checklist-badge"><span class="pill pill-positive" id="rc-survey-pill">Đang Bật</span></div>
+              </div>
+
+              <div class="checklist-item" style="margin-bottom: 8px;">
+                <input type="checkbox" id="rc-live-qa" checked onchange="app.toggleRemoteConfig('live-qa')">
+                <div>
+                  <label for="rc-live-qa" class="checklist-title">enable_live_qa = true</label>
+                  <div class="checklist-desc">Bật tính năng đặt câu hỏi Live Q&A cho diễn giả trong sự kiện</div>
+                </div>
+                <div class="checklist-badge"><span class="pill pill-positive" id="rc-live-qa-pill">Đang Bật</span></div>
               </div>
 
               <div class="checklist-item">

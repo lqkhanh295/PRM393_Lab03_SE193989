@@ -206,11 +206,13 @@ class EventModel {
       bannerUrl: map['bannerUrl'] as String? ?? '',
       isFeatured: map['isFeatured'] as bool? ?? false,
       speakers: (map['speakers'] as List<dynamic>?)
-              ?.map((s) => EventSpeaker.fromMap(s as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((s) => EventSpeaker.fromMap(Map<String, dynamic>.from(s)))
               .toList() ??
           [],
       sessions: (map['sessions'] as List<dynamic>?)
-              ?.map((s) => EventSession.fromMap(s as Map<String, dynamic>))
+              ?.whereType<Map>()
+              .map((s) => EventSession.fromMap(Map<String, dynamic>.from(s)))
               .toList() ??
           [],
     );

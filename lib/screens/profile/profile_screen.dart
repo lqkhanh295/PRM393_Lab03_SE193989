@@ -206,7 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       final userEmail = user?.email.toLowerCase() ?? '';
                       final isCtsvStaff = userEmail.contains('ctsv') ||
                           userEmail.contains('@fe.edu.vn') ||
-                          userEmail == 'quachhoatg2020@gmail.com' ||
+                          userEmail == 'quockhoatg2020@gmail.com' ||
                           userEmail == 'lqkhanh292005@gmail.com';
 
                       return Container(
@@ -819,9 +819,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(AppTheme.radiusCard),
                 border: Border.all(color: AppTheme.hairline, width: 1),
               ),
-              child: Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                child: ExpansionTile(
+              child: Material(
+                color: Colors.transparent,
+                child: Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
                   initiallyExpanded: false,
                   tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -841,7 +843,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
-            ),
+            ),),
             const SizedBox(height: 20),
 
             // Sign out Button

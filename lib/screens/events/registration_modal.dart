@@ -160,7 +160,7 @@ class _RegistrationModalState extends State<RegistrationModal> {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text(
-                              'SLIDE 18 DEMO',
+                              'Quy trình CTSV',
                               style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w800, color: Color(0xFFB45309)),
                             ),
                           ),
@@ -211,7 +211,7 @@ class _RegistrationModalState extends State<RegistrationModal> {
                               ),
                               child: Center(
                                 child: Text(
-                                  'Xét Duyệt BTC (Slide 18)',
+                                  'Đăng Ký Chờ Phê Duyệt',
                                   style: TextStyle(
                                     fontSize: 11.5,
                                     fontWeight: FontWeight.w700,

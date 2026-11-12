@@ -147,6 +147,34 @@ class FirestoreService {
       debugPrint('[FirestoreService] Query live events warning: $e');
     }
 
+    // Try REST API fallback from Web Portal if Firestore is unavailable or rate limited
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/events')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null && docs.isNotEmpty) {
+            final apiEvents = docs
+                .whereType<Map>()
+                .map((d) => EventModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
+                .toList();
+            if (apiEvents.isNotEmpty) {
+              for (final evt in apiEvents) {
+                final idx = _cachedEvents.indexWhere((e) => e.id == evt.id);
+                if (idx >= 0) {
+                  _cachedEvents[idx] = evt;
+                } else {
+                  _cachedEvents.add(evt);
+                }
+              }
+              break;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
     // Filter cache fallback
     var list = _cachedEvents;
     if (category != null && category != 'All' && category != 'Tất cả') {
@@ -214,6 +242,35 @@ class FirestoreService {
     } catch (e) {
       debugPrint('[FirestoreService] getUserTickets error: $e');
     }
+
+    // Try REST API fallback from Web Portal
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/tickets?userId=${Uri.encodeComponent(userId)}')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null) {
+            final apiTickets = docs
+                .whereType<Map>()
+                .map((d) => TicketModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
+                .toList();
+            for (final t in apiTickets) {
+              final idx = _cachedTickets.indexWhere((old) => old.id == t.id);
+              if (idx >= 0) {
+                _cachedTickets[idx] = t;
+              } else {
+                _cachedTickets.insert(0, t);
+              }
+            }
+            if (apiTickets.isNotEmpty) {
+              return apiTickets;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
     return _cachedTickets.where((t) => t.userId == userId).toList();
   }
 
@@ -376,7 +433,7 @@ class FirestoreService {
     return newTicket;
   }
 
-  void _notifyLocalWebPortalTicketCreated(TicketModel ticket) {
+  void _notifyLocalWebPortalTicketCreated(TicketModel ticket) async {
     try {
       final payload = jsonEncode(ticket.toMap());
       final endpoints = [
@@ -384,11 +441,17 @@ class FirestoreService {
         'http://10.0.2.2:3000/api/tickets',
       ];
       for (final ep in endpoints) {
-        http.post(
-          Uri.parse(ep),
-          headers: {'Content-Type': 'application/json'},
-          body: payload,
-        ).catchError((_) => http.Response('', 500));
+        try {
+          final res = await http.post(
+            Uri.parse(ep),
+            headers: {'Content-Type': 'application/json'},
+            body: payload,
+          ).timeout(const Duration(milliseconds: 1500));
+          if (res.statusCode == 200) {
+            debugPrint('[FirestoreService] Successfully notified Web Portal ticket: $ep');
+            break;
+          }
+        } catch (_) {}
       }
     } catch (_) {}
   }
@@ -621,7 +684,7 @@ class FirestoreService {
     );
   }
 
-  void _notifyLocalWebPortalCheckin(TicketModel ticket, String token) {
+  void _notifyLocalWebPortalCheckin(TicketModel ticket, String token) async {
     try {
       final payload = jsonEncode({
         'id': ticket.id,
@@ -640,16 +703,17 @@ class FirestoreService {
         'http://10.0.2.2:3000/api/tickets/checkin',
       ];
       for (final ep in endpoints) {
-        http.post(
-          Uri.parse(ep),
-          headers: {'Content-Type': 'application/json'},
-          body: payload,
-        ).then((res) {
+        try {
+          final res = await http.post(
+            Uri.parse(ep),
+            headers: {'Content-Type': 'application/json'},
+            body: payload,
+          ).timeout(const Duration(milliseconds: 1500));
           if (res.statusCode == 200) {
             debugPrint('[FirestoreService] Successfully notified Web Portal backend of check-in: $ep');
+            break;
           }
-          return res;
-        }).catchError((_) => http.Response('', 500));
+        } catch (_) {}
       }
     } catch (_) {}
   }
@@ -673,6 +737,26 @@ class FirestoreService {
       }
     } catch (e) {
       debugPrint('[FirestoreService] getSpeakerQuestions error: $e');
+    }
+
+    // High availability fallback via Web Portal backend
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/questions?eventId=${Uri.encodeComponent(eventId)}')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null && docs.isNotEmpty) {
+            final list = docs
+                .whereType<Map>()
+                .map((doc) => SpeakerQuestionModel.fromMap(Map<String, dynamic>.from(doc), doc['id']?.toString() ?? ''))
+                .toList();
+            list.sort((a, b) => b.upvotes.compareTo(a.upvotes));
+            return list;
+          }
+        }
+        break;
+      } catch (_) {}
     }
 
     return _cachedQuestions.where((q) => q.eventId == eventId).toList()
@@ -715,6 +799,25 @@ class FirestoreService {
       }
     } catch (e) {
       debugPrint('[FirestoreService] askSpeakerQuestion cloud error: $e');
+    }
+
+    // Persist via Web Portal backend bridge
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.post(
+          Uri.parse('$base/api/questions'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'id': qId,
+            'eventId': eventId,
+            'userId': user.id,
+            'studentName': user.name,
+            'question': question,
+            'upvotes': 0,
+          }),
+        ).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) break;
+      } catch (_) {}
     }
 
     _cachedQuestions.insert(0, q);
@@ -779,6 +882,29 @@ class FirestoreService {
       }
     } catch (e) {
       debugPrint('[FirestoreService] getUserCertificates cloud error: $e');
+    }
+
+    // High availability fallback via Web Portal backend
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/certificates?userId=${Uri.encodeComponent(userId)}')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null && docs.isNotEmpty) {
+            final apiCerts = docs
+                .whereType<Map>()
+                .map((d) => CertificateModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
+                .toList();
+            for (final c in apiCerts) {
+              if (!result.any((r) => r.id == c.id || r.eventId == c.eventId)) {
+                result.add(c);
+              }
+            }
+            break;
+          }
+        }
+      } catch (_) {}
     }
 
     // Merge cached certificates for this user
@@ -853,6 +979,18 @@ class FirestoreService {
     } catch (e) {
       debugPrint('[FirestoreService] saveCertificate error: $e');
     }
+
+    // Persist via Web Portal backend bridge
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.post(
+          Uri.parse('$base/api/certificates'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(cert.toMap()..['id'] = cert.id),
+        ).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) break;
+      } catch (_) {}
+    }
     final idx = _cachedCertificates.indexWhere((c) => c.id == cert.id);
     if (idx >= 0) {
       _cachedCertificates[idx] = cert;
@@ -924,6 +1062,24 @@ class FirestoreService {
           'rating': rating,
           'comments': comments,
         });
+
+        // Sync to Web Portal backend bridge
+        for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+          try {
+            final res = await http.post(
+              Uri.parse('$base/api/feedback'),
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({
+                'eventId': eventId,
+                'userId': userId,
+                'rating': rating,
+                'comments': comments,
+              }),
+            ).timeout(const Duration(milliseconds: 1500));
+            if (res.statusCode == 200) break;
+          } catch (_) {}
+        }
+
         debugPrint('[FirestoreService] First cached feedback submitted, awarded +5 points.');
         return true;
       }
@@ -954,6 +1110,28 @@ class FirestoreService {
     } catch (e) {
       debugPrint('[FirestoreService] getClubs error: $e');
     }
+
+    // Try REST API fallback from Web Portal
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/clubs')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null && docs.isNotEmpty) {
+            final apiClubs = docs
+                .whereType<Map>()
+                .map((d) => ClubModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
+                .toList();
+            if (apiClubs.isNotEmpty) {
+              return apiClubs;
+            }
+          }
+        }
+        break;
+      } catch (_) {}
+    }
+
     return _cachedClubs;
   }
 
@@ -990,7 +1168,8 @@ class FirestoreService {
               .where((a) => a.userId.isEmpty || a.userId == currentUserId)
               .toList());
     }
-    return Stream.value(_cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList());
+    return Stream.periodic(const Duration(seconds: 10), (_) => _cachedAnnouncements)
+        .asyncMap((_) => getAnnouncements(currentUserId: currentUserId));
   }
 
   /// Get list of announcements directly from Cloud Firestore, filtered by userId
@@ -1014,6 +1193,31 @@ class FirestoreService {
     } catch (e) {
       debugPrint('[FirestoreService] getAnnouncements error: $e');
     }
+
+    // High-availability fallback via Web Portal backend
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/announcements')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          final docs = (data is Map && data['documents'] is List) ? (data['documents'] as List) : null;
+          if (docs != null && docs.isNotEmpty) {
+            final list = docs
+                .whereType<Map>()
+                .map((d) => AnnouncementModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
+                .where((a) => a.userId.isEmpty || a.userId == currentUserId)
+                .toList();
+            if (list.isNotEmpty) {
+              _cachedAnnouncements.clear();
+              _cachedAnnouncements.addAll(list);
+              return list;
+            }
+          }
+        }
+        break;
+      } catch (_) {}
+    }
+
     return _cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList();
   }
 
@@ -1062,6 +1266,18 @@ class FirestoreService {
       }
     } catch (e) {
       debugPrint('[FirestoreService] submitRegistration error: $e');
+    }
+
+    // Persist via Web Portal backend bridge
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.post(
+          Uri.parse('$base/api/registrations'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(registration.toMap()..['id'] = regId),
+        ).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) break;
+      } catch (_) {}
     }
 
     _cachedRegistrations.insert(0, registration);

@@ -16,6 +16,9 @@ class FeedbackViewModel extends ChangeNotifier {
   ScreenState<CertificateModel> _state = const StateInitial();
   ScreenState<CertificateModel> get state => _state;
 
+  String? _currentEventId;
+  String? get currentEventId => _currentEventId;
+
   int _rating = 5;
   int get rating => _rating;
 
@@ -26,6 +29,15 @@ class FeedbackViewModel extends ChangeNotifier {
   })  : _analyticsService = analyticsService,
         _pdfExportService = pdfExportService,
         _firestoreService = firestoreService;
+
+  void resetForEvent(String eventId) {
+    if (_currentEventId != eventId) {
+      _currentEventId = eventId;
+      _state = const StateInitial();
+      _rating = 5;
+      notifyListeners();
+    }
+  }
 
   void setRating(int value) {
     _rating = value;

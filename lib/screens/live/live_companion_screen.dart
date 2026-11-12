@@ -8,6 +8,7 @@ import '../../models/ticket_model.dart';
 import '../../models/event_model.dart';
 import '../../models/screen_state.dart';
 import '../../services/firestore_service.dart';
+import '../../services/remote_config_service.dart';
 import '../../viewmodels/live_event_vm.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/question_card.dart';
@@ -44,6 +45,9 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
           _event = evt;
           _isLoadingEvent = false;
         });
+        if (evt != null) {
+          context.read<LiveEventViewModel>().updateCurrentSessionIndex(evt.sessions);
+        }
       }
     });
   }
@@ -391,6 +395,7 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
   }
 
   Widget _buildSpeakerQATab(BuildContext context, LiveEventViewModel liveVM, dynamic user) {
+    final isQAEnabled = context.watch<RemoteConfigService>().enableLiveQA;
     return Column(
       children: [
         // Question list
@@ -423,9 +428,32 @@ class _LiveCompanionScreenState extends State<LiveCompanionScreen> with SingleTi
           },
         ),
 
-        // Bottom Ask Question Input Field
-        Container(
-          padding: const EdgeInsets.all(12),
+        // Bottom Ask Question Input Field or Disabled Notice
+        if (!isQAEnabled)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: const BoxDecoration(
+              color: AppTheme.surfaceSubtle,
+              border: Border(top: BorderSide(color: AppTheme.hairline, width: 1)),
+            ),
+            child: const SafeArea(
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline_rounded, size: 18, color: AppTheme.textMuted),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Phiên hỏi đáp trực tiếp (Live Q&A) hiện đang tạm dừng bởi Ban Tổ Chức CTSV.',
+                      style: TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          Container(
+            padding: const EdgeInsets.all(12),
           decoration: const BoxDecoration(
             color: AppTheme.surface,
             border: Border(

@@ -373,7 +373,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ',
+                      event.isPast ? 'ĐÃ KẾT THÚC' : (event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ'),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,

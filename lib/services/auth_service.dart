@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -233,12 +235,55 @@ class AuthService {
           _listenToUserDocument(_currentUser!.id);
         }
       } else {
-        // Standalone fallback
+        // Authenticate via Firebase REST Auth API (Identity Toolkit)
+        const apiKey = 'AIzaSyCg0vHOVyIPb4LZoVln0d4clDx8dW54CJI';
+        final verifyUrl = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$apiKey');
+        final verifyRes = await http.post(
+          verifyUrl,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'email': cleanEmail,
+            'password': password,
+            'returnSecureToken': true,
+          }),
+        );
+
+        String? firebaseUid;
+        if (verifyRes.statusCode == 200) {
+          final resData = jsonDecode(verifyRes.body);
+          firebaseUid = resData['localId'] as String?;
+        } else {
+          final errBody = jsonDecode(verifyRes.body);
+          final errMsg = errBody['error']?['message']?.toString() ?? '';
+          if (errMsg == 'EMAIL_NOT_FOUND') {
+            final signUpUrl = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
+            final signUpRes = await http.post(
+              signUpUrl,
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({
+                'email': cleanEmail,
+                'password': password,
+                'returnSecureToken': true,
+              }),
+            );
+            if (signUpRes.statusCode == 200) {
+              final signUpData = jsonDecode(signUpRes.body);
+              firebaseUid = signUpData['localId'] as String?;
+            } else {
+              throw Exception('Không thể tạo tài khoản sinh viên trên hệ thống.');
+            }
+          } else if (errMsg == 'INVALID_PASSWORD' || errMsg == 'INVALID_LOGIN_CREDENTIALS') {
+            throw Exception('Mật khẩu không chính xác.');
+          } else {
+            throw Exception('Đăng nhập thất bại: $errMsg');
+          }
+        }
+
         final prefix = cleanEmail.split('@').first;
         final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
 
         final basicUser = UserModel(
-          id: 'USR-${cleanEmail.hashCode.abs()}',
+          id: firebaseUid != null && firebaseUid.isNotEmpty ? firebaseUid : 'USR-${cleanEmail.hashCode.abs()}',
           name: formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU',
           email: cleanEmail,
           avatarUrl: 'https://i.pravatar.cc/150?u=${cleanEmail.hashCode}',

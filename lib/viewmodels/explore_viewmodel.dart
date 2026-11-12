@@ -31,6 +31,8 @@ class ExploreViewModel extends ChangeNotifier {
   final List<String> categories = [
     'Tất cả',
     'Technology',
+    'Design',
+    'Entertainment',
     'Business',
     'Languages',
     'Sports',

@@ -78,52 +78,68 @@ function getFirebaseToken() {
 // -------------------------------------------------------------
 // Firestore Document Conversions
 // -------------------------------------------------------------
+// Firestore Document Conversions (Full Recursive Map/Array Support)
+// -------------------------------------------------------------
+function convertFirestoreValue(val) {
+  if (!val || typeof val !== 'object') return val;
+  if ('stringValue' in val) return val.stringValue;
+  if ('integerValue' in val) return parseInt(val.integerValue, 10);
+  if ('doubleValue' in val) return parseFloat(val.doubleValue);
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('timestampValue' in val) return val.timestampValue;
+  if ('arrayValue' in val) {
+    return (val.arrayValue.values || []).map(convertFirestoreValue);
+  }
+  if ('mapValue' in val) {
+    const res = {};
+    for (const [k, v] of Object.entries(val.mapValue.fields || {})) {
+      res[k] = convertFirestoreValue(v);
+    }
+    return res;
+  }
+  return val;
+}
+
 function fromFirestoreDoc(doc) {
   if (!doc) return null;
   const id = doc.name ? doc.name.split('/').pop() : '';
   const fields = doc.fields || {};
   const result = { id };
-
   for (const [key, val] of Object.entries(fields)) {
-    if ('stringValue' in val) result[key] = val.stringValue;
-    else if ('integerValue' in val) result[key] = parseInt(val.integerValue, 10);
-    else if ('doubleValue' in val) result[key] = parseFloat(val.doubleValue);
-    else if ('booleanValue' in val) result[key] = val.booleanValue;
-    else if ('timestampValue' in val) result[key] = val.timestampValue;
-    else if ('arrayValue' in val) {
-      result[key] = (val.arrayValue.values || []).map(item => {
-        if ('stringValue' in item) return item.stringValue;
-        if ('integerValue' in item) return parseInt(item.integerValue, 10);
-        return item;
-      });
-    } else {
-      result[key] = val;
-    }
+    result[key] = convertFirestoreValue(val);
   }
   return result;
+}
+
+function convertToFirestoreValue(v) {
+  if (v === undefined || v === null) return { nullValue: null };
+  if (typeof v === 'string') return { stringValue: v };
+  if (typeof v === 'number') {
+    return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  }
+  if (typeof v === 'boolean') return { booleanValue: v };
+  if (Array.isArray(v)) {
+    return {
+      arrayValue: {
+        values: v.map(convertToFirestoreValue)
+      }
+    };
+  }
+  if (typeof v === 'object') {
+    const fields = {};
+    for (const [k, child] of Object.entries(v)) {
+      fields[k] = convertToFirestoreValue(child);
+    }
+    return { mapValue: { fields } };
+  }
+  return { stringValue: String(v) };
 }
 
 function toFirestoreFields(obj) {
   const fields = {};
   for (const [key, val] of Object.entries(obj)) {
     if (val === undefined || val === null) continue;
-    if (typeof val === 'string') {
-      fields[key] = { stringValue: val };
-    } else if (typeof val === 'number') {
-      if (Number.isInteger(val)) {
-        fields[key] = { integerValue: val.toString() };
-      } else {
-        fields[key] = { doubleValue: val };
-      }
-    } else if (typeof val === 'boolean') {
-      fields[key] = { booleanValue: val };
-    } else if (Array.isArray(val)) {
-      fields[key] = {
-        arrayValue: {
-          values: val.map(v => (typeof v === 'string' ? { stringValue: v } : { stringValue: String(v) }))
-        }
-      };
-    }
+    fields[key] = convertToFirestoreValue(val);
   }
   return fields;
 }
@@ -181,7 +197,8 @@ function mutateCache(endpoint, method, body, createdId) {
     const rawPath = endpoint.split('?')[0].replace(/^\//, '');
     const parts = rawPath.split('/');
     const collection = parts[0];
-    const docId = parts[1] || createdId;
+    const queryDocId = endpoint.includes('documentId=') ? endpoint.split('documentId=')[1].split('&')[0] : null;
+    const docId = parts[1] || queryDocId || createdId;
     const cacheKey = `GET:/${collection}`;
 
     if (!firestoreCache.has(cacheKey)) return;
@@ -447,9 +464,38 @@ const server = http.createServer(async (req, res) => {
 
       // 4. GET /api/registrations (Review Queue)
       if (pathname === '/api/registrations' && req.method === 'GET') {
+        const eventId = parsedUrl.searchParams.get('eventId');
+        const userId = parsedUrl.searchParams.get('userId');
         const data = await firestoreRequest('/registrations');
-        const registrations = (data.documents || []).map(fromFirestoreDoc);
+        let registrations = (data.documents || []).map(fromFirestoreDoc);
+        if (eventId) {
+          registrations = registrations.filter(r => r.eventId === eventId);
+        }
+        if (userId) {
+          registrations = registrations.filter(r => r.userId === userId);
+        }
         return sendJson(res, 200, { documents: registrations });
+      }
+
+      // 4b. POST /api/registrations (Submit Registration to Review Queue)
+      if (pathname === '/api/registrations' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const regId = body.id || `REG-${Date.now()}`;
+        const now = new Date().toISOString();
+        const regData = {
+          id: regId,
+          eventId: body.eventId || '',
+          eventTitle: body.eventTitle || '',
+          userId: body.userId || '',
+          studentName: body.studentName || '',
+          studentEmail: body.studentEmail || '',
+          status: 'pending',
+          createdAt: body.createdAt || now,
+        };
+        const fields = toFirestoreFields(regData);
+        await firestoreRequest(`/registrations/${regId}`, 'PATCH', { fields });
+        console.log(`[Registration Submitted] ${regId} by ${regData.studentName} for ${regData.eventTitle}`);
+        return sendJson(res, 200, { success: true, registration: regData });
       }
 
       // 5. POST /api/registrations/:id/approve (Cross-Role Approval Action)
@@ -592,8 +638,12 @@ const server = http.createServer(async (req, res) => {
 
       // 9. GET /api/tickets (Student Directory & Live Gate Data)
       if (pathname === '/api/tickets' && req.method === 'GET') {
+        const userIdFilter = parsedUrl.searchParams.get('userId');
         const data = await firestoreRequest('/tickets');
-        const tickets = (data.documents || []).map(fromFirestoreDoc);
+        let tickets = (data.documents || []).map(fromFirestoreDoc);
+        if (userIdFilter) {
+          tickets = tickets.filter(t => t.userId === userIdFilter);
+        }
         return sendJson(res, 200, { documents: tickets });
       }
 
@@ -602,6 +652,29 @@ const server = http.createServer(async (req, res) => {
         const body = await parseBody(req);
         const ticketId = body.id || body.ticketCode || `CE2026-${Math.floor(100000 + Math.random() * 900000)}`;
         const now = new Date().toISOString();
+
+        // Enforce BR: Reject tickets for past or fully booked events
+        if (body.eventId && !body.checkInStatus) {
+          try {
+            const evtDoc = await firestoreRequest(`/events/${body.eventId}`);
+            const evt = fromFirestoreDoc(evtDoc);
+            if (evt) {
+              if (evt.date) {
+                const parts = evt.date.split('/');
+                if (parts.length === 3) {
+                  const evtDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]), 23, 59, 59);
+                  if (evtDate < new Date()) {
+                    return sendJson(res, 400, { error: 'Sự kiện đã kết thúc, không thể cấp vé.' });
+                  }
+                }
+              }
+              if (typeof evt.registeredCount === 'number' && evt.capacity && evt.registeredCount >= evt.capacity) {
+                return sendJson(res, 400, { error: 'Sự kiện đã hết chỗ.' });
+              }
+            }
+          } catch (_) {}
+        }
+
         const ticketData = {
           id: ticketId,
           ticketCode: body.ticketCode || ticketId,
@@ -619,14 +692,29 @@ const server = http.createServer(async (req, res) => {
           status: body.status || 'active',
           checkInStatus: Boolean(body.checkInStatus),
           checkedInAt: body.checkedInAt || (body.checkInStatus ? new Date().toLocaleTimeString('vi-VN') + ' ' + new Date().toLocaleDateString('vi-VN') : ''),
-          points: body.points !== undefined ? body.points : 5,
-          certId: body.certId || `CERT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+          points: body.points !== undefined ? body.points : (body.checkInStatus ? 5 : 0),
+          certId: body.certId || (body.checkInStatus ? `CERT-2026-${Math.floor(1000 + Math.random() * 9000)}` : ''),
           createdAt: body.createdAt || now
         };
 
         const fields = toFirestoreFields(ticketData);
         await firestoreRequest(`/tickets/${ticketId}`, 'PATCH', { fields });
         console.log(`[Ticket Upsert] Synced ticket ${ticketId} for ${ticketData.studentName}`);
+
+        // Increment event registeredCount on newly issued ticket
+        if (ticketData.eventId && !body.checkInStatus) {
+          try {
+            const evtDoc = await firestoreRequest(`/events/${ticketData.eventId}`);
+            const evt = fromFirestoreDoc(evtDoc);
+            if (evt && typeof evt.registeredCount === 'number') {
+              const newCount = evt.registeredCount + 1;
+              await firestoreRequest(`/events/${ticketData.eventId}?updateMask.fieldPaths=registeredCount`, 'PATCH', {
+                fields: { registeredCount: { integerValue: String(newCount) } }
+              });
+              console.log(`[Ticket Upsert] Incremented registeredCount on ${ticketData.eventId} to ${newCount}`);
+            }
+          } catch (_) {}
+        }
         return sendJson(res, 200, { success: true, ticket: ticketData });
       }
 
@@ -863,12 +951,12 @@ const server = http.createServer(async (req, res) => {
             },
             {
               id: 'PRJ-2026-03',
-              title: 'Giải Bóng Đá FPTU Champions League',
-              club: 'CLB Thể thao FPTU',
-              budget: 24000000,
-              source: 'Quỹ CTSV Cấp Phép Thi Đấu',
-              status: 'pending',
-              date: '12/11/2026'
+              title: 'Giải Đấu Thể Thao Điện Tử FPTU Champions League',
+              club: 'CLB F-Code',
+              budget: 8000000,
+              source: 'Quỹ Hoạt động Sinh viên FPTU',
+              status: 'approved',
+              date: '05/11/2026'
             }
           ];
 
@@ -908,6 +996,40 @@ const server = http.createServer(async (req, res) => {
       if (pathname === '/api/pccc-inspections' && req.method === 'GET') {
         const data = await firestoreRequest('/pccc_inspections');
         let documents = (data.documents || []).map(fromFirestoreDoc);
+        if (documents.length === 0) {
+          documents = [
+            {
+              id: 'vn-tcs',
+              name: 'Hội trường Trịnh Công Sơn',
+              capacity: 400,
+              score: 100,
+              signed: true,
+              signedDate: '26/10/2026',
+              signatory: 'Thượng úy PCCC & Trưởng ban CTSV FPTU',
+              licenseNumber: '108/BB-CTSV-2026'
+            },
+            {
+              id: 'vn-alpha',
+              name: 'Phòng Hội thảo Alpha Building (Phòng 301)',
+              capacity: 120,
+              score: 95,
+              signed: true,
+              signedDate: '28/10/2026',
+              signatory: 'Đội Trưởng An Ninh Campus',
+              licenseNumber: '112/BB-CTSV-2026'
+            },
+            {
+              id: 'vn-a2',
+              name: 'Sân khấu Hội trường Lớn A2',
+              capacity: 300,
+              score: 90,
+              signed: true,
+              signedDate: '01/11/2026',
+              signatory: 'Ban Quản Lý Tòa Nhà A2',
+              licenseNumber: '115/BB-CTSV-2026'
+            }
+          ];
+        }
         return sendJson(res, 200, { documents });
       }
 
@@ -931,6 +1053,150 @@ const server = http.createServer(async (req, res) => {
         });
         console.log(`[PCCC Inspection] Venue ${venueId} signed successfully: ${licenseNumber}`);
         return sendJson(res, 200, { success: true, venueId, signed, signedDate, signatory, licenseNumber });
+      }
+
+      // 12. GET & POST /api/remote-config
+      if (pathname === '/api/remote-config' && req.method === 'GET') {
+        const data = await firestoreRequest('/remote_config/parameters');
+        const config = fromFirestoreDoc(data) || {
+          enable_live_qa: true,
+          max_featured_events: 5,
+          featured_banner_title: 'Sự kiện Nổi bật Campus FPTU',
+          show_survey_banner: true,
+          maintenance_mode: false
+        };
+        return sendJson(res, 200, config);
+      }
+      if (pathname === '/api/remote-config' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const fields = toFirestoreFields(body);
+        await firestoreRequest('/remote_config/parameters', 'PATCH', { fields });
+        console.log('[Remote Config] Published updated remote config:', body);
+        return sendJson(res, 200, { success: true, config: body });
+      }
+
+      // 13. GET & POST /api/questions
+      if (pathname === '/api/questions' && req.method === 'GET') {
+        const eventId = parsedUrl.searchParams.get('eventId');
+        const data = await firestoreRequest('/questions');
+        let questions = (data.documents || []).map(fromFirestoreDoc);
+        if (eventId) {
+          questions = questions.filter(q => q.eventId === eventId);
+        }
+        return sendJson(res, 200, { documents: questions });
+      }
+      if (pathname === '/api/questions' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const qId = body.id || `Q-${Date.now()}`;
+        const newQuestion = {
+          id: qId,
+          eventId: body.eventId || 'EVT-2026-01',
+          userId: body.userId || 'USR-STUDENT',
+          studentName: body.studentName || 'Sinh viên FPTU',
+          question: body.question || '',
+          upvotes: body.upvotes || 0,
+          createdAt: new Date().toISOString()
+        };
+        const fields = toFirestoreFields(newQuestion);
+        await firestoreRequest(`/questions/${qId}`, 'PATCH', { fields });
+        return sendJson(res, 200, { success: true, question: newQuestion });
+      }
+
+      // 14. GET & POST /api/feedback
+      if (pathname === '/api/feedback' && req.method === 'GET') {
+        const eventId = parsedUrl.searchParams.get('eventId');
+        const data = await firestoreRequest('/feedback');
+        let feedbacks = (data.documents || []).map(fromFirestoreDoc);
+        if (eventId) {
+          feedbacks = feedbacks.filter(f => f.eventId === eventId);
+        }
+        return sendJson(res, 200, { documents: feedbacks });
+      }
+      if (pathname === '/api/feedback' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const fbId = body.id || `FB-${Date.now()}`;
+        const newFeedback = {
+          id: fbId,
+          eventId: body.eventId || '',
+          userId: body.userId || '',
+          studentName: body.studentName || '',
+          rating: parseInt(body.rating || 5, 10),
+          comments: body.comments || '',
+          createdAt: new Date().toISOString()
+        };
+        const fields = toFirestoreFields(newFeedback);
+        await firestoreRequest(`/feedback/${fbId}`, 'PATCH', { fields });
+
+        // Award +5 points to student on feedback submission (BR-005)
+        if (newFeedback.userId) {
+          try {
+            const userDoc = await firestoreRequest(`/users/${newFeedback.userId}`);
+            const userData = fromFirestoreDoc(userDoc);
+            const currentPoints = parseInt(userData?.activityPoints || 0, 10);
+            await firestoreRequest(`/users/${newFeedback.userId}?updateMask.fieldPaths=activityPoints`, 'PATCH', {
+              fields: { activityPoints: { integerValue: String(currentPoints + 5) } }
+            });
+            console.log(`[Feedback Award] +5 points to ${newFeedback.userId} -> new total: ${currentPoints + 5}`);
+          } catch (_) {}
+        }
+
+        return sendJson(res, 200, { success: true, feedback: newFeedback });
+      }
+
+      // 15. GET & POST /api/certificates
+      if (pathname === '/api/certificates' && req.method === 'GET') {
+        const userId = parsedUrl.searchParams.get('userId');
+        const data = await firestoreRequest('/certificates');
+        let certs = (data.documents || []).map(fromFirestoreDoc);
+        if (userId) {
+          certs = certs.filter(c => c.userId === userId);
+        }
+        return sendJson(res, 200, { documents: certs });
+      }
+      if (pathname === '/api/certificates' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const certId = body.id || `CERT-${Date.now()}`;
+        const newCert = {
+          id: certId,
+          eventId: body.eventId || '',
+          eventTitle: body.eventTitle || '',
+          userId: body.userId || '',
+          studentName: body.studentName || '',
+          issueDate: body.issueDate || new Date().toLocaleDateString('vi-VN'),
+          verificationHash: body.verificationHash || `HASH-FPTU-${Date.now()}`,
+          downloadUrl: body.downloadUrl || '',
+          createdAt: new Date().toISOString()
+        };
+        const fields = toFirestoreFields(newCert);
+        await firestoreRequest(`/certificates/${certId}`, 'PATCH', { fields });
+        return sendJson(res, 200, { success: true, certificate: newCert });
+      }
+
+      // 16. GET /api/users & PATCH /api/users/:id
+      const userMatch = pathname.match(/^\/api\/users\/([^\/]+)$/);
+      if (userMatch && req.method === 'GET') {
+        const uid = decodeURIComponent(userMatch[1]);
+        const userDoc = await firestoreRequest(`/users/${uid}`);
+        return sendJson(res, 200, fromFirestoreDoc(userDoc) || { id: uid, activityPoints: 0 });
+      }
+      if (userMatch && req.method === 'PATCH') {
+        const uid = decodeURIComponent(userMatch[1]);
+        const body = await parseBody(req);
+        const fields = toFirestoreFields(body);
+        await firestoreRequest(`/users/${uid}`, 'PATCH', { fields });
+        return sendJson(res, 200, { success: true, userId: uid });
+      }
+
+      // 17. POST /api/upload (Web proxy upload)
+      if (pathname === '/api/upload' && req.method === 'POST') {
+        const body = await parseBody(req);
+        const fileName = body.fileName || `file_${Date.now()}.pdf`;
+        console.log(`[Upload Proxy] Received upload request for ${fileName}`);
+        return sendJson(res, 200, {
+          success: true,
+          downloadUrl: `http://localhost:${PORT}/uploads/${fileName}`,
+          path: `reports/${fileName}`
+        });
       }
 
       // 404 for unknown API

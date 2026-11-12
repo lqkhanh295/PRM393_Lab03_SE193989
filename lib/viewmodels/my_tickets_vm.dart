@@ -23,8 +23,10 @@ class MyTicketsViewModel extends ChangeNotifier {
     _firestoreService.ticketsNotifier.addListener(_onTicketsNotifierChanged);
   }
 
+  bool _isRefreshing = false;
+
   void _onTicketsNotifierChanged() {
-    if (_subscribedUserId != null) {
+    if (_subscribedUserId != null && !_isRefreshing) {
       _refreshTicketsSilently(_subscribedUserId!);
     }
   }
@@ -62,11 +64,15 @@ class MyTicketsViewModel extends ChangeNotifier {
   }
 
   Future<void> _refreshTicketsSilently(String userId) async {
+    if (_isRefreshing) return;
+    _isRefreshing = true;
     try {
       _allTickets = await _firestoreService.getUserTickets(userId);
       _filterTicketsByTab();
     } catch (e) {
       debugPrint('[MyTicketsViewModel] Silent refresh notice: $e');
+    } finally {
+      _isRefreshing = false;
     }
   }
 

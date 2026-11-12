@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../models/ticket_model.dart';
 import '../../models/screen_state.dart';
+import '../../models/certificate_model.dart';
 import '../../viewmodels/feedback_vm.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/rating_bar.dart';
@@ -26,6 +27,16 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
   bool _awardedPoints = true;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<FeedbackViewModel>().resetForEvent(widget.ticket.eventId);
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _commentController.dispose();
     super.dispose();
@@ -36,7 +47,7 @@ class _EventFeedbackScreenState extends State<EventFeedbackScreen> {
     final feedbackVM = context.watch<FeedbackViewModel>();
     final authVM = context.watch<AuthViewModel>();
     final user = authVM.currentUser;
-    final isSubmitted = feedbackVM.state is StateData;
+    final isSubmitted = feedbackVM.state is StateData && (feedbackVM.state as StateData<CertificateModel>).data.eventId == widget.ticket.eventId;
 
     return Scaffold(
       backgroundColor: AppTheme.background,

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:http/http.dart' as http;
 
 /// Firebase Remote Config Service Wrapper
 /// Supplies in-app defaults and fetches dynamic overrides without app rebuilds.
@@ -50,6 +52,7 @@ class RemoteConfigService {
     } catch (e) {
       debugPrint('[RemoteConfigService] Init error, using default fallbacks: $e');
     }
+    await fetchAndActivate();
   }
 
   Future<bool> fetchAndActivate() async {
@@ -71,6 +74,34 @@ class RemoteConfigService {
     } catch (e) {
       debugPrint('[RemoteConfigService] Fetch error: $e');
     }
+
+    // Try REST fallback from Web Portal
+    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
+      try {
+        final res = await http.get(Uri.parse('$base/api/remote-config')).timeout(const Duration(milliseconds: 1500));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body);
+          if (data is Map) {
+            if (data['max_featured_events'] != null) {
+              _maxFeaturedEvents = int.tryParse(data['max_featured_events'].toString()) ?? _maxFeaturedEvents;
+            }
+            if (data['enable_live_qa'] != null) {
+              _enableLiveQA = data['enable_live_qa'].toString().toLowerCase() == 'true' || data['enable_live_qa'] == true;
+            }
+            if (data['featured_banner_title'] != null) {
+              _featuredBannerTitle = data['featured_banner_title'].toString();
+            }
+            if (data['enable_gemini_insights'] != null) {
+              _enableGeminiInsights = data['enable_gemini_insights'].toString().toLowerCase() == 'true' || data['enable_gemini_insights'] == true;
+            }
+            debugPrint('[RemoteConfigService] Values activated via Web Portal: enableLiveQA=$_enableLiveQA');
+            return true;
+          }
+        }
+        break;
+      } catch (_) {}
+    }
+
     return false;
   }
 

@@ -547,14 +547,8 @@ const app = {
     checkinCount: 0,
     totalRegistered: 0,
     totalCapacity: 0,
-    approvedBudget: 48500000,
-    hourlyFlow: [
-      { hour: '07:30', count: 8 },
-      { hour: '08:00', count: 32 },
-      { hour: '08:30', count: 46 },
-      { hour: '09:00', count: 24 },
-      { hour: '09:30', count: 14 }
-    ],
+    approvedBudget: 18000000,
+    hourlyFlow: [],
     budgetProposals: [
       {
         id: 'PRJ-2026-01',
@@ -576,12 +570,12 @@ const app = {
       },
       {
         id: 'PRJ-2026-03',
-        title: 'Giải Bóng Đá FPTU Champions League',
-        club: 'CLB Thể thao FPTU',
-        budget: 24000000,
-        source: 'Quỹ CTSV Cấp Phép Thi Đấu',
-        status: 'pending',
-        date: '12/11/2026'
+        title: 'Giải Đấu Thể Thao Điện Tử FPTU Champions League',
+        club: 'CLB F-Code',
+        budget: 8000000,
+        source: 'Quỹ Hoạt động Sinh viên FPTU',
+        status: 'approved',
+        date: '05/11/2026'
       }
     ],
     selectedTelemetryEvent: 'all',
@@ -689,8 +683,10 @@ const app = {
     // Realtime Background Sync (auto-refresh from Firestore every 45 seconds with server TTL cache)
     if (!this._pollInterval) {
       this._pollInterval = setInterval(() => {
-        this.loadAllRealData();
-      }, 5000);
+        if (!document.hidden) {
+          this.loadAllRealData();
+        }
+      }, 30000);
     }
   },
 
@@ -767,6 +763,7 @@ const app = {
         }
         this.populateTelemetryDropdown();
         this.renderTelemetryView();
+        this.renderEventsTable(events);
       }
 
             // Fetch Budget Proposals from Cloud Firestore
@@ -815,11 +812,7 @@ const app = {
         if (clubsRes.ok) {
           const clubsData = await clubsRes.json();
           this.state.liveClubs = clubsData.documents || [];
-          if (this.state.liveClubs.length >= 2) {
-            this.state.budgetProposals[0].club = this.state.liveClubs[0].name;
-            this.state.budgetProposals[1].club = this.state.liveClubs[1].name;
-            this.renderBudgetTable();
-          }
+          // Live clubs preserved
         }
       } catch (e) {
         console.warn('[Clubs] Note:', e);
@@ -1190,6 +1183,47 @@ const app = {
   },
 
   // Render Overview Recent Table
+  
+  // Render Overview Events Management Table
+  renderEventsTable(eventsList = null) {
+    const tbody = document.getElementById('overview-events-table');
+    if (!tbody) return;
+
+    const list = eventsList || this.state.liveEvents || [];
+    if (list.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 24px; color: var(--muted); font-size: 13px;">
+            Chưa có sự kiện nào trong hệ thống. Bấm "+ Tạo Sự Kiện Mới" để phát hành sự kiện.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = list.map(evt => {
+      const reg = evt.registeredCount || 0;
+      const cap = evt.capacity || 200;
+      const pct = Math.min(100, Math.round((reg / cap) * 100));
+      return `
+        <tr>
+          <td class="mono" style="font-weight: 600;">${evt.id}</td>
+          <td style="font-weight: 600; color: var(--text);">${evt.title}</td>
+          <td><span class="pill pill-default">${evt.clubName || 'CLB FPTU'}</span></td>
+          <td>${evt.date} <span style="color: var(--muted); font-size: 11px;">${evt.time || ''}</span></td>
+          <td>${evt.location}</td>
+          <td>
+            <div style="font-size: 12px; font-weight: 600;">${reg} / ${cap} (${pct}%)</div>
+            <div class="capacity-bar-wrap" style="height: 4px; margin-top: 4px;">
+              <div class="capacity-bar-fill" style="width: ${pct}%; background-color: ${pct >= 90 ? 'var(--negative)' : 'var(--positive)'};"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-positive">Hoạt Động</span></td>
+        </tr>
+      `;
+    }).join('');
+  },
+
   renderRecentOverviewTable() {
     const tbody = document.getElementById('overview-recent-table');
     if (!tbody) return;
@@ -2264,6 +2298,14 @@ const app = {
         pill.className = isChecked ? 'pill pill-positive' : 'pill pill-neutral';
       }
       this.showToast(`Remote Config: show_survey_banner = ${isChecked}`);
+    } else if (key === 'live-qa') {
+      const isChecked = document.getElementById('rc-live-qa')?.checked;
+      const pill = document.getElementById('rc-live-qa-pill');
+      if (pill) {
+        pill.innerText = isChecked ? 'Đang Bật' : 'Tắt';
+        pill.className = isChecked ? 'pill pill-positive' : 'pill pill-neutral';
+      }
+      this.showToast(`Remote Config: enable_live_qa = ${isChecked}`);
     } else if (key === 'maintenance') {
       const isChecked = document.getElementById('rc-maintenance')?.checked;
       const pill = document.getElementById('rc-maintenance-pill');
@@ -2275,9 +2317,31 @@ const app = {
     }
   },
 
-  publishRemoteConfig() {
-    this.logAnalytics('remote_config_published', { timestamp: new Date().toISOString() });
-    this.showToast('Đã xuất bản Remote Config mới! Các thiết bị sinh viên sẽ tự động fetch & activate.');
+  async publishRemoteConfig() {
+    const config = {
+      max_featured_events: document.getElementById('rc-featured')?.checked ? 5 : 2,
+      show_survey_banner: Boolean(document.getElementById('rc-survey')?.checked),
+      maintenance_mode: Boolean(document.getElementById('rc-maintenance')?.checked),
+      enable_live_qa: Boolean(document.getElementById('rc-live-qa')?.checked !== false),
+      featured_banner_title: 'Sự kiện Nổi bật Campus FPTU',
+      publishedAt: new Date().toISOString()
+    };
+    try {
+      const res = await fetch('/api/remote-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config)
+      });
+      if (res.ok) {
+        this.logAnalytics('remote_config_published', config);
+        this.showToast('✓ Đã xuất bản Remote Config mới lên máy chủ! Các thiết bị sinh viên sẽ tự động fetch & activate.');
+        return;
+      }
+    } catch (e) {
+      console.warn('Publish RC error:', e);
+    }
+    this.logAnalytics('remote_config_published', config);
+    this.showToast('Đã lưu cấu hình Remote Config nội bộ!');
   },
 
   // Simulate Handled Exception for Crashlytics
