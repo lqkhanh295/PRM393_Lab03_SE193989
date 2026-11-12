@@ -12,7 +12,7 @@ function escapeXml(unsafe) {
 }
 
 class DiagramBuilder {
-  constructor(name, width = 1600, height = 1100) {
+  constructor(name, width = 1600, height = 1200) {
     this.name = name;
     this.width = width;
     this.height = height;
@@ -37,7 +37,7 @@ class DiagramBuilder {
     </div>`;
     this.cells.push(`
       <mxCell id="${id}" value="${escapeXml(html)}" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
-        <mxGeometry x="40" y="15" width="1000" height="75" as="geometry" />
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
       </mxCell>
     `);
     return id;
@@ -70,7 +70,7 @@ class DiagramBuilder {
       subtitleHtml = `<div style="font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;">${escapeXml(subtitle)}</div>`;
     }
 
-    const html = `<div style="font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;">
+    const html = `<div style="font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;">
       <div style="font-size:12px; font-weight:800; color:${t.headerColor}; line-height:1.3; word-break:break-word;">${escapeXml(title)}</div>
       ${subtitleHtml}
       ${detailsHtml}
@@ -112,7 +112,7 @@ class DiagramBuilder {
     return cellId;
   }
 
-  addConnection({ source, target, label, style, color = '#334155', dashed = 0, strokeWidth = 1.5, exitX, exitY, entryX, entryY, offsetY = -14, offsetX = 0 }) {
+  addConnection({ source, target, label, style, color = '#334155', dashed = 0, strokeWidth = 1.5, exitX, exitY, entryX, entryY, offsetY = -12, offsetX = 0 }) {
     const id = this.nextId();
     let edgeStyle = `edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=${color};strokeWidth=${strokeWidth};dashed=${dashed};fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;`;
     if (exitX !== undefined) edgeStyle += `exitX=${exitX};exitY=${exitY};`;

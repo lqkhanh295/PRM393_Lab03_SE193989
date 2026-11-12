@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2026-11-12T02:09:34.804Z" agent="Antigravity Architecture Builder" version="24.0.0">
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:33:59.732Z" agent="Antigravity Architecture Builder" version="24.0.0">
   <diagram id="14_Database_Conceptual" name="14_Database_Conceptual">
   <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" background="#ffffff">
     <root>
@@ -10,135 +10,121 @@
       &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;14. DATABASE DESIGN 1/2 — MÔ HÌNH DỮ LIỆU KHÁI NIỆM (CONCEPTUAL ERD)&lt;/div&gt;
       &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Mô hình hóa ngữ nghĩa nghiệp vụ, thực thể, mối quan hệ và bản số (Cardinality) — Chưa phụ thuộc DBMS vật lý&lt;/div&gt;
     &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
-        <mxGeometry x="40" y="15" width="1000" height="75" as="geometry" />
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
-      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;SINH VIÊN (USER)&lt;/div&gt;
-      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Thực thể người học FPT&lt;/div&gt;
-      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã sinh viên (MSSV)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Họ và tên&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Email trường (@fpt.edu.vn)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Chuyên ngành đào tạo&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Điểm rèn luyện tích lũy&lt;/div&gt;&lt;/div&gt;
-    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="60" y="140" width="270" height="170" as="geometry" />
-      </mxCell>
-    
-      
-      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;CÂU LẠC BỘ (CLUB)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Đơn vị tổ chức sự kiện&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã định danh CLB&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tên câu lạc bộ&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tên viết tắt&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Lĩnh vực hoạt động&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Cán bộ chủ nhiệm&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="60" y="440" width="270" height="170" as="geometry" />
+        <mxGeometry x="60" y="140" width="280" height="175" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;SỰ KIỆN (EVENT)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Chương trình được phê duyệt&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã sự kiện&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tên chủ đề sự kiện&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Ngày giờ diễn ra&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Địa điểm / Hội trường&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Sức chứa tối đa&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hạn chót đăng ký&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Trạng thái vận hành&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="480" y="280" width="300" height="200" as="geometry" />
+        <mxGeometry x="480" y="140" width="320" height="195" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;ĐƠN ĐĂNG KÝ (REGISTRATION)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Hồ sơ chờ duyệt (Slide 18)&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã đơn đăng ký&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Thời điểm nộp đơn&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Trạng thái xét duyệt (pending/approved/rejected)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Lý do từ chối (nếu có)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Cán bộ xét duyệt&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="910" y="140" width="300" height="180" as="geometry" />
+        <mxGeometry x="930" y="140" width="320" height="185" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;SINH VIÊN (USER)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Thực thể người học FPT&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã sinh viên (MSSV)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Họ và tên&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Email trường (@fpt.edu.vn)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Chuyên ngành đào tạo&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Điểm rèn luyện tích lũy&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="60" y="440" width="280" height="180" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;VÉ ĐIỆN TỬ (TICKET)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Vé vào cổng kèm mã bảo mật&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã vé điện tử&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Mã băm QR Token bí mật&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Trạng thái sử dụng (isUsed)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Thời điểm check-in cổng&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Đã gửi feedback hay chưa&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="910" y="440" width="300" height="190" as="geometry" />
+        <mxGeometry x="930" y="440" width="320" height="195" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;ĐÁNH GIÁ (FEEDBACK)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Khảo sát chất lượng sự kiện&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Mã phiếu đánh giá&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Điểm số hài lòng (1-5 sao)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Nhận xét &amp;amp; góp ý chi tiết&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Thời điểm nộp phiếu&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Điểm rèn luyện đã cộng (+5)&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="1300" y="240" width="260" height="160" as="geometry" />
+        <mxGeometry x="1320" y="340" width="250" height="155" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;CHỨNG NHẬN (CERTIFICATE)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Chứng chỉ e-Cert số hóa&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• * Số hiệu chứng nhận&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Đường dẫn tệp PDF Cloud&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Mã băm kiểm định SHA-256&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Ngày cấp chứng nhận&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="1300" y="460" width="260" height="160" as="geometry" />
+        <mxGeometry x="1320" y="530" width="250" height="155" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_9" value="tổ chức (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=2;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_3" target="cell_4">
+      <mxCell id="cell_9" value="tổ chức (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=2;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_2" target="cell_3">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="0" y="-12" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_10" value="nộp đơn (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_2" target="cell_5">
+      <mxCell id="cell_10" value="tiếp nhận (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_3" target="cell_4">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="0" y="-12" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_11" value="tiếp nhận (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_4" target="cell_5">
+      <mxCell id="cell_11" value="duyệt sinh vé [Slide 18]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d97706;strokeWidth=2;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="cell_4" target="cell_6">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="35" y="0" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_12" value="duyệt sinh vé [Slide 18]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#d97706;strokeWidth=2;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_5" target="cell_6">
+      <mxCell id="cell_12" value="sở hữu (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_5" target="cell_6">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="0" y="-12" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_13" value="phát hành (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_4" target="cell_6">
+      <mxCell id="cell_13" value="đánh giá (1,1 ➔ 0,1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_6" target="cell_7">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="0" y="-12" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_14" value="sở hữu (1,1 ➔ 0,N)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_2" target="cell_6">
+      <mxCell id="cell_14" value="chứng nhận (1,1 ➔ 0,1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.7;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_6" target="cell_8">
         <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
+          <mxPoint as="offset" x="0" y="-12" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="cell_15" value="mở khóa đánh giá (1,1 ➔ 0,1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_6" target="cell_7">
-        <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
-        </mxGeometry>
-      </mxCell>
-    
-      
-      <mxCell id="cell_16" value="cấp chứng nhận (1,1 ➔ 0,1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;" edge="1" parent="1" source="cell_6" target="cell_8">
-        <mxGeometry relative="1" as="geometry">
-          <mxPoint as="offset" x="0" y="-14" />
-        </mxGeometry>
-      </mxCell>
-    
-      
-      <mxCell id="cell_17" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_15" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;CÁC QUY TẮC NGHIỆP VỤ (BUSINESS RULES) CHI PHỐI QUAN HỆ KHÁI NIỆM:&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Ràng buộc toàn vẹn dữ liệu được bảo vệ xuyên suốt từ mức thiết kế ý niệm đến ứng dụng thực tế&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-01 (Định danh duy nhất): Mỗi Vé điện tử (Ticket) thuộc về duy nhất một Sinh viên (User) và một Sự kiện (Event). Một sinh viên không thể có 2 vé trong cùng 1 sự kiện.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-02 (Ràng buộc sức chứa): Tổng số Vé điện tử được phát hành của một Sự kiện không bao giờ vượt quá chỉ số Sức chứa tối đa (Capacity) của Sự kiện đó.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-03 (Thời hạn nộp đơn): Đơn đăng ký chỉ có thể được tạo khi thời điểm hiện tại nhỏ hơn hoặc bằng Hạn chót đăng ký của Sự kiện.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-04 (Quy trình duyệt vé Slide 18): Một Vé điện tử chỉ được khởi tạo khi và chỉ khi Đơn đăng ký (Registration) tương ứng chuyển sang trạng thái &amp;quot;approved&amp;quot; bởi Cán bộ CTSV.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-05 (Ràng buộc Đánh giá &amp;amp; Chứng nhận): Phiếu Đánh giá (Feedback) và Chứng chỉ (Certificate) chỉ có thể được tạo sau khi Vé đã được xác thực Check-in cổng (isUsed == true).&lt;/div&gt;&lt;/div&gt;
     &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="60" y="730" width="1500" height="260" as="geometry" />
+        <mxGeometry x="60" y="730" width="1510" height="260" as="geometry" />
       </mxCell>
     
     </root>

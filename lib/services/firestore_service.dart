@@ -51,7 +51,20 @@ class FirestoreService {
   // Reactive notifier for certificate issuance across the application
   final ValueNotifier<int> certificatesNotifier = ValueNotifier<int>(0);
 
+  // Smart in-memory Quota Protection Caches & Timestamps
+  DateTime? _lastEventsFetch;
+  DateTime? _lastClubsFetch;
+  DateTime? _lastAnnouncementsFetch;
+  final Map<String, List<GateAssignmentModel>> _cachedGateAssignments = {};
+  final Map<String, DateTime> _lastGateAssignmentsFetch = {};
+
+  static const Duration _eventsCacheTtl = Duration(minutes: 3);
+  static const Duration _clubsCacheTtl = Duration(hours: 4);
+  static const Duration _announcementsCacheTtl = Duration(minutes: 3);
+  static const Duration _gateAssignmentsCacheTtl = Duration(minutes: 5);
+
   FirestoreService([this._firestore]) {
+    _lastClubsFetch = DateTime.now();
     _cachedClubs.addAll(
       FirestoreSeeder.officialClubs.map(
         (c) => ClubModel.fromMap(c, c['id'] as String),
@@ -69,56 +82,50 @@ class FirestoreService {
       if (snap.docs.isEmpty) {
         debugPrint('[FirestoreService] Cloud Firestore empty. Auto-seeding official collections...');
         await FirestoreSeeder.seedAll(_firestore);
+        await _syncFromCloud(force: true);
       } else {
-        // Sync clubs if Cloud Firestore has fewer than official list
-        try {
-          final clubsSnap = await _firestore.collection('clubs').get();
-          if (clubsSnap.docs.length < FirestoreSeeder.officialClubs.length) {
-            debugPrint('[FirestoreService] Syncing missing official clubs to Cloud Firestore...');
-            final batch = _firestore.batch();
-            for (final club in FirestoreSeeder.officialClubs) {
-              final docRef = _firestore.collection('clubs').doc(club['id'] as String);
-              batch.set(docRef, club, SetOptions(merge: true));
-            }
-            await batch.commit();
-            debugPrint('[FirestoreService] Successfully synced official clubs to Cloud Firestore!');
-          }
-        } catch (e) {
-          debugPrint('[FirestoreService] Auto-sync clubs note: $e');
-        }
+        await _syncFromCloud(force: false);
       }
-      // Populate local cache from real Cloud Firestore
-      await _syncFromCloud();
     } catch (e) {
       debugPrint('[FirestoreService] Cloud Firestore auto-init note: $e');
     }
   }
 
-  Future<void> _syncFromCloud() async {
+  Future<void> _syncFromCloud({bool force = false}) async {
     if (_firestore == null) return;
     try {
-      final eventsSnap = await _firestore.collection('events').get();
-      if (eventsSnap.docs.isNotEmpty) {
-        _cachedEvents.clear();
-        _cachedEvents.addAll(
-          eventsSnap.docs.map((d) => EventModel.fromMap(d.data(), d.id)),
-        );
-      }
-
-      final clubsSnap = await _firestore.collection('clubs').get();
-      if (clubsSnap.docs.isNotEmpty) {
-        _cachedClubs.clear();
-        _cachedClubs.addAll(
-          clubsSnap.docs.map((d) => ClubModel.fromMap(d.data(), d.id)),
-        );
+      if (force || _cachedEvents.isEmpty || _lastEventsFetch == null || DateTime.now().difference(_lastEventsFetch!) > _eventsCacheTtl) {
+        final eventsSnap = await _firestore.collection('events').get();
+        if (eventsSnap.docs.isNotEmpty) {
+          _cachedEvents.clear();
+          _cachedEvents.addAll(
+            eventsSnap.docs.map((d) => EventModel.fromMap(d.data(), d.id)),
+          );
+          _lastEventsFetch = DateTime.now();
+        }
       }
     } catch (e) {
       debugPrint('[FirestoreService] Sync from cloud error: $e');
     }
   }
 
-  /// Get list of events directly from Cloud Firestore with fallback sync
-  Future<List<EventModel>> getEvents({String? category, int? limit}) async {
+  /// Get list of events directly from Cloud Firestore with fallback sync and smart quota cache
+  Future<List<EventModel>> getEvents({String? category, int? limit, bool forceRefresh = false}) async {
+    final isCacheFresh = _cachedEvents.isNotEmpty &&
+        _lastEventsFetch != null &&
+        DateTime.now().difference(_lastEventsFetch!) < _eventsCacheTtl;
+
+    if (!forceRefresh && isCacheFresh) {
+      var list = _cachedEvents;
+      if (category != null && category != 'All' && category != 'Tất cả') {
+        list = list.where((e) => e.category.toLowerCase() == category.toLowerCase()).toList();
+      }
+      if (limit != null && list.length > limit) {
+        list = list.sublist(0, limit);
+      }
+      return list;
+    }
+
     try {
       if (_firestore != null) {
         Query<Map<String, dynamic>> query = _firestore.collection('events');
@@ -140,6 +147,7 @@ class FirestoreService {
               _cachedEvents.add(evt);
             }
           }
+          _lastEventsFetch = DateTime.now();
           return liveList;
         }
       }
@@ -168,6 +176,7 @@ class FirestoreService {
                   _cachedEvents.add(evt);
                 }
               }
+              _lastEventsFetch = DateTime.now();
               break;
             }
           }
@@ -1089,14 +1098,25 @@ class FirestoreService {
     }
   }
 
-  /// Clubs from Cloud Firestore
-  Future<List<ClubModel>> getClubs() async {
+  /// Clubs from Cloud Firestore with smart quota cache
+  Future<List<ClubModel>> getClubs({bool forceRefresh = false}) async {
+    final isCacheFresh = _cachedClubs.isNotEmpty &&
+        _lastClubsFetch != null &&
+        DateTime.now().difference(_lastClubsFetch!) < _clubsCacheTtl;
+
+    if (!forceRefresh && isCacheFresh) {
+      return _cachedClubs;
+    }
+
     try {
       if (_firestore != null) {
         final snap = await _firestore.collection('clubs').get();
         if (snap.docs.isNotEmpty) {
           final cloudList = snap.docs.map((d) => ClubModel.fromMap(d.data(), d.id)).toList();
           if (cloudList.length >= _cachedClubs.length) {
+            _cachedClubs.clear();
+            _cachedClubs.addAll(cloudList);
+            _lastClubsFetch = DateTime.now();
             return cloudList;
           }
           // Merge cloud clubs with cached official clubs so all 45 clubs remain accessible
@@ -1104,7 +1124,10 @@ class FirestoreService {
           for (var c in cloudList) {
             map[c.id] = c;
           }
-          return map.values.toList();
+          _cachedClubs.clear();
+          _cachedClubs.addAll(map.values);
+          _lastClubsFetch = DateTime.now();
+          return _cachedClubs;
         }
       }
     } catch (e) {
@@ -1124,6 +1147,9 @@ class FirestoreService {
                 .map((d) => ClubModel.fromMap(Map<String, dynamic>.from(d), d['id']?.toString() ?? ''))
                 .toList();
             if (apiClubs.isNotEmpty) {
+              _cachedClubs.clear();
+              _cachedClubs.addAll(apiClubs);
+              _lastClubsFetch = DateTime.now();
               return apiClubs;
             }
           }
@@ -1173,7 +1199,15 @@ class FirestoreService {
   }
 
   /// Get list of announcements directly from Cloud Firestore, filtered by userId
-  Future<List<AnnouncementModel>> getAnnouncements({String? currentUserId}) async {
+  Future<List<AnnouncementModel>> getAnnouncements({String? currentUserId, bool forceRefresh = false}) async {
+    final isCacheFresh = _cachedAnnouncements.isNotEmpty &&
+        _lastAnnouncementsFetch != null &&
+        DateTime.now().difference(_lastAnnouncementsFetch!) < _announcementsCacheTtl;
+
+    if (!forceRefresh && isCacheFresh) {
+      return _cachedAnnouncements.where((a) => a.userId.isEmpty || a.userId == currentUserId).toList();
+    }
+
     try {
       if (_firestore != null) {
         final snap = await _firestore
@@ -1187,6 +1221,7 @@ class FirestoreService {
               .toList();
           _cachedAnnouncements.clear();
           _cachedAnnouncements.addAll(list);
+          _lastAnnouncementsFetch = DateTime.now();
           return list;
         }
       }
@@ -1404,8 +1439,16 @@ class FirestoreService {
     }
   }
 
-  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore with Web Portal Fallback Bridge
-  Future<List<GateAssignmentModel>> getGateAssignments({String? email}) async {
+  /// Gate Check-in Duty Assignments (Phân công ca trực cổng) - Real Cloud Firestore with Web Portal Fallback Bridge & Quota Cache
+  Future<List<GateAssignmentModel>> getGateAssignments({String? email, bool forceRefresh = false}) async {
+    final cacheKey = email?.toLowerCase().trim() ?? 'all';
+    final lastFetch = _lastGateAssignmentsFetch[cacheKey];
+    final cached = _cachedGateAssignments[cacheKey];
+
+    if (!forceRefresh && cached != null && cached.isNotEmpty && lastFetch != null && DateTime.now().difference(lastFetch) < _gateAssignmentsCacheTtl) {
+      return cached;
+    }
+
     try {
       if (_firestore != null) {
         Query<Map<String, dynamic>> query = _firestore.collection('gate_assignments');
@@ -1417,7 +1460,11 @@ class FirestoreService {
             .map((doc) => GateAssignmentModel.fromMap(doc.data(), doc.id))
             .where((a) => a.isActive)
             .toList();
-        if (list.isNotEmpty) return list;
+        if (list.isNotEmpty) {
+          _cachedGateAssignments[cacheKey] = list;
+          _lastGateAssignmentsFetch[cacheKey] = DateTime.now();
+          return list;
+        }
       }
     } catch (e) {
       debugPrint('[FirestoreService] getGateAssignments live cloud note: $e');

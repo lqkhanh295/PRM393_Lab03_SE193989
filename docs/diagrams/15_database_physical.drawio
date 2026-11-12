@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2026-11-12T02:09:34.805Z" agent="Antigravity Architecture Builder" version="24.0.0">
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:33:59.733Z" agent="Antigravity Architecture Builder" version="24.0.0">
   <diagram id="15_Database_Physical" name="15_Database_Physical">
   <mxGraphModel dx="1600" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" background="#ffffff">
     <root>
@@ -10,11 +10,11 @@
       &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;15. DATABASE DESIGN 2/2 — THIẾT KẾ VẬT LÝ CLOUD FIRESTORE NOSQL&lt;/div&gt;
       &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Cấu trúc Documents &amp;amp; Collections, Kiểu dữ liệu, Khóa chính, Chỉ mục phức hợp (Indexes) và Ràng buộc bảo mật&lt;/div&gt;
     &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
-        <mxGeometry x="40" y="15" width="1000" height="75" as="geometry" />
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;📁 users/{uid}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection tài khoản người dùng&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, Firebase UID]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • name: string [Required]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • email: string [Unique, @fpt.edu.vn]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • avatarUrl: string [URL]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • major: string [Chuyên ngành]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • role: string [&amp;quot;student&amp;quot; | &amp;quot;admin&amp;quot; | &amp;quot;staff&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • activityPoints: number [Default: 0, &amp;gt;= 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • createdAt: timestamp [ServerTimestamp]&lt;/div&gt;&lt;/div&gt;
@@ -23,7 +23,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;📁 events/{eventId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection thông tin sự kiện&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, EVT-YYYY-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • title: string [Required, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • description: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • date: timestamp [Required, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • timeRange: string [&amp;quot;13:30 - 17:30&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • location: string [Hội trường / Phòng]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • clubId: string [FK ➔ clubs.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • capacity: number [Int, &amp;gt; 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • registeredCount: number [Default: 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • status: string [&amp;quot;upcoming&amp;quot; | &amp;quot;happening&amp;quot; | &amp;quot;completed&amp;quot;]&lt;/div&gt;&lt;/div&gt;
@@ -32,7 +32,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;📁 registrations/{regId} (Slide 18)&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Hàng chờ thẩm định đơn xét duyệt&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, REG-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • studentName: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • studentEmail: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • status: string [&amp;quot;pending&amp;quot; | &amp;quot;approved&amp;quot; | &amp;quot;rejected&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • rejectReason: string? [Optional]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • createdAt: timestamp [Index DESC]&lt;/div&gt;&lt;/div&gt;
@@ -41,7 +41,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;📁 tickets/{ticketId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection vé điện tử &amp;amp; check-in&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, CE2026-XXXXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • qrToken: string [Unique Hash Token]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • isUsed: boolean [Default: false, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • checkedInAt: timestamp? [Nullable]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • feedbackSubmitted: boolean [Default: false]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
@@ -50,7 +50,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;📁 feedback/{feedbackId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection đánh giá khảo sát&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • userId: string [FK ➔ users.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • ticketId: string [FK ➔ tickets.id, Unique]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • rating: number [1..5, Required]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • comment: string [Text]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
@@ -59,7 +59,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;📁 certificates/{certId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection chứng nhận e-Certificate&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, CERT-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • eventId: string [FK ➔ events.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • pdfStoragePath: string [&amp;quot;reports/{uid}/...&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • sha256Checksum: string [64-char Hash]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • issuedAt: timestamp&lt;/div&gt;&lt;/div&gt;
@@ -68,7 +68,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;📁 clubs/{clubId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Collection danh mục CLB&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK, &amp;quot;fcode&amp;quot;, &amp;quot;cocsaigon&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • name: string [Tên chính thức]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • acronym: string [&amp;quot;F-Code&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • category: string [&amp;quot;Technology&amp;quot; | &amp;quot;Media&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • followerCount: number&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • logoUrl: string, fanpageUrl: string&lt;/div&gt;&lt;/div&gt;
@@ -77,7 +77,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_9" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_9" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;📁 events/{id}/questions/{qId}&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Subcollection Q&amp;amp;A hội trường trực tiếp&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • id: string [PK]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • authorId: string [FK ➔ users.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • authorName: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • question: string [Nội dung]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • upvotes: number [Default: 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • isAnswered: boolean [Default: false]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
@@ -86,7 +86,7 @@
       </mxCell>
     
       
-      <mxCell id="cell_10" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_10" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;CHỈ MỤC PHỨC HỢP (COMPOUND INDEXES) &amp;amp; BẢO MẬT FIRESTORE SECURITY RULES:&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Tối ưu hóa hiệu năng truy vấn sub-second và bảo vệ dữ liệu ở mức cơ sở dữ liệu đám mây&lt;/div&gt;
       &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 1. Compound Index: tickets ➔ userId (ASC) + isUsed (ASC) + createdAt (DESC) — Tối ưu truy vấn phân tách vé &amp;quot;Sắp diễn ra&amp;quot; (isUsed:false) và &amp;quot;Đã tham gia&amp;quot; (isUsed:true).&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 2. Compound Index: events ➔ status (ASC) + date (ASC) — Hỗ trợ lọc danh sách sự kiện theo trạng thái vận hành và thứ tự thời gian.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 3. Compound Index: registrations ➔ eventId (ASC) + status (ASC) + createdAt (DESC) — Tối ưu hiển thị bảng Hàng chờ duyệt vé (Slide 18) trên Web Portal.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 4. Firestore Security Rule: allow read: if request.auth != null &amp;amp;&amp;amp; request.auth.token.email.matches(&amp;quot;.*@fpt[.]edu[.]vn$|.*@fe[.]edu[.]vn$&amp;quot;); — Khóa chặt truy cập.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 5. Atomic Check-in Rule: Chỉ cho phép cập nhật isUsed: true nếu document trước đó có isUsed == false, chặn hoàn toàn xung đột ghi đè đồng thời (Write Conflict).&lt;/div&gt;&lt;/div&gt;

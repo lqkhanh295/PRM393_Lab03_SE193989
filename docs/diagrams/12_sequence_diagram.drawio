@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2026-11-12T02:09:34.801Z" agent="Antigravity Architecture Builder" version="24.0.0">
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:33:59.730Z" agent="Antigravity Architecture Builder" version="24.0.0">
   <diagram id="12_Sequence_Diagram" name="12_Sequence_Diagram">
-  <mxGraphModel dx="1600" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" background="#ffffff">
+  <mxGraphModel dx="1600" dy="1220" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1220" background="#ffffff">
     <root>
       <mxCell id="0" />
       <mxCell id="1" parent="0" />
@@ -10,11 +10,11 @@
       &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;12. SEQUENCE DIAGRAM — QUY TRÌNH DUYỆT VÉ SLIDE 18 &amp;amp; CHECK-IN CỔNG&lt;/div&gt;
       &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Tương tác tuần tự chi tiết giữa Sinh viên, ViewModel, FirestoreService, Web Admin và Bàn soát vé&lt;/div&gt;
     &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
-        <mxGeometry x="40" y="15" width="1000" height="75" as="geometry" />
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
       </mxCell>
     
       
-      <mxCell id="act_student" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_student" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Sinh viên An
 (:Student)&lt;/div&gt;
       
@@ -27,12 +27,12 @@
       <mxCell id="cell_2" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_student">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="135" y="160" as="sourcePoint" />
-          <mxPoint x="135" y="1030" as="targetPoint" />
+          <mxPoint x="135" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_ui" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_ui" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Giao diện
 (:EventDetailScreen)&lt;/div&gt;
       
@@ -45,12 +45,12 @@
       <mxCell id="cell_3" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_ui">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="335" y="160" as="sourcePoint" />
-          <mxPoint x="335" y="1030" as="targetPoint" />
+          <mxPoint x="335" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_vm" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_vm" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Bộ điều khiển
 (:RegistrationVM)&lt;/div&gt;
       
@@ -63,12 +63,12 @@
       <mxCell id="cell_4" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_vm">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="555" y="160" as="sourcePoint" />
-          <mxPoint x="555" y="1030" as="targetPoint" />
+          <mxPoint x="555" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_svc" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_svc" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Dịch vụ
 (:FirestoreService)&lt;/div&gt;
       
@@ -81,12 +81,12 @@
       <mxCell id="cell_5" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_svc">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="785" y="160" as="sourcePoint" />
-          <mxPoint x="785" y="1030" as="targetPoint" />
+          <mxPoint x="785" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_db" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_db" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;&amp;lt;&amp;lt;Cloud&amp;gt;&amp;gt;
 :CloudFirestore&lt;/div&gt;
       
@@ -99,12 +99,12 @@
       <mxCell id="cell_6" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_db">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="1035" y="160" as="sourcePoint" />
-          <mxPoint x="1035" y="1030" as="targetPoint" />
+          <mxPoint x="1035" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_web" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_web" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Cổng Web Admin
 (:WebAdminPortal)&lt;/div&gt;
       
@@ -117,12 +117,12 @@
       <mxCell id="cell_7" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_web">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="1275" y="160" as="sourcePoint" />
-          <mxPoint x="1275" y="1030" as="targetPoint" />
+          <mxPoint x="1275" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
       
-      <mxCell id="act_desk" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="act_desk" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;Máy quét cổng
 (:MobileDeskScanner)&lt;/div&gt;
       
@@ -135,7 +135,7 @@
       <mxCell id="cell_8" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="act_desk">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
           <mxPoint x="1485" y="160" as="sourcePoint" />
-          <mxPoint x="1485" y="1030" as="targetPoint" />
+          <mxPoint x="1485" y="1080" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     
@@ -151,8 +151,8 @@
       
         <mxCell id="cell_10" value="2. submitPendingRegistration(event, user)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="335" y="240" as="sourcePoint" />
-            <mxPoint x="555" y="240" as="targetPoint" />
+            <mxPoint x="335" y="245" as="sourcePoint" />
+            <mxPoint x="555" y="245" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -160,8 +160,8 @@
       
         <mxCell id="cell_11" value="3. submitRegistration(RegistrationModel)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="555" y="290" as="sourcePoint" />
-            <mxPoint x="785" y="290" as="targetPoint" />
+            <mxPoint x="555" y="300" as="sourcePoint" />
+            <mxPoint x="785" y="300" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -169,8 +169,8 @@
       
         <mxCell id="cell_12" value="4. setDoc(registrations/{regId}, status: &quot;pending&quot;)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="785" y="340" as="sourcePoint" />
-            <mxPoint x="1035" y="340" as="targetPoint" />
+            <mxPoint x="785" y="355" as="sourcePoint" />
+            <mxPoint x="1035" y="355" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -178,8 +178,8 @@
       
         <mxCell id="cell_13" value="5. onSnapshot() [Thông báo đơn mới chờ duyệt +1]" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1035" y="400" as="sourcePoint" />
-            <mxPoint x="1275" y="400" as="targetPoint" />
+            <mxPoint x="1035" y="415" as="sourcePoint" />
+            <mxPoint x="1275" y="415" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -187,11 +187,11 @@
       
         <mxCell id="cell_14" value="6. Cán bộ CTSV xem xét hồ sơ trên Web Admin (Slide 18)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#4c1d95;labelBackgroundColor=#ffffff;labelBorderColor=#c4b5fd;align=left;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1275" y="460" as="sourcePoint" />
-            <mxPoint x="1395" y="490" as="targetPoint" />
+            <mxPoint x="1275" y="475" as="sourcePoint" />
+            <mxPoint x="1395" y="505" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="1345" y="460" />
-              <mxPoint x="1345" y="490" />
+              <mxPoint x="1345" y="475" />
+              <mxPoint x="1345" y="505" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -199,8 +199,8 @@
       
         <mxCell id="cell_15" value="7. approveRegistration(regId) ➔ runTransaction" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1275" y="520" as="sourcePoint" />
-            <mxPoint x="1035" y="520" as="targetPoint" />
+            <mxPoint x="1275" y="535" as="sourcePoint" />
+            <mxPoint x="1035" y="535" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -208,11 +208,11 @@
       
         <mxCell id="cell_16" value="8. update(status: &quot;approved&quot;) &amp; create(tickets/{ticketId})" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#4c1d95;labelBackgroundColor=#ffffff;labelBorderColor=#c4b5fd;align=left;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1035" y="575" as="sourcePoint" />
-            <mxPoint x="1155" y="605" as="targetPoint" />
+            <mxPoint x="1035" y="595" as="sourcePoint" />
+            <mxPoint x="1155" y="625" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="1105" y="575" />
-              <mxPoint x="1105" y="605" />
+              <mxPoint x="1105" y="595" />
+              <mxPoint x="1105" y="625" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -220,8 +220,8 @@
       
         <mxCell id="cell_17" value="9. Stream push: Vé mới về thiết bị sinh viên" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1035" y="630" as="sourcePoint" />
-            <mxPoint x="555" y="630" as="targetPoint" />
+            <mxPoint x="1035" y="655" as="sourcePoint" />
+            <mxPoint x="555" y="655" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -229,8 +229,8 @@
       
         <mxCell id="cell_18" value="10. setState(StateSuccess) ➔ Hiển thị DigitalTicket" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="555" y="685" as="sourcePoint" />
-            <mxPoint x="335" y="685" as="targetPoint" />
+            <mxPoint x="555" y="715" as="sourcePoint" />
+            <mxPoint x="335" y="715" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -238,8 +238,8 @@
       
         <mxCell id="cell_19" value="11. Sinh viên xuất trình QR tại Bàn kiểm soát cổng" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="135" y="745" as="sourcePoint" />
-            <mxPoint x="1485" y="745" as="targetPoint" />
+            <mxPoint x="135" y="775" as="sourcePoint" />
+            <mxPoint x="1485" y="775" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -247,8 +247,8 @@
       
         <mxCell id="cell_20" value="12. checkInTicket(qrToken) ➔ runTransaction" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1485" y="800" as="sourcePoint" />
-            <mxPoint x="785" y="800" as="targetPoint" />
+            <mxPoint x="1485" y="835" as="sourcePoint" />
+            <mxPoint x="785" y="835" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -256,8 +256,8 @@
       
         <mxCell id="cell_21" value="13. Atomic update(isUsed: true, checkedInAt: now)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="785" y="855" as="sourcePoint" />
-            <mxPoint x="1035" y="855" as="targetPoint" />
+            <mxPoint x="785" y="895" as="sourcePoint" />
+            <mxPoint x="1035" y="895" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -265,8 +265,8 @@
       
         <mxCell id="cell_22" value="14. Return 200 OK (&lt; 1.5s): Mở cổng thành công" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1035" y="910" as="sourcePoint" />
-            <mxPoint x="1485" y="910" as="targetPoint" />
+            <mxPoint x="1035" y="955" as="sourcePoint" />
+            <mxPoint x="1485" y="955" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
@@ -274,21 +274,21 @@
       
         <mxCell id="cell_23" value="15. Mở khóa nút Feedback (+5 Điểm rèn luyện) trên Mobile" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
-            <mxPoint x="1035" y="965" as="sourcePoint" />
-            <mxPoint x="335" y="965" as="targetPoint" />
+            <mxPoint x="1035" y="1015" as="sourcePoint" />
+            <mxPoint x="335" y="1015" as="targetPoint" />
             <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
       
       
-      <mxCell id="cell_24" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:8px 10px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      <mxCell id="cell_24" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
       &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;NHÁNH NGOẠI LỆ (ALTERNATIVE FLOWS):&lt;/div&gt;
       &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;• alt [Sự kiện hết chỗ / Hết hạn BR-02, BR-03]: FirestoreService ném ngoại lệ ➔ UI hiển thị thông báo lỗi ➔ Hủy luồng.
 • alt [CTSV Từ chối đơn]: CTSV ghi rejectReason ➔ FCM Push thông báo sinh viên lý do từ chối ➔ Không phát hành vé.
 • alt [Quét vé giả hoặc vé đã dùng BR-05]: MobileDesk Scanner rung chuông cảnh báo đỏ &amp;quot;VÉ KHÔNG HỢP LỆ HOẶC ĐÃ QUÉT&amp;quot; ➔ Chặn vào cổng.&lt;/div&gt;
       
     &lt;/div&gt;" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
-        <mxGeometry x="40" y="1045" width="1520" height="75" as="geometry" />
+        <mxGeometry x="40" y="1100" width="1520" height="80" as="geometry" />
       </mxCell>
     
     </root>

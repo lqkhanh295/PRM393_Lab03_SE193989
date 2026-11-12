@@ -684,17 +684,18 @@ const app = {
     if (!this._pollInterval) {
       this._pollInterval = setInterval(() => {
         if (!document.hidden) {
-          this.loadAllRealData();
+          this.loadAllRealData(true);
         }
-      }, 30000);
+      }, 45000);
     }
   },
 
   // Live Cloud Firestore Data Loader (Zero-Mock Data)
-  async loadAllRealData() {
+  async loadAllRealData(isBackground = false) {
     try {
       // 1. Sync Backend Status & Active User Account
-      try {
+      if (!isBackground) {
+        try {
         const statusRes = await fetch('/api/status');
         if (statusRes.ok) {
           const statusData = await statusRes.json();
@@ -707,17 +708,21 @@ const app = {
             liveIndicator.innerText = `Firestore: ${statusData.projectId} (Đã kết nối)`;
           }
         }
-      } catch (e) {
-        console.warn('[Status Check] Backend API note:', e);
+        } catch (e) {
+          console.warn('[Status Check] Backend API note:', e);
+        }
       }
 
-      // 2. Fetch Events from Cloud Firestore
+      // 2. Fetch Events from Cloud Firestore (throttled in background)
       let events = [];
-      try {
-        const eventsRes = await fetch('/api/events');
+      const shouldFetchEvents = !isBackground || !this._lastEventsFetchTime || (Date.now() - this._lastEventsFetchTime > 120000);
+      if (shouldFetchEvents) {
+        try {
+          const eventsRes = await fetch('/api/events');
         if (eventsRes.ok) {
           const eventsData = await eventsRes.json();
           events = eventsData.documents || [];
+          this._lastEventsFetchTime = Date.now();
         }
       } catch (e) {
         // Fallback to direct public Firestore REST endpoint
@@ -765,10 +770,12 @@ const app = {
         this.renderTelemetryView();
         this.renderEventsTable(events);
       }
+      }
 
-            // Fetch Budget Proposals from Cloud Firestore
-      try {
-        const budgetRes = await fetch('/api/budgets');
+            // Fetch Budget Proposals from Cloud Firestore (skip in background unless on budget tab)
+      if (!isBackground || this.state.activeView === 'budget') {
+        try {
+          const budgetRes = await fetch('/api/budgets');
         if (budgetRes.ok) {
           const budgetData = await budgetRes.json();
           if (budgetData.documents && budgetData.documents.length > 0) {
@@ -780,13 +787,15 @@ const app = {
             this.renderBudgetTable();
           }
         }
-      } catch (e) {
-        console.warn('[Budgets] Note:', e);
+        } catch (e) {
+          console.warn('[Budgets] Note:', e);
+        }
       }
 
-      // Fetch PCCC Inspections from Cloud Firestore
-      try {
-        const pcccRes = await fetch('/api/pccc-inspections');
+      // Fetch PCCC Inspections from Cloud Firestore (skip in background unless on safety tab)
+      if (!isBackground || this.state.activeView === 'safety') {
+        try {
+          const pcccRes = await fetch('/api/pccc-inspections');
         if (pcccRes.ok) {
           const pcccData = await pcccRes.json();
           if (pcccData.documents && pcccData.documents.length > 0) {
@@ -802,20 +811,23 @@ const app = {
             this.renderVenues();
           }
         }
-      } catch (e) {
-        console.warn('[PCCC] Note:', e);
+        } catch (e) {
+          console.warn('[PCCC] Note:', e);
+        }
       }
 
-      // 3. Fetch Clubs from Cloud Firestore
-      try {
-        const clubsRes = await fetch('/api/clubs');
+      // 3. Fetch Clubs from Cloud Firestore (skip in background - static)
+      if (!isBackground || !this.state.liveClubs || this.state.liveClubs.length === 0) {
+        try {
+          const clubsRes = await fetch('/api/clubs');
         if (clubsRes.ok) {
           const clubsData = await clubsRes.json();
           this.state.liveClubs = clubsData.documents || [];
           // Live clubs preserved
         }
-      } catch (e) {
-        console.warn('[Clubs] Note:', e);
+        } catch (e) {
+          console.warn('[Clubs] Note:', e);
+        }
       }
 
       // 4. Fetch Registrations from Cloud Firestore (Cross-Role Review Queue)

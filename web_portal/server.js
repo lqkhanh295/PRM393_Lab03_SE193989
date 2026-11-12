@@ -155,7 +155,25 @@ process.on('unhandledRejection', (reason) => {
 // Firestore REST Request with Bearer Token & Smart Quota Protection Cache
 const CACHE_FILE = path.join(__dirname, '.firestore_cache.json');
 const firestoreCache = new Map();
-const CACHE_TTL_MS = 60000; // 60 seconds quota-safe cache
+
+// Tiered Quota-Safe Cache TTLs (drastically reduces Firebase Spark quota burn)
+const COLLECTION_TTLS = {
+  clubs: 12 * 60 * 60 * 1000,             // 12 hours (46 clubs are static, saving 46 reads per poll)
+  'pccc-inspections': 4 * 60 * 60 * 1000, // 4 hours
+  pccc_inspections: 4 * 60 * 60 * 1000,
+  budgets: 15 * 60 * 1000,                // 15 minutes (updated optimistically on review)
+  events: 5 * 60 * 1000,                  // 5 minutes (updated optimistically on creation)
+  announcements: 5 * 60 * 1000,           // 5 minutes (updated optimistically on broadcast)
+  gate_assignments: 10 * 60 * 1000,       // 10 minutes
+  registrations: 3 * 60 * 1000,           // 3 minutes (updated optimistically on submit/approve)
+  tickets: 90 * 1000,                     // 90 seconds (updated optimistically on checkin)
+  default: 5 * 60 * 1000                  // 5 minutes default
+};
+
+function getTtlForEndpoint(endpoint) {
+  const collection = endpoint.split('?')[0].replace(/^\//, '').split('/')[0];
+  return COLLECTION_TTLS[collection] || COLLECTION_TTLS.default;
+}
 
 // Load disk snapshot on startup if available
 try {
@@ -256,7 +274,8 @@ async function firestoreRequest(endpoint, method = 'GET', body = null) {
   if (method === 'GET') {
     const cachedData = getFromCache(method, endpoint);
     const cachedEntry = firestoreCache.get(cacheKey) || firestoreCache.get(`${method}:${endpoint.split('?')[0]}`);
-    if (cachedData && cachedEntry && (Date.now() - cachedEntry.timestamp < CACHE_TTL_MS)) {
+    const ttl = getTtlForEndpoint(endpoint);
+    if (cachedData && cachedEntry && (Date.now() - cachedEntry.timestamp < ttl)) {
       return cachedData;
     }
   }
@@ -279,10 +298,14 @@ async function firestoreRequest(endpoint, method = 'GET', body = null) {
     const res = await fetch(url, options);
     if (!res.ok) {
       const errorText = await res.text();
-      // If 429 (Quota exceeded) or server error, gracefully serve cached data if available
+      // If 429 (Quota exceeded) or server error, gracefully serve cached data if available and back off
       const cachedData = getFromCache(method, endpoint);
       if (cachedData) {
         console.warn(`[Firestore Quota/Status ${res.status}] Serving cached data for ${endpoint}`);
+        if (res.status === 429) {
+          const entry = firestoreCache.get(cacheKey) || firestoreCache.get(`${method}:${endpoint.split('?')[0]}`);
+          if (entry) entry.timestamp = Date.now(); // Back off
+        }
         return cachedData;
       }
       if (res.status === 429 && method === 'GET') {
