@@ -79,6 +79,9 @@ class ProfileViewModel extends ChangeNotifier {
   /// Cờ báo hiệu quá trình xuất PDF hoặc tải lên Firebase Storage đang diễn ra.
   bool get isUploading => _isUploading;
 
+  /// Đối tượng [RemoteConfigService] quản lý cấu hình động từ xa của ứng dụng.
+  RemoteConfigService get remoteConfigService => _remoteConfigService;
+
   String? _statusMessage;
 
   /// Thông điệp trạng thái kết quả của hành động demo Firebase vừa thực hiện.

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../theme/app_theme.dart';
 import '../../viewmodels/auth_viewmodel.dart';
+import '../../viewmodels/home_viewmodel.dart';
 import '../../viewmodels/profile_viewmodel.dart';
 import '../../models/screen_state.dart';
 import '../../models/certificate_model.dart';
@@ -837,13 +838,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, color: AppTheme.obsidian),
                   ),
                   subtitle: const Text(
-                    'Analytics 7 events & Crashlytics (dành cho giảng viên / nghiệm thu)',
+                    'Analytics, Crashlytics & Remote Config (nghiệm thu Lab 3)',
                     style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
                   ),
                   children: [
                     _buildAnalyticsTriggerPanel(context, profileVM, user?.id ?? ''),
                     const SizedBox(height: 14),
                     _buildCrashlyticsPanel(context, profileVM),
+                    const SizedBox(height: 14),
+                    _buildRemoteConfigPanel(context, profileVM),
                   ],
                 ),
               ),
@@ -1144,6 +1147,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: 'Kích hoạt Test Crash (fatal)',
             icon: Icons.warning_amber_rounded,
             onPressed: vm.triggerTestCrash,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─── TASK 4 (ĐẠT): REMOTE CONFIG VERIFICATION PANEL ───────────────────────────
+  /// Hiển thị bảng điều khiển kiểm thử Firebase Remote Config & Feature Flags.
+  /// Cho phép giảng viên quan sát tham số runtime và chuyển đổi trực tiếp số lượng sự kiện nổi bật.
+  Widget _buildRemoteConfigPanel(BuildContext context, ProfileViewModel vm) {
+    final maxEvents = vm.remoteConfigService.maxFeaturedEvents;
+    final geminiAI = vm.remoteConfigService.enableGeminiInsights;
+    final modelName = vm.remoteConfigService.geminiModelName;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.surface,
+        borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+        border: Border.all(color: AppTheme.hairline, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: const Color(0xFFBFDBFE), width: 1),
+                ),
+                child: const Text(
+                  'REMOTE CONFIG & FEATURE FLAGS',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF1D4ED8),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Kiểm tra thay đổi cấu hình thời gian thực không cần build lại app (Zero-downtime over-the-air update).',
+            style: TextStyle(fontSize: 12, color: AppTheme.textMuted, height: 1.4),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.surfaceSubtle,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: AppTheme.hairline, width: 1),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('max_featured_events:', style: TextStyle(fontSize: 11, color: AppTheme.textMuted)),
+                    Text('$maxEvents sự kiện', style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, fontFamily: 'monospace')),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('enable_gemini_insights:', style: TextStyle(fontSize: 11, color: AppTheme.textMuted)),
+                    Text(geminiAI ? 'true (Đang bật)' : 'false (Đã tắt)', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: geminiAI ? const Color(0xFF15803D) : const Color(0xFFDC2626))),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('gemini_model_name:', style: TextStyle(fontSize: 11, color: AppTheme.textMuted)),
+                    Text(modelName, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, fontFamily: 'monospace')),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          AppOutlinedButton(
+            label: 'Đổi max_featured_events ($maxEvents ➔ ${maxEvents == 5 ? 2 : 5})',
+            icon: Icons.tune_rounded,
+            onPressed: () async {
+              await vm.toggleRemoteConfigDemo();
+              if (context.mounted) {
+                context.read<HomeViewModel>().refreshRemoteConfig();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('⚙️ Remote Config: max_featured_events = ${vm.remoteConfigService.maxFeaturedEvents} (Đã cập nhật Trang Chủ)'),
+                    backgroundColor: AppTheme.obsidian,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
