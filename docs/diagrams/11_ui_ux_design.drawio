@@ -1,0 +1,239 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:44:11.606Z" agent="Antigravity Architecture Builder" version="24.0.0">
+  <diagram id="11_UI_UX_Design" name="11_UI_UX_Design">
+  <mxGraphModel dx="1600" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" background="#ffffff">
+    <root>
+      <mxCell id="0" />
+      <mxCell id="1" parent="0" />
+      
+      <mxCell id="cell_1" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; text-align:left; padding:4px 8px;&quot;&gt;
+      &lt;div style=&quot;display:inline-block; font-size:10px; font-weight:800; color:#2563eb; background:#eff6ff; padding:3px 10px; border-radius:12px; margin-bottom:4px; border:1px solid #bfdbfe; letter-spacing:0.5px;&quot;&gt;SLIDE 11 • UI/UX DESIGN&lt;/div&gt;
+      &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;11. UI/UX DESIGN — CẤU TRÚC ĐIỀU HƯỚNG SITEMAP &amp;amp; TRẠNG THÁI GIAO DIỆN&lt;/div&gt;
+      &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Sơ đồ phân cấp màn hình (UI-01 ➔ UI-08), luồng điều hướng người dùng và 4 trạng thái giao diện chuẩn mực&lt;/div&gt;
+    &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;CẤU TRÚC ĐIỀU HƯỚNG MÀN HÌNH DI ĐỘNG (MOBILE NAVIGATION - FLUTTER 3.24)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Hệ thống màn hình chuẩn Material Design 3, phong cách Glassmorphism đồng nhất&lt;/div&gt;
+      
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="105" width="1030" height="630" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;UI-01: LoginScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Đăng nhập định danh&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Google SSO OAuth2&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Email FPT (@fpt.edu.vn)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="65" y="170" width="210" height="90" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;UI-02: HomeScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Trang chủ trung tâm&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Banner Remote Config&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Danh mục CLB, Featured&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="320" y="170" width="220" height="90" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;UI-03: ExploreScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Khám phá sự kiện&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tìm kiếm không dấu&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Lọc sự kiện theo CLB&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="580" y="170" width="220" height="90" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;UI-04: EventDetailScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Chi tiết &amp;amp; Đăng ký&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Sức chứa, thời gian&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Modal nộp đơn (Slide 18)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="835" y="170" width="215" height="90" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;UI-05: DigitalTicketScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Vé điện tử &amp;amp; Mã QR&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tab Sắp diễn ra / Đã tham gia&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Khóa nút gửi Feedback (BR-05)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tải chứng nhận PDF e-Cert&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="320" y="310" width="220" height="100" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;UI-06: LiveCompanionScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Đồng hành sự kiện trực tiếp&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Lịch trình phiên thuyết trình&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Q&amp;amp;A trực tiếp tại hội trường&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Upvote câu hỏi nổi bật&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="580" y="310" width="220" height="100" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_9" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;UI-07: EventFeedbackScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Đánh giá &amp;amp; Nhận điểm&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Đánh giá 1-5 sao&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Góp ý chất lượng tổ chức&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Cộng +5 Điểm rèn luyện&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="835" y="310" width="215" height="100" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_10" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;UI-08: MobileDeskScreen&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Bàn soát vé cổng Mobile&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Camera QR Scanner (&amp;lt; 1.5s)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Kiểm soát vé vào cổng&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Báo động vé giả/Đã dùng&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="65" y="310" width="210" height="100" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_11" value="Đăng nhập" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_3" target="cell_4">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_12" value="Xem tất cả" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_4" target="cell_5">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_13" value="Chọn sự kiện" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_5" target="cell_6">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_14" value="Duyệt vé ➔ Cấp QR" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" edge="1" parent="1" source="cell_6" target="cell_7">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_15" value="Vào sự kiện" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="cell_7" target="cell_8">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_16" value="Check-in ➔ Mở khóa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7c3aed;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=0.8;exitY=1;entryX=0.5;entryY=1;" edge="1" parent="1" source="cell_7" target="cell_9">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_17" value="Role: CTV" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=1.5;dashed=0;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#94a3b8;arcSize=4;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="cell_3" target="cell_10">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="25" y="0" />
+        </mxGeometry>
+      </mxCell>
+    
+      
+      <mxCell id="cell_18" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;CỔNG QUẢN TRỊ WEB ADMIN (PORTAL - CTSV)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Bảng điều khiển chuyên sâu dành cho Cán bộ Phòng CTSV&lt;/div&gt;
+      
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1095" y="105" width="465" height="630" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_19" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;WEB-01: Live KPI &amp;amp; Telemetry Dashboard&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Tổng quan chỉ số thời gian thực&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Đếm vé phát hành, tỷ lệ có mặt tại hội trường&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tốc độ quét cổng (giây/vé), nhịp độ cổng&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1115" y="170" width="425" height="105" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_20" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;WEB-02: Hàng Chờ Duyệt Vé (Slide 18)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Thẩm định đơn đăng ký trực tiếp&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Badge thông báo đơn mới theo thời gian thực (+1)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Xem thông tin sinh viên, bấm Phê duyệt / Từ chối&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1115" y="295" width="425" height="105" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_21" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;WEB-03: Thẩm Định Ngân Sách &amp;amp; An Toàn PCCC&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Quản trị rủi ro &amp;amp; an toàn hội trường&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Phê duyệt dự toán chi phí CLB đề xuất&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Giám sát giới hạn sức chứa chống quá tải hội trường&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1115" y="420" width="425" height="105" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_22" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;WEB-04: Danh Bạ Sinh Viên &amp;amp; e-Certificate&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Tra cứu &amp;amp; Xuất dữ liệu số hóa&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Lịch sử tích lũy điểm rèn luyện toàn trường&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tra cứu mã băm kiểm định SHA-256 chứng nhận số&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Xuất báo cáo tổng kết sự kiện sang PDF / CSV&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1115" y="545" width="425" height="160" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_23" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;4 TRẠNG THÁI GIAO DIỆN CHUẨN MỰC TOÀN HỆ THỐNG (STANDARDIZED UI STATES - SEALED CLASS)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Đảm bảo trải nghiệm nhất quán 100% trên tất cả các màn hình, tuân thủ nghiêm ngặt Chính sách Zero-Mock Data&lt;/div&gt;
+      
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="760" width="1520" height="350" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_24" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;📭 1. STATE EMPTY (TRẠNG THÁI RỖNG)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Khi Firestore trả về danh sách rỗng ([])&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Không hiển thị mock data giả mạo.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Render biểu tượng minh họa tinh gọn.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Thông điệp rõ ràng: &amp;quot;Bạn chưa có vé sự kiện nào&amp;quot;, &amp;quot;Hộp thư thông báo trống&amp;quot;.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Nút hành động trực tiếp: &amp;quot;Khám phá sự kiện ngay&amp;quot;.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="65" y="825" width="350" height="250" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_25" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;⏳ 2. STATE LOADING (ĐANG TẢI DỮ LIỆU)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Trong khi chờ kết nối Cloud Firestore / REST&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hiệu ứng Shimmer Skeleton mượt mà.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Giữ nguyên cấu trúc layout của thẻ vé / sự kiện.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tránh giật khung hình (layout shifting).&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hiển thị ngay lập tức khi khởi tạo ViewModel.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="440" y="825" width="350" height="250" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_26" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#b91c1c; line-height:1.3; word-break:break-word;&quot;&gt;⚠️ 3. STATE ERROR (XỬ LÝ LỖI)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Khi gặp lỗi kết nối mạng hoặc phân quyền&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #ef4444; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Bắt lỗi bằng Try-Catch &amp;amp; Crashlytics.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hiển thị thông báo tiếng Việt dễ hiểu.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tuyệt đối không hiển thị màn hình crash đỏ.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Nút &amp;quot;Thử lại&amp;quot; (Retry) kích hoạt refresh tự động.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fef2f2;strokeColor=#ef4444;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="815" y="825" width="350" height="250" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_27" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;✅ 4. STATE SUCCESS (HIỂN THỊ DỮ LIỆU)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Nạp dữ liệu thật thành công từ Firebase&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hiển thị 100% dữ liệu thực tế từ Cloud.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Cập nhật thời gian thực qua Snapshot Streams.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Đổi màu trạng thái động (Đang mở, Đã đóng).&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Hỗ trợ vuốt xuống để làm mới (Pull-to-Refresh).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1190" y="825" width="350" height="250" as="geometry" />
+      </mxCell>
+    
+    </root>
+  </mxGraphModel>
+</diagram>
+</mxfile>

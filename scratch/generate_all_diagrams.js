@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const { DiagramBuilder, escapeXml } = require('./diagram_builder');
+const {
+  buildSlide11UiUxDesign,
+  buildSlide16Traceability,
+  buildSlide17DemoPlan,
+  buildSlide21Testing
+} = require('./additional_builders');
 
 // =========================================================================
 // SLIDE 07: BUSINESS FLOW (BPMN / Activity with Waterfall Non-crossing Flow)
@@ -1155,10 +1161,14 @@ function main() {
     { file: '08_state_machine.drawio', fn: buildSlide08StateMachine },
     { file: '09_system_architecture.drawio', fn: buildSlide09SystemArchitecture },
     { file: '10_technology_stack.drawio', fn: buildSlide10TechStack },
+    { file: '11_ui_ux_design.drawio', fn: buildSlide11UiUxDesign },
     { file: '12_sequence_diagram.drawio', fn: buildSlide12SequenceDiagram },
     { file: '13_class_design.drawio', fn: buildSlide13ClassDesign },
     { file: '14_database_conceptual.drawio', fn: buildSlide14DatabaseConceptual },
     { file: '15_database_physical.drawio', fn: buildSlide15DatabasePhysical },
+    { file: '16_traceability_matrix.drawio', fn: buildSlide16Traceability },
+    { file: '17_demo_plan.drawio', fn: buildSlide17DemoPlan },
+    { file: '21_testing_verification.drawio', fn: buildSlide21Testing }
   ];
 
   const builtDiagrams = [];

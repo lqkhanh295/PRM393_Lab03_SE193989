@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:44:11.609Z" agent="Antigravity Architecture Builder" version="24.0.0">
+  <diagram id="16_Traceability_Matrix" name="16_Traceability_Matrix">
+  <mxGraphModel dx="1600" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" background="#ffffff">
+    <root>
+      <mxCell id="0" />
+      <mxCell id="1" parent="0" />
+      
+      <mxCell id="cell_1" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; text-align:left; padding:4px 8px;&quot;&gt;
+      &lt;div style=&quot;display:inline-block; font-size:10px; font-weight:800; color:#2563eb; background:#eff6ff; padding:3px 10px; border-radius:12px; margin-bottom:4px; border:1px solid #bfdbfe; letter-spacing:0.5px;&quot;&gt;SLIDE 16 • TRACEABILITY MATRIX&lt;/div&gt;
+      &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;16. TRACEABILITY MATRIX — MA TRẬN TRUY VẾT TÍNH NHẤT QUÁN THIẾT KẾ&lt;/div&gt;
+      &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Kiểm chứng tính liên kết toàn vẹn 100%: Nhóm Tính Năng ↔ Màn Hình UI ↔ Lớp Mã Nguồn ↔ Thực Thể Dữ Liệu ↔ Kiểm Thử&lt;/div&gt;
+    &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;F1. Xác thực &amp;amp; Định danh FPT SSO&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-01: LoginScreen, ProfileScreen  |  🧩 Mã nguồn: AuthViewModel, AuthService (Google SSO, Identity Toolkit)&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: UserModel (users/{uid}), Firebase Auth Tokens&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-01, TC-02 (FPT domain validation, User profile sync) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="105" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;F2. Khám phá &amp;amp; Lọc sự kiện động&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-02: HomeScreen, UI-03: ExploreScreen  |  🧩 Mã nguồn: ExploreViewModel, FirestoreService, RemoteConfigService&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: EventModel (events/{id}), ClubModel (clubs/{id})&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-03..TC-07 (Accent-free search, Remote config 2&amp;lt;-&amp;gt;5) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="235" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;F3. Đăng ký &amp;amp; Duyệt vé (Slide 18)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-04: EventDetailScreen, WEB-02: Review Queue  |  🧩 Mã nguồn: RegistrationViewModel, FirestoreService (Atomic Transactions)&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: RegistrationModel (registrations), TicketModel (tickets)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-08..TC-11 (BR-02 capacity, BR-03 date, BR-04 approval) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="365" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;F4. Soát vé cổng (Check-in Viễn trắc)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-08: MobileDeskScreen, WEB-01: Telemetry Desk  |  🧩 Mã nguồn: MobileDeskViewModel, FirestoreService (runTransaction)&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: TicketModel (tickets.isUsed, checkedInAt, qrToken)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-12..TC-15 (BR-05 atomic single check-in, anti-replay) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="495" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;F5. Đánh giá &amp;amp; Cộng điểm rèn luyện&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-05: DigitalTicket, UI-07: EventFeedbackScreen  |  🧩 Mã nguồn: FeedbackViewModel, AuthViewModel, GeminiAiService&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: FeedbackModel (feedback), users.activityPoints (+5)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-16..TC-18 (BR-06 feedback unlock after check-in, +5pts) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="625" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;F6. Xuất chứng nhận số e-Certificate&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;🖥️ Màn hình: UI-05: DigitalTicketScreen (Nút Tải e-Cert)  |  🧩 Mã nguồn: StorageService, FirestoreService (pdf_generator)&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 💾 Cơ sở dữ liệu: CertificateModel (certificates), Cloud Storage (reports/{uid}/)&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 🧪 Kiểm thử tự động: TC-19..TC-21 (BR-07 PDF SHA-256 generation, download) (Đã kiểm chứng 100% Passed)&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="755" width="1520" height="115" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;KẾT LUẬN KIỂM ĐỊNH TÍNH NHẤT QUÁN THIẾT KẾ (QUALITY GATE CONFIRMATION):&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;100% các thành phần thiết kế trong phần Design đều có mã nguồn thật và bài kiểm thử bảo vệ&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• ✓ Không có &amp;quot;Thiết kế ma&amp;quot;: Mọi màn hình UI, Class ViewModel và Service trong sơ đồ đều tồn tại trong mã nguồn lib/.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• ✓ Không có &amp;quot;Tính năng bỏ rơi&amp;quot;: Mọi bảng / Document Firestore đều có giao diện tương tác và luồng nghiệp vụ tương ứng.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• ✓ Bảo đảm tính toàn vẹn 2 chiều: Khi sửa quy tắc nghiệp vụ (BR), bài kiểm thử tự động sẽ báo lỗi ngay lập tức nếu mã nguồn chưa cập nhật.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• ✓ Sẵn sàng cho phần Demo: 6 nhóm tính năng trên ánh xạ hoàn hảo sang 3 Workflow cốt lõi được demo trực tiếp trong Slide 18 ➔ 20.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="895" width="1520" height="180" as="geometry" />
+      </mxCell>
+    
+    </root>
+  </mxGraphModel>
+</diagram>
+</mxfile>

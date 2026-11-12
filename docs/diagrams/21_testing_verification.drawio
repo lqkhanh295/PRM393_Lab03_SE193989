@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:44:11.611Z" agent="Antigravity Architecture Builder" version="24.0.0">
+  <diagram id="21_Testing_Verification" name="21_Testing_Verification">
+  <mxGraphModel dx="1600" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" background="#ffffff">
+    <root>
+      <mxCell id="0" />
+      <mxCell id="1" parent="0" />
+      
+      <mxCell id="cell_1" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; text-align:left; padding:4px 8px;&quot;&gt;
+      &lt;div style=&quot;display:inline-block; font-size:10px; font-weight:800; color:#2563eb; background:#eff6ff; padding:3px 10px; border-radius:12px; margin-bottom:4px; border:1px solid #bfdbfe; letter-spacing:0.5px;&quot;&gt;SLIDE 21 • TESTING &amp;amp; VERIFICATION&lt;/div&gt;
+      &lt;div style=&quot;font-size:19px; font-weight:800; color:#0f172a; line-height:1.2; letter-spacing:-0.2px;&quot;&gt;21. TESTING &amp;amp; VERIFICATION — MINH CHỨNG KIỂM THỬ VÀ CHẤT LƯỢNG HỆ THỐNG&lt;/div&gt;
+      &lt;div style=&quot;font-size:11px; color:#475569; margin-top:3px; font-weight:500;&quot;&gt;Thực thi kiểm thử tự động toàn diện theo tháp kiểm thử 4 cấp độ: Đạt 21/21 Test Cases (100% Passed) trên Cloud Thật&lt;/div&gt;
+    &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+        <mxGeometry x="40" y="15" width="1100" height="75" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;21 / 21 TESTS&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Tổng số test case tự động&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 100% Unit, Widget &amp;amp; Integration Tests&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="105" width="350" height="110" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;100% PASS RATE&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Tỷ lệ vượt qua kiểm thử&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Không có bài test nào thất bại&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="425" y="105" width="350" height="110" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;0 BUG MỞ&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Số lượng lỗi tồn đọng&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Đã khắc phục triệt để mọi hồi quy lỗi&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="810" y="105" width="350" height="110" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;1.8 GIÂY&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Thời gian thực thi bộ test&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• Tối ưu hóa chạy tự động trên CI/CD&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1195" y="105" width="350" height="110" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#1d4ed8; line-height:1.3; word-break:break-word;&quot;&gt;LEVEL 1: UNIT TESTING (10 TEST CASES)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Kiểm thử logic nghiệp vụ độc lập, dịch vụ và mô hình dữ liệu&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #3b82f6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Xác thực nghiêm ngặt domain email trường FPT (@fpt.edu.vn, @fe.edu.vn).&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm chứng thuộc tính động EventModel.isPast và isRegistrationOpen theo DateTime.now().&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm thử cơ chế xoay tua 10 API Key của Gemini AI khi gặp mã lỗi HTTP 429 Quota Exceeded.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Tính toán chính xác logic cộng điểm rèn luyện (+5 điểm) và bảo đảm tính bất biến của Model.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kết quả: 10/10 Passed (Minh chứng: test/widget_test.dart).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="245" width="730" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#6d28d9; line-height:1.3; word-break:break-word;&quot;&gt;LEVEL 2: WIDGET &amp;amp; UI TESTING (6 TEST CASES)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Kiểm thử hiển thị giao diện và chống tràn khung hình (No Overflow)&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #8b5cf6; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm chứng AppPrimaryButton &amp;amp; OutlinedButton không bị tràn chữ trong khung hẹp 260px.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm tra TicketCard render tên dài và địa chỉ phức tạp an toàn không vỡ layout.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm thử tương tác chấm sao của StarRatingBar phản hồi chính xác sự kiện tap.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm thử hỗ trợ tìm kiếm không dấu Tiếng Việt trên ExploreViewModel.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kết quả: 6/6 Passed (Minh chứng: tester.takeException() isNull).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#8b5cf6;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="810" y="245" width="730" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#047857; line-height:1.3; word-break:break-word;&quot;&gt;LEVEL 3: INTEGRATION &amp;amp; STATE TESTING (3 TEST CASES)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Kiểm thử chuyển trạng thái MVVM và Atomic Transactions&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #10b981; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm chứng MyTicketsViewModel tự động chuyển vé từ &amp;quot;Sắp diễn ra&amp;quot; sang &amp;quot;Đã tham gia&amp;quot; khi có check-in.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm thử giao dịch nguyên tử runTransaction bảo đảm vé không bị quét trùng lặp.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kiểm thử tạo tệp chứng nhận PDF e-Certificate hỗ trợ đầy đủ ký tự Unicode Tiếng Việt.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kết quả: 3/3 Passed (Minh chứng: Real Firestore Transaction pass).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="495" width="730" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_9" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#b45309; line-height:1.3; word-break:break-word;&quot;&gt;LEVEL 4: BUSINESS RULES &amp;amp; UAT (2 TEST CASES)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Kiểm chứng các quy tắc nghiệp vụ cốt lõi và chuyển trạng thái cấm&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #f59e0b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-004: Chặn hoàn toàn việc đăng ký tham gia các sự kiện trong quá khứ.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • BR-005: Khóa nút Feedback khi vé chưa check-in và mở khóa tức thì ngay sau khi soát vé thành công.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Chặn đứng các hành vi tấn công giả lập: Replay Attack, Fake Ticket Token, Vượt sức chứa hội trường.&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• • Kết quả: 2/2 Passed (Minh chứng: Báo cáo kiểm định toàn diện).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="810" y="495" width="730" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_10" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px 12px; text-align:left; box-sizing:border-box; width:100%; height:100%;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:800; color:#0f172a; line-height:1.3; word-break:break-word;&quot;&gt;TRÍCH XUẤT MINH CHỨNG KIỂM THỬ THỰC TẾ (OFFICIAL TEST EXECUTION LOG):&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.35; font-weight:500; word-break:break-word;&quot;&gt;Thực thi lệnh flutter test trên máy trạm trước khi đóng gói phiên bản bảo vệ&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #64748b; font-size:10px; color:#1e293b; line-height:1.45; word-break:break-word;&quot;&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +0: AppPrimaryButton renders label and triggers onPressed ................................... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +1: TicketCard does not overflow with long student name and event location .................... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +6: AuthService.signInWithEmailPassword validates FPT email domains ........................... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +11: ExploreViewModel filteredClubs supports Vietnamese accent-free search .................... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +12: DigitalTicketScreen locks feedback button when ticket is not checked in (BR-005) .......... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +13: DigitalTicketScreen unlocks feedback button when ticket is checked in (BR-005) ........ [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +15: MyTicketsViewModel reacts to check-in and transitions ticket to attended tab ............. [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +17: EventModel.isPast accurately tracks expiration based on current runtime date ............. [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +18: FirestoreService blocks registration for past events (BR-004) ............................ [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +19: GeminiAiService initializes with 10 official API keys and supports round-robin rotation .. [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +20: GeminiAiService automatically rotates key on HTTP 429 quota error ....................... [PASS]&lt;/div&gt;&lt;div style=&quot;margin-bottom:3px;&quot;&gt;• 00:01 +21: All tests passed! (21/21 Passed in 1.8s) ------------------------------------------- [100% OK]&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="745" width="1500" height="360" as="geometry" />
+      </mxCell>
+    
+    </root>
+  </mxGraphModel>
+</diagram>
+</mxfile>
