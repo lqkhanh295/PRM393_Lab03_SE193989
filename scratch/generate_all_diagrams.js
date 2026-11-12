@@ -6,30 +6,30 @@ const { DiagramBuilder, escapeXml } = require('./diagram_builder');
 // SLIDE 07: BUSINESS FLOW (BPMN / Activity with 4 Swimlanes & BR Rules)
 // =========================================================================
 function buildSlide07BusinessFlow() {
-  const d = new DiagramBuilder('07_Business_Flow', 1450, 1000);
+  const d = new DiagramBuilder('07_Business_Flow', 1600, 1150);
   d.addTitle(
     '07. BUSINESS FLOW — LUỒNG NGHIỆP VỤ TỔNG THỂ HỆ THỐNG',
     'Phối hợp 4 tác nhân: Sinh viên ➔ Hệ thống Cloud/Mobile ➔ Cán bộ CTSV (Duyệt vé Slide 18) ➔ Ban Soát vé Cổng',
     'SLIDE 07 • BUSINESS FLOW'
   );
 
-  // 4 Swimlanes
-  const laneStudent = d.addSwimlane({ x: 40, y: 100, w: 320, h: 860, title: 'SINH VIÊN (MOBILE APP)', subtitle: 'Tài khoản Email FPT (@fpt.edu.vn)', colorTheme: 'blue' });
-  const laneSystem = d.addSwimlane({ x: 380, y: 100, w: 340, h: 860, title: 'HỆ THỐNG (MOBILE VM & FIRESTORE)', subtitle: 'Atomic Engine, Rule Check & FCM Gateway', colorTheme: 'slate' });
-  const laneCTSV = d.addSwimlane({ x: 740, y: 100, w: 330, h: 860, title: 'CÁN BỘ CTSV (WEB ADMIN PORTAL)', subtitle: 'Hàng chờ thẩm định đơn đăng ký & cấp vé', colorTheme: 'purple' });
-  const laneGate = d.addSwimlane({ x: 1090, y: 100, w: 320, h: 860, title: 'BAN SOÁT VÉ / CTV CỔNG', subtitle: 'MobileDesk Scanner viễn trắc thời gian thực', colorTheme: 'emerald' });
+  // 4 Swimlanes with generous width (360px each)
+  const laneStudent = d.addSwimlane({ x: 40, y: 100, w: 350, h: 970, title: 'SINH VIÊN (MOBILE APP)', subtitle: 'Tài khoản Email FPT (@fpt.edu.vn)', colorTheme: 'blue' });
+  const laneSystem = d.addSwimlane({ x: 420, y: 100, w: 360, h: 970, title: 'HỆ THỐNG (MOBILE VM & FIRESTORE)', subtitle: 'Atomic Engine, Rule Check & FCM Gateway', colorTheme: 'slate' });
+  const laneCTSV = d.addSwimlane({ x: 810, y: 100, w: 360, h: 970, title: 'CÁN BỘ CTSV (WEB ADMIN PORTAL)', subtitle: 'Hàng chờ thẩm định đơn đăng ký & cấp vé', colorTheme: 'purple' });
+  const laneGate = d.addSwimlane({ x: 1200, y: 100, w: 350, h: 970, title: 'BAN SOÁT VÉ / CTV CỔNG', subtitle: 'MobileDesk Scanner viễn trắc thời gian thực', colorTheme: 'emerald' });
 
-  // Nodes in Lane 1 (Student)
+  // Nodes in Lane 1 (Student) - Ample vertical spacing
   const nStart = d.addBox({
-    parent: laneStudent, x: 30, y: 60, w: 260, h: 55,
+    parent: laneStudent, x: 30, y: 65, w: 290, h: 65,
     title: '1. Khởi động & Đăng nhập',
     subtitle: 'Đăng nhập Google SSO / Email FPT',
-    details: ['Xác thực định danh sinh viên FPT'],
+    details: ['Xác thực định danh @fpt.edu.vn'],
     colorTheme: 'blue'
   });
 
   const nSelectEvent = d.addBox({
-    parent: laneStudent, x: 30, y: 140, w: 260, h: 60,
+    parent: laneStudent, x: 30, y: 175, w: 290, h: 70,
     title: '2. Duyệt & Chọn Sự kiện',
     subtitle: 'Màn hình Explore / Danh sách sự kiện',
     details: ['Xem ngày giờ, địa điểm, số chỗ còn lại'],
@@ -37,7 +37,7 @@ function buildSlide07BusinessFlow() {
   });
 
   const nSubmitReg = d.addBox({
-    parent: laneStudent, x: 30, y: 230, w: 260, h: 60,
+    parent: laneStudent, x: 30, y: 285, w: 290, h: 70,
     title: '3. Bấm "Đăng ký tham gia"',
     subtitle: 'Mở Registration Modal',
     details: ['Xác nhận MSSV, họ tên, email, CLB tổ chức'],
@@ -46,7 +46,7 @@ function buildSlide07BusinessFlow() {
 
   // Nodes in Lane 2 (System Verification)
   const nCheckBR03 = d.addBox({
-    parent: laneSystem, x: 30, y: 230, w: 280, h: 70,
+    parent: laneSystem, x: 30, y: 285, w: 300, h: 75,
     title: '4. Kiểm tra Thời hạn Sự kiện [BR-03]',
     subtitle: 'Guard: DateTime.now() <= event.date',
     details: ['Chặn đăng ký nếu sự kiện đã trong quá khứ'],
@@ -54,33 +54,33 @@ function buildSlide07BusinessFlow() {
   });
 
   const nCheckBR02 = d.addBox({
-    parent: laneSystem, x: 30, y: 330, w: 280, h: 70,
-    title: '5. Kiểm tra Sức chứa & Hạn mức [BR-02]',
+    parent: laneSystem, x: 30, y: 405, w: 300, h: 75,
+    title: '5. Kiểm tra Sức chứa [BR-02]',
     subtitle: 'Guard: registeredCount < capacity',
     details: ['Đảm bảo không vượt quá sức chứa hội trường'],
     colorTheme: 'amber'
   });
 
   const nCreatePending = d.addBox({
-    parent: laneSystem, x: 30, y: 430, w: 280, h: 65,
+    parent: laneSystem, x: 30, y: 520, w: 300, h: 75,
     title: '6. Lưu Đơn Xét Duyệt (Pending)',
     subtitle: 'Ghi Firestore: registrations/{regId}',
-    details: ['Status: "pending" • Bắn Snapshot Stream'],
+    details: ['Status: "pending" • Real-time Snapshot Push'],
     colorTheme: 'purple'
   });
 
   // Nodes in Lane 3 (CTSV Review - Slide 18)
   const nReviewQueue = d.addBox({
-    parent: laneCTSV, x: 25, y: 430, w: 280, h: 65,
-    title: '7. Nhận Đơn trên Hàng Chờ (Slide 18)',
-    subtitle: 'Web Admin Portal: Tab Hàng chờ duyệt vé',
+    parent: laneCTSV, x: 30, y: 520, w: 300, h: 75,
+    title: '7. Hàng Chờ Duyệt Vé (Slide 18)',
+    subtitle: 'Web Admin Portal: Tab Hàng chờ duyệt',
     details: ['Real-time badge (+1) hiển thị tức thì'],
     colorTheme: 'purple'
   });
 
   const nDecision = d.addBox({
-    parent: laneCTSV, x: 25, y: 525, w: 280, h: 75,
-    title: '8. Thẩm định & Ra Quyết định [BR-04]',
+    parent: laneCTSV, x: 30, y: 635, w: 300, h: 80,
+    title: '8. Thẩm định & Quyết định [BR-04]',
     subtitle: 'Kiểm tra tư cách sinh viên & hồ sơ CLB',
     details: ['Nhánh A: Phê duyệt (Approve) ➔ Cấp vé', 'Nhánh B: Từ chối (Reject) ➔ Nhập lý do'],
     colorTheme: 'amber'
@@ -88,17 +88,17 @@ function buildSlide07BusinessFlow() {
 
   // Issue Ticket (System)
   const nIssueTicket = d.addBox({
-    parent: laneSystem, x: 30, y: 620, w: 280, h: 75,
+    parent: laneSystem, x: 30, y: 750, w: 300, h: 85,
     title: '9. Phát hành Vé & Sinh Mã QR [BR-04]',
     subtitle: 'Atomic Transaction Cloud Firestore',
-    details: ['Tạo tickets/{ticketId} • qrToken bí mật', 'FCM Push Notification: "Vé của bạn đã sẵn sàng"'],
+    details: ['Tạo tickets/{ticketId} • qrToken bảo mật', 'FCM Push: "Vé của bạn đã sẵn sàng"'],
     colorTheme: 'green'
   });
 
   // Receive Ticket (Student)
   const nReceiveTicket = d.addBox({
-    parent: laneStudent, x: 30, y: 620, w: 260, h: 75,
-    title: '10. Nhận Vé trong Tab "Sắp diễn ra"',
+    parent: laneStudent, x: 30, y: 750, w: 290, h: 85,
+    title: '10. Nhận Vé Trong Tab "Sắp diễn ra"',
     subtitle: 'DigitalTicketScreen hiển thị mã QR',
     details: ['Vé hợp lệ, sẵn sàng xuất trình tại cổng'],
     colorTheme: 'green'
@@ -106,7 +106,7 @@ function buildSlide07BusinessFlow() {
 
   // Gate Check-in (Lane 4)
   const nScanGate = d.addBox({
-    parent: laneGate, x: 20, y: 620, w: 280, h: 75,
+    parent: laneGate, x: 25, y: 750, w: 300, h: 85,
     title: '11. Quét QR tại Bàn Soát Vé',
     subtitle: 'MobileDesk Camera Scanner (< 1.5s/lượt)',
     details: ['Đối chiếu qrToken với Firestore Ticket Record'],
@@ -114,26 +114,26 @@ function buildSlide07BusinessFlow() {
   });
 
   const nValidateQR = d.addBox({
-    parent: laneGate, x: 20, y: 725, w: 280, h: 75,
+    parent: laneGate, x: 25, y: 870, w: 300, h: 80,
     title: '12. Xác thực Hợp lệ [BR-05]',
     subtitle: 'Guard: qrValid && !isUsed',
-    details: ['Nhánh ĐÚNG: Check-in thành công ➔ Đổi isUsed:true', 'Nhánh SAI: Báo động Vé giả mạo / Đã qua sử dụng'],
+    details: ['Nhánh ĐÚNG: Check-in ➔ Đổi isUsed:true', 'Nhánh SAI: Báo động Vé giả/Đã quét'],
     colorTheme: 'amber'
   });
 
   // Post Check-in (Student)
   const nFeedbackReward = d.addBox({
-    parent: laneStudent, x: 30, y: 820, w: 260, h: 80,
-    title: '13. Đánh giá & Nhận Điểm Rèn Luyện',
-    subtitle: 'Mở khóa Feedback Screen [BR-06]',
+    parent: laneStudent, x: 30, y: 870, w: 290, h: 80,
+    title: '13. Đánh giá & Nhận Điểm [BR-06]',
+    subtitle: 'Mở khóa Feedback Screen',
     details: ['Đánh giá 1-5 sao ➔ +5 Điểm rèn luyện', 'Xuất chứng nhận e-Certificate PDF [BR-07]'],
     colorTheme: 'green'
   });
 
-  // Connectors
+  // Connectors with concise labels and white-pill styling
   d.addConnection({ source: nStart, target: nSelectEvent, label: 'Khám phá sự kiện' });
   d.addConnection({ source: nSelectEvent, target: nSubmitReg, label: 'Chọn sự kiện' });
-  d.addConnection({ source: nSubmitReg, target: nCheckBR03, label: 'Gửi yêu cầu' });
+  d.addConnection({ source: nSubmitReg, target: nCheckBR03, label: 'Gửi đăng ký' });
   d.addConnection({ source: nCheckBR03, target: nCheckBR02, label: 'Hợp lệ [BR-03]' });
   d.addConnection({ source: nCheckBR02, target: nCreatePending, label: 'Còn chỗ [BR-02]' });
   d.addConnection({ source: nCreatePending, target: nReviewQueue, label: 'Realtime Sync (Slide 18)' });
@@ -142,11 +142,11 @@ function buildSlide07BusinessFlow() {
   d.addConnection({ source: nIssueTicket, target: nReceiveTicket, label: 'FCM Push & Stream', color: '#059669' });
   d.addConnection({ source: nReceiveTicket, target: nScanGate, label: 'Xuất trình QR tại cổng', color: '#2563eb' });
   d.addConnection({ source: nScanGate, target: nValidateQR, label: 'Quét token' });
-  d.addConnection({ source: nValidateQR, target: nFeedbackReward, label: 'Check-in thành công [BR-05]', color: '#059669', strokeWidth: 2 });
+  d.addConnection({ source: nValidateQR, target: nFeedbackReward, label: 'Check-in OK [BR-05]', color: '#059669', strokeWidth: 2 });
 
   // Floating Business Rules Summary Box
   d.addBox({
-    x: 40, y: 970, w: 1370, h: 50,
+    x: 40, y: 1085, w: 1510, h: 50,
     title: 'QUY TẮC NGHIỆP VỤ (BUSINESS RULES) GẮN TRÊN LUỒNG:',
     subtitle: 'BR-01: Định danh email @fpt.edu.vn • BR-02: Giới hạn sức chứa hội trường • BR-03: Không đăng ký sự kiện quá khứ • BR-04: Cán bộ CTSV phê duyệt mới cấp vé (Slide 18) • BR-05: Chống tái quét vé (Single check-in) • BR-06: Check-in xong mới được đánh giá & nhận +5 điểm • BR-07: e-Certificate PDF có chữ ký băm.',
     colorTheme: 'slate', rx: 4
@@ -159,74 +159,170 @@ function buildSlide07BusinessFlow() {
 // SLIDE 08: STATE MACHINE (Vòng đời Vé, Đơn đăng ký & Sự kiện)
 // =========================================================================
 function buildSlide08StateMachine() {
-  const d = new DiagramBuilder('08_State_Machine', 1450, 950);
+  const d = new DiagramBuilder('08_State_Machine', 1600, 1100);
   d.addTitle(
     '08. STATE MACHINE DIAGRAM — VÒNG ĐỜI THỰC THỂ KINH DOANH CHÍNH',
     'Đặc tả State, Event, Guard, Action và Các Chuyển Trạng Thái Bị Cấm (Forbidden Transitions)',
     'SLIDE 08 • STATE MACHINE'
   );
 
-  // Group 1: Registration State Machine (Slide 18)
+  // Group 1: Registration State Machine (Slide 18) - Generous size 730 x 440
   d.addBox({
-    x: 40, y: 100, w: 650, h: 420,
+    x: 40, y: 105, w: 730, h: 440,
     title: 'VÒNG ĐỜI ĐƠN ĐĂNG KÝ (REGISTRATION LIFECYCLE - SLIDE 18)',
     subtitle: 'Quản lý yêu cầu từ lúc sinh viên nộp đơn đến khi hoàn tất thẩm định',
     colorTheme: 'blue'
   });
 
-  const rStart = d.addBox({ x: 70, y: 180, w: 140, h: 50, title: '[*] Khởi tạo', subtitle: 'Sinh viên chọn sự kiện', colorTheme: 'slate' });
-  const rPending = d.addBox({ x: 260, y: 180, w: 180, h: 70, title: 'PENDING (Chờ duyệt)', subtitle: 'Đang nằm trên Hàng chờ', details: ['Khóa chỉnh sửa thông tin', 'Chờ cán bộ CTSV review'], colorTheme: 'amber' });
-  const rApproved = d.addBox({ x: 500, y: 150, w: 160, h: 65, title: 'APPROVED (Đã duyệt)', subtitle: 'Đạt điều kiện tham dự', details: ['Trigger tạo Vé điện tử'], colorTheme: 'green' });
-  const rRejected = d.addBox({ x: 500, y: 270, w: 160, h: 65, title: 'REJECTED (Từ chối)', subtitle: 'Không đạt tiêu chí', details: ['Lưu lý do từ chối cụ thể'], colorTheme: 'red' });
+  const rStart = d.addBox({
+    x: 70, y: 220, w: 140, h: 65,
+    title: '[*] Khởi tạo', subtitle: 'Sinh viên chọn sự kiện', colorTheme: 'slate'
+  });
 
-  d.addConnection({ source: rStart, target: rPending, label: 'submit() [BR-02 && BR-03]' });
-  d.addConnection({ source: rPending, target: rApproved, label: 'approve() [BR-04] / issueTicket()', color: '#059669', strokeWidth: 2 });
-  d.addConnection({ source: rPending, target: rRejected, label: 'reject(reason) / notifyUser()', color: '#dc2626' });
+  const rPending = d.addBox({
+    x: 300, y: 205, w: 180, h: 95,
+    title: 'PENDING (Chờ duyệt)',
+    subtitle: 'Đang nằm trên Hàng chờ',
+    details: ['Khóa chỉnh sửa thông tin', 'Chờ cán bộ CTSV review'],
+    colorTheme: 'amber'
+  });
 
-  // Group 2: Digital Ticket State Machine (Core Entity)
+  const rApproved = d.addBox({
+    x: 550, y: 155, w: 190, h: 90,
+    title: 'APPROVED (Đã duyệt)',
+    subtitle: 'Đạt điều kiện tham dự',
+    details: ['Kích hoạt tạo Vé điện tử'],
+    colorTheme: 'green'
+  });
+
+  const rRejected = d.addBox({
+    x: 550, y: 315, w: 190, h: 90,
+    title: 'REJECTED (Từ chối)',
+    subtitle: 'Không đạt tiêu chí',
+    details: ['Lưu lý do từ chối cụ thể'],
+    colorTheme: 'red'
+  });
+
+  // Short, concise labels with white background pill
+  d.addConnection({ source: rStart, target: rPending, label: 'submit() [BR-02,03]' });
+  d.addConnection({ source: rPending, target: rApproved, label: 'approve() [BR-04]', color: '#059669', strokeWidth: 2 });
+  d.addConnection({ source: rPending, target: rRejected, label: 'reject(lý do)', color: '#dc2626' });
+
+  // Group 2: Digital Ticket State Machine (Core Entity) - Generous size 760 x 440
   d.addBox({
-    x: 720, y: 100, w: 690, h: 420,
+    x: 790, y: 105, w: 760, h: 440,
     title: 'VÒNG ĐỜI VÉ ĐIỆN TỬ (DIGITAL TICKET LIFECYCLE - CORE ENTITY)',
     subtitle: 'Thực thể kiểm soát an ninh cổng, điểm danh và tích lũy điểm rèn luyện',
     colorTheme: 'green'
   });
 
-  const tIssued = d.addBox({ x: 750, y: 170, w: 170, h: 70, title: 'ISSUED (Đã phát hành)', subtitle: 'Tab "Sắp diễn ra"', details: ['isUsed = false', 'Mã QR hoạt động'], colorTheme: 'blue' });
-  const tUsed = d.addBox({ x: 970, y: 170, w: 180, h: 70, title: 'USED (Đã check-in)', subtitle: 'Tab "Đã tham gia"', details: ['isUsed = true', 'Ghi checkedInAt: now'], colorTheme: 'green' });
-  const tExpired = d.addBox({ x: 750, y: 310, w: 170, h: 70, title: 'EXPIRED (Quá hạn)', subtitle: 'Không đến dự', details: ['Sự kiện đã kết thúc', 'Khóa quét QR'], colorTheme: 'slate' });
-  const tFeedback = d.addBox({ x: 1200, y: 170, w: 180, h: 70, title: 'FEEDBACK_DONE', subtitle: 'Hoàn thành đánh giá', details: ['activityPoints += 5', 'Mở khóa tải e-Cert'], colorTheme: 'purple' });
+  const tIssued = d.addBox({
+    x: 820, y: 175, w: 185, h: 95,
+    title: 'ISSUED (Đã phát hành)',
+    subtitle: 'Tab "Sắp diễn ra"',
+    details: ['isUsed = false', 'Mã QR hoạt động'],
+    colorTheme: 'blue'
+  });
 
-  d.addConnection({ source: tIssued, target: tUsed, label: 'scanQR() [valid && !isUsed BR-05] / openGate()', color: '#059669', strokeWidth: 2 });
-  d.addConnection({ source: tIssued, target: tExpired, label: 'timeout() [eventEnded && !isUsed]', color: '#64748b' });
-  d.addConnection({ source: tUsed, target: tFeedback, label: 'submitFeedback() [BR-06] / addPoints(+5)', color: '#7c3aed', strokeWidth: 2 });
+  const tUsed = d.addBox({
+    x: 1085, y: 175, w: 195, h: 95,
+    title: 'USED (Đã check-in)',
+    subtitle: 'Tab "Đã tham gia"',
+    details: ['isUsed = true', 'Ghi checkedInAt: now'],
+    colorTheme: 'green'
+  });
 
-  // Group 3: Event Operational State Machine
+  const tFeedback = d.addBox({
+    x: 1345, y: 175, w: 185, h: 95,
+    title: 'FEEDBACK_DONE',
+    subtitle: 'Hoàn thành đánh giá',
+    details: ['activityPoints += 5', 'Mở khóa tải e-Cert'],
+    colorTheme: 'purple'
+  });
+
+  const tExpired = d.addBox({
+    x: 820, y: 335, w: 185, h: 85,
+    title: 'EXPIRED (Quá hạn)',
+    subtitle: 'Không đến dự sự kiện',
+    details: ['Sự kiện đã kết thúc', 'Khóa quét QR'],
+    colorTheme: 'slate'
+  });
+
+  const tCert = d.addBox({
+    x: 1345, y: 335, w: 185, h: 85,
+    title: 'CERT_CLAIMED',
+    subtitle: 'Đã tải chứng nhận',
+    details: ['e-Certificate PDF SHA-256', 'Lưu Cloud Storage'],
+    colorTheme: 'blue'
+  });
+
+  d.addConnection({ source: tIssued, target: tUsed, label: 'scanQR() [BR-05]', color: '#059669', strokeWidth: 2 });
+  d.addConnection({ source: tIssued, target: tExpired, label: 'quá hạn [timeout]', color: '#64748b' });
+  d.addConnection({ source: tUsed, target: tFeedback, label: 'feedback() [+5đ]', color: '#7c3aed', strokeWidth: 2 });
+  d.addConnection({ source: tFeedback, target: tCert, label: 'xuất e-Cert [BR-07]', color: '#2563eb' });
+
+  // Group 3: Event Operational State Machine - 730 x 470
   d.addBox({
-    x: 40, y: 550, w: 650, h: 360,
+    x: 40, y: 575, w: 730, h: 480,
     title: 'TRẠNG THÁI VẬN HÀNH SỰ KIỆN (EVENT OPERATIONAL STATUS)',
     subtitle: 'Đồng bộ thời gian thực theo DateTime.now() và khung giờ tổ chức',
     colorTheme: 'purple'
   });
 
-  const eUpcoming = d.addBox({ x: 70, y: 640, w: 160, h: 65, title: 'UPCOMING (Sắp diễn ra)', subtitle: 'now < startDate', details: ['Mở đăng ký vé [BR-03]'], colorTheme: 'blue' });
-  const eHappening = d.addBox({ x: 280, y: 640, w: 170, h: 65, title: 'HAPPENING (Đang diễn ra)', subtitle: 'startDate <= now <= endDate', details: ['Mở cổng soát vé MobileDesk', 'Live Companion Q&A'], colorTheme: 'green' });
-  const eCompleted = d.addBox({ x: 490, y: 640, w: 170, h: 65, title: 'COMPLETED (Đã diễn ra)', subtitle: 'now > endDate', details: ['Đóng cổng soát vé', 'Tổng kết viễn trắc'], colorTheme: 'slate' });
+  const eUpcoming = d.addBox({
+    x: 70, y: 670, w: 185, h: 95,
+    title: 'UPCOMING (Sắp diễn ra)',
+    subtitle: 'now < startDate',
+    details: ['Mở đăng ký vé [BR-03]', 'Đếm ngược ngày diễn ra'],
+    colorTheme: 'blue'
+  });
 
-  d.addConnection({ source: eUpcoming, target: eHappening, label: 'timeReached() / openDeskGate()' });
-  d.addConnection({ source: eHappening, target: eCompleted, label: 'eventFinished() / closeDeskGate()' });
+  const eHappening = d.addBox({
+    x: 320, y: 670, w: 200, h: 95,
+    title: 'HAPPENING (Đang diễn ra)',
+    subtitle: 'startDate <= now <= endDate',
+    details: ['Mở cổng soát vé MobileDesk', 'Live Companion Q&A'],
+    colorTheme: 'green'
+  });
 
-  // Group 4: FORBIDDEN TRANSITIONS BOX (BẮT BUỘC THEO SLIDE 08 GUIDELINE)
+  const eCompleted = d.addBox({
+    x: 580, y: 670, w: 170, h: 95,
+    title: 'COMPLETED (Đã diễn ra)',
+    subtitle: 'now > endDate',
+    details: ['Đóng cổng soát vé', 'Tổng kết viễn trắc'],
+    colorTheme: 'slate'
+  });
+
+  d.addConnection({ source: eUpcoming, target: eHappening, label: 'bắt đầu [giờ G]' });
+  d.addConnection({ source: eHappening, target: eCompleted, label: 'kết thúc [hết giờ]' });
+
+  // Event Status Note
   d.addBox({
-    x: 720, y: 550, w: 690, h: 360,
+    x: 70, y: 810, w: 680, h: 215,
+    title: 'QUY TẮC CHUYỂN TRẠNG THÁI TỰ ĐỘNG CỦA SỰ KIỆN:',
+    subtitle: 'Tính toán động (Dynamic Computation) dựa trên thời gian thực tế của hệ thống',
+    details: [
+      '• EventModel.isPast: Tự động chuyển true khi thời điểm hiện tại vượt qua thời điểm kết thúc sự kiện.',
+      '• EventModel.isRegistrationOpen: Đóng đăng ký (false) ngay khi sự kiện bắt đầu hoặc khi hết chỗ.',
+      '• Trạng thái Cổng MobileDesk: Tự động chuyển từ "Chưa mở" sang "Đang mở cổng" khi sự kiện diễn ra.',
+      '• Tuân thủ nghiêm ngặt Chính sách Zero-Mock Data: Mọi mốc thời gian đều so khớp với DateTime.now() thật.'
+    ],
+    colorTheme: 'slate'
+  });
+
+  // Group 4: FORBIDDEN TRANSITIONS BOX (BẮT BUỘC THEO SLIDE 08 GUIDELINE) - 760 x 480
+  d.addBox({
+    x: 790, y: 575, w: 760, h: 480,
     title: 'CÁC CHUYỂN TRẠNG THÁI BỊ CẤM & RÀNG BUỘC TOÀN VẸN (FORBIDDEN TRANSITIONS)',
     subtitle: 'Bắt buộc kiểm thử tự động (Unit Test / Integration Test) để ngăn chặn lỗ hổng bảo mật',
     details: [
       '❌ CẤM: PENDING ➔ USED — Đơn chưa được CTSV duyệt tuyệt đối không được phép soát vé vào cổng.',
       '❌ CẤM: USED ➔ ISSUED — Vé đã check-in không được phép hoàn lại trạng thái chưa quét (Chống tấn công Replay Attack).',
-      '❌ CẤM: EXPIRED ➔ USED — Vé của sự kiện đã kết thúc trong quá khứ không được phép check-in.',
+      '❌ CẤM: EXPIRED ➔ USED — Vé của sự kiện đã kết thúc trong quá khứ không được phép check-in tại cổng.',
       '❌ CẤM: PENDING ➔ FEEDBACK_DONE — Sinh viên chưa tham dự sự kiện không được phép gửi đánh giá hay nhận điểm.',
       '❌ CẤM: DRAFT ➔ APPROVED — Phải đi qua hàng chờ PENDING để có vết kiểm toán (Audit Trail) của cán bộ CTSV.',
-      '🔒 BẢO VỆ ATOMIC: Mọi thao tác đổi trạng thái vé và duyệt đơn đều chạy qua Firestore RunTransaction bảo đảm tính nhất quán cao.'
+      '🔒 BẢO VỆ ATOMIC: Mọi thao tác đổi trạng thái vé và duyệt đơn đều chạy qua Firestore RunTransaction bảo đảm tính nhất quán cao.',
+      '🧪 MINH CHỨNG KIỂM THỬ: Bộ kiểm thử test/widget_test.dart đã xác nhận toàn bộ 21/21 kịch bản kiểm thử pass 100%.'
     ],
     colorTheme: 'red'
   });
@@ -238,7 +334,7 @@ function buildSlide08StateMachine() {
 // SLIDE 09: SYSTEM ARCHITECTURE (C4 Container & Deployment)
 // =========================================================================
 function buildSlide09SystemArchitecture() {
-  const d = new DiagramBuilder('09_System_Architecture', 1450, 1000);
+  const d = new DiagramBuilder('09_System_Architecture', 1600, 1150);
   d.addTitle(
     '09. SYSTEM ARCHITECTURE — KIẾN TRÚC HỆ THỐNG & NƠI TRIỂN KHAI',
     'Mô hình C4 Container: Client Presentation Layer ➔ Business Service Layer ➔ Google Firebase Cloud Backend',
@@ -247,14 +343,14 @@ function buildSlide09SystemArchitecture() {
 
   // Layer 1: Client Layer
   d.addBox({
-    x: 40, y: 100, w: 1370, h: 220,
+    x: 40, y: 100, w: 1510, h: 235,
     title: 'TẦNG GIAO DIỆN & TRẢI NGHIỆM KHÁCH (CLIENT PRESENTATION LAYER)',
     subtitle: 'Đa nền tảng: Ứng dụng Di động Native (Sinh viên, CTV) & Cổng Quản trị Web Desktop (Cán bộ CTSV)',
     colorTheme: 'blue'
   });
 
   const cMobile = d.addBox({
-    x: 70, y: 155, w: 630, h: 140,
+    x: 70, y: 155, w: 700, h: 155,
     title: '📱 Mobile Client — Flutter 3.24 / Dart 3.5 (iOS & Android)',
     subtitle: 'Kiến trúc MVVM sạch, phân tách giao diện và trạng thái dữ liệu (Provider Pattern)',
     details: [
@@ -266,7 +362,7 @@ function buildSlide09SystemArchitecture() {
   });
 
   const cWeb = d.addBox({
-    x: 730, y: 155, w: 650, h: 140,
+    x: 810, y: 155, w: 710, h: 155,
     title: '💻 Desktop Web Admin Portal — Vanilla JS / Modern CSS / Node.js Express Bridge (Port 3000)',
     subtitle: 'Hệ thống bảng điều khiển trung tâm dành cho Cán bộ Phòng Chăm sóc Sinh viên (CTSV)',
     details: [
@@ -279,34 +375,34 @@ function buildSlide09SystemArchitecture() {
 
   // Layer 2: Business Service Layer
   d.addBox({
-    x: 40, y: 350, w: 1370, h: 180,
+    x: 40, y: 360, w: 1510, h: 195,
     title: 'TẦNG DỊCH VỤ & NGHIỆP VỤ HỆ THỐNG (BUSINESS SERVICE LAYER - LIB/SERVICES/)',
     subtitle: 'Tập trung toàn bộ logic nghiệp vụ độc lập, đóng gói REST API và SDK giao tiếp',
     colorTheme: 'slate'
   });
 
-  const sAuth = d.addBox({ x: 60, y: 405, w: 230, h: 105, title: 'AuthService', subtitle: 'Google SSO & Mail FPT', details: ['Enforce @fpt.edu.vn', 'Firebase Auth Token', 'User state sync'], colorTheme: 'blue' });
-  const sFirestore = d.addBox({ x: 310, y: 405, w: 260, h: 105, title: 'FirestoreService', subtitle: 'Atomic Transaction Engine', details: ['runTransaction: Check-in', 'Snapshot streams', 'Zero-mock policy'], colorTheme: 'green' });
-  const sStorage = d.addBox({ x: 590, y: 405, w: 240, h: 105, title: 'StorageService', subtitle: 'Cloud Storage Handler', details: ['Upload PDF e-Cert', 'Path: reports/{uid}/', 'Signed download URL'], colorTheme: 'amber' });
-  const sFCM = d.addBox({ x: 850, y: 405, w: 260, h: 105, title: 'FCMService & RemoteConfig', subtitle: 'Cloud Messaging & Config', details: ['Push thông báo duyệt vé', 'Topic broadcast', 'max_featured_events flag'], colorTheme: 'purple' });
-  const sGemini = d.addBox({ x: 1130, y: 405, w: 250, h: 105, title: 'GeminiAiService', subtitle: 'Google GenAI Flash 1.5', details: ['Multi-key pool (10 keys)', 'Round-robin failover', 'Phân tích phản hồi sinh viên'], colorTheme: 'purple' });
+  const sAuth = d.addBox({ x: 60, y: 415, w: 260, h: 115, title: 'AuthService', subtitle: 'Google SSO & Mail FPT', details: ['Enforce @fpt.edu.vn', 'Firebase Auth Token', 'User state sync'], colorTheme: 'blue' });
+  const sFirestore = d.addBox({ x: 350, y: 415, w: 290, h: 115, title: 'FirestoreService', subtitle: 'Atomic Transaction Engine', details: ['runTransaction: Check-in', 'Snapshot streams', 'Zero-mock policy'], colorTheme: 'green' });
+  const sStorage = d.addBox({ x: 670, y: 415, w: 260, h: 115, title: 'StorageService', subtitle: 'Cloud Storage Handler', details: ['Upload PDF e-Cert', 'Path: reports/{uid}/', 'Signed download URL'], colorTheme: 'amber' });
+  const sFCM = d.addBox({ x: 960, y: 415, w: 270, h: 115, title: 'FCMService & RemoteConfig', subtitle: 'Cloud Messaging & Config', details: ['Push thông báo duyệt vé', 'Topic broadcast', 'max_featured_events flag'], colorTheme: 'purple' });
+  const sGemini = d.addBox({ x: 1260, y: 415, w: 270, h: 115, title: 'GeminiAiService', subtitle: 'Google GenAI Flash 1.5', details: ['Multi-key pool (10 keys)', 'Round-robin failover', 'Phân tích phản hồi sinh viên'], colorTheme: 'purple' });
 
   // Layer 3: Cloud Infrastructure Backend
   d.addBox({
-    x: 40, y: 560, w: 1370, h: 220,
+    x: 40, y: 580, w: 1510, h: 235,
     title: 'HẠ TẦNG ĐÁM MÂY GOOGLE FIREBASE (CLOUD BACKEND - PROJECT: CAMPUS-EVENT-48443)',
     subtitle: 'Toàn bộ dữ liệu vận hành thực tế 100% trên đám mây Google Cloud Platform (GCP)',
     colorTheme: 'green'
   });
 
-  const bAuth = d.addBox({ x: 60, y: 615, w: 250, h: 140, title: 'Firebase Authentication', subtitle: 'Identity Toolkit & OAuth2', details: ['Đăng nhập tài khoản trường FPT', 'Xác thực hai lớp qua Google', 'Cấp JWT Token định danh'], colorTheme: 'blue' });
-  const bFirestore = d.addBox({ x: 330, y: 615, w: 450, h: 140, title: 'Cloud Firestore (NoSQL Document Database)', subtitle: 'Multi-Region High Availability & Sub-second Query', details: ['Collections: events, tickets, registrations, clubs, feedback, certificates, announcements', 'Compound Indexes: Lọc vé theo sinh viên và trạng thái check-in', 'Security Rules: Phân quyền truy cập tài liệu nghiêm ngặt'], colorTheme: 'green' });
-  const bStorage = d.addBox({ x: 800, y: 615, w: 280, h: 140, title: 'Firebase Cloud Storage', subtitle: 'Bảo mật lưu trữ chứng nhận số', details: ['Lưu trữ PDF e-Certificate SHA-256', 'Quy tắc bảo mật theo UID người dùng', 'Hỗ trợ tải ngoại tuyến'], colorTheme: 'amber' });
-  const bFCM = d.addBox({ x: 1100, y: 615, w: 280, h: 140, title: 'FCM & Crashlytics / Analytics', subtitle: 'Hệ thống vận hành viễn trắc', details: ['FCM Push Gateway độ trễ thấp', 'Crashlytics bắt lỗi Crash thời gian thực', 'Google Analytics DebugView'], colorTheme: 'purple' });
+  const bAuth = d.addBox({ x: 60, y: 635, w: 280, h: 155, title: 'Firebase Authentication', subtitle: 'Identity Toolkit & OAuth2', details: ['Đăng nhập tài khoản trường FPT', 'Xác thực hai lớp qua Google', 'Cấp JWT Token định danh'], colorTheme: 'blue' });
+  const bFirestore = d.addBox({ x: 370, y: 635, w: 480, h: 155, title: 'Cloud Firestore (NoSQL Document Store)', subtitle: 'Multi-Region High Availability & Sub-second Query', details: ['Collections: events, tickets, registrations, clubs, feedback, certificates, announcements', 'Compound Indexes: Lọc vé theo sinh viên và trạng thái check-in', 'Security Rules: Phân quyền truy cập tài liệu nghiêm ngặt'], colorTheme: 'green' });
+  const bStorage = d.addBox({ x: 880, y: 635, w: 300, h: 155, title: 'Firebase Cloud Storage', subtitle: 'Bảo mật lưu trữ chứng nhận số', details: ['Lưu trữ PDF e-Certificate SHA-256', 'Quy tắc bảo mật theo UID người dùng', 'Hỗ trợ tải ngoại tuyến'], colorTheme: 'amber' });
+  const bFCM = d.addBox({ x: 1210, y: 635, w: 320, h: 155, title: 'FCM & Crashlytics / Analytics', subtitle: 'Hệ thống vận hành viễn trắc', details: ['FCM Push Gateway độ trễ thấp', 'Crashlytics bắt lỗi Crash thời gian thực', 'Google Analytics DebugView'], colorTheme: 'purple' });
 
   // Layer 4: Architectural Decisions Box
   d.addBox({
-    x: 40, y: 805, w: 1370, h: 160,
+    x: 40, y: 840, w: 1510, h: 270,
     title: 'CÁC QUYẾT ĐỊNH KIẾN TRÚC & ĐÁNH ĐỔI (ARCHITECTURAL DECISIONS & TRADE-OFFS):',
     subtitle: 'Lựa chọn công nghệ phục vụ trực tiếp cho tiêu chí vận hành thực tế của Đại học FPT TP.HCM',
     details: [
@@ -324,19 +420,19 @@ function buildSlide09SystemArchitecture() {
 // SLIDE 10: TECHNOLOGY STACK (Bảng công nghệ theo nhóm chuẩn Slide 10)
 // =========================================================================
 function buildSlide10TechStack() {
-  const d = new DiagramBuilder('10_Technology_Stack', 1450, 950);
+  const d = new DiagramBuilder('10_Technology_Stack', 1600, 1100);
   d.addTitle(
     '10. TECHNOLOGY STACK — BẢNG CÔNG NGHỆ THEO NHÓM VÀ VAI TRÒ SỬ DỤNG',
     'Khớp 100% mã nguồn thực tế và môi trường triển khai của dự án Campus Event Management',
     'SLIDE 10 • TECHNOLOGY STACK'
   );
 
-  const cardWidth = 430;
-  const cardHeight = 220;
+  const cardWidth = 475;
+  const cardHeight = 255;
 
   // 1. Mobile Frontend
   d.addBox({
-    x: 40, y: 100, w: cardWidth, h: cardHeight,
+    x: 40, y: 105, w: cardWidth, h: cardHeight,
     title: '📱 1. MOBILE APPLICATION',
     subtitle: 'Ứng dụng di động sinh viên và CTV cổng',
     details: [
@@ -351,7 +447,7 @@ function buildSlide10TechStack() {
 
   // 2. Web Admin Portal
   d.addBox({
-    x: 510, y: 100, w: cardWidth, h: cardHeight,
+    x: 555, y: 105, w: cardWidth, h: cardHeight,
     title: '💻 2. WEB ADMIN PORTAL',
     subtitle: 'Cổng quản trị chuyên sâu dành cho Cán bộ CTSV',
     details: [
@@ -366,7 +462,7 @@ function buildSlide10TechStack() {
 
   // 3. Backend & Cloud Database
   d.addBox({
-    x: 980, y: 100, w: cardWidth, h: cardHeight,
+    x: 1070, y: 105, w: cardWidth, h: cardHeight,
     title: '☁️ 3. BACKEND & CLOUD PLATFORM',
     subtitle: 'Nền tảng điện toán đám mây Google Cloud / Firebase',
     details: [
@@ -381,7 +477,7 @@ function buildSlide10TechStack() {
 
   // 4. AI & Machine Learning
   d.addBox({
-    x: 40, y: 350, w: cardWidth, h: cardHeight,
+    x: 40, y: 385, w: cardWidth, h: cardHeight,
     title: '🤖 4. AI & AUTOMATION ENGINE',
     subtitle: 'Trí tuệ nhân tạo hỗ trợ phân tích và giải đáp',
     details: [
@@ -396,7 +492,7 @@ function buildSlide10TechStack() {
 
   // 5. Developer Tools & DevOps
   d.addBox({
-    x: 510, y: 350, w: cardWidth, h: cardHeight,
+    x: 555, y: 385, w: cardWidth, h: cardHeight,
     title: '🛠️ 5. DEVELOPER TOOLS & DEVOPS',
     subtitle: 'Công cụ phát triển, kiểm soát phiên bản & CI/CD',
     details: [
@@ -411,7 +507,7 @@ function buildSlide10TechStack() {
 
   // 6. Testing & Quality Assurance
   d.addBox({
-    x: 980, y: 350, w: cardWidth, h: cardHeight,
+    x: 1070, y: 385, w: cardWidth, h: cardHeight,
     title: '🧪 6. TESTING & QUALITY ASSURANCE',
     subtitle: 'Hệ thống kiểm thử tự động & giám sát lỗi thực tế',
     details: [
@@ -426,7 +522,7 @@ function buildSlide10TechStack() {
 
   // Summary Table Bar
   d.addBox({
-    x: 40, y: 600, w: 1370, h: 320,
+    x: 40, y: 665, w: 1505, h: 380,
     title: 'TỔNG HỢP ÁNH XẠ CÔNG NGHỆ ↔ TRÁCH NHIỆM TRONG DỰ ÁN (TRACEABILITY MATRIX)',
     subtitle: 'Chứng minh mọi công nghệ sử dụng đều giải quyết trực tiếp một nhu cầu thực tế của đề tài',
     details: [
@@ -448,7 +544,7 @@ function buildSlide10TechStack() {
 // SLIDE 12: SEQUENCE DIAGRAM (Slide 18 & Check-In Cổng)
 // =========================================================================
 function buildSlide12SequenceDiagram() {
-  const d = new DiagramBuilder('12_Sequence_Diagram', 1450, 1000);
+  const d = new DiagramBuilder('12_Sequence_Diagram', 1600, 1150);
   d.addTitle(
     '12. SEQUENCE DIAGRAM — QUY TRÌNH DUYỆT VÉ SLIDE 18 & CHECK-IN CỔNG',
     'Tương tác tuần tự chi tiết giữa Sinh viên, ViewModel, FirestoreService, Web Admin và Bàn soát vé',
@@ -458,17 +554,17 @@ function buildSlide12SequenceDiagram() {
   // Lifelines
   const actors = [
     { id: 'act_student', name: 'Sinh viên An\n(:Student)', x: 60 },
-    { id: 'act_ui', name: 'Giao diện\n(:EventDetailScreen)', x: 230 },
-    { id: 'act_vm', name: 'Bộ điều khiển\n(:RegistrationVM)', x: 420 },
-    { id: 'act_svc', name: 'Dịch vụ\n(:FirestoreService)', x: 620 },
-    { id: 'act_db', name: '<<Cloud>>\n:CloudFirestore', x: 830 },
-    { id: 'act_web', name: 'Cổng Web Admin\n(:WebAdminPortal)', x: 1040 },
-    { id: 'act_desk', name: 'Máy quét cổng\n(:MobileDeskScanner)', x: 1250 }
+    { id: 'act_ui', name: 'Giao diện\n(:EventDetailScreen)', x: 260 },
+    { id: 'act_vm', name: 'Bộ điều khiển\n(:RegistrationVM)', x: 480 },
+    { id: 'act_svc', name: 'Dịch vụ\n(:FirestoreService)', x: 710 },
+    { id: 'act_db', name: '<<Cloud>>\n:CloudFirestore', x: 960 },
+    { id: 'act_web', name: 'Cổng Web Admin\n(:WebAdminPortal)', x: 1200 },
+    { id: 'act_desk', name: 'Máy quét cổng\n(:MobileDeskScanner)', x: 1410 }
   ];
 
   actors.forEach(a => {
     d.addBox({
-      id: a.id, x: a.x, y: 100, w: 140, h: 50,
+      id: a.id, x: a.x, y: 105, w: 150, h: 55,
       title: a.name, subtitle: '', colorTheme: 'blue', rx: 4
     });
 
@@ -477,54 +573,55 @@ function buildSlide12SequenceDiagram() {
     d.cells.push(`
       <mxCell id="${lineId}" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94a3b8;" edge="1" parent="1" source="${a.id}">
         <mxGeometry width="50" height="50" relative="1" as="geometry">
-          <mxPoint x="${a.x + 70}" y="150" as="sourcePoint" />
-          <mxPoint x="${a.x + 70}" y="920" as="targetPoint" />
+          <mxPoint x="${a.x + 75}" y="160" as="sourcePoint" />
+          <mxPoint x="${a.x + 75}" y="1030" as="targetPoint" />
         </mxGeometry>
       </mxCell>
     `);
   });
 
-  // Sequence Steps as Horizontal Arrows and Text Calls
+  // Sequence Steps as Horizontal Arrows and Text Calls with white backgrounds
   const steps = [
-    { y: 180, x1: 130, x2: 300, label: '1. tap "Đăng ký tham gia"()' },
-    { y: 220, x1: 300, x2: 490, label: '2. submitPendingRegistration(event, user)' },
-    { y: 260, x1: 490, x2: 690, label: '3. submitRegistration(RegistrationModel)' },
-    { y: 300, x1: 690, x2: 900, label: '4. setDoc(registrations/{regId}, status: "pending")' },
-    { y: 350, x1: 900, x2: 1110, label: '5. onSnapshot() [Real-time notification: +1 Đơn chờ duyệt]' },
-    { y: 400, x1: 1110, x2: 1110, label: '6. Cán bộ CTSV xem xét hồ sơ trên Web Admin (Slide 18)' },
-    { y: 450, x1: 1110, x2: 900, label: '7. approveRegistration(regId) ➔ runTransaction' },
-    { y: 500, x1: 900, x2: 900, label: '8. update(status: "approved") & create(tickets/{ticketId})' },
-    { y: 550, x1: 900, x2: 490, label: '9. Stream push: Vé mới về thiết bị' },
-    { y: 600, x1: 490, x2: 300, label: '10. setState(StateSuccess) ➔ Hiển thị DigitalTicket' },
-    { y: 650, x1: 130, x2: 1320, label: '11. Sinh viên xuất trình QR tại Bàn kiểm soát cổng' },
-    { y: 700, x1: 1320, x2: 690, label: '12. checkInTicket(qrToken) ➔ runTransaction' },
-    { y: 750, x1: 690, x2: 900, label: '13. Atomic update(isUsed: true, checkedInAt: now)' },
-    { y: 800, x1: 900, x2: 1320, label: '14. Return 200 OK (< 1.5s): Mở cổng thành công' },
-    { y: 850, x1: 900, x2: 300, label: '15. Mở khóa nút Feedback (+5 Điểm rèn luyện) trên Mobile' }
+    { y: 190, x1: 135, x2: 335, label: '1. tap "Đăng ký tham gia"()' },
+    { y: 240, x1: 335, x2: 555, label: '2. submitPendingRegistration(event, user)' },
+    { y: 290, x1: 555, x2: 785, label: '3. submitRegistration(RegistrationModel)' },
+    { y: 340, x1: 785, x2: 1035, label: '4. setDoc(registrations/{regId}, status: "pending")' },
+    { y: 400, x1: 1035, x2: 1275, label: '5. onSnapshot() [Thông báo đơn mới chờ duyệt +1]' },
+    { y: 460, x1: 1275, x2: 1275, label: '6. Cán bộ CTSV xem xét hồ sơ trên Web Admin (Slide 18)' },
+    { y: 520, x1: 1275, x2: 1035, label: '7. approveRegistration(regId) ➔ runTransaction' },
+    { y: 575, x1: 1035, x2: 1035, label: '8. update(status: "approved") & create(tickets/{ticketId})' },
+    { y: 630, x1: 1035, x2: 555, label: '9. Stream push: Vé mới về thiết bị sinh viên' },
+    { y: 685, x1: 555, x2: 335, label: '10. setState(StateSuccess) ➔ Hiển thị DigitalTicket' },
+    { y: 745, x1: 135, x2: 1485, label: '11. Sinh viên xuất trình QR tại Bàn kiểm soát cổng' },
+    { y: 800, x1: 1485, x2: 785, label: '12. checkInTicket(qrToken) ➔ runTransaction' },
+    { y: 855, x1: 785, x2: 1035, label: '13. Atomic update(isUsed: true, checkedInAt: now)' },
+    { y: 910, x1: 1035, x2: 1485, label: '14. Return 200 OK (< 1.5s): Mở cổng thành công' },
+    { y: 965, x1: 1035, x2: 335, label: '15. Mở khóa nút Feedback (+5 Điểm rèn luyện) trên Mobile' }
   ];
 
-  steps.forEach((s, idx) => {
+  steps.forEach((s) => {
     const isSelf = s.x1 === s.x2;
     const arrowId = d.nextId();
     if (isSelf) {
       d.cells.push(`
-        <mxCell id="${arrowId}" value="${escapeXml(s.label)}" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontColor=#4c1d95;align=left;" edge="1" parent="1">
+        <mxCell id="${arrowId}" value="${escapeXml(s.label)}" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#4c1d95;labelBackgroundColor=#ffffff;labelBorderColor=#c4b5fd;align=left;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="${s.x1}" y="${s.y}" as="sourcePoint" />
-            <mxPoint x="${s.x1 + 100}" y="${s.y + 25}" as="targetPoint" />
+            <mxPoint x="${s.x1 + 120}" y="${s.y + 30}" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="${s.x1 + 60}" y="${s.y}" />
-              <mxPoint x="${s.x1 + 60}" y="${s.y + 25}" />
+              <mxPoint x="${s.x1 + 70}" y="${s.y}" />
+              <mxPoint x="${s.x1 + 70}" y="${s.y + 30}" />
             </Array>
           </mxGeometry>
         </mxCell>
       `);
     } else {
       d.cells.push(`
-        <mxCell id="${arrowId}" value="${escapeXml(s.label)}" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontColor=#0f172a;" edge="1" parent="1">
+        <mxCell id="${arrowId}" value="${escapeXml(s.label)}" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#2563eb;strokeWidth=1.5;fontFamily=Segoe UI;fontSize=10;fontStyle=1;fontColor=#0f172a;labelBackgroundColor=#ffffff;labelBorderColor=#93c5fd;" edge="1" parent="1">
           <mxGeometry width="80" relative="1" as="geometry">
             <mxPoint x="${s.x1}" y="${s.y}" as="sourcePoint" />
             <mxPoint x="${s.x2}" y="${s.y}" as="targetPoint" />
+            <mxPoint as="offset" y="-12" />
           </mxGeometry>
         </mxCell>
       `);
@@ -533,7 +630,7 @@ function buildSlide12SequenceDiagram() {
 
   // Alt branch annotation box
   d.addBox({
-    x: 40, y: 925, w: 1370, h: 55,
+    x: 40, y: 1045, w: 1520, h: 75,
     title: 'NHÁNH NGOẠI LỆ (ALTERNATIVE FLOWS):',
     subtitle: '• alt [Sự kiện hết chỗ / Hết hạn BR-02, BR-03]: FirestoreService ném ngoại lệ ➔ UI hiển thị thông báo lỗi ➔ Hủy luồng.\n• alt [CTSV Từ chối đơn]: CTSV ghi rejectReason ➔ FCM Push thông báo sinh viên lý do từ chối ➔ Không phát hành vé.\n• alt [Quét vé giả hoặc vé đã dùng BR-05]: MobileDesk Scanner rung chuông cảnh báo đỏ "VÉ KHÔNG HỢP LỆ HOẶC ĐÃ QUÉT" ➔ Chặn vào cổng.',
     colorTheme: 'amber', rx: 4
@@ -546,7 +643,7 @@ function buildSlide12SequenceDiagram() {
 // SLIDE 13: CLASS DESIGN (MVVM UML Class Diagram)
 // =========================================================================
 function buildSlide13ClassDesign() {
-  const d = new DiagramBuilder('13_Class_Design', 1450, 1000);
+  const d = new DiagramBuilder('13_Class_Design', 1600, 1150);
   d.addTitle(
     '13. CLASS DESIGN — THIẾT KẾ CÁC LỚP TRONG MÃ NGUỒN (MVVM)',
     'Phân định trách nhiệm rõ ràng: Domain Models ➔ ViewModels (State) ➔ Business Services ➔ Cloud Layer',
@@ -555,14 +652,14 @@ function buildSlide13ClassDesign() {
 
   // Group 1: Domain Entities (Models)
   d.addBox({
-    x: 40, y: 100, w: 420, h: 840,
+    x: 40, y: 100, w: 470, h: 980,
     title: '1. TẦNG DOMAIN MODELS (LIB/MODELS/)',
     subtitle: 'Thực thể dữ liệu bất biến, chuyển đổi JSON/Firestore Map',
     colorTheme: 'blue'
   });
 
   const cEvent = d.addBox({
-    x: 60, y: 155, w: 380, h: 175,
+    x: 60, y: 160, w: 430, h: 205,
     title: 'EventModel',
     subtitle: 'Entity sự kiện trường FPT',
     details: [
@@ -579,7 +676,7 @@ function buildSlide13ClassDesign() {
   });
 
   const cTicket = d.addBox({
-    x: 60, y: 345, w: 380, h: 180,
+    x: 60, y: 380, w: 430, h: 205,
     title: 'TicketModel',
     subtitle: 'Entity vé điện tử sinh viên',
     details: [
@@ -595,7 +692,7 @@ function buildSlide13ClassDesign() {
   });
 
   const cReg = d.addBox({
-    x: 60, y: 540, w: 380, h: 170,
+    x: 60, y: 600, w: 430, h: 205,
     title: 'RegistrationModel (Slide 18)',
     subtitle: 'Entity đơn đăng ký xét duyệt',
     details: [
@@ -610,7 +707,7 @@ function buildSlide13ClassDesign() {
   });
 
   const cUser = d.addBox({
-    x: 60, y: 725, w: 380, h: 160,
+    x: 60, y: 820, w: 430, h: 205,
     title: 'UserModel',
     subtitle: 'Entity tài khoản sinh viên FPT',
     details: [
@@ -624,14 +721,14 @@ function buildSlide13ClassDesign() {
 
   // Group 2: ViewModels (State Controllers)
   d.addBox({
-    x: 490, y: 100, w: 450, h: 840,
+    x: 545, y: 100, w: 490, h: 980,
     title: '2. TẦNG VIEWMODELS (LIB/VIEWMODELS/)',
     subtitle: 'Kế thừa ChangeNotifier, quản lý trạng thái UI',
     colorTheme: 'purple'
   });
 
   const vmReg = d.addBox({
-    x: 510, y: 155, w: 410, h: 175,
+    x: 565, y: 160, w: 450, h: 205,
     title: 'RegistrationViewModel',
     subtitle: 'Điều khiển luồng nộp đơn và duyệt (Slide 18)',
     details: [
@@ -646,7 +743,7 @@ function buildSlide13ClassDesign() {
   });
 
   const vmTickets = d.addBox({
-    x: 510, y: 345, w: 410, h: 180,
+    x: 565, y: 380, w: 450, h: 205,
     title: 'MyTicketsViewModel',
     subtitle: 'Quản lý vé Sắp diễn ra & Đã tham gia',
     details: [
@@ -661,7 +758,7 @@ function buildSlide13ClassDesign() {
   });
 
   const vmAuth = d.addBox({
-    x: 510, y: 540, w: 410, h: 170,
+    x: 565, y: 600, w: 450, h: 205,
     title: 'AuthViewModel',
     subtitle: 'Quản lý phiên đăng nhập & điểm rèn luyện',
     details: [
@@ -676,7 +773,7 @@ function buildSlide13ClassDesign() {
   });
 
   const vmDesk = d.addBox({
-    x: 510, y: 725, w: 410, h: 160,
+    x: 565, y: 820, w: 450, h: 205,
     title: 'MobileDeskViewModel',
     subtitle: 'Điều khiển máy quét cổng & viễn trắc',
     details: [
@@ -691,14 +788,14 @@ function buildSlide13ClassDesign() {
 
   // Group 3: Services (Business Layer)
   d.addBox({
-    x: 970, y: 100, w: 440, h: 840,
+    x: 1070, y: 100, w: 490, h: 980,
     title: '3. TẦNG DỊCH VỤ (LIB/SERVICES/)',
     subtitle: 'Triển khai Atomic Transactions & kết nối Cloud',
     colorTheme: 'green'
   });
 
   const sFire = d.addBox({
-    x: 990, y: 155, w: 400, h: 260,
+    x: 1090, y: 160, w: 450, h: 280,
     title: 'FirestoreService',
     subtitle: 'Cung cấp toàn bộ thao tác cơ sở dữ liệu thật',
     details: [
@@ -715,7 +812,7 @@ function buildSlide13ClassDesign() {
   });
 
   const sAuthCls = d.addBox({
-    x: 990, y: 430, w: 400, h: 200,
+    x: 1090, y: 460, w: 450, h: 240,
     title: 'AuthService',
     subtitle: 'Xác thực tài khoản & kiểm tra domain',
     details: [
@@ -731,7 +828,7 @@ function buildSlide13ClassDesign() {
   });
 
   const sAiCls = d.addBox({
-    x: 990, y: 645, w: 400, h: 240,
+    x: 1090, y: 720, w: 450, h: 260,
     title: 'GeminiAiService',
     subtitle: 'Hệ thống AI xử lý ngôn ngữ tự nhiên',
     details: [
@@ -759,16 +856,16 @@ function buildSlide13ClassDesign() {
 // SLIDE 14: DATABASE DESIGN 1/2 (Conceptual ERD)
 // =========================================================================
 function buildSlide14DatabaseConceptual() {
-  const d = new DiagramBuilder('14_Database_Conceptual', 1450, 950);
+  const d = new DiagramBuilder('14_Database_Conceptual', 1600, 1100);
   d.addTitle(
     '14. DATABASE DESIGN 1/2 — MÔ HÌNH DỮ LIỆU KHÁI NIỆM (CONCEPTUAL ERD)',
     'Mô hình hóa ngữ nghĩa nghiệp vụ, thực thể, mối quan hệ và bản số (Cardinality) — Chưa phụ thuộc DBMS vật lý',
     'SLIDE 14 • DATABASE DESIGN 1/2'
   );
 
-  // Entities as Clean Conceptual Cards
+  // Entities as Clean Conceptual Cards with generous spacing
   const eUser = d.addBox({
-    x: 60, y: 140, w: 240, h: 140,
+    x: 60, y: 140, w: 270, h: 170,
     title: 'SINH VIÊN (USER)',
     subtitle: 'Thực thể người học FPT',
     details: ['* Mã sinh viên (MSSV)', '• Họ và tên', '• Email trường (@fpt.edu.vn)', '• Chuyên ngành đào tạo', '• Điểm rèn luyện tích lũy'],
@@ -776,7 +873,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eClub = d.addBox({
-    x: 60, y: 400, w: 240, h: 140,
+    x: 60, y: 440, w: 270, h: 170,
     title: 'CÂU LẠC BỘ (CLUB)',
     subtitle: 'Đơn vị tổ chức sự kiện',
     details: ['* Mã định danh CLB', '• Tên câu lạc bộ', '• Tên viết tắt', '• Lĩnh vực hoạt động', '• Cán bộ chủ nhiệm'],
@@ -784,7 +881,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eEvent = d.addBox({
-    x: 420, y: 260, w: 260, h: 170,
+    x: 480, y: 280, w: 300, h: 200,
     title: 'SỰ KIỆN (EVENT)',
     subtitle: 'Chương trình được phê duyệt',
     details: ['* Mã sự kiện', '• Tên chủ đề sự kiện', '• Ngày giờ diễn ra', '• Địa điểm / Hội trường', '• Sức chứa tối đa', '• Hạn chót đăng ký', '• Trạng thái vận hành'],
@@ -792,7 +889,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eReg = d.addBox({
-    x: 790, y: 140, w: 260, h: 150,
+    x: 910, y: 140, w: 300, h: 180,
     title: 'ĐƠN ĐĂNG KÝ (REGISTRATION)',
     subtitle: 'Hồ sơ chờ duyệt (Slide 18)',
     details: ['* Mã đơn đăng ký', '• Thời điểm nộp đơn', '• Trạng thái xét duyệt (pending/approved/rejected)', '• Lý do từ chối (nếu có)', '• Cán bộ xét duyệt'],
@@ -800,7 +897,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eTicket = d.addBox({
-    x: 790, y: 400, w: 260, h: 160,
+    x: 910, y: 440, w: 300, h: 190,
     title: 'VÉ ĐIỆN TỬ (TICKET)',
     subtitle: 'Vé vào cổng kèm mã bảo mật',
     details: ['* Mã vé điện tử', '• Mã băm QR Token bí mật', '• Trạng thái sử dụng (isUsed)', '• Thời điểm check-in cổng', '• Đã gửi feedback hay chưa'],
@@ -808,7 +905,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eFeedback = d.addBox({
-    x: 1140, y: 300, w: 250, h: 140,
+    x: 1300, y: 240, w: 260, h: 160,
     title: 'ĐÁNH GIÁ (FEEDBACK)',
     subtitle: 'Khảo sát chất lượng sự kiện',
     details: ['* Mã phiếu đánh giá', '• Điểm số hài lòng (1-5 sao)', '• Nhận xét & góp ý chi tiết', '• Thời điểm nộp phiếu', '• Điểm rèn luyện đã cộng (+5)'],
@@ -816,7 +913,7 @@ function buildSlide14DatabaseConceptual() {
   });
 
   const eCert = d.addBox({
-    x: 1140, y: 490, w: 250, h: 140,
+    x: 1300, y: 460, w: 260, h: 160,
     title: 'CHỨNG NHẬN (CERTIFICATE)',
     subtitle: 'Chứng chỉ e-Cert số hóa',
     details: ['* Số hiệu chứng nhận', '• Đường dẫn tệp PDF Cloud', '• Mã băm kiểm định SHA-256', '• Ngày cấp chứng nhận'],
@@ -824,18 +921,18 @@ function buildSlide14DatabaseConceptual() {
   });
 
   // Relationships with Crow's Foot & Cardinalities
-  d.addConnection({ source: eClub, target: eEvent, label: '1 tổ chức (1,1) ➔ (0,N)', color: '#7c3aed', strokeWidth: 2 });
-  d.addConnection({ source: eUser, target: eReg, label: 'nộp đơn (1,1) ➔ (0,N)', color: '#2563eb' });
-  d.addConnection({ source: eEvent, target: eReg, label: 'tiếp nhận (1,1) ➔ (0,N)', color: '#059669' });
-  d.addConnection({ source: eReg, target: eTicket, label: 'phê duyệt sinh vé (0,1) ➔ (0,1) [Slide 18]', color: '#d97706', strokeWidth: 2 });
-  d.addConnection({ source: eEvent, target: eTicket, label: 'phát hành (1,1) ➔ (0,N)', color: '#059669' });
-  d.addConnection({ source: eUser, target: eTicket, label: 'sở hữu (1,1) ➔ (0,N)', color: '#2563eb' });
-  d.addConnection({ source: eTicket, target: eFeedback, label: 'mở khóa đánh giá (1,1) ➔ (0,1)', color: '#7c3aed' });
-  d.addConnection({ source: eTicket, target: eCert, label: 'cấp chứng nhận (1,1) ➔ (0,1)', color: '#2563eb' });
+  d.addConnection({ source: eClub, target: eEvent, label: 'tổ chức (1,1 ➔ 0,N)', color: '#7c3aed', strokeWidth: 2 });
+  d.addConnection({ source: eUser, target: eReg, label: 'nộp đơn (1,1 ➔ 0,N)', color: '#2563eb' });
+  d.addConnection({ source: eEvent, target: eReg, label: 'tiếp nhận (1,1 ➔ 0,N)', color: '#059669' });
+  d.addConnection({ source: eReg, target: eTicket, label: 'duyệt sinh vé [Slide 18]', color: '#d97706', strokeWidth: 2 });
+  d.addConnection({ source: eEvent, target: eTicket, label: 'phát hành (1,1 ➔ 0,N)', color: '#059669' });
+  d.addConnection({ source: eUser, target: eTicket, label: 'sở hữu (1,1 ➔ 0,N)', color: '#2563eb' });
+  d.addConnection({ source: eTicket, target: eFeedback, label: 'mở khóa đánh giá (1,1 ➔ 0,1)', color: '#7c3aed' });
+  d.addConnection({ source: eTicket, target: eCert, label: 'cấp chứng nhận (1,1 ➔ 0,1)', color: '#2563eb' });
 
   // Prominent Business Rules Box
   d.addBox({
-    x: 60, y: 680, w: 1330, h: 220,
+    x: 60, y: 730, w: 1500, h: 260,
     title: 'CÁC QUY TẮC NGHIỆP VỤ (BUSINESS RULES) CHI PHỐI QUAN HỆ KHÁI NIỆM:',
     subtitle: 'Ràng buộc toàn vẹn dữ liệu được bảo vệ xuyên suốt từ mức thiết kế ý niệm đến ứng dụng thực tế',
     details: [
@@ -855,19 +952,19 @@ function buildSlide14DatabaseConceptual() {
 // SLIDE 15: DATABASE DESIGN 2/2 (Logical -> Physical Schema Firestore)
 // =========================================================================
 function buildSlide15DatabasePhysical() {
-  const d = new DiagramBuilder('15_Database_Physical', 1450, 1000);
+  const d = new DiagramBuilder('15_Database_Physical', 1600, 1150);
   d.addTitle(
     '15. DATABASE DESIGN 2/2 — THIẾT KẾ VẬT LÝ CLOUD FIRESTORE NOSQL',
     'Cấu trúc Documents & Collections, Kiểu dữ liệu, Khóa chính, Chỉ mục phức hợp (Indexes) và Ràng buộc bảo mật',
     'SLIDE 15 • DATABASE DESIGN 2/2'
   );
 
-  const colWidth = 320;
-  const colHeight = 270;
+  const colWidth = 355;
+  const colHeight = 295;
 
   // Collection 1: users
   d.addBox({
-    x: 40, y: 100, w: colWidth, h: colHeight,
+    x: 40, y: 105, w: colWidth, h: colHeight,
     title: '📁 users/{uid}',
     subtitle: 'Collection tài khoản người dùng',
     details: [
@@ -885,7 +982,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 2: events
   d.addBox({
-    x: 380, y: 100, w: colWidth + 20, h: colHeight,
+    x: 425, y: 105, w: colWidth + 10, h: colHeight,
     title: '📁 events/{eventId}',
     subtitle: 'Collection thông tin sự kiện',
     details: [
@@ -905,7 +1002,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 3: registrations (Slide 18)
   d.addBox({
-    x: 740, y: 100, w: colWidth + 20, h: colHeight,
+    x: 820, y: 105, w: colWidth + 10, h: colHeight,
     title: '📁 registrations/{regId} (Slide 18)',
     subtitle: 'Hàng chờ thẩm định đơn xét duyệt',
     details: [
@@ -923,7 +1020,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 4: tickets
   d.addBox({
-    x: 1095, y: 100, w: colWidth + 15, h: colHeight,
+    x: 1215, y: 105, w: colWidth + 10, h: colHeight,
     title: '📁 tickets/{ticketId}',
     subtitle: 'Collection vé điện tử & check-in',
     details: [
@@ -941,7 +1038,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 5: feedback
   d.addBox({
-    x: 40, y: 390, w: colWidth, h: 220,
+    x: 40, y: 430, w: colWidth, h: 250,
     title: '📁 feedback/{feedbackId}',
     subtitle: 'Collection đánh giá khảo sát',
     details: [
@@ -958,7 +1055,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 6: certificates
   d.addBox({
-    x: 380, y: 390, w: colWidth + 20, h: 220,
+    x: 425, y: 430, w: colWidth + 10, h: 250,
     title: '📁 certificates/{certId}',
     subtitle: 'Collection chứng nhận e-Certificate',
     details: [
@@ -974,7 +1071,7 @@ function buildSlide15DatabasePhysical() {
 
   // Collection 7: clubs
   d.addBox({
-    x: 740, y: 390, w: colWidth + 20, h: 220,
+    x: 820, y: 430, w: colWidth + 10, h: 250,
     title: '📁 clubs/{clubId}',
     subtitle: 'Collection danh mục CLB',
     details: [
@@ -990,7 +1087,7 @@ function buildSlide15DatabasePhysical() {
 
   // Subcollection 8: questions (Live Q&A)
   d.addBox({
-    x: 1095, y: 390, w: colWidth + 15, h: 220,
+    x: 1215, y: 430, w: colWidth + 10, h: 250,
     title: '📁 events/{id}/questions/{qId}',
     subtitle: 'Subcollection Q&A hội trường trực tiếp',
     details: [
@@ -1007,7 +1104,7 @@ function buildSlide15DatabasePhysical() {
 
   // Compound Indexes & Security Rules Specifications Box
   d.addBox({
-    x: 40, y: 630, w: 1370, h: 320,
+    x: 40, y: 710, w: 1530, h: 360,
     title: 'CHỈ MỤC PHỨC HỢP (COMPOUND INDEXES) & BẢO MẬT FIRESTORE SECURITY RULES:',
     subtitle: 'Tối ưu hóa hiệu năng truy vấn sub-second và bảo vệ dữ liệu ở mức cơ sở dữ liệu đám mây',
     details: [
@@ -1024,7 +1121,7 @@ function buildSlide15DatabasePhysical() {
 }
 
 // =========================================================================
-// MAIN BUILDER: GENERATE ALL FILES
+// MAIN BUILDER: RE-GENERATE ALL FILES WITH OPTIMIZED LAYOUT
 // =========================================================================
 function main() {
   const outputDir = path.join(__dirname, '../docs/diagrams');
