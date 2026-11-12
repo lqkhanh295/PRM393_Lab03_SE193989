@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:04:16.986Z" agent="Antigravity Architecture Builder" version="24.0.0">
+  <diagram id="10_Technology_Stack" name="10_Technology_Stack">
+  <mxGraphModel dx="1450" dy="950" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1450" pageHeight="950" background="#ffffff">
+    <root>
+      <mxCell id="0" />
+      <mxCell id="1" parent="0" />
+      
+      <mxCell id="cell_1" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; text-align:left; padding:8px 12px;&quot;&gt;
+      &lt;div style=&quot;display:inline-block; font-size:10px; font-weight:700; color:#2563eb; background:#eff6ff; padding:2px 8px; border-radius:12px; margin-bottom:4px; border:1px solid #bfdbfe;&quot;&gt;SLIDE 10 • TECHNOLOGY STACK&lt;/div&gt;
+      &lt;div style=&quot;font-size:18px; font-weight:800; color:#0f172a; line-height:1.2;&quot;&gt;10. TECHNOLOGY STACK — BẢNG CÔNG NGHỆ THEO NHÓM VÀ VAI TRÒ SỬ DỤNG&lt;/div&gt;
+      &lt;div style=&quot;font-size:11px; color:#64748b; margin-top:2px;&quot;&gt;Khớp 100% mã nguồn thực tế và môi trường triển khai của dự án Campus Event Management&lt;/div&gt;
+    &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+        <mxGeometry x="40" y="20" width="700" height="65" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📱 1. MOBILE APPLICATION&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Ứng dụng di động sinh viên và CTV cổng&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #60a5fa; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Công nghệ: Flutter 3.24 SDK &amp;amp; Dart 3.5&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• State Management: Provider (MVVM Pattern)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• UI Kit: Material Design 3, Glassmorphism, Google Fonts&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Phần cứng: Mobile Scanner (Camera QR), Image Picker&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Biên dịch Native mượt mà 60 FPS, chia sẻ 100% logic giữa Android và iOS.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#60a5fa;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="100" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;💻 2. WEB ADMIN PORTAL&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Cổng quản trị chuyên sâu dành cho Cán bộ CTSV&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #c084fc; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Công nghệ: Vanilla JavaScript ES6+, Modern CSS3, HTML5&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Server Bridge: Node.js Express Bridge (Port 3000)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Giao diện: 9 Phân hệ viễn trắc (Live Telemetry Dashboard)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Tích hợp: Firestore REST API, Real-time Polling &amp;amp; Push&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Siêu nhẹ, tải trang tức thì trên máy tính bàn soát vé, không phụ thuộc nặng nề vào build tools.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#c084fc;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="510" y="100" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;☁️ 3. BACKEND &amp;amp; CLOUD PLATFORM&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Nền tảng điện toán đám mây Google Cloud / Firebase&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #34d399; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Cơ sở dữ liệu: Cloud Firestore (NoSQL Document Store)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Định danh: Firebase Authentication (Google SSO, FPT Mail)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lưu trữ tệp: Firebase Cloud Storage (PDF e-Certificates)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Thông báo: Firebase Cloud Messaging (FCM Push)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Đạt SLA 99.99%, real-time synchronization không cần duy trì máy chủ socket phức tạp.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#34d399;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="980" y="100" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;🤖 4. AI &amp;amp; AUTOMATION ENGINE&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Trí tuệ nhân tạo hỗ trợ phân tích và giải đáp&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #c084fc; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Mô hình: Google Gemini 1.5 Flash API (Google GenAI)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Giao thức: Google REST Generative Language Endpoints&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Kiến trúc: Multi-Key Round Robin Pool (10 Official API Keys)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Nhiệm vụ: Phân tích đánh giá sinh viên, gợi ý sự kiện phù hợp, phân loại câu hỏi Q&amp;amp;A trực tiếp&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Tốc độ suy luận dưới 1 giây, phản hồi tiếng Việt chuẩn xác.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#c084fc;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="350" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;🛠️ 5. DEVELOPER TOOLS &amp;amp; DEVOPS&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Công cụ phát triển, kiểm soát phiên bản &amp;amp; CI/CD&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #94a3b8; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Kiểm soát phiên bản: Git &amp;amp; GitHub Repository&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• IDE &amp;amp; Môi trường: Visual Studio Code, Antigravity Agentic IDE&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Thiết kế kiến trúc: Draw.io / diagrams.net, Mermaid UML&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• API Testing: Postman, Firebase Emulator Suite&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Tiêu chuẩn hóa quy trình phát triển, dễ dàng kiểm tra vết thay đổi mã nguồn.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="510" y="350" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;🧪 6. TESTING &amp;amp; QUALITY ASSURANCE&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Hệ thống kiểm thử tự động &amp;amp; giám sát lỗi thực tế&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #fbbf24; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Framework: Flutter Test Suite (package:test, flutter_test)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Độ bao phủ: 21/21 Unit &amp;amp; Widget Tests passed 100%&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Chính sách: Strict Zero-Mock Data Policy (Truy vấn Cloud thật)&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Giám sát: Firebase Crashlytics &amp;amp; Google Analytics DebugView&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• Lý do chọn: Đảm bảo không xảy ra hồi quy lỗi (regression), kiểm soát nghiêm ngặt các quy tắc nghiệp vụ.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#fbbf24;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="980" y="350" width="430" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;TỔNG HỢP ÁNH XẠ CÔNG NGHỆ ↔ TRÁCH NHIỆM TRONG DỰ ÁN (TRACEABILITY MATRIX)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Chứng minh mọi công nghệ sử dụng đều giải quyết trực tiếp một nhu cầu thực tế của đề tài&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #94a3b8; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Flutter / Dart: Xây dựng UI phản hồi nhanh cho sinh viên tra cứu và nhận diện mã QR chỉ trong 1.5 giây.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Cloud Firestore: Lưu trữ 7 tập tài liệu (events, tickets, registrations, clubs, feedback, certificates, questions) với ACID Transactions.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Firebase Auth: Khóa chặt phạm vi truy cập nội bộ trường, chỉ chấp nhận đuôi email @fpt.edu.vn hoặc @fe.edu.vn.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Firebase Cloud Storage: Cung cấp kho lưu trữ an toàn cho file PDF chứng nhận theo đường dẫn tiêu chuẩn reports/{uid}/...&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Firebase Remote Config: Thay đổi linh hoạt số lượng sự kiện nổi bật hiển thị (2 ↔ 5 sự kiện) từ xa mà không cần build lại app.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Google Gemini API: Tự động tổng hợp insight từ hàng trăm phản hồi sinh viên gửi về sau sự kiện phục vụ báo cáo CTSV.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • Node.js Portal Server: Làm cầu nối bảo mật giữa Web Dashboard quản trị và hạ tầng đám mây Google.&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="600" width="1370" height="320" as="geometry" />
+      </mxCell>
+    
+    </root>
+  </mxGraphModel>
+</diagram>
+</mxfile>

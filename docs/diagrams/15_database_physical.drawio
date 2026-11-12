@@ -1,0 +1,100 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T02:04:16.988Z" agent="Antigravity Architecture Builder" version="24.0.0">
+  <diagram id="15_Database_Physical" name="15_Database_Physical">
+  <mxGraphModel dx="1450" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1450" pageHeight="1000" background="#ffffff">
+    <root>
+      <mxCell id="0" />
+      <mxCell id="1" parent="0" />
+      
+      <mxCell id="cell_1" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; text-align:left; padding:8px 12px;&quot;&gt;
+      &lt;div style=&quot;display:inline-block; font-size:10px; font-weight:700; color:#2563eb; background:#eff6ff; padding:2px 8px; border-radius:12px; margin-bottom:4px; border:1px solid #bfdbfe;&quot;&gt;SLIDE 15 • DATABASE DESIGN 2/2&lt;/div&gt;
+      &lt;div style=&quot;font-size:18px; font-weight:800; color:#0f172a; line-height:1.2;&quot;&gt;15. DATABASE DESIGN 2/2 — THIẾT KẾ VẬT LÝ CLOUD FIRESTORE NOSQL&lt;/div&gt;
+      &lt;div style=&quot;font-size:11px; color:#64748b; margin-top:2px;&quot;&gt;Cấu trúc Documents &amp;amp; Collections, Kiểu dữ liệu, Khóa chính, Chỉ mục phức hợp (Indexes) và Ràng buộc bảo mật&lt;/div&gt;
+    &lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;" vertex="1" parent="1">
+        <mxGeometry x="40" y="20" width="700" height="65" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_2" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 users/{uid}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection tài khoản người dùng&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #60a5fa; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, Firebase UID]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • name: string [Required]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • email: string [Unique, @fpt.edu.vn]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • avatarUrl: string [URL]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • major: string [Chuyên ngành]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • role: string [&amp;quot;student&amp;quot; | &amp;quot;admin&amp;quot; | &amp;quot;staff&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • activityPoints: number [Default: 0, &amp;gt;= 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • createdAt: timestamp [ServerTimestamp]&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#60a5fa;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="100" width="320" height="270" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_3" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 events/{eventId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection thông tin sự kiện&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #34d399; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, EVT-YYYY-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • title: string [Required, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • description: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • date: timestamp [Required, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • timeRange: string [&amp;quot;13:30 - 17:30&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • location: string [Hội trường / Phòng]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • clubId: string [FK ➔ clubs.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • capacity: number [Int, &amp;gt; 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • registeredCount: number [Default: 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • status: string [&amp;quot;upcoming&amp;quot; | &amp;quot;happening&amp;quot; | &amp;quot;completed&amp;quot;]&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#34d399;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="380" y="100" width="340" height="270" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_4" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 registrations/{regId} (Slide 18)&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Hàng chờ thẩm định đơn xét duyệt&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #fbbf24; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, REG-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • studentName: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • studentEmail: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • status: string [&amp;quot;pending&amp;quot; | &amp;quot;approved&amp;quot; | &amp;quot;rejected&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • rejectReason: string? [Optional]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • createdAt: timestamp [Index DESC]&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#fffbeb;strokeColor=#fbbf24;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="740" y="100" width="340" height="270" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_5" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 tickets/{ticketId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection vé điện tử &amp;amp; check-in&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #34d399; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, CE2026-XXXXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • qrToken: string [Unique Hash Token]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • isUsed: boolean [Default: false, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • checkedInAt: timestamp? [Nullable]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • feedbackSubmitted: boolean [Default: false]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ecfdf5;strokeColor=#34d399;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1095" y="100" width="335" height="270" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_6" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 feedback/{feedbackId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection đánh giá khảo sát&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #c084fc; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • eventId: string [FK ➔ events.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • userId: string [FK ➔ users.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • ticketId: string [FK ➔ tickets.id, Unique]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • rating: number [1..5, Required]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • comment: string [Text]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#c084fc;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="390" width="320" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_7" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 certificates/{certId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection chứng nhận e-Certificate&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #60a5fa; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, CERT-XXXX]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • eventId: string [FK ➔ events.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • userId: string [FK ➔ users.id, Index]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • pdfStoragePath: string [&amp;quot;reports/{uid}/...&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • sha256Checksum: string [64-char Hash]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • issuedAt: timestamp&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#eff6ff;strokeColor=#60a5fa;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="380" y="390" width="340" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_8" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 clubs/{clubId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Collection danh mục CLB&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #94a3b8; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK, &amp;quot;fcode&amp;quot;, &amp;quot;cocsaigon&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • name: string [Tên chính thức]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • acronym: string [&amp;quot;F-Code&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • category: string [&amp;quot;Technology&amp;quot; | &amp;quot;Media&amp;quot;]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • followerCount: number&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • logoUrl: string, fanpageUrl: string&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="740" y="390" width="340" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_9" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;📁 events/{id}/questions/{qId}&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Subcollection Q&amp;amp;A hội trường trực tiếp&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #c084fc; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • id: string [PK]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • authorId: string [FK ➔ users.id]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • authorName: string&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • question: string [Nội dung]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • upvotes: number [Default: 0]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • isAnswered: boolean [Default: false]&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• • createdAt: timestamp&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#faf5ff;strokeColor=#c084fc;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="1095" y="390" width="335" height="220" as="geometry" />
+      </mxCell>
+    
+      
+      <mxCell id="cell_10" value="&lt;div style=&quot;font-family:Segoe UI, sans-serif; padding:10px; text-align:left; box-sizing:border-box;&quot;&gt;
+      &lt;div style=&quot;font-size:12px; font-weight:700; color:#0f172a; line-height:1.3;&quot;&gt;CHỈ MỤC PHỨC HỢP (COMPOUND INDEXES) &amp;amp; BẢO MẬT FIRESTORE SECURITY RULES:&lt;/div&gt;
+      &lt;div style=&quot;font-size:10px; color:#475569; margin-top:2px; line-height:1.3;&quot;&gt;Tối ưu hóa hiệu năng truy vấn sub-second và bảo vệ dữ liệu ở mức cơ sở dữ liệu đám mây&lt;/div&gt;
+      &lt;div style=&quot;margin-top:6px; padding-top:6px; border-top:1px dashed #94a3b8; font-size:10px; color:#334155; line-height:1.4;&quot;&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• 1. Compound Index: tickets ➔ userId (ASC) + isUsed (ASC) + createdAt (DESC) — Tối ưu truy vấn phân tách vé &amp;quot;Sắp diễn ra&amp;quot; (isUsed:false) và &amp;quot;Đã tham gia&amp;quot; (isUsed:true).&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• 2. Compound Index: events ➔ status (ASC) + date (ASC) — Hỗ trợ lọc danh sách sự kiện theo trạng thái vận hành và thứ tự thời gian.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• 3. Compound Index: registrations ➔ eventId (ASC) + status (ASC) + createdAt (DESC) — Tối ưu hiển thị bảng Hàng chờ duyệt vé (Slide 18) trên Web Portal.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• 4. Firestore Security Rule: allow read: if request.auth != null &amp;amp;&amp;amp; request.auth.token.email.matches(&amp;quot;.*@fpt[.]edu[.]vn$|.*@fe[.]edu[.]vn$&amp;quot;); — Khóa chặt truy cập.&lt;/div&gt;&lt;div style=&quot;margin-bottom:2px;&quot;&gt;• 5. Atomic Check-in Rule: Chỉ cho phép cập nhật isUsed: true nếu document trước đó có isUsed == false, chặn hoàn toàn xung đột ghi đè đồng thời (Write Conflict).&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.5;shadow=0;verticalAlign=top;align=left;" vertex="1" parent="1">
+        <mxGeometry x="40" y="630" width="1370" height="320" as="geometry" />
+      </mxCell>
+    
+    </root>
+  </mxGraphModel>
+</diagram>
+</mxfile>
