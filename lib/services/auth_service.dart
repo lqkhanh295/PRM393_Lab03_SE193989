@@ -249,33 +249,41 @@ class AuthService {
         );
 
         String? firebaseUid;
-        if (verifyRes.statusCode == 200) {
-          final resData = jsonDecode(verifyRes.body);
-          firebaseUid = resData['localId'] as String?;
-        } else {
-          final errBody = jsonDecode(verifyRes.body);
-          final errMsg = errBody['error']?['message']?.toString() ?? '';
-          if (errMsg == 'EMAIL_NOT_FOUND') {
-            final signUpUrl = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
-            final signUpRes = await http.post(
-              signUpUrl,
-              headers: {'Content-Type': 'application/json'},
-              body: jsonEncode({
-                'email': cleanEmail,
-                'password': password,
-                'returnSecureToken': true,
-              }),
-            );
-            if (signUpRes.statusCode == 200) {
-              final signUpData = jsonDecode(signUpRes.body);
-              firebaseUid = signUpData['localId'] as String?;
-            } else {
-              throw Exception('Không thể tạo tài khoản sinh viên trên hệ thống.');
+        if (verifyRes.statusCode == 200 && verifyRes.body.trim().isNotEmpty) {
+          try {
+            final resData = jsonDecode(verifyRes.body);
+            firebaseUid = resData['localId'] as String?;
+          } catch (_) {}
+        } else if (verifyRes.body.trim().isNotEmpty) {
+          try {
+            final errBody = jsonDecode(verifyRes.body);
+            final errMsg = errBody['error']?['message']?.toString() ?? '';
+            if (errMsg == 'EMAIL_NOT_FOUND') {
+              final signUpUrl = Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
+              final signUpRes = await http.post(
+                signUpUrl,
+                headers: {'Content-Type': 'application/json'},
+                body: jsonEncode({
+                  'email': cleanEmail,
+                  'password': password,
+                  'returnSecureToken': true,
+                }),
+              );
+              if (signUpRes.statusCode == 200 && signUpRes.body.trim().isNotEmpty) {
+                final signUpData = jsonDecode(signUpRes.body);
+                firebaseUid = signUpData['localId'] as String?;
+              } else {
+                throw Exception('Không thể tạo tài khoản sinh viên trên hệ thống.');
+              }
+            } else if (errMsg == 'INVALID_PASSWORD' || errMsg == 'INVALID_LOGIN_CREDENTIALS') {
+              throw Exception('Mật khẩu không chính xác.');
+            } else if (errMsg.isNotEmpty) {
+              throw Exception('Đăng nhập thất bại: $errMsg');
             }
-          } else if (errMsg == 'INVALID_PASSWORD' || errMsg == 'INVALID_LOGIN_CREDENTIALS') {
-            throw Exception('Mật khẩu không chính xác.');
-          } else {
-            throw Exception('Đăng nhập thất bại: $errMsg');
+          } catch (e) {
+            if (e is Exception && !e.toString().contains('FormatException')) {
+              rethrow;
+            }
           }
         }
 
