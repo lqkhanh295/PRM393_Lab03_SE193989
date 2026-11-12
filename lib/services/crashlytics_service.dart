@@ -1,13 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-/// Firebase Crashlytics Service Wrapper
-/// Handles fatal and non-fatal production reporting with user ID and custom keys.
+/// Dịch vụ giám sát lỗi và quản lý sự cố ứng dụng qua Firebase Crashlytics.
+///
+/// Xử lý ghi nhận các lỗi nghiêm trọng (fatal) và lỗi được xử lý (non-fatal),
+/// đồng thời đính kèm mã người dùng và các khóa ngữ cảnh chẩn đoán (custom keys).
 class CrashlyticsService {
   final FirebaseCrashlytics? _crashlytics;
 
+  /// Khởi tạo [CrashlyticsService] với tùy chọn [FirebaseCrashlytics] (hỗ trợ Mocking).
   CrashlyticsService([this._crashlytics]);
 
+  /// Gán định danh người dùng [userId] vào báo cáo Crashlytics giúp lọc lỗi theo phiên làm việc.
   Future<void> setUserId(String userId) async {
     try {
       await _crashlytics?.setUserIdentifier(userId);
@@ -17,6 +21,7 @@ class CrashlyticsService {
     }
   }
 
+  /// Gán một cặp khóa [key] - giá trị [value] tùy chỉnh để cung cấp ngữ cảnh khi xảy ra lỗi.
   Future<void> setCustomKey(String key, Object value) async {
     try {
       await _crashlytics?.setCustomKey(key, value);
@@ -26,7 +31,10 @@ class CrashlyticsService {
     }
   }
 
-  /// Reports a handled non-fatal error with context keys
+  /// Ghi nhận ngoại lệ được xử lý an toàn (non-fatal error) lên Firebase Crashlytics.
+  ///
+  /// Nhận vào ngoại lệ [exception], vết ngăn xếp [stack], lý do [reason],
+  /// và bản đồ các khóa chẩn đoán bổ sung [customKeys].
   Future<void> recordHandledError(
     dynamic exception,
     StackTrace? stack, {
@@ -53,17 +61,17 @@ class CrashlyticsService {
     }
   }
 
-  /// Triggers a test crash for verification demo.
-  /// Stack trace message: "Simulated Crashlytics Test Crash: Verified in demo mode"
-  /// After crash, restart the app so the SDK flushes the report to Firebase Console.
+  /// Kích hoạt một vụ sập có chủ đích (Test Crash) phục vụ kiểm tra và chấm demo nghiệm thu.
+  ///
+  /// Sau khi kích hoạt crash và khởi động lại app, SDK sẽ tự động gửi báo cáo lên Firebase Console.
   void triggerTestCrash() {
     if (_crashlytics == null) {
       debugPrint(
-        '[CrashlyticsService] Crash test unavailable: Firebase Crashlytics is not configured.',
+        '[CrashlyticsService] Test crash skipped in offline/test mode.',
       );
       return;
     }
-    debugPrint('[CrashlyticsService] Triggering verification test crash: "Simulated Crashlytics Test Crash: Verified in demo mode"');
+    _crashlytics.setCustomKey('test_crash_origin', 'verification_screen');
     _crashlytics.crash();
   }
 }

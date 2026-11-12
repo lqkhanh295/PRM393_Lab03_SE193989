@@ -1176,8 +1176,10 @@ const app = {
     if (elCheckin) elCheckin.innerText = this.state.checkinCount;
     const elCheckinSub = document.getElementById('kpi-checkin-sub');
     if (elCheckinSub) {
-      const totalReg = this.state.totalRegistered || 724;
-      elCheckinSub.innerHTML = `Đã quét trên <strong>${totalReg}</strong> đăng ký`;
+      const totalReg = this.state.totalRegistered || (this.state.tickets ? this.state.tickets.length : 0);
+      elCheckinSub.innerHTML = totalReg > 0 
+        ? `Đã quét trên <strong>${totalReg}</strong> đăng ký`
+        : `đồng bộ tức thời`;
     }
 
     const elApproved = document.getElementById('kpi-budget-approved');
