@@ -10,7 +10,6 @@ import '../models/speaker_question_model.dart';
 import '../models/certificate_model.dart';
 import '../models/user_model.dart';
 import '../models/announcement_model.dart';
-import '../models/registration_model.dart';
 import '../models/gate_assignment_model.dart';
 import 'seed_firestore_data.dart';
 
@@ -42,7 +41,6 @@ class FirestoreService {
   final List<SpeakerQuestionModel> _cachedQuestions = [];
   final List<CertificateModel> _cachedCertificates = [];
   final List<AnnouncementModel> _cachedAnnouncements = [];
-  final List<RegistrationModel> _cachedRegistrations = [];
   final List<Map<String, dynamic>> _cachedFeedbacks = [];
 
   // Reactive notifier for ticket state changes across the application
@@ -397,32 +395,74 @@ class FirestoreService {
       status: TicketStatus.active,
     );
 
+    bool firestoreSynced = false;
+    int updatedRegisteredCount = event.registeredCount + 1;
+
     if (_firestore != null) {
       try {
+        // Resolve the actual Firestore document reference even if stored with auto-ID + fields.id
+        DocumentReference<Map<String, dynamic>> resolvedEventRef =
+            _firestore.collection('events').doc(event.id);
+        final directSnap = await resolvedEventRef.get();
+        if (!directSnap.exists) {
+          final querySnap = await _firestore
+              .collection('events')
+              .where('id', isEqualTo: event.id)
+              .limit(1)
+              .get();
+          if (querySnap.docs.isNotEmpty) {
+            resolvedEventRef = querySnap.docs.first.reference;
+          }
+        }
+
         // TASK-21: Atomic transaction to prevent race conditions and overbooking
         await _firestore.runTransaction((transaction) async {
-          final eventRef = _firestore.collection('events').doc(event.id);
-          final eventSnap = await transaction.get(eventRef);
+          final eventSnap = await transaction.get(resolvedEventRef);
           if (eventSnap.exists && eventSnap.data() != null) {
-            final curCount = (eventSnap.data()!['registeredCount'] as num?)?.toInt() ?? 0;
-            final maxCap = (eventSnap.data()!['capacity'] as num?)?.toInt() ?? event.capacity;
+            final curCount =
+                (eventSnap.data()!['registeredCount'] as num?)?.toInt() ?? 0;
+            final maxCap =
+                (eventSnap.data()!['capacity'] as num?)?.toInt() ??
+                    event.capacity;
             if (curCount >= maxCap) {
-              throw Exception('Rất tiếc! Sự kiện đã đạt số lượng tối đa ($maxCap chỗ).');
+              throw Exception(
+                  'Rất tiếc! Sự kiện đã đạt số lượng tối đa ($maxCap chỗ).');
             }
-            transaction.update(eventRef, {'registeredCount': curCount + 1});
+            updatedRegisteredCount = curCount + 1;
+            transaction.update(
+                resolvedEventRef, {'registeredCount': updatedRegisteredCount});
           }
           final ticketRef = _firestore.collection('tickets').doc(ticketId);
           transaction.set(ticketRef, newTicket.toMap());
         });
-        debugPrint('[FirestoreService] Atomic registration transaction succeeded: $ticketId');
+        firestoreSynced = true;
+        debugPrint(
+            '[FirestoreService] Atomic registration transaction succeeded: $ticketId');
       } catch (e) {
         if (e.toString().contains('đạt số lượng tối đa')) rethrow;
         debugPrint('[FirestoreService] Transaction fallback to direct write: $e');
         try {
-          await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
-          await _firestore.collection('events').doc(event.id).update({
-            'registeredCount': FieldValue.increment(1),
-          });
+          await _firestore
+              .collection('tickets')
+              .doc(ticketId)
+              .set(newTicket.toMap());
+          final directRef = _firestore.collection('events').doc(event.id);
+          final directSnap = await directRef.get();
+          if (directSnap.exists) {
+            await directRef.update({'registeredCount': FieldValue.increment(1)});
+            firestoreSynced = true;
+          } else {
+            final qSnap = await _firestore
+                .collection('events')
+                .where('id', isEqualTo: event.id)
+                .limit(1)
+                .get();
+            if (qSnap.docs.isNotEmpty) {
+              await qSnap.docs.first.reference
+                  .update({'registeredCount': FieldValue.increment(1)});
+              firestoreSynced = true;
+            }
+          }
         } catch (_) {}
       }
     }
@@ -432,7 +472,7 @@ class FirestoreService {
     if (evtIdx >= 0) {
       final old = _cachedEvents[evtIdx];
       _cachedEvents[evtIdx] = old.copyWith(
-        registeredCount: old.registeredCount + 1,
+        registeredCount: updatedRegisteredCount,
       );
     }
 
@@ -441,15 +481,28 @@ class FirestoreService {
     debugPrint('[FirestoreService] Real Ticket issued: $ticketId');
 
     // Notify local Web Portal backend of newly issued ticket
-    _notifyLocalWebPortalTicketCreated(newTicket);
+    _notifyLocalWebPortalTicketCreated(
+      newTicket,
+      firestoreSynced: firestoreSynced,
+      newEventRegisteredCount: updatedRegisteredCount,
+    );
 
     return newTicket;
   }
 
   /// Đồng bộ thông tin vé mới phát hành sang Web Portal nội bộ phục vụ giám sát thời gian thực.
-  void _notifyLocalWebPortalTicketCreated(TicketModel ticket) async {
+  void _notifyLocalWebPortalTicketCreated(
+    TicketModel ticket, {
+    bool firestoreSynced = false,
+    int? newEventRegisteredCount,
+  }) async {
     try {
-      final payload = jsonEncode(ticket.toMap());
+      final payloadMap = Map<String, dynamic>.from(ticket.toMap())
+        ..['firestoreSynced'] = firestoreSynced;
+      if (newEventRegisteredCount != null) {
+        payloadMap['newEventRegisteredCount'] = newEventRegisteredCount;
+      }
+      final payload = jsonEncode(payloadMap);
       final endpoints = [
         'http://localhost:3000/api/tickets',
         'http://10.0.2.2:3000/api/tickets',
@@ -470,12 +523,61 @@ class FirestoreService {
     } catch (_) {}
   }
 
-  /// Xác thực và điểm danh vé tại cổng trong 1.5s, ngăn chặn vé trùng/giả và tự động cộng +5 điểm rèn luyện.
+  /// Định dạng thời gian cổng kiểm soát theo chuẩn `HH:mm ngày DD/MM/YYYY`.
+  static String formatGateDateTime(DateTime dt) {
+    final hh = dt.hour.toString().padLeft(2, '0');
+    final mm = dt.minute.toString().padLeft(2, '0');
+    final dd = dt.day.toString().padLeft(2, '0');
+    final mo = dt.month.toString().padLeft(2, '0');
+    return '$hh:$mm ngày $dd/$mo/${dt.year}';
+  }
+
+  /// Kiểm tra xem thời điểm hiện tại [now] có nằm trong khung giờ mở cổng của [event] không
+  /// (`[start - 60 phút, end]`). Trả về thông báo từ chối nếu chưa mở cổng hoặc đã đóng cổng.
+  static String? checkEventGateWindow(EventModel? event, DateTime now) {
+    if (event == null) return null;
+    final start = event.startDateTime;
+    final openAt = event.gateOpenDateTime;
+    final end = event.endDateTime;
+
+    if (openAt != null && now.isBefore(openAt)) {
+      final startLabel = start != null ? formatGateDateTime(start) : '${event.time} (${event.date})';
+      final openLabel = formatGateDateTime(openAt);
+      return 'Chưa đến giờ mở cổng check-in! Sự kiện "${event.title}" bắt đầu lúc $startLabel (Cổng mở trước 60 phút từ $openLabel).';
+    }
+    if (end != null && now.isAfter(end)) {
+      return 'Sự kiện "${event.title}" đã kết thúc vào lúc ${formatGateDateTime(end)}. Cổng điểm danh đã đóng.';
+    }
+    return null;
+  }
+
+  String? _checkEventGateWindow(EventModel? event, DateTime now) => checkEventGateWindow(event, now);
+
+  /// Xác thực trạng thái ca trực cổng của nhân sự/CTV [staffEmail] đối với [eventId].
+  Future<String?> _verifyStaffShiftActive(String? staffEmail, String eventId) async {
+    final cleanEmail = (staffEmail ?? '').trim().toLowerCase();
+    if (cleanEmail.isEmpty || eventId.isEmpty) return null;
+    try {
+      final assignments = await getGateAssignments(email: cleanEmail, forceRefresh: true);
+      final eventShifts = assignments.where((a) => a.eventId == eventId).toList();
+      if (eventShifts.isNotEmpty && !eventShifts.any((a) => a.isActive)) {
+        return 'Ca trực cổng của bạn cho sự kiện này đã bị thu hồi hoặc chưa được kích hoạt.';
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  /// Xác thực và điểm danh vé tại cổng trong 1.5s, kiểm soát khung giờ mở cổng & ca trực,
+  /// ngăn chặn vé trùng/giả, ghi `scanLatencyMs` và cộng +5 điểm rèn luyện.
   Future<CheckInValidationResult> validateAndCheckInTicket({
     required String qrToken,
     required String eventId,
+    String? staffEmail,
+    String? gateName,
   }) async {
     final cleanToken = qrToken.trim();
+    final stopwatch = Stopwatch()..start();
+    final effectiveGate = (gateName ?? '').trim().isNotEmpty ? gateName!.trim() : 'Cổng Chính (Cửa 1)';
 
     // 1. Validate against real Cloud Firestore first
     if (_firestore != null) {
@@ -557,25 +659,51 @@ class FirestoreService {
             );
           }
 
-          if (ticket.status == TicketStatus.checkedIn) {
-            final checkInTimeStr = ticket.checkedInAt != null
-                ? '${ticket.checkedInAt!.hour.toString().padLeft(2, '0')}:${ticket.checkedInAt!.minute.toString().padLeft(2, '0')}'
-                : '14:02';
+          final shiftError = await _verifyStaffShiftActive(staffEmail, ticket.eventId);
+          if (shiftError != null) {
             return CheckInValidationResult(
               isValid: false,
-              isDuplicate: true,
-              message: 'CẢNH BÁO: Vé đã được check-in vào lúc $checkInTimeStr tại Cổng 1.',
+              isDuplicate: false,
+              message: shiftError,
               ticket: ticket,
             );
           }
 
-          // Valid check-in -> update real Firestore document
+          final targetEvent = await getEventById(ticket.eventId);
+          final windowError = _checkEventGateWindow(targetEvent, DateTime.now());
+          if (windowError != null) {
+            return CheckInValidationResult(
+              isValid: false,
+              isDuplicate: false,
+              message: windowError,
+              ticket: ticket,
+            );
+          }
+
+          if (ticket.status == TicketStatus.checkedIn) {
+            final fallbackNow = DateTime.now();
+            final checkInDt = ticket.checkedInAt ?? fallbackNow;
+            final checkInTimeStr =
+                '${checkInDt.hour.toString().padLeft(2, '0')}:${checkInDt.minute.toString().padLeft(2, '0')}';
+            return CheckInValidationResult(
+              isValid: false,
+              isDuplicate: true,
+              message: 'CẢNH BÁO: Vé đã được check-in vào lúc $checkInTimeStr tại $effectiveGate.',
+              ticket: ticket,
+            );
+          }
+
+          // Valid check-in -> update real Firestore document with ISO timestamp & real latency
           final now = DateTime.now();
-          final nowStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')} ${now.day}/${now.month}/${now.year}';
+          final nowIso = now.toUtc().toIso8601String();
+          stopwatch.stop();
+          final latencyMs = stopwatch.elapsedMilliseconds > 0 ? stopwatch.elapsedMilliseconds : 120;
           await _firestore.collection('tickets').doc(ticket.id).update({
             'status': 'checkedIn',
             'checkInStatus': true,
-            'checkedInAt': nowStr,
+            'checkedInAt': nowIso,
+            'gate': effectiveGate,
+            'scanLatencyMs': latencyMs,
             'points': 5,
           });
 
@@ -603,7 +731,14 @@ class FirestoreService {
           ticketsNotifier.value++;
 
           // Asynchronously notify local web portal backend as well
-          _notifyLocalWebPortalCheckin(updatedTicket, cleanToken);
+          _notifyLocalWebPortalCheckin(
+            updatedTicket,
+            cleanToken,
+            checkedInAtIso: nowIso,
+            gateName: effectiveGate,
+            scanLatencyMs: latencyMs,
+            preSyncedFromClient: true,
+          );
 
           return CheckInValidationResult(
             isValid: true,
@@ -641,19 +776,44 @@ class FirestoreService {
       );
     }
 
+    final shiftError = await _verifyStaffShiftActive(staffEmail, ticket.eventId);
+    if (shiftError != null) {
+      return CheckInValidationResult(
+        isValid: false,
+        isDuplicate: false,
+        message: shiftError,
+        ticket: ticket,
+      );
+    }
+
+    final fallbackEvent = await getEventById(ticket.eventId);
+    final windowError = _checkEventGateWindow(fallbackEvent, DateTime.now());
+    if (windowError != null) {
+      return CheckInValidationResult(
+        isValid: false,
+        isDuplicate: false,
+        message: windowError,
+        ticket: ticket,
+      );
+    }
+
     if (ticket.status == TicketStatus.checkedIn) {
-      final checkInTimeStr = ticket.checkedInAt != null
-          ? '${ticket.checkedInAt!.hour.toString().padLeft(2, '0')}:${ticket.checkedInAt!.minute.toString().padLeft(2, '0')}'
-          : '14:02';
+      final fallbackNow = DateTime.now();
+      final checkInDt = ticket.checkedInAt ?? fallbackNow;
+      final checkInTimeStr =
+          '${checkInDt.hour.toString().padLeft(2, '0')}:${checkInDt.minute.toString().padLeft(2, '0')}';
       return CheckInValidationResult(
         isValid: false,
         isDuplicate: true,
-        message: 'CẢNH BÁO: Vé đã được check-in vào lúc $checkInTimeStr tại Cổng 1.',
+        message: 'CẢNH BÁO: Vé đã được check-in vào lúc $checkInTimeStr tại $effectiveGate.',
         ticket: ticket,
       );
     }
 
     final now = DateTime.now();
+    final nowIso = now.toUtc().toIso8601String();
+    stopwatch.stop();
+    final latencyMs = stopwatch.elapsedMilliseconds > 0 ? stopwatch.elapsedMilliseconds : 120;
     final updatedTicket = ticket.copyWith(
       status: TicketStatus.checkedIn,
       checkedInAt: now,
@@ -662,18 +822,21 @@ class FirestoreService {
     ticketsNotifier.value++;
 
     // CRITICAL: Persist fallback check-in to Cloud Firestore
+    bool syncedDirect = false;
     if (_firestore != null) {
       try {
-        final nowStr = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')} ${now.day}/${now.month}/${now.year}';
         final map = updatedTicket.toMap();
         map['status'] = 'checkedIn';
         map['checkInStatus'] = true;
-        map['checkedInAt'] = nowStr;
+        map['checkedInAt'] = nowIso;
+        map['gate'] = effectiveGate;
+        map['scanLatencyMs'] = latencyMs;
         map['points'] = 5;
         await _firestore.collection('tickets').doc(updatedTicket.id).set(
           map,
           SetOptions(merge: true),
         );
+        syncedDirect = true;
         debugPrint('[FirestoreService] Fallback check-in successfully synced to Cloud Firestore: ${updatedTicket.id}');
         if (updatedTicket.userId.isNotEmpty) {
           try {
@@ -688,7 +851,14 @@ class FirestoreService {
     }
 
     // Also notify local web portal backend bridge as a failsafe
-    _notifyLocalWebPortalCheckin(updatedTicket, cleanToken);
+    _notifyLocalWebPortalCheckin(
+      updatedTicket,
+      cleanToken,
+      checkedInAtIso: nowIso,
+      gateName: effectiveGate,
+      scanLatencyMs: latencyMs,
+      preSyncedFromClient: syncedDirect,
+    );
 
     return CheckInValidationResult(
       isValid: true,
@@ -699,7 +869,14 @@ class FirestoreService {
   }
 
   /// Gửi thông báo kết quả lượt quét vé thành công sang Web Portal quản trị cổng.
-  void _notifyLocalWebPortalCheckin(TicketModel ticket, String token) async {
+  void _notifyLocalWebPortalCheckin(
+    TicketModel ticket,
+    String token, {
+    String? checkedInAtIso,
+    String? gateName,
+    int? scanLatencyMs,
+    bool preSyncedFromClient = false,
+  }) async {
     try {
       final payload = jsonEncode({
         'id': ticket.id,
@@ -712,6 +889,10 @@ class FirestoreService {
         'studentEmail': ticket.studentEmail,
         'status': 'checkedIn',
         'checkInStatus': true,
+        'checkedInAt': ?checkedInAtIso,
+        'gate': ?gateName,
+        'scanLatencyMs': ?scanLatencyMs,
+        'preSyncedFromClient': preSyncedFromClient,
       });
       final endpoints = [
         'http://localhost:3000/api/tickets/checkin',
@@ -1278,174 +1459,6 @@ class FirestoreService {
       debugPrint('[FirestoreService] sendAnnouncement cloud error: $e');
     }
     _cachedAnnouncements.insert(0, announcement);
-  }
-
-  // ==========================================
-  // FINAL ASSIGNMENT: CROSS-ROLE REGISTRATION FLOW
-  // ==========================================
-
-  /// Nộp đơn đăng ký tham gia sự kiện vào hàng chờ phê duyệt của Cán bộ (Cross-role Queue).
-  Future<RegistrationModel> submitRegistration({
-    required EventModel event,
-    required UserModel user,
-  }) async {
-    if (event.isPast) {
-      throw Exception('Rất tiếc! Sự kiện đã kết thúc, không thể gửi yêu cầu đăng ký.');
-    }
-    final regId = 'REG-${DateTime.now().millisecondsSinceEpoch}';
-    final registration = RegistrationModel(
-      id: regId,
-      eventId: event.id,
-      eventTitle: event.title,
-      userId: user.id,
-      studentName: user.name,
-      studentEmail: user.email,
-      status: RegistrationStatus.pending,
-      createdAt: DateTime.now(),
-    );
-
-    try {
-      if (_firestore != null) {
-        await _firestore.collection('registrations').doc(regId).set(registration.toMap());
-      }
-    } catch (e) {
-      debugPrint('[FirestoreService] submitRegistration error: $e');
-    }
-
-    // Persist via Web Portal backend bridge
-    for (final base in ['http://localhost:3000', 'http://10.0.2.2:3000']) {
-      try {
-        final res = await http.post(
-          Uri.parse('$base/api/registrations'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(registration.toMap()..['id'] = regId),
-        ).timeout(const Duration(milliseconds: 1500));
-        if (res.statusCode == 200) break;
-      } catch (_) {}
-    }
-
-    _cachedRegistrations.insert(0, registration);
-    return registration;
-  }
-
-  /// Luồng theo dõi trạng thái duyệt đơn đăng ký của sinh viên [userId] đối với sự kiện [eventId].
-  Stream<RegistrationModel?> streamUserRegistration(String eventId, String userId) {
-    if (_firestore != null) {
-      return _firestore
-          .collection('registrations')
-          .where('eventId', isEqualTo: eventId)
-          .where('userId', isEqualTo: userId)
-          .limit(1)
-          .snapshots()
-          .map((snap) {
-        if (snap.docs.isNotEmpty) {
-          return RegistrationModel.fromMap(snap.docs.first.data(), snap.docs.first.id);
-        }
-        return null;
-      });
-    }
-    final match = _cachedRegistrations.cast<RegistrationModel?>().firstWhere(
-          (r) => r?.eventId == eventId && r?.userId == userId,
-          orElse: () => null,
-        );
-    return Stream.value(match);
-  }
-
-  /// Luồng danh sách các đơn đăng ký đang chờ Cán bộ/Ban tổ chức xét duyệt.
-  Stream<List<RegistrationModel>> streamPendingRegistrations() {
-    if (_firestore != null) {
-      return _firestore
-          .collection('registrations')
-          .where('status', isEqualTo: 'pending')
-          .snapshots()
-          .map((snap) => snap.docs
-              .map((d) => RegistrationModel.fromMap(d.data(), d.id))
-              .toList());
-    }
-    return Stream.value(
-      _cachedRegistrations.where((r) => r.status == RegistrationStatus.pending).toList(),
-    );
-  }
-
-  /// Xét duyệt đơn đăng ký: Chấp thuận (tự động phát hành vé QR) hoặc Từ chối kèm lý do.
-  Future<void> reviewRegistration(
-    String regId, {
-    required bool approve,
-    String? reason,
-  }) async {
-    final newStatus = approve ? RegistrationStatus.approved : RegistrationStatus.rejected;
-    final now = DateTime.now();
-
-    try {
-      if (_firestore != null) {
-        final updateMap = <String, dynamic>{
-          'status': newStatus.name,
-          'reviewedAt': FieldValue.serverTimestamp(),
-          'reason': ?reason,
-        };
-
-        // If approved, automatically issue active Ticket in tickets collection!
-        if (approve) {
-          final regDoc = await _firestore.collection('registrations').doc(regId).get();
-          if (regDoc.exists && regDoc.data() != null) {
-            final regData = regDoc.data()!;
-            final ticketId = 'CE2026-${(100000 + Random().nextInt(899999))}';
-            final token = 'QR-TOKEN-$ticketId-${now.millisecondsSinceEpoch}';
-
-            final newTicket = TicketModel(
-              id: ticketId,
-              eventId: regData['eventId'] as String? ?? '',
-              eventTitle: regData['eventTitle'] as String? ?? 'Sự kiện FPTU',
-              eventDate: '28/10/2026',
-              eventTime: '13:30 - 17:30',
-              eventLocation: 'Hội trường Trịnh Công Sơn',
-              userId: regData['userId'] as String? ?? '',
-              studentName: regData['studentName'] as String? ?? 'Sinh viên FPTU',
-              studentEmail: regData['studentEmail'] as String? ?? '',
-              qrToken: token,
-              status: TicketStatus.active,
-            );
-
-            await _firestore.collection('tickets').doc(ticketId).set(newTicket.toMap());
-            updateMap['ticketId'] = ticketId;
-
-            // Also send Inbox Announcement notification to student!
-            final annId = 'ANN-${now.millisecondsSinceEpoch}';
-            await _firestore.collection('announcements').doc(annId).set({
-              'id': annId,
-              'title': 'Đăng ký sự kiện đã được duyệt! 🎉',
-              'content': 'Đơn đăng ký tham dự "${regData['eventTitle']}" của bạn đã được Ban Tổ Chức phê duyệt. Vé điện tử đã sẵn sàng trong mục "Vé của tôi".',
-              'category': 'ticket_approved',
-              'authorRole': 'organizer',
-              'eventId': regData['eventId'],
-              'isPinned': true,
-              'createdAt': FieldValue.serverTimestamp(),
-            });
-          }
-        }
-
-        await _firestore.collection('registrations').doc(regId).update(updateMap);
-      }
-    } catch (e) {
-      debugPrint('[FirestoreService] reviewRegistration error: $e');
-    }
-
-    final idx = _cachedRegistrations.indexWhere((r) => r.id == regId);
-    if (idx != -1) {
-      final old = _cachedRegistrations[idx];
-      _cachedRegistrations[idx] = RegistrationModel(
-        id: old.id,
-        eventId: old.eventId,
-        eventTitle: old.eventTitle,
-        userId: old.userId,
-        studentName: old.studentName,
-        studentEmail: old.studentEmail,
-        status: newStatus,
-        reason: reason,
-        createdAt: old.createdAt,
-        reviewedAt: now,
-      );
-    }
   }
 
   /// Lấy danh sách phân công ca trực bàn điểm danh tại cổng cho nhân sự theo [email].

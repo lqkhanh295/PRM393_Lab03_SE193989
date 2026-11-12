@@ -38,19 +38,14 @@
         <a class="nav-item" data-view="announcements">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           Phát Thanh & Hộp Thư
-          <span class="nav-badge" style="background-color: #dbeafe; color: #1e40af;">INBOX</span>
+          <span class="nav-badge" id="sidebar-ann-count" style="background-color: #dbeafe; color: #1e40af;">0</span>
         </a>
 
         <div class="nav-group-label">Phê Duyệt & Pháp Lý</div>
-        <a class="nav-item" data-view="review-queue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-          Hàng Chờ Duyệt Vé (Queue)
-          <span class="nav-badge" id="sidebar-pending-registrations" style="background-color: #fee2e2; color: #991b1b;">2</span>
-        </a>
         <a class="nav-item" data-view="budget">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           Duyệt Ngân Sách CLB
-          <span class="nav-badge" id="sidebar-pending-budget">2</span>
+          <span class="nav-badge" id="sidebar-pending-budget">0</span>
         </a>
         <a class="nav-item" data-view="safety">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
@@ -73,9 +68,9 @@
 
       <div class="sidebar-footer">
         <div class="user-snippet">
-          <div class="user-avatar">VH</div>
+          <div class="user-avatar" id="sidebar-user-avatar">CT</div>
           <div class="user-info">
-            <div class="user-name">Nguyễn Văn Hùng</div>
+            <div class="user-name" id="sidebar-user-name">Đang xác thực...</div>
             <div class="user-role">Cán bộ Phòng CTSV</div>
           </div>
         </div>
@@ -102,7 +97,7 @@
               Làm mới dữ liệu
             </button>
             <button class="btn btn-primary btn-sm" onclick="app.openCreateEventModal()" style="background-color: var(--positive); border-color: var(--positive);">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               + Tạo Sự Kiện Mới
             </button>
             <button class="btn btn-secondary btn-sm" onclick="app.switchView('export')">
@@ -132,21 +127,21 @@
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-label">Hồ Sơ Chờ CTSV Phê Duyệt</div>
+            <div class="kpi-label">Ngân Sách CLB Chờ Duyệt</div>
             <div class="kpi-value-row">
-              <span class="kpi-value" id="kpi-pending-docs">2</span>
-              <span class="kpi-unit">hồ sơ</span>
+              <span class="kpi-value" id="kpi-pending-docs">0</span>
+              <span class="kpi-unit">đề xuất</span>
             </div>
-            <div class="kpi-sub"><span class="pill pill-warning">Cần xử lý trước 17:00</span></div>
+            <div class="kpi-sub" id="kpi-pending-docs-sub"><span class="pill pill-neutral">Đang đồng bộ...</span></div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Thẩm Định An Toàn PCCC</div>
             <div class="kpi-value-row">
-              <span class="kpi-value" style="color: var(--positive);">100%</span>
-              <span class="kpi-unit">Đạt Chuẩn</span>
+              <span class="kpi-value num" id="kpi-safety-rate" style="color: var(--positive);">—</span>
+              <span class="kpi-unit" id="kpi-safety-unit">địa điểm</span>
             </div>
-            <div class="kpi-sub">Biên bản nghiệm thu Hội trường TCS</div>
+            <div class="kpi-sub" id="kpi-safety-sub">Đang đồng bộ biên bản kiểm định...</div>
           </div>
         </div>
 
@@ -157,15 +152,15 @@
             <div class="panel-header">
               <div>
                 <div class="panel-title">Lưu Lượng Sinh Viên Qua Cổng (Theo Giờ)</div>
-                <div class="panel-sub">Dữ liệu ghi nhận từ Bàn quét mã QR vé tại Cổng Hội trường TCS</div>
+                <div class="panel-sub">Dữ liệu ghi nhận từ Bàn quét mã QR vé trên toàn trường (UTC+7)</div>
               </div>
               <span class="pill pill-accent">Thời gian thực</span>
             </div>
             <div class="panel-body">
               <canvas id="gateChart" height="240" style="width: 100%; display: block;"></canvas>
-              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--rule);">
-                <span>Cột màu xanh (#1d5fbf): Khung giờ cao điểm lưu thông (08:30)</span>
-                <span class="mono">Cập nhật mỗi 30s từ Cloud Firestore</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--rule); gap: 12px; flex-wrap: wrap;">
+                <span id="gate-chart-peak-note">Cột màu xanh (#1d5fbf): Chưa có dữ liệu check-in theo giờ</span>
+                <span class="mono">Tự đồng bộ mỗi 45s từ Cloud Firestore</span>
               </div>
             </div>
           </div>
@@ -174,41 +169,11 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">Hiện Trạng Không Gian Campus</div>
-              <span class="pill pill-positive">Hoạt động bình thường</span>
+              <span class="pill pill-neutral" id="overview-venues-pill">Đang đồng bộ...</span>
             </div>
-            <div class="panel-body">
-              <div style="margin-bottom: 16px;">
-                <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                  <span style="font-weight: 600;">Hội trường Trịnh Công Sơn</span>
-                  <span class="num">124 / 200 (62%)</span>
-                </div>
-                <div class="capacity-bar-wrap">
-                  <div class="capacity-bar-fill" style="width: 62%;"></div>
-                </div>
-              </div>
-
-              <div style="margin-bottom: 16px;">
-                <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                  <span style="font-weight: 600;">Sân bóng Thể thao D2</span>
-                  <span class="num">85 / 300 (28%)</span>
-                </div>
-                <div class="capacity-bar-wrap">
-                  <div class="capacity-bar-fill" style="width: 28%; background-color: var(--positive);"></div>
-                </div>
-              </div>
-
-              <div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                  <span style="font-weight: 600;">Phòng Workshop Lab Alpha</span>
-                  <span class="num">48 / 60 (80%)</span>
-                </div>
-                <div class="capacity-bar-wrap">
-                  <div class="capacity-bar-fill" style="width: 80%; background-color: var(--warning);"></div>
-                </div>
-              </div>
-
-              <div style="font-size: 11.5px; color: var(--muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--rule);">
-                Hệ số an toàn: Đạt chuẩn TCVN 3890 (Tối thiểu 1.25m²/người)
+            <div class="panel-body" id="overview-venues-body">
+              <div style="font-size: 12.5px; color: var(--muted); padding: 12px 0;">
+                Đang tải dữ liệu sức chứa sự kiện từ Cloud Firestore...
               </div>
             </div>
           </div>
@@ -219,10 +184,10 @@
           <div class="panel-header">
             <div>
               <div class="panel-title">Quản Lý Danh Sách Sự Kiện Campus</div>
-              <div class="panel-sub">Theo dõi toàn bộ các sự kiện do CTSV & CLB khởi tạo và đồng bộ với Mobile App</div>
+              <div class="panel-sub">Theo dõi toàn bộ các sự kiện do CTSV & CLB khởi tạo và đồng bộ trạng thái thời gian thực với Mobile App</div>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="app.openCreateEventModal()" style="background-color: var(--positive); border-color: var(--positive);">
-              + Tạo Sự Kiện Mới
+            <button class="btn btn-secondary btn-sm" onclick="app.switchView('telemetry')">
+              Giám sát điểm danh cổng &rarr;
             </button>
           </div>
           <div class="table-responsive">
@@ -283,9 +248,9 @@
             <p class="page-subhead">Kiểm soát dòng người, đo lường thời gian quét vé, theo dõi lưu lượng và tiến độ theo từng sự kiện</p>
           </div>
           <div class="header-actions">
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <label for="telem-event-select" style="font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase;">Sự kiện:</label>
-              <select id="telem-event-select" class="select-input" onchange="app.handleTelemetryEventChange(this.value)" style="min-width: 270px; font-weight: 600;">
+            <div class="header-filter-group">
+              <label for="telem-event-select" style="font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; white-space: nowrap; flex-shrink: 0;">Sự kiện:</label>
+              <select id="telem-event-select" class="select-input" onchange="app.handleTelemetryEventChange(this.value)" style="min-width: 220px; max-width: 320px; width: auto; font-weight: 600;">
                 <option value="all">⚡ Tất cả sự kiện (Tổng hợp toàn trường)</option>
               </select>
             </div>
@@ -293,9 +258,8 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               Làm mới
             </button>
-            <button class="btn btn-primary btn-sm" onclick="app.simulateIncomingCheckin()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              Mô phỏng 1 lượt quét vé mới
+            <button class="btn btn-secondary btn-sm" onclick="app.switchView('duty-roster')">
+              Phân công ca trực &rarr;
             </button>
           </div>
         </header>
@@ -314,7 +278,7 @@
               <span class="kpi-unit" id="telem-total-tickets">/ 0 vé</span>
             </div>
             <div class="kpi-sub" id="telem-scanned-sub">
-              <span class="pill pill-positive" id="telem-scanned-rate">0.0%</span> hoàn thành điểm danh
+              <span class="pill pill-neutral" id="telem-scanned-rate">0.0%</span> đang đồng bộ
             </div>
           </div>
 
@@ -322,7 +286,7 @@
             <div class="kpi-label">Thời Gian Vận Hành Ca Trực</div>
             <div class="kpi-value-row">
               <span class="kpi-value num" id="telem-elapsed-time">00:00:00</span>
-              <span class="kpi-unit" id="telem-elapsed-unit">thời gian mở</span>
+              <span class="kpi-unit" id="telem-elapsed-unit">trạng thái ca</span>
             </div>
             <div class="kpi-sub" id="telem-last-scan-sub">
               Lượt quét gần nhất: <span id="telem-last-scan-time" style="font-weight: 600; color: var(--text);">Chưa có</span>
@@ -332,11 +296,11 @@
           <div class="kpi-card">
             <div class="kpi-label">Tốc Độ Xử Lý & Nhịp Độ Cổng</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="telem-avg-speed">1.2</span>
-              <span class="kpi-unit">giây / vé</span>
+              <span class="kpi-value num" id="telem-avg-speed">—</span>
+              <span class="kpi-unit" id="telem-speed-unit">giây / vé</span>
             </div>
             <div class="kpi-sub" id="telem-pace-sub">
-              Tần suất: <span id="telem-scan-pace" style="font-weight: 600; color: var(--positive);">~14 vé / 10 phút</span> | Lỗi: <span style="font-weight: 600;">0.0%</span>
+              Nhịp độ 10 phút gần nhất: <span id="telem-scan-pace" style="font-weight: 600;">0 vé</span>
             </div>
           </div>
 
@@ -425,49 +389,14 @@
           </div>
         </div>
 
-        <!-- Section 3: Cảnh Báo & Điều Phối An Toàn Hiện Trường -->
+        <!-- Section 3: Cảnh Báo & Điều Phối An Toàn Hiện Trường (Dynamic Firestore Driven) -->
         <div class="grid-2">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Thông Số Kỹ Thuật Cửa Kiểm Soát Cổng 1 (Main Gate)</div>
-              <span class="pill pill-positive">Đang Mở Điểm Danh</span>
-            </div>
-            <div class="panel-body">
-              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px;">
-                <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
-                  <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tốc độ xử lý cổng</div>
-                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--text); margin-top: 4px;">1.2 giây / vé</div>
-                </div>
-                <div style="background-color: var(--ground); padding: 12px; border-radius: 6px;">
-                  <div style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Tỷ lệ lỗi / trùng vé</div>
-                  <div class="num" style="font-size: 20px; font-weight: 700; color: var(--positive); margin-top: 4px;">0.0%</div>
-                </div>
-              </div>
-              <p style="font-size: 13px; color: var(--muted); line-height: 1.6;">
-                Mỗi lượt quét từ thiết bị di động của CTV Bàn trực cổng sẽ gửi xác thực trực tiếp qua Cloud Firestore Security Rules, tự động khóa vé và cấp điểm rèn luyện (+5 điểm) cho sinh viên ngay tại cửa.
-              </p>
-            </div>
+          <div class="panel" id="telem-gate-specs-card">
+            <!-- Dynamically rendered by app.renderTelemetryPanels() -->
           </div>
 
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">Cảnh Báo & Điều Phối An Toàn</div>
-              <span class="pill pill-neutral">Bình Thường</span>
-            </div>
-            <div class="panel-body">
-              <div class="checklist-item" style="border-left: 3px solid var(--positive);">
-                <div>
-                  <div class="checklist-title">Hàng Đợi Cổng Chính: Thông Thoáng</div>
-                  <div class="checklist-desc">Thời gian chờ bình quân dưới 30 giây. Không có hiện tượng ùn tắc trước sảnh.</div>
-                </div>
-              </div>
-              <div class="checklist-item" style="border-left: 3px solid var(--positive);">
-                <div>
-                  <div class="checklist-title">Trực Ban Y Tế & PCCC: Sẵn Sàng</div>
-                  <div class="checklist-desc">2 nhân sự trực tại chốt cửa thoát hiểm số 2 sẵn sàng ứng phó.</div>
-                </div>
-              </div>
-            </div>
+          <div class="panel" id="telem-safety-dispatch-card">
+            <!-- Dynamically rendered by app.renderTelemetryPanels() -->
           </div>
         </div>
       </section>
@@ -485,7 +414,7 @@
               Làm mới
             </button>
             <button class="btn btn-primary btn-sm" onclick="app.openDutyAssignmentModal()" style="background-color: var(--positive); border-color: var(--positive);">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               + Phân Công Ca Trực Mới
             </button>
           </div>
@@ -496,25 +425,25 @@
           <div class="kpi-card">
             <div class="kpi-label">Tổng Nhân Sự Trực Cổng</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="duty-kpi-total-staff">3</span>
+              <span class="kpi-value num" id="duty-kpi-total-staff">0</span>
               <span class="kpi-unit">nhân sự</span>
             </div>
             <div class="kpi-sub">Cán bộ CTSV & Sinh viên CTV</div>
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-label">Ca Trực Đang Hoạt Động</div>
+            <div class="kpi-label">Ca Trực Có Hiệu Lực</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="duty-kpi-active-shifts" style="color: var(--positive);">3</span>
+              <span class="kpi-value num" id="duty-kpi-active-shifts" style="color: var(--positive);">0</span>
               <span class="kpi-unit">ca trực</span>
             </div>
-            <div class="kpi-sub"><span class="pill pill-positive">Đang mở quyền scan</span></div>
+            <div class="kpi-sub" id="duty-kpi-active-sub"><span class="pill pill-neutral">Đang đồng bộ Firestore...</span></div>
           </div>
 
           <div class="kpi-card">
             <div class="kpi-label">Cửa Kiểm Soát Đã Bố Trí</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="duty-kpi-gates-covered">3</span>
+              <span class="kpi-value num" id="duty-kpi-gates-covered">0</span>
               <span class="kpi-unit">cổng / cửa</span>
             </div>
             <div class="kpi-sub">Main Gate & Hội thảo</div>
@@ -523,10 +452,10 @@
           <div class="kpi-card">
             <div class="kpi-label">Sự Kiện Đã Phân Công</div>
             <div class="kpi-value-row">
-              <span class="kpi-value num" id="duty-kpi-events-covered">3</span>
-              <span class="kpi-unit" id="duty-kpi-events-total">/ 4 sự kiện</span>
+              <span class="kpi-value num" id="duty-kpi-events-covered">0</span>
+              <span class="kpi-unit" id="duty-kpi-events-total">/ 0 sự kiện</span>
             </div>
-            <div class="kpi-sub" id="duty-kpi-coverage-rate">Tỷ lệ phủ ca trực: 75%</div>
+            <div class="kpi-sub" id="duty-kpi-coverage-rate">Đang đồng bộ...</div>
           </div>
         </div>
 
@@ -539,12 +468,13 @@
             </select>
             <select id="duty-status-filter" class="search-input" onchange="app.filterDutyAssignments()" style="width: auto; min-width: 160px;">
               <option value="all">Tất cả trạng thái</option>
-              <option value="active">Đang kích hoạt (Active)</option>
+              <option value="active">Có hiệu lực (Active)</option>
+              <option value="ended">Đã kết thúc ca (Ended)</option>
               <option value="revoked">Đã thu hồi (Revoked)</option>
             </select>
           </div>
           <div style="font-size: 12.5px; color: var(--muted); font-weight: 500;" id="duty-count-indicator">
-            Đang hiển thị 3 ca trực
+            Đang tải ca trực...
           </div>
         </div>
 
@@ -557,18 +487,18 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table class="data-table">
+            <table class="data-table table-duty">
               <thead>
                 <tr>
-                  <th>Mã Ca</th>
-                  <th>Cán Bộ / CTV Soát Vé</th>
-                  <th>Email FPT & MSSV</th>
+                  <th style="width: 122px; white-space: nowrap;">Mã Ca</th>
+                  <th>Cán Bộ / CTV</th>
+                  <th style="min-width: 190px;">Email FPT & MSSV</th>
                   <th>Sự Kiện Được Phân Công</th>
                   <th>Cổng Kiểm Soát</th>
                   <th>Vai Trò</th>
-                  <th>Khung Giờ Trực</th>
-                  <th>Trạng Thái</th>
-                  <th style="text-align: right;">Thao Tác</th>
+                  <th style="width: 100px; white-space: nowrap;">Giờ Trực</th>
+                  <th style="width: 132px;">Trạng Thái</th>
+                  <th style="text-align: right; width: 118px;">Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="duty-roster-body">
@@ -587,9 +517,60 @@
             <p class="page-subhead">Duyệt hồ sơ kinh phí tổ chức sự kiện từ Quỹ Hoạt Động Sinh Viên và Tài Trợ Doanh Nghiệp</p>
           </div>
           <div class="header-actions">
-            <span class="pill pill-warning" id="budget-summary-pill">2 Hồ sơ chờ thẩm định</span>
+            <span class="pill pill-warning" id="budget-summary-pill">Đang tải hồ sơ...</span>
+            <button class="btn btn-primary btn-sm" onclick="app.openCreateBudgetModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              + Đề Xuất Ngân Sách Mới
+            </button>
           </div>
         </header>
+
+        <!-- Workflow Guide Banner -->
+        <div style="margin-bottom: 16px; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius-card); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div style="font-size: 12.5px; color: var(--text);">
+            <strong>Quy trình tổ chức sự kiện CTSV:</strong>
+            <span style="color: var(--positive); font-weight: 600;">1. Duyệt Ngân Sách CLB</span> &rarr;
+            <span style="color: var(--accent); font-weight: 600;">2. Nghiệm Thu PCCC Địa Điểm (100/100đ + Ký Phép)</span> &rarr;
+            <span style="font-weight: 600;">3. Bấm &ldquo;+ Tạo Sự Kiện&rdquo; Từ Hồ Sơ Đã Duyệt</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="app.switchView('safety')">Kiểm tra PCCC Địa Điểm &rarr;</button>
+        </div>
+
+        <!-- KPI Grid for Club Budgets -->
+        <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Kinh Phí Đã Duyệt</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="budget-kpi-approved" style="color: var(--positive);">0</span>
+              <span class="kpi-unit">VND</span>
+            </div>
+            <div class="kpi-sub" id="budget-kpi-approved-count">0 hồ sơ đã giải ngân</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đang Chờ Thẩm Định</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="budget-kpi-pending" style="color: var(--warning);">0</span>
+              <span class="kpi-unit">hồ sơ</span>
+            </div>
+            <div class="kpi-sub" id="budget-kpi-pending-amount">0 ₫ chờ CTSV duyệt</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đã Từ Chối / Sửa Lại</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="budget-kpi-rejected" style="color: var(--negative);">0</span>
+              <span class="kpi-unit">hồ sơ</span>
+            </div>
+            <div class="kpi-sub">Yêu cầu điều chỉnh dự toán</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Hồ Sơ Theo Dõi</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value num" id="budget-kpi-total">0</span>
+              <span class="kpi-unit">hồ sơ</span>
+            </div>
+            <div class="kpi-sub">Đồng bộ Cloud Firestore: budgets</div>
+          </div>
+        </div>
 
         <!-- Filter & Search Toolbar for Budget -->
         <div class="table-toolbar" style="margin-bottom: 20px; background: var(--surface); padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-card); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
@@ -607,7 +588,7 @@
           </div>
           <div style="display: flex; gap: 12px; align-items: center;">
             <div id="budget-count-indicator" style="font-size: 12.5px; color: var(--muted); font-weight: 500;">
-              Đang hiển thị 3 hồ sơ
+              Đang tải hồ sơ...
             </div>
             <button class="btn btn-secondary btn-sm" onclick="app.refreshBudget()">Làm mới</button>
           </div>
@@ -648,6 +629,16 @@
           </div>
           <div class="header-actions">
             <span class="pill pill-neutral" id="pccc-summary-pill" style="font-size: 12px; padding: 6px 12px;">Đang tải danh sách hội trường...</span>
+            <button class="btn btn-success btn-sm" onclick="app.openAddVenueModal()" title="Thêm mới hội trường/địa điểm để nghiệm thu PCCC trước khi tổ chức sự kiện">
+              + Thêm Địa Điểm Mới
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="app.initPCCCFromEvents()" title="Tạo hồ sơ PCCC cho các địa điểm của sự kiện mới">
+              + Đồng bộ từ Sự kiện
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshPCCCInspections()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Làm mới
+            </button>
           </div>
         </header>
 
@@ -716,23 +707,44 @@
           </div>
         </header>
 
+        <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+          <div class="kpi-card">
+            <div class="kpi-label">Vé Đang Hiển Thị</div>
+            <div class="kpi-value num" id="students-kpi-total">0</div>
+            <div class="kpi-sub">Theo bộ lọc hiện hành</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Đã Check-in Cổng</div>
+            <div class="kpi-value num" id="students-kpi-checked" style="color: var(--positive);">0</div>
+            <div class="kpi-sub">Đã xác nhận qua cổng</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Chưa Đến Cửa</div>
+            <div class="kpi-value num" id="students-kpi-pending" style="color: var(--warning);">0</div>
+            <div class="kpi-sub">Vé đã cấp QR chờ quét</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Tổng Điểm RL Ghi Nhận</div>
+            <div class="kpi-value num" id="students-kpi-points" style="color: var(--chart-primary);">0</div>
+            <div class="kpi-sub">Điểm rèn luyện đã cộng</div>
+          </div>
+        </div>
+
         <div class="panel">
           <div class="panel-header">
             <div class="filter-bar">
-              <input type="text" id="student-search" class="search-input" placeholder="Tìm theo tên hoặc MSSV..." oninput="app.filterStudents()">
+              <input type="text" id="student-search" class="search-input" placeholder="Tìm theo tên, MSSV hoặc mã vé..." oninput="app.filterStudents()">
               <select id="event-filter" class="select-input" onchange="app.filterStudents()">
-                <option value="all">Tất cả sự kiện</option>
-                <option value="EVT-2026-01">FPTU Tech Expo 2026</option>
-                <option value="EVT-2026-02">Workshop UI/UX Design</option>
-                <option value="EVT-2026-03">FPTU Champions League</option>
+                <option value="all">Tất cả sự kiện (Cloud Firestore)</option>
               </select>
               <select id="status-filter" class="select-input" onchange="app.filterStudents()">
                 <option value="all">Tất cả trạng thái</option>
                 <option value="checkedIn">Đã Check-in</option>
                 <option value="active">Chưa Đến Cửa</option>
+                <option value="cancelled">Đã Thu Hồi</option>
               </select>
             </div>
-            <div class="num" style="font-size: 12px; color: var(--muted);" id="students-count-indicator">Hiển thị 8 sinh viên</div>
+            <div class="num" style="font-size: 12px; color: var(--muted);" id="students-count-indicator">Đang tải...</div>
           </div>
 
           <div class="table-responsive">
@@ -748,72 +760,11 @@
                   <th class="num">Điểm RL</th>
                   <th>Trạng Thái</th>
                   <th>Chứng Nhận</th>
+                  <th style="text-align: right;">Thao Tác</th>
                 </tr>
               </thead>
               <tbody id="student-directory-body">
                 <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- VIEW: REGISTRATION REVIEW QUEUE (CROSS-ROLE REVIEW QUEUE WITH SEARCH & FILTER) -->
-      <section id="view-review-queue" class="view-section">
-        <header class="canvas-header">
-          <div>
-            <h1 class="page-headline">Hàng Chờ Duyệt Vé (Cross-Role Review Queue)</h1>
-            <p class="page-subhead">Phê duyệt hoặc từ chối đơn đăng ký sự kiện từ Mobile App sinh viên trong thời gian thực</p>
-          </div>
-          <div class="header-actions">
-            <span class="pill pill-warning" id="review-pending-badge">2 Đơn Chờ Duyệt</span>
-          </div>
-        </header>
-
-        <!-- Filter & Search Toolbar for Review Queue -->
-        <div class="table-toolbar" style="margin-bottom: 20px; background: var(--surface); padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-card); display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-          <div style="display: flex; gap: 12px; align-items: center; flex: 1; min-width: 280px; flex-wrap: wrap;">
-            <input type="text" id="reg-search" class="search-input" placeholder="🔍 Tìm theo mã đơn (REG-...), tên SV, email, sự kiện..." oninput="app.filterReviewQueue()" style="flex: 1; min-width: 240px; max-width: 360px;">
-            <select id="reg-event-filter" class="search-input" onchange="app.filterReviewQueue()" style="width: auto; min-width: 180px;">
-              <option value="all">Tất cả sự kiện đăng ký</option>
-            </select>
-            <select id="reg-status-filter" class="search-input" onchange="app.filterReviewQueue()" style="width: auto; min-width: 160px;">
-              <option value="all">Tất cả trạng thái</option>
-              <option value="pending">Chờ Phê Duyệt</option>
-              <option value="approved">Đã Cấp Vé</option>
-              <option value="rejected">Từ Chối</option>
-            </select>
-          </div>
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <div id="reg-count-indicator" style="font-size: 12.5px; color: var(--muted); font-weight: 500;">
-              Đang hiển thị 2 đơn
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="app.refreshRegistrations()">Làm mới danh sách</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div>
-              <div class="panel-title">Đơn Đăng Ký Chờ Cán Bộ / Ban Tổ Chức Phê Duyệt</div>
-              <div class="panel-sub">Khi bấm "Duyệt & Cấp Vé", hệ thống tự động phát hành vé QR và gửi thông báo đến Mobile App sinh viên</div>
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Mã Đơn</th>
-                  <th>Sinh Viên</th>
-                  <th>Email FPT</th>
-                  <th>Sự Kiện Đăng Ký</th>
-                  <th>Thời Gian Nộp</th>
-                  <th>Trạng Thái</th>
-                  <th style="text-align: right;">Thao Tác</th>
-                </tr>
-              </thead>
-              <tbody id="review-queue-body">
-                <!-- Dynamically populated from real registrations -->
               </tbody>
             </table>
           </div>
@@ -826,6 +777,13 @@
           <div>
             <h1 class="page-headline">Phát Thanh & Hộp Thư Thông Báo (Announcements)</h1>
             <p class="page-subhead">Gửi thông báo đẩy và bản tin thời gian thực đến toàn bộ ứng dụng sinh viên FPTU (Mobile Inbox)</p>
+          </div>
+          <div class="header-actions">
+            <span class="pill pill-accent" id="announcements-summary-pill">0 bản tin đang lưu</span>
+            <button class="btn btn-secondary btn-sm" onclick="app.refreshAnnouncements()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              Làm mới
+            </button>
           </div>
         </header>
 
@@ -840,6 +798,12 @@
             </div>
             <form onsubmit="app.handleBroadcastSubmit(event)">
               <div style="margin-bottom: 12px;">
+                <label style="font-size: 12px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px;">Gắn nhanh Sự kiện sắp diễn ra (Tùy chọn)</label>
+                <select id="ann-event-template" class="select-input" style="width: 100%;" onchange="app.onAnnouncementEventSelected()">
+                  <option value="">-- Soạn tự do hoặc chọn sự kiện để điền nhanh --</option>
+                </select>
+              </div>
+              <div style="margin-bottom: 12px;">
                 <label style="font-size: 12px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px;">Tiêu đề thông báo</label>
                 <input type="text" id="ann-title" class="search-input" style="width: 100%;" placeholder="VD: Khai mạc gian hàng công nghệ F-Code..." required>
               </div>
@@ -849,7 +813,7 @@
                   <option value="general">Bản tin chung (General)</option>
                   <option value="reminder">Nhắc nhở giờ G (Reminder)</option>
                   <option value="urgent">Khẩn cấp (Urgent)</option>
-                  <option value="ticket_approved">Thông báo duyệt vé (Ticket Approved)</option>
+                  <option value="ticket_approved">Thông báo sự kiện & vé điện tử (Event & Ticket)</option>
                 </select>
               </div>
               <div style="margin-bottom: 12px;">
@@ -879,10 +843,11 @@
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>Tiêu Đề</th>
+                    <th>Tiêu Đề & Nội Dung</th>
                     <th>Phân Loại</th>
                     <th>Thời Gian</th>
                     <th>Trạng Thái</th>
+                    <th style="text-align: right;">Thao Tác</th>
                   </tr>
                 </thead>
                 <tbody id="announcements-history-body">
@@ -924,19 +889,19 @@
               </p>
               <button class="btn btn-primary btn-sm" id="btn-storage-upload" onclick="app.simulateStorageUpload()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                Xuất Chứng Nhận PDF & Upload Cloud Storage
+                Tạo & Lưu Báo Cáo Tổng Hợp (JSON/Storage)
               </button>
 
               <div id="storage-progress-wrap" style="display: none; margin-top: 14px;">
-                <div style="font-size: 11.5px; color: var(--muted); margin-bottom: 4px;">Tiến độ tải lên Cloud Storage: <span id="storage-progress-text" class="mono">0%</span></div>
+                <div style="font-size: 11.5px; color: var(--muted); margin-bottom: 4px;">Đang kết xuất báo cáo từ dữ liệu Firestore: <span id="storage-progress-text" class="mono">0%</span></div>
                 <div class="capacity-bar-wrap">
                   <div class="capacity-bar-fill" id="storage-progress-bar" style="width: 0%;"></div>
                 </div>
               </div>
 
               <div id="storage-result-box" style="display: none; margin-top: 14px; background-color: var(--ground); border: 1px solid var(--border); padding: 12px; border-radius: 6px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--positive); text-transform: uppercase;">Download URL (Cloud Storage):</div>
-                <div class="mono" id="storage-download-url" style="font-size: 11px; color: var(--text); word-break: break-all; margin-top: 4px;">https://firebasestorage.googleapis.com/v0/b/campus-event-48443.firebasestorage.app/o/reports%2FUSR-FPTU-2026%2Fcert_summary.pdf?alt=media</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--positive); text-transform: uppercase;">Báo cáo đã tạo & sẵn sàng tải về:</div>
+                <a class="mono" id="storage-download-url" href="#" target="_blank" style="font-size: 11px; color: var(--chart-primary); word-break: break-all; margin-top: 4px; display: block; text-decoration: underline;">—</a>
               </div>
             </div>
           </div>
@@ -953,21 +918,20 @@
             <div class="panel-body">
               <div style="margin-bottom: 10px;">
                 <label style="font-size: 12px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px;">Tiêu đề thông báo:</label>
-                <input type="text" id="fcm-title" class="search-input" style="width: 100%;" value="Nhắc nhở giờ G: FPTU Tech Expo 2026">
+                <input type="text" id="fcm-title" class="search-input" style="width: 100%;" placeholder="VD: Nhắc nhở mở cổng Check-in sự kiện..." value="">
               </div>
               <div style="margin-bottom: 12px;">
                 <label style="font-size: 12px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px;">Nội dung thông báo:</label>
-                <input type="text" id="fcm-body" class="search-input" style="width: 100%;" value="Sự kiện sẽ bắt đầu sau 30 phút tại Hội trường Trịnh Công Sơn. Mở vé QR tại cổng!">
+                <input type="text" id="fcm-body" class="search-input" style="width: 100%;" placeholder="VD: Cổng check-in mở trước 60 phút. Sinh viên vui lòng chuẩn bị mã QR vé." value="">
               </div>
               <button class="btn btn-primary btn-sm" onclick="app.sendFCMBroadcast()">
                 Phát Sóng Push Notification (FCM)
               </button>
 
               <div style="margin-top: 14px; border-top: 1px solid var(--rule); padding-top: 10px;">
-                <div style="font-size: 11.5px; font-weight: 600; color: var(--muted); margin-bottom: 6px;">Lịch sử thông báo gần đây:</div>
+                <div style="font-size: 11.5px; font-weight: 600; color: var(--muted); margin-bottom: 6px;">Lịch sử thông báo trên Cloud Firestore:</div>
                 <div id="fcm-history-list">
-                  <div style="font-size: 11.5px; color: var(--muted); padding: 4px 0;">• Khởi động đăng ký Workshop UI/UX Masterclass (09:00 Hôm nay)</div>
-                  <div style="font-size: 11.5px; color: var(--muted); padding: 4px 0;">• Cập nhật sơ đồ an toàn PCCC Hội trường Trịnh Công Sơn</div>
+                  <div style="font-size: 11.5px; color: var(--muted); padding: 4px 0;">Đang đồng bộ danh sách bản tin từ Cloud Firestore...</div>
                 </div>
               </div>
             </div>
@@ -1048,7 +1012,7 @@
                 </div>
                 <div style="background-color: var(--ground); padding: 10px; border-radius: 6px;">
                   <div style="font-size: 11px; color: var(--muted);">Handled Exceptions</div>
-                  <div class="num" id="crashlytics-handled-count" style="font-size: 18px; font-weight: 700; color: var(--warning); margin-top: 2px;">2</div>
+                  <div class="num" id="crashlytics-handled-count" style="font-size: 18px; font-weight: 700; color: var(--warning); margin-top: 2px;">0</div>
                 </div>
               </div>
 
@@ -1062,8 +1026,7 @@
               </div>
 
               <div id="crashlytics-log" style="margin-top: 14px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 8px;">
-                <div>• [Handled] NetworkTimeoutException in EventDetailVM (Handled cleanly)</div>
-                <div>• [Handled] CameraPermissionDenied in QR Scanner (Resolved with fallback)</div>
+                <div>• Chưa ghi nhận ngoại lệ nào trong phiên làm việc hiện tại.</div>
               </div>
             </div>
           </div>
@@ -1081,12 +1044,17 @@
               <p style="font-size: 13px; color: var(--muted); margin-bottom: 14px;">
                 Khởi tạo và đồng bộ tự động 5 collections: <code>events</code>, <code>clubs</code>, <code>users</code>, <code>tickets</code>, <code>certificates</code> vào Cloud Firestore dự án <code>campus-event-48443</code>.
               </p>
-              <button class="btn btn-primary btn-sm" onclick="app.seedFirestoreFromWeb()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-                Tái Lập & Đồng Bộ Collections Firestore
-              </button>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-primary btn-sm" onclick="app.seedFirestoreFromWeb()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  Làm Mới & Kiểm Định Dữ Liệu Firestore
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="app.simulateIncomingCheckin()">
+                  Kiểm Tra Check-in 1 Vé Thật Chưa Quét
+                </button>
+              </div>
               <div id="seeder-status-msg" style="margin-top: 12px; font-size: 12px; color: var(--positive); font-weight: 500;">
-                ✓ 3 Sự kiện · 3 CLB · 8 Vé sinh viên · Đã xác thực Firestore Rules 537 dòng
+                Đang thống kê số lượng tài liệu thực tế từ Cloud Firestore...
               </div>
             </div>
           </div>
@@ -1102,10 +1070,7 @@
             </div>
             <div class="panel-body">
               <div id="analytics-stream" style="font-family: var(--font-mono); font-size: 11.5px; background-color: var(--ground); border: 1px solid var(--border); padding: 12px; border-radius: 6px; height: 140px; overflow-y: auto;">
-                <div style="color: var(--positive);">[Analytics] event: 'app_open' - user: 'USR-FPTU-2026'</div>
-                <div style="color: var(--text);">[Analytics] event: 'view_event' - event_id: 'EVT-2026-01'</div>
-                <div style="color: var(--chart-primary);">[Analytics] event: 'ticket_registered' - ticket: 'CE2026-083291'</div>
-                <div style="color: var(--positive);">[Analytics] event: 'qr_checked_in' - duration_ms: 1400</div>
+                <div style="color: var(--muted);">Đang lắng nghe sự kiện hệ thống thực tế...</div>
               </div>
             </div>
           </div>
@@ -1172,25 +1137,40 @@
             <div class="form-group">
               <label class="form-label" for="evt-time">Khung giờ <span style="color: var(--negative);">*</span></label>
               <input type="text" id="evt-time" class="search-input" style="width: 100%;" placeholder="VD: 13:30 - 17:30" value="13:30 - 17:30" required>
+              <div id="evt-time-error" style="color: #ef4444; font-size: 11px; margin-top: 4px; display: none; font-weight: 500;">
+                ⚠️ Khung giờ phải theo định dạng HH:mm - HH:mm, tối thiểu 30 phút và không ở quá khứ.
+              </div>
             </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 12px; margin-top: 12px;">
             <div class="form-group">
-              <label class="form-label" for="evt-location">Địa điểm tổ chức <span style="color: var(--negative);">*</span></label>
-              <select id="evt-location" class="search-input" style="width: 100%;">
-                <option value="Hội trường Trịnh Công Sơn">Hội trường Trịnh Công Sơn (Tòa Alpha)</option>
-                <option value="Innovation Hall - Tòa Delta">Innovation Hall (Tòa Delta)</option>
-                <option value="Hội trường B - Tòa Epsilon">Hội trường B (Tòa Epsilon)</option>
-                <option value="Sân bóng đá FPTU HCMC">Sân bóng đá FPTU HCMC</option>
-                <option value="Thư viện Đại học FPT TP.HCM">Thư viện Đại học FPT TP.HCM</option>
+              <label class="form-label" for="evt-location">Địa điểm tổ chức (Đồng bộ An Toàn PCCC) <span style="color: var(--negative);">*</span></label>
+              <select id="evt-location" class="search-input" style="width: 100%;" required>
+                <!-- Populated dynamically from Cloud Firestore pccc_inspections -->
               </select>
+              <div id="evt-location-pccc-hint" style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+                Chỉ các địa điểm đạt 100/100 điểm &amp; đã ký Giấy phép PCCC mới được chọn. <a href="#" onclick="app.closeCreateEventModal(); app.switchView('safety'); return false;" style="color: var(--accent); text-decoration: underline;">Mở Tab PCCC &rarr;</a>
+              </div>
             </div>
             <div class="form-group">
               <label class="form-label" for="evt-capacity">Sức chứa tối đa <span style="color: var(--negative);">*</span></label>
               <input type="number" id="evt-capacity" class="search-input" style="width: 100%;" min="10" max="2000" value="200" required>
+              <div id="evt-capacity-hint" style="font-size: 11px; color: var(--muted); margin-top: 4px;">Theo giới hạn an toàn PCCC</div>
             </div>
           </div>
+
+          <div class="form-group" style="margin-top: 12px;">
+            <label class="form-label" for="evt-budget-id">Hồ Sơ Ngân Sách Liên Kết (Phòng CTSV)</label>
+            <select id="evt-budget-id" class="search-input" style="width: 100%;">
+              <!-- Populated dynamically from approved budgets -->
+            </select>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">
+              Chọn hồ sơ ngân sách <strong>Đã Phê Duyệt</strong> hoặc chế độ CLB tự túc kinh phí / miễn phí.
+            </div>
+          </div>
+
+          <div id="evt-conflict-error" style="color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 10px; font-size: 11.5px; margin-top: 10px; display: none; font-weight: 500;"></div>
 
           <div class="form-group" style="margin-top: 12px;">
             <label class="form-label" for="evt-banner">URL Ảnh Banner (Tùy chọn)</label>
@@ -1273,18 +1253,21 @@
         <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
           <div class="form-group">
             <label class="form-label">Sự Kiện Được Phân Công (*)</label>
-            <select id="duty-form-event" class="search-input" style="width: 100%;" required>
+            <select id="duty-form-event" class="search-input" style="width: 100%;" onchange="app.syncDutyShiftFromSelectedEvent()" required>
               <!-- Populated dynamically -->
             </select>
+            <div id="duty-no-event-hint" style="display: none; margin-top: 6px; padding: 8px 10px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; font-size: 11.5px; color: #92400e;">
+              ⚠️ Hiện chưa có sự kiện nào sắp/đang diễn ra khả dụng trên Firestore. Vui lòng tạo sự kiện mới hoặc kiểm tra kết nối trước khi phân công ca trực.
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Email FPT Của Nhân Sự / CTV (*)</label>
-            <input type="email" id="duty-form-email" class="search-input" placeholder="Ví dụ: kkk@fpt.edu.vn" required style="width: 100%;">
+            <input type="email" id="duty-form-email" class="search-input" placeholder="Ví dụ: an.nv@fpt.edu.vn" required style="width: 100%;">
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div class="form-group">
               <label class="form-label">Họ Và Tên CTV (*)</label>
-              <input type="text" id="duty-form-name" class="search-input" placeholder="Ví dụ: Kkk" required style="width: 100%;">
+              <input type="text" id="duty-form-name" class="search-input" placeholder="Ví dụ: Nguyễn Văn An" required style="width: 100%;">
             </div>
             <div class="form-group">
               <label class="form-label">MSSV (Nếu là sinh viên)</label>
@@ -1320,9 +1303,145 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="app.closeDutyModal()">Hủy Bỏ</button>
-          <button type="submit" class="btn btn-primary" style="background-color: var(--positive); border-color: var(--positive);">
-            Xác Nhận & Cấp Quyền Firestore
+          <button type="submit" id="duty-submit-btn" class="btn btn-primary" style="background-color: var(--positive); border-color: var(--positive);">
+            Xác Nhận &amp; Cấp Quyền Firestore
           </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Create Club Budget Proposal -->
+  <div class="modal-backdrop" id="budget-create-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 540px;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Tạo Đề Xuất Ngân Sách CLB Mới</h2>
+          <p class="modal-subtitle">Ghi trực tiếp vào Cloud Firestore collection <code>budgets</code></p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeCreateBudgetModal()">&times;</button>
+      </div>
+      <form onsubmit="app.handleCreateBudgetSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Liên Kết Sự Kiện Thực Tế (Không bắt buộc)</label>
+            <select id="budget-form-event" class="search-input" style="width: 100%;" onchange="app.onBudgetEventSelected()">
+              <option value="">-- Nhập thủ công hoặc chọn từ danh sách sự kiện --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tên Sự Kiện / Hạng Mục Dự Toán (*)</label>
+            <input type="text" id="budget-form-title" class="search-input" placeholder="Ví dụ: FPT Hackathon 2026: Sáng Tạo Ứng Dụng Di Động & AI" required style="width: 100%;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">CLB / Đơn Vị Đề Xuất (*)</label>
+            <input type="text" id="budget-form-club" class="search-input" placeholder="Ví dụ: CLB F-Code" required style="width: 100%;">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Kinh Phí Đề Xuất (VND) (*)</label>
+              <input type="number" id="budget-form-amount" class="search-input" min="100000" step="100000" placeholder="5000000" required style="width: 100%;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nguồn Kinh Phí</label>
+              <input type="text" id="budget-form-source" class="search-input" value="Quỹ Hoạt động Sinh viên FPTU" style="width: 100%;">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="app.closeCreateBudgetModal()">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-primary">Lưu Đề Xuất Lên Firestore</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Reject Club Budget Proposal -->
+  <div class="modal-backdrop" id="budget-reject-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Từ Chối / Yêu Cầu Điều Chỉnh Dự Toán</h2>
+          <p class="modal-subtitle" id="budget-reject-subtitle">Nhập lý do cụ thể gửi Ban Chủ Nhiệm CLB</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeRejectBudgetModal()">&times;</button>
+      </div>
+      <form onsubmit="app.handleRejectBudgetSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="hidden" id="budget-reject-id">
+          <div class="form-group">
+            <label class="form-label" for="budget-reject-reason">Lý do Phòng CTSV từ chối (*)</label>
+            <textarea id="budget-reject-reason" class="search-input" style="width: 100%; height: 90px; resize: vertical;" placeholder="VD: Dự toán vượt hạn mức Quỹ CLB quý 4, vui lòng điều chỉnh hạng mục thiết bị..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="app.closeRejectBudgetModal()">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-danger">Xác Nhận Từ Chối</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Revoke Student Ticket -->
+  <div class="modal-backdrop" id="ticket-revoke-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Thu Hồi Vé Tham Dự Sự Kiện</h2>
+          <p class="modal-subtitle" id="ticket-revoke-subtitle">Trạng thái vé sẽ chuyển thành Đã Thu Hồi và hoàn lại chỗ trống</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeRevokeTicketModal()">&times;</button>
+      </div>
+      <form onsubmit="app.handleRevokeTicketSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="hidden" id="ticket-revoke-id">
+          <div class="form-group">
+            <label class="form-label" for="ticket-revoke-reason">Lý do thu hồi vé (*)</label>
+            <input type="text" id="ticket-revoke-reason" class="search-input" style="width: 100%;" value="Sinh viên hủy tham gia / Vi phạm quy chế" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="app.closeRevokeTicketModal()">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-danger">Xác Nhận Thu Hồi Vé</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Venue for PCCC Safety Inspection -->
+  <div class="modal-backdrop" id="safety-add-venue-modal" style="display: none;">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title">Thêm Địa Điểm Kiểm Định PCCC Mới</h2>
+          <p class="modal-subtitle">Đăng ký hội trường / sân bãi lên Cloud Firestore để thẩm định trước khi mở sự kiện</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeAddVenueModal()">&times;</button>
+      </div>
+      <form onsubmit="app.handleAddVenueSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="venue-form-name">Tên Địa Điểm / Hội Trường (*)</label>
+            <input type="text" id="venue-form-name" class="search-input" style="width: 100%;" placeholder="VD: Innovation Hall - Tòa Delta" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="venue-form-building">Tòa Nhà / Khu Vực (*)</label>
+              <input type="text" id="venue-form-building" class="search-input" style="width: 100%;" placeholder="VD: Tòa Delta" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="venue-form-capacity">Sức Chứa An Toàn (Người) (*)</label>
+              <input type="number" id="venue-form-capacity" class="search-input" style="width: 100%;" min="20" max="2000" value="200" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="venue-form-license">Số Biên Bản Kiểm Định</label>
+            <input type="text" id="venue-form-license" class="search-input" style="width: 100%;" placeholder="Tự tạo nếu để trống (VD: 112/BB-CTSV)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="app.closeAddVenueModal()">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-primary">Lưu &amp; Bắt Đầu Chấm Điểm PCCC</button>
         </div>
       </form>
     </div>

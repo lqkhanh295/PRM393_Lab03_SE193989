@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:campus_event/screens/auth/login_screen.dart';
 import 'package:campus_event/widgets/app_button.dart';
 import 'package:campus_event/widgets/points_badge.dart';
 import 'package:campus_event/widgets/rating_bar.dart';
@@ -9,6 +11,8 @@ import 'package:campus_event/models/ticket_model.dart';
 import 'package:campus_event/models/event_model.dart';
 import 'package:campus_event/models/club_model.dart';
 import 'package:campus_event/widgets/club_card.dart';
+import 'package:campus_event/widgets/app_chip.dart';
+import 'package:campus_event/theme/app_theme.dart';
 import 'package:campus_event/viewmodels/explore_viewmodel.dart';
 import 'package:campus_event/services/firestore_service.dart';
 import 'package:campus_event/services/analytics_service.dart';
@@ -26,6 +30,12 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:campus_event/services/gemini_ai_service.dart';
 import 'package:campus_event/services/remote_config_service.dart';
+import 'package:campus_event/screens/events/registration_modal.dart';
+import 'package:campus_event/screens/events/registration_result_screen.dart';
+import 'package:campus_event/viewmodels/registration_vm.dart';
+import 'package:campus_event/viewmodels/home_viewmodel.dart';
+import 'package:campus_event/viewmodels/event_detail_vm.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:convert';
 
 void main() {
@@ -684,4 +694,176 @@ void main() {
     expect(insight.keyTakeaways, contains('Điểm 1'));
   });
 
+  testWidgets('LoginScreen renders Google sign-in button without (@fpt.edu.vn) suffix', (WidgetTester tester) async {
+    final authService = AuthService(null, null);
+    final authVM = AuthViewModel(
+      authService: authService,
+      analyticsService: AnalyticsService(null),
+      crashlyticsService: CrashlyticsService(null),
+    );
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider<AuthViewModel>.value(
+        value: authVM,
+        child: const MaterialApp(
+          home: LoginScreen(),
+        ),
+      ),
+    );
+
+    expect(find.text('Đăng nhập với Google'), findsOneWidget);
+    expect(find.text('Đăng nhập với Google (@fpt.edu.vn)'), findsNothing);
+
+    authVM.dispose();
+  });
+
+  testWidgets('RegistrationModal issues instant QR ticket without CTSV approval and displays QrImageView immediately', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final firestoreService = FirestoreService(null);
+    final analyticsService = AnalyticsService(null);
+    final crashlyticsService = CrashlyticsService(null);
+    final remoteConfigService = RemoteConfigService(null);
+
+    final regVM = RegistrationViewModel(
+      firestoreService: firestoreService,
+      analyticsService: analyticsService,
+      crashlyticsService: crashlyticsService,
+    );
+    final myTicketsVM = MyTicketsViewModel(firestoreService: firestoreService);
+    final homeVM = HomeViewModel(
+      firestoreService: firestoreService,
+      remoteConfigService: remoteConfigService,
+      analyticsService: analyticsService,
+    );
+    final detailVM = EventDetailViewModel(
+      firestoreService: firestoreService,
+      analyticsService: analyticsService,
+      crashlyticsService: crashlyticsService,
+    );
+
+    const openEvent = EventModel(
+      id: 'EVT-INSTANT-QR-01',
+      title: 'FPTU Instant QR Workshop 2026',
+      description: 'Workshop kiểm thử luồng phát hành vé QR tức thì.',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '28/12/2026',
+      time: '13:30 - 17:30',
+      location: 'Hội trường Trịnh Công Sơn',
+      capacity: 50,
+      registeredCount: 10,
+      bannerUrl: '',
+      isFeatured: true,
+    );
+
+    const studentUser = UserModel(
+      id: 'USR-QR-01',
+      name: 'Trần Minh Khôi',
+      email: 'khoitm.se190001@fpt.edu.vn',
+      avatarUrl: '',
+      major: 'Kỹ thuật Phần mềm (SE)',
+      role: 'student',
+      activityPoints: 0,
+    );
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<RegistrationViewModel>.value(value: regVM),
+          ChangeNotifierProvider<MyTicketsViewModel>.value(value: myTicketsVM),
+          ChangeNotifierProvider<HomeViewModel>.value(value: homeVM),
+          ChangeNotifierProvider<EventDetailViewModel>.value(value: detailVM),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: RegistrationModal(event: openEvent, user: studentUser),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // No CTSV approval queue or mode switcher exists
+    expect(find.byType(Switch), findsNothing);
+    expect(find.byType(Radio<dynamic>), findsNothing);
+    expect(find.textContaining('CTSV duyệt'), findsNothing);
+    expect(find.textContaining('Còn 40 / 50 chỗ trống · Cấp mã QR ngay'), findsOneWidget);
+    expect(find.text('Xác nhận đăng ký & Nhận mã QR'), findsOneWidget);
+
+    // Tap register button -> directly shows RegistrationResultScreen with TicketCard & QrImageView
+    await tester.tap(find.text('Xác nhận đăng ký & Nhận mã QR'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(RegistrationResultScreen), findsOneWidget);
+    expect(find.text('ĐĂNG KÝ THÀNH CÔNG · VÉ QR ĐÃ SẴN SÀNG'), findsOneWidget);
+    expect(find.byType(TicketCard), findsOneWidget);
+    expect(find.byType(QrImageView), findsOneWidget);
+
+    regVM.dispose();
+    myTicketsVM.dispose();
+    homeVM.dispose();
+    detailVM.dispose();
+  });
+
+  testWidgets('AppFilterChip selected state uses high-contrast white text on AppTheme.primary', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: AppFilterChip(
+            label: 'Tất cả',
+            isSelected: true,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final chip = tester.widget<FilterChip>(find.byType(FilterChip));
+    expect(chip.selectedColor, equals(AppTheme.primary));
+    expect(chip.labelStyle?.color, equals(Colors.white));
+  });
+
+  test('Gate check-in window rejects scans >60m early or after event ends, and allows active window', () {
+    const evt = EventModel(
+      id: 'EVT-GATE-TEST',
+      title: 'Hội thảo AI Campus',
+      description: 'Test gate window',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '20/11/2026',
+      time: '14:00 - 17:00',
+      location: 'Hội trường Trịnh Công Sơn',
+      capacity: 250,
+      registeredCount: 2,
+      bannerUrl: '',
+    );
+
+    // 1. Too early (same day 12:30 -> >60m before 14:00)
+    final tooEarly = FirestoreService.checkEventGateWindow(evt, DateTime(2026, 11, 20, 12, 30));
+    expect(tooEarly, isNotNull);
+    expect(tooEarly, contains('Chưa đến giờ mở cổng check-in'));
+    expect(tooEarly, contains('13:00 ngày 20/11/2026'));
+
+    // 2. Valid lead window (13:05 -> within [13:00, 17:00])
+    final withinLead = FirestoreService.checkEventGateWindow(evt, DateTime(2026, 11, 20, 13, 5));
+    expect(withinLead, isNull);
+
+    // 3. Valid ongoing window (15:15)
+    final duringEvent = FirestoreService.checkEventGateWindow(evt, DateTime(2026, 11, 20, 15, 15));
+    expect(duringEvent, isNull);
+
+    // 4. Ended event (17:05)
+    final afterEnd = FirestoreService.checkEventGateWindow(evt, DateTime(2026, 11, 20, 17, 5));
+    expect(afterEnd, isNotNull);
+    expect(afterEnd, contains('đã kết thúc'));
+  });
 }

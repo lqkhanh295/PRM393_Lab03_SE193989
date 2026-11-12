@@ -24,8 +24,23 @@ class HomeViewModel extends ChangeNotifier {
   /// Toàn bộ danh sách sự kiện hiện có được tải về từ cơ sở dữ liệu.
   List<EventModel> get allEvents => _allEvents;
 
-  /// Tiêu đề biểu ngữ sự kiện nổi bật được lấy động từ Remote Config.
-  String get bannerTitle => _remoteConfigService.featuredBannerTitle;
+  /// Tiêu đề biểu ngữ sự kiện nổi bật được lấy động từ Remote Config hoặc sự kiện sắp diễn ra.
+  String get bannerTitle {
+    final raw = _remoteConfigService.featuredBannerTitle.trim();
+    const staleBanner = 'Chào mừng đến với FPTU Tech Expo 2026';
+    if (raw.isEmpty || raw == staleBanner || raw == RemoteConfigService.defaultBannerTitle) {
+      final nextUpcoming = _allEvents.where((e) => !e.isPast).toList();
+      if (nextUpcoming.isNotEmpty) {
+        return 'Sắp diễn ra: ${nextUpcoming.first.title}';
+      }
+      return RemoteConfigService.defaultBannerTitle;
+    }
+    return raw;
+  }
+
+  /// Sắp xếp sự kiện ưu tiên sự kiện đang diễn ra / sắp diễn ra lên trước sự kiện đã kết thúc.
+  static List<EventModel> sortEventsByPriority(List<EventModel> events) =>
+      EventModel.sortByPriority(events);
 
   /// Số lượng sự kiện nổi bật tối đa được cấu hình từ xa.
   int get maxFeatured => _remoteConfigService.maxFeaturedEvents;
@@ -46,7 +61,8 @@ class HomeViewModel extends ChangeNotifier {
 
     try {
       await _remoteConfigService.fetchAndActivate();
-      _allEvents = await _firestoreService.getEvents();
+      final fetched = await _firestoreService.getEvents(forceRefresh: true);
+      _allEvents = sortEventsByPriority(fetched);
 
       if (_allEvents.isEmpty) {
         _state = const StateEmpty('Hiện chưa có sự kiện nào sắp diễn ra.');

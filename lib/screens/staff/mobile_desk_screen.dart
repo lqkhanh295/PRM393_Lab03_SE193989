@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../theme/app_theme.dart';
 import '../../viewmodels/mobile_desk_vm.dart';
 import '../../viewmodels/home_viewmodel.dart';
+import '../../viewmodels/auth_viewmodel.dart';
 import '../../services/firestore_service.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
@@ -193,51 +194,26 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
                 ),
                 const SizedBox(height: 12),
 
-                // Fast Simulation Buttons (for reviewer/test without physical QR print)
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppTheme.obsidian,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.radiusInput),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        icon: const Icon(Icons.keyboard_outlined, size: 18),
-                        label: const Text(
-                          'Nhập mã tay',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                        ),
-                        onPressed: () => _openManualCodeDialog(context),
+                // Manual Ticket Code Entry (Real Firestore / Portal API validation)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppTheme.obsidian,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppTheme.radiusInput),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppTheme.radiusInput),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        icon: const Icon(Icons.qr_code, size: 18),
-                        label: const Text(
-                          'Quét thử vé 1',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                        ),
-                        onPressed: () {
-                          _onScanDetected(context, 'QR-TOKEN-CE2026-083291-SECURE-HASH');
-                        },
-                      ),
+                    icon: const Icon(Icons.keyboard_outlined, size: 18),
+                    label: const Text(
+                      'Nhập mã vé thủ công',
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                     ),
-                  ],
+                    onPressed: () => _openManualCodeDialog(context),
+                  ),
                 ),
               ],
             ),
@@ -252,11 +228,14 @@ class _MobileDeskScreenState extends State<MobileDeskScreen> {
     if (deskVM.isProcessing) return;
 
     final homeVM = context.read<HomeViewModel>();
+    final authVM = context.read<AuthViewModel>();
     final targetEventId = widget.eventId ?? (homeVM.allEvents.isNotEmpty ? homeVM.allEvents.first.id : '');
 
     final result = await deskVM.processCheckInScan(
       qrToken: rawToken,
       eventId: targetEventId,
+      staffEmail: authVM.currentUser?.email,
+      gateName: widget.gateName,
     );
 
     if (!context.mounted) return;

@@ -147,7 +147,7 @@ class ExploreViewModel extends ChangeNotifier {
 
     try {
       _clubs = await _firestoreService.getClubs();
-      await searchEvents(query: _currentQuery, category: _selectedCategory);
+      await searchEvents(query: _currentQuery, category: _selectedCategory, forceRefresh: true);
     } catch (e) {
       _state = StateError('Lỗi tải danh mục: $e');
       notifyListeners();
@@ -161,14 +161,17 @@ class ExploreViewModel extends ChangeNotifier {
   }
 
   /// Tìm kiếm sự kiện theo từ khóa [query] và danh mục [category], hỗ trợ tiếng Việt không dấu.
-  Future<void> searchEvents({String query = '', String? category}) async {
+  Future<void> searchEvents({String query = '', String? category, bool forceRefresh = false}) async {
     _currentQuery = query;
     _state = const StateLoading('Đang tìm kiếm sự kiện...');
     notifyListeners();
 
     try {
       final effectiveCategory = (category ?? _selectedCategory) == 'Tất cả' ? null : (category ?? _selectedCategory);
-      final rawEvents = await _firestoreService.getEvents(category: effectiveCategory);
+      final rawEvents = await _firestoreService.getEvents(
+        category: effectiveCategory,
+        forceRefresh: forceRefresh,
+      );
 
       var filtered = rawEvents;
       if (query.trim().isNotEmpty) {
@@ -200,7 +203,7 @@ class ExploreViewModel extends ChangeNotifier {
       if (filtered.isEmpty) {
         _state = const StateEmpty('Không tìm thấy sự kiện nào phù hợp với từ khóa của bạn.');
       } else {
-        _state = StateData(filtered);
+        _state = StateData(EventModel.sortByPriority(filtered));
       }
       notifyListeners();
     } catch (e) {

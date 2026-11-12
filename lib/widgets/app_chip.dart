@@ -34,14 +34,17 @@ class AppFilterChip extends StatelessWidget {
         selected: isSelected,
         onSelected: onSelected,
         backgroundColor: Colors.white,
-        selectedColor: AppTheme.primaryContainer,
+        selectedColor: AppTheme.primary,
         labelStyle: TextStyle(
           fontSize: 13,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
           color: isSelected ? Colors.white : AppTheme.onSurface,
         ),
-        shape: const StadiumBorder(
-          side: BorderSide(color: AppTheme.outlineVariant, width: 1),
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: isSelected ? AppTheme.primary : AppTheme.outlineVariant,
+            width: 1,
+          ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         showCheckmark: false,

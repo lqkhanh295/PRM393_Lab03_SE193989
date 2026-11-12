@@ -218,6 +218,26 @@ class EventModel {
     return DateTime(d.year, d.month, d.day, 23, 59, 59);
   }
 
+  /// Cổng check-in mở trước giờ bắt đầu sự kiện 60 phút.
+  static const Duration gateOpenLeadTime = Duration(minutes: 60);
+
+  /// Thời điểm mở cổng quét vé QR hợp lệ (trước giờ khai mạc 60 phút).
+  DateTime? get gateOpenDateTime => startDateTime?.subtract(gateOpenLeadTime);
+
+  /// Sắp xếp danh sách sự kiện: đang diễn ra -> sắp diễn ra (gần nhất trước) -> đã kết thúc (mới nhất trước).
+  static List<EventModel> sortByPriority(List<EventModel> events) {
+    final sorted = List<EventModel>.from(events);
+    sorted.sort((a, b) {
+      final rankA = a.isOngoing ? 0 : (!a.isPast ? 1 : 2);
+      final rankB = b.isOngoing ? 0 : (!b.isPast ? 1 : 2);
+      if (rankA != rankB) return rankA.compareTo(rankB);
+      final timeA = a.startDateTime ?? DateTime(2099);
+      final timeB = b.startDateTime ?? DateTime(2099);
+      return rankA == 2 ? timeB.compareTo(timeA) : timeA.compareTo(timeB);
+    });
+    return sorted;
+  }
+
   /// Xác định xem sự kiện đã diễn ra và kết thúc hay chưa dựa vào thời gian thực hiện tại.
   bool get isPast {
     final end = endDateTime;

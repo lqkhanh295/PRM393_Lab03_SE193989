@@ -10,9 +10,11 @@ import 'package:http/http.dart' as http;
 class RemoteConfigService {
   final FirebaseRemoteConfig? _remoteConfig;
 
+  static const String defaultBannerTitle = 'Khám phá Sự kiện & Hoạt động Sinh viên FPTU';
+
   int _maxFeaturedEvents = 5;
   bool _enableLiveQA = true;
-  String _featuredBannerTitle = 'Chào mừng đến với FPTU Tech Expo 2026';
+  String _featuredBannerTitle = defaultBannerTitle;
 
   // Final Assignment: Gemini AI Feature Parameters
   bool _enableGeminiInsights = true;
@@ -54,7 +56,7 @@ class RemoteConfigService {
         await _remoteConfig.setDefaults(<String, dynamic>{
           'max_featured_events': 5,
           'enable_live_qa': true,
-          'featured_banner_title': 'Chào mừng đến với FPTU Tech Expo 2026',
+          'featured_banner_title': defaultBannerTitle,
           'enable_gemini_insights': true,
           'gemini_model_name': 'gemini-3.5-flash-lite',
           'gemini_prompt_template':

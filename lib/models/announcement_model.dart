@@ -63,7 +63,7 @@ class AnnouncementModel {
       authorRole: map['authorRole'] as String? ?? 'staff',
       eventId: map['eventId'] as String?,
       userId: map['userId'] as String? ?? '',
-      isPinned: map['isPinned'] as bool? ?? false,
+      isPinned: (map['isPinned'] as bool?) ?? (map['pinned'] as bool?) ?? false,
       createdAt: parseDate(map['createdAt']),
     );
   }

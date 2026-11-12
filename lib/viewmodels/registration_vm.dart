@@ -3,15 +3,13 @@ import '../models/screen_state.dart';
 import '../models/event_model.dart';
 import '../models/ticket_model.dart';
 import '../models/user_model.dart';
-import '../models/registration_model.dart';
 import '../services/firestore_service.dart';
 import '../services/analytics_service.dart';
 import '../services/crashlytics_service.dart';
 
-/// ViewModel điều phối tiến trình đăng ký tham gia sự kiện của sinh viên (Registration Pipeline).
+/// ViewModel điều phối tiến trình đăng ký sự kiện và phát hành vé QR tức thì (Instant QR Pipeline).
 ///
-/// Hỗ trợ cả 2 luồng: Đăng ký vé tức thời 1-Tap (sinh vé QR ngay) và
-/// Đăng ký có phê duyệt qua hàng chờ của Cán bộ (Cross-role Approval Queue).
+/// Kiểm tra sức chứa, tránh trùng vé và phát hành ngay mã QR trên Cloud Firestore khi sự kiện còn chỗ.
 class RegistrationViewModel extends ChangeNotifier {
   final FirestoreService _firestoreService;
   final AnalyticsService _analyticsService;
@@ -75,45 +73,6 @@ class RegistrationViewModel extends ChangeNotifier {
       _state = StateError(e.toString().replaceAll('Exception: ', ''));
       notifyListeners();
       return false;
-    }
-  }
-
-  /// Nộp hồ sơ đăng ký vào hàng chờ xét duyệt của Cán bộ/Ban tổ chức (Cross-role Review).
-  Future<RegistrationModel?> submitPendingRegistration({
-    required EventModel event,
-    required UserModel user,
-  }) async {
-    _state = const StateLoading('Đang gửi hồ sơ đăng ký tới Ban Tổ Chức...');
-    notifyListeners();
-
-    try {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      final registration = await _firestoreService.submitRegistration(
-        event: event,
-        user: user,
-      );
-
-      await _analyticsService.logRegisterEvent(
-        eventId: event.id,
-        clubId: event.clubId,
-        durationSeconds: 1,
-        calendarSynced: false,
-      );
-
-      _state = const StateInitial();
-      notifyListeners();
-      return registration;
-    } catch (e, stack) {
-      debugPrint('[RegistrationViewModel] Pending registration error: $e');
-      await _crashlyticsService.recordHandledError(
-        e,
-        stack,
-        reason: 'Cross-role pending registration failure for event ${event.id}',
-        customKeys: {'eventId': event.id, 'userId': user.id},
-      );
-      _state = StateError(e.toString().replaceAll('Exception: ', ''));
-      notifyListeners();
-      return null;
     }
   }
 

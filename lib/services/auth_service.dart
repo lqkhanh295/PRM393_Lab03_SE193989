@@ -17,32 +17,52 @@ class AuthService {
 
   static const String _webClientId = '74927582053-u55o35mih7dnssub0g5c3cmm3mmtcnil.apps.googleusercontent.com';
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
+  late final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: kIsWeb ? _webClientId : null,
-    serverClientId: _webClientId,
-    scopes: ['email', 'profile'],
+    serverClientId: kIsWeb ? null : _webClientId,
+    scopes: const ['email', 'profile'],
   );
 
   UserModel? _currentUser;
   final _authStateController = StreamController<UserModel?>.broadcast();
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _userDocSubscription;
 
+  UserModel _buildUserFromFirebaseUser(User user, {String? fallbackName, String? fallbackEmail, String? fallbackAvatar}) {
+    final email = (user.email != null && user.email!.isNotEmpty) ? user.email! : (fallbackEmail ?? '');
+    final prefix = email.split('@').first;
+    final formattedName = prefix
+        .split('.')
+        .map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '')
+        .join(' ')
+        .trim();
+    final resolvedName = (user.displayName != null && user.displayName!.trim().isNotEmpty)
+        ? user.displayName!.trim()
+        : (fallbackName != null && fallbackName.trim().isNotEmpty)
+            ? fallbackName.trim()
+            : (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU');
+    final resolvedAvatar = (user.photoURL != null && user.photoURL!.trim().isNotEmpty)
+        ? user.photoURL!
+        : (fallbackAvatar != null && fallbackAvatar.trim().isNotEmpty)
+            ? fallbackAvatar
+            : 'https://i.pravatar.cc/150?u=${user.uid}';
+
+    return UserModel(
+      id: user.uid,
+      name: resolvedName,
+      email: email,
+      avatarUrl: resolvedAvatar,
+      major: 'Sinh viên FPTU',
+      activityPoints: 0,
+      role: 'student',
+    );
+  }
+
   /// Khởi tạo [AuthService] và thiết lập lắng nghe luồng thay đổi trạng thái xác thực.
   AuthService([this._firebaseAuth, this._firestore]) {
     // If Firebase Auth is provided, listen to its auth state changes
     _firebaseAuth?.authStateChanges().listen((User? user) async {
       if (user != null) {
-        final prefix = (user.email ?? '').split('@').first;
-        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
-        final basicUser = UserModel(
-          id: user.uid,
-          name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
-          email: user.email ?? '',
-          avatarUrl: user.photoURL ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-          major: 'Sinh viên FPTU',
-          activityPoints: 0,
-          role: 'student',
-        );
+        final basicUser = _buildUserFromFirebaseUser(user);
         _currentUser = await _syncUserWithFirestore(basicUser);
         _listenToUserDocument(_currentUser!.id);
       } else {
@@ -80,20 +100,47 @@ class AuthService {
 
   /// Đồng bộ thông tin [basicUser] với bộ sưu tập `users` trên Cloud Firestore.
   Future<UserModel> _syncUserWithFirestore(UserModel basicUser) async {
-    if (_firestore == null) return basicUser;
-    try {
-      final docRef = _firestore.collection('users').doc(basicUser.id);
-      final snap = await docRef.get();
-      if (snap.exists && snap.data() != null) {
-        return UserModel.fromMap(snap.data()!, basicUser.id);
-      } else {
-        await docRef.set(basicUser.toMap(), SetOptions(merge: true));
+    if (_firestore != null) {
+      try {
+        final docRef = _firestore.collection('users').doc(basicUser.id);
+        final snap = await docRef.get();
+        if (snap.exists && snap.data() != null) {
+          return UserModel.fromMap(snap.data()!, basicUser.id);
+        } else {
+          await docRef.set(basicUser.toMap(), SetOptions(merge: true));
+          return basicUser;
+        }
+      } catch (e) {
+        debugPrint('[AuthService] Firestore user sync note: $e');
         return basicUser;
       }
-    } catch (e) {
-      debugPrint('[AuthService] Firestore user sync note: $e');
-      return basicUser;
     }
+
+    // Best-effort profile sync via local Web Portal REST bridge when Firestore SDK is null (Web)
+    try {
+      final getRes = await http
+          .get(Uri.parse('http://localhost:3000/api/users/${Uri.encodeComponent(basicUser.id)}'))
+          .timeout(const Duration(milliseconds: 1200));
+      if (getRes.statusCode == 200 && getRes.body.trim().isNotEmpty) {
+        final decoded = jsonDecode(getRes.body);
+        if (decoded is Map && (decoded['email']?.toString().isNotEmpty ?? false)) {
+          final existing = UserModel.fromMap(Map<String, dynamic>.from(decoded), basicUser.id);
+          return existing.copyWith(
+            name: basicUser.name.isNotEmpty ? basicUser.name : existing.name,
+            email: basicUser.email.isNotEmpty ? basicUser.email : existing.email,
+            avatarUrl: basicUser.avatarUrl.isNotEmpty ? basicUser.avatarUrl : existing.avatarUrl,
+          );
+        }
+      }
+      await http
+          .patch(
+            Uri.parse('http://localhost:3000/api/users/${Uri.encodeComponent(basicUser.id)}'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(basicUser.toMap()),
+          )
+          .timeout(const Duration(milliseconds: 1200));
+    } catch (_) {}
+    return basicUser;
   }
 
   /// Thông tin đối tượng người dùng hiện tại đang đăng nhập.
@@ -105,10 +152,30 @@ class AuthService {
   /// Luồng phát tín hiệu khi có sự thay đổi về phiên đăng nhập hoặc dữ liệu hồ sơ người dùng.
   Stream<UserModel?> get authStateChanges => _authStateController.stream;
 
-  /// Đăng nhập tài khoản bằng cơ chế Google Sign-In với xác thực OAuth 2.0.
+  /// Đăng nhập tài khoản bằng cơ chế Google Sign-In với xác thực OAuth 2.0
+  /// (sử dụng Firebase Auth Popup trên Web để tránh lỗi GIS origin_mismatch, SDK GoogleSignIn trên Mobile).
   Future<UserModel?> signInWithGoogle() async {
     try {
       debugPrint('[AuthService] Initiating Google Sign-In...');
+
+      if (kIsWeb && _firebaseAuth != null) {
+        final googleProvider = GoogleAuthProvider()
+          ..addScope('email')
+          ..addScope('profile')
+          ..setCustomParameters({'prompt': 'select_account'});
+
+        final UserCredential userCred = await _firebaseAuth.signInWithPopup(googleProvider);
+        final User? user = userCred.user;
+        if (user != null) {
+          final basicUser = _buildUserFromFirebaseUser(user);
+          _currentUser = await _syncUserWithFirestore(basicUser);
+          _listenToUserDocument(_currentUser!.id);
+        }
+        _authStateController.add(_currentUser);
+        debugPrint('[AuthService] Web Google Sign-in successful: ${_currentUser?.email}');
+        return _currentUser;
+      }
+
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
@@ -126,18 +193,11 @@ class AuthService {
         final UserCredential userCred = await _firebaseAuth.signInWithCredential(credential);
         final User? user = userCred.user;
         if (user != null) {
-          final email = user.email ?? googleUser.email;
-          final prefix = email.split('@').first;
-          final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
-          
-          final basicUser = UserModel(
-            id: user.uid,
-            name: user.displayName ?? googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
-            email: email,
-            avatarUrl: user.photoURL ?? googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-            major: 'Kỹ thuật Phần mềm (SE)',
-            activityPoints: 0,
-            role: 'student',
+          final basicUser = _buildUserFromFirebaseUser(
+            user,
+            fallbackName: googleUser.displayName,
+            fallbackEmail: googleUser.email,
+            fallbackAvatar: googleUser.photoUrl,
           );
           _currentUser = await _syncUserWithFirestore(basicUser);
           _listenToUserDocument(_currentUser!.id);
@@ -145,13 +205,15 @@ class AuthService {
       } else {
         final email = googleUser.email;
         final prefix = email.split('@').first;
-        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+        final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ').trim();
         final basicUser = UserModel(
           id: googleUser.id,
-          name: googleUser.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
+          name: (googleUser.displayName != null && googleUser.displayName!.trim().isNotEmpty)
+              ? googleUser.displayName!.trim()
+              : (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
           email: email,
           avatarUrl: googleUser.photoUrl ?? 'https://i.pravatar.cc/150?u=${googleUser.id}',
-          major: 'Kỹ thuật Phần mềm (SE)',
+          major: 'Sinh viên FPTU',
           activityPoints: 0,
           role: 'student',
         );
@@ -165,6 +227,15 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       debugPrint('[AuthService] Firebase Auth error: ${e.code} - ${e.message}');
       switch (e.code) {
+        case 'popup-closed-by-user':
+        case 'cancelled-popup-request':
+        case 'user-cancelled':
+          debugPrint('[AuthService] Google Sign-In popup cancelled by user');
+          return null;
+        case 'popup-blocked':
+          throw Exception('Trình duyệt đã chặn cửa sổ đăng nhập Google. Vui lòng bật Pop-up và thử lại.');
+        case 'unauthorized-domain':
+          throw Exception('Tên miền hiện tại chưa được cấp phép trên Firebase Auth.');
         case 'account-exists-with-different-credential':
           throw Exception('Tài khoản này đã được liên kết với một phương thức đăng nhập khác.');
         case 'invalid-credential':
@@ -178,6 +249,10 @@ class AuthService {
       }
     } catch (e) {
       debugPrint('[AuthService] Sign-in error: $e');
+      final errStr = e.toString().toLowerCase();
+      if (errStr.contains('popup_closed') || errStr.contains('popup-closed') || errStr.contains('cancel')) {
+        return null;
+      }
       rethrow;
     }
   }
@@ -222,7 +297,10 @@ class AuthService {
                 email: cleanEmail,
                 password: password,
               );
-            } catch (_) {
+            } on FirebaseAuthException catch (createErr) {
+              if (createErr.code == 'email-already-in-use') {
+                throw Exception('Mật khẩu không chính xác.');
+              }
               rethrow;
             }
           } else {
@@ -232,18 +310,7 @@ class AuthService {
 
         final User? user = userCred.user;
         if (user != null) {
-          final prefix = cleanEmail.split('@').first;
-          final formattedName = prefix.split('.').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
-
-          final basicUser = UserModel(
-            id: user.uid,
-            name: user.displayName ?? (formattedName.isNotEmpty ? formattedName : 'Sinh viên FPTU'),
-            email: user.email ?? cleanEmail,
-            avatarUrl: user.photoURL ?? 'https://i.pravatar.cc/150?u=${user.uid}',
-            major: 'Sinh viên FPTU',
-            activityPoints: 0,
-            role: 'student',
-          );
+          final basicUser = _buildUserFromFirebaseUser(user, fallbackEmail: cleanEmail);
           _currentUser = await _syncUserWithFirestore(basicUser);
           _listenToUserDocument(_currentUser!.id);
         }
@@ -354,6 +421,16 @@ class AuthService {
       } catch (e) {
         debugPrint('[AuthService] addActivityPoints update note: $e');
       }
+    } else {
+      try {
+        await http
+            .patch(
+              Uri.parse('http://localhost:3000/api/users/${Uri.encodeComponent(_currentUser!.id)}'),
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({'activityPoints': updatedPoints}),
+            )
+            .timeout(const Duration(milliseconds: 1200));
+      } catch (_) {}
     }
   }
 
@@ -371,6 +448,20 @@ class AuthService {
       } catch (e) {
         debugPrint('[AuthService] reloadCurrentUser error: $e');
       }
+    } else {
+      try {
+        final res = await http
+            .get(Uri.parse('http://localhost:3000/api/users/${Uri.encodeComponent(_currentUser!.id)}'))
+            .timeout(const Duration(milliseconds: 1200));
+        if (res.statusCode == 200 && res.body.trim().isNotEmpty) {
+          final decoded = jsonDecode(res.body);
+          if (decoded is Map && (decoded['email']?.toString().isNotEmpty ?? false)) {
+            _currentUser = UserModel.fromMap(Map<String, dynamic>.from(decoded), _currentUser!.id);
+            _authStateController.add(_currentUser);
+            return _currentUser;
+          }
+        }
+      } catch (_) {}
     }
     return _currentUser;
   }
@@ -389,7 +480,9 @@ class AuthService {
     try {
       _userDocSubscription?.cancel();
       _userDocSubscription = null;
-      await _googleSignIn.signOut();
+      if (!kIsWeb) {
+        await _googleSignIn.signOut();
+      }
       await _firebaseAuth?.signOut();
     } catch (e) {
       debugPrint('[AuthService] Error during SDK signOut: $e');

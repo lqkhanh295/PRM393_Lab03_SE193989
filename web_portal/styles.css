@@ -262,6 +262,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
@@ -283,6 +285,16 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.header-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  max-width: 100%;
 }
 
 /* Buttons */
@@ -291,16 +303,23 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: var(--control-height);
-  padding: 0 14px;
+  min-height: var(--control-height);
+  padding: 6px 14px;
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
   border-radius: var(--radius-control);
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.12s ease;
   user-select: none;
   text-decoration: none;
+}
+
+.btn svg {
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -324,9 +343,11 @@ html, body {
 }
 
 .btn-sm {
-  height: 28px;
-  padding: 0 10px;
+  min-height: 30px;
+  height: auto;
+  padding: 5px 12px;
   font-size: 12px;
+  line-height: 1.2;
 }
 
 .btn-danger {
@@ -414,6 +435,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .panel-title {
@@ -568,6 +591,53 @@ html, body {
   text-align: right;
 }
 
+.table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.data-table .pill {
+  white-space: nowrap;
+}
+
+/* Compact Duty Roster Table (Prevents right-edge clipping on standard viewports) */
+.table-duty th,
+.table-duty td {
+  padding: 10px 9px;
+  font-size: 12.2px;
+}
+
+.table-duty th {
+  font-size: 11px;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.table-duty td {
+  word-break: break-word;
+}
+
+.table-duty .table-actions {
+  gap: 4px;
+}
+
+.table-duty .btn-sm {
+  padding: 4px 9px;
+  font-size: 11.5px;
+  min-height: 28px;
+}
+
+/* Announcements Split Grid */
+@media (max-width: 1024px) {
+  .split-view {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Capacity Bar */
 .capacity-bar-wrap {
   width: 100%;
@@ -632,6 +702,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 

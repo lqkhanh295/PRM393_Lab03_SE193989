@@ -66,6 +66,8 @@ class MobileDeskViewModel extends ChangeNotifier {
     required String qrToken,
     required String eventId,
     bool isManual = false,
+    String? staffEmail,
+    String? gateName,
   }) async {
     _isProcessing = true;
     notifyListeners();
@@ -74,6 +76,8 @@ class MobileDeskViewModel extends ChangeNotifier {
       final result = await _firestoreService.validateAndCheckInTicket(
         qrToken: qrToken.trim(),
         eventId: eventId,
+        staffEmail: staffEmail,
+        gateName: gateName,
       );
 
       _lastResult = result;

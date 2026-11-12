@@ -102,7 +102,7 @@ class EventGlassCard extends StatelessWidget {
                               ),
                               child: Text(
                                 event.isPast
-                                    ? 'ĐÃ KẾT THÚC'
+                                    ? '${event.registeredCount}/${event.capacity} ĐÃ ĐK'
                                     : (event.isFull ? 'HẾT CHỖ' : 'CÒN ${event.spotsRemaining} CHỖ'),
                                 style: TextStyle(
                                   color: event.isPast

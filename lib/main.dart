@@ -44,10 +44,25 @@ void main() async {
 
   // Initialize Firebase Cloud Services
   try {
-    await Firebase.initializeApp();
-    debugPrint('[Firebase] Successfully initialized with native options.');
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: 'AIzaSyBI6FAMQyaQBvPEwYCvsbY4hjsz_yvy_rQ',
+          appId: '1:74927582053:web:92deddbddca5f7201acf8c',
+          messagingSenderId: '74927582053',
+          projectId: 'campus-event-48443',
+          authDomain: 'campus-event-48443.firebaseapp.com',
+          storageBucket: 'campus-event-48443.firebasestorage.app',
+          measurementId: 'G-6PG8DJCK0E',
+        ),
+      );
+      debugPrint('[Firebase] Successfully initialized with Web options.');
+    } else {
+      await Firebase.initializeApp();
+      debugPrint('[Firebase] Successfully initialized with native options.');
+    }
   } catch (e) {
-    debugPrint('[Firebase] Native init fallback notice: $e');
+    debugPrint('[Firebase] Init fallback notice: $e');
   }
 
   if (!kIsWeb) {
@@ -58,9 +73,16 @@ void main() async {
     };
   }
 
-  // Instantiate Cloud & Foundation Services (Native instances on Mobile, graceful fallback on Web)
+  FirebaseAuth? firebaseAuthInstance;
+  try {
+    firebaseAuthInstance = FirebaseAuth.instance;
+  } catch (e) {
+    debugPrint('[Firebase] Auth instance fallback notice: $e');
+  }
+
+  // Instantiate Cloud & Foundation Services (Firebase Auth on Web & Mobile, Firestore REST bridge on Web)
   final authService = AuthService(
-    !kIsWeb ? FirebaseAuth.instance : null,
+    firebaseAuthInstance,
     !kIsWeb ? FirebaseFirestore.instance : null,
   );
   final firestoreService = FirestoreService(

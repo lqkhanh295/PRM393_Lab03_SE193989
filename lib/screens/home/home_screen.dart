@@ -14,6 +14,17 @@ import '../../viewmodels/inbox_viewmodel.dart';
 import '../events/event_detail_screen.dart';
 import '../inbox/announcements_inbox_screen.dart';
 
+/// Xây dựng chuỗi viết tắt 1–2 ký tự từ tên người dùng để hiển thị avatar mặc định.
+String _computeUserInitials(String? name) {
+  final clean = (name ?? '').trim();
+  if (clean.isEmpty) return 'SV';
+  final parts = clean.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+  if (parts.length >= 2) {
+    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+  }
+  return parts.first.substring(0, parts.first.length >= 2 ? 2 : 1).toUpperCase();
+}
+
 /// Màn hình Trang chủ (Campus Pulse) phản ánh nhịp sống sự kiện Đại học FPT TP.HCM.
 ///
 /// Thể hiện hồ sơ nhanh của sinh viên, huy hiệu điểm rèn luyện, nút hộp thư thông báo,
@@ -21,6 +32,46 @@ import '../inbox/announcements_inbox_screen.dart';
 class HomeScreen extends StatelessWidget {
   /// Khởi tạo [HomeScreen].
   const HomeScreen({super.key});
+
+  /// Xây dựng avatar hình tròn với chữ viết tắt thật và ảnh đại diện (nếu hợp lệ).
+  Widget _buildUserAvatar(String? name, String? avatarUrl) {
+    final trimmedUrl = (avatarUrl ?? '').trim();
+    final hasRealPhoto = trimmedUrl.isNotEmpty && !trimmedUrl.contains('pravatar.cc');
+    final initials = _computeUserInitials(name);
+
+    return Container(
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppTheme.primaryContainer,
+        border: Border.all(color: AppTheme.outlineVariant, width: 1.5),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            initials,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.onPrimaryContainer,
+              letterSpacing: 0.3,
+            ),
+          ),
+          if (hasRealPhoto)
+            Image.network(
+              trimmedUrl,
+              width: 38,
+              height: 38,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => const SizedBox.shrink(),
+            ),
+        ],
+      ),
+    );
+  }
 
   /// Xây dựng giao diện màn hình trang chủ.
   @override
@@ -35,24 +86,16 @@ class HomeScreen extends StatelessWidget {
         titleSpacing: AppTheme.spacingScreenPadding,
         title: Row(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppTheme.outlineVariant, width: 1.5),
-              ),
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: AppTheme.surfaceContainer,
-                backgroundImage: NetworkImage(user?.avatarUrl ?? 'https://i.pravatar.cc/100'),
-              ),
-            ),
+            _buildUserAvatar(user?.name, user?.avatarUrl),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user != null ? 'Chào ${user.name.split(' ').last} 👋' : 'Chào bạn!',
+                    user != null && user.name.trim().isNotEmpty
+                        ? 'Chào ${user.name.trim()} 👋'
+                        : 'Chào bạn!',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

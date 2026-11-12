@@ -241,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Google SSO Button
                   AppOutlinedButton(
-                    label: 'Đăng nhập với Google (@fpt.edu.vn)',
+                    label: 'Đăng nhập với Google',
                     leadingWidget: Container(
                       width: 22,
                       height: 22,

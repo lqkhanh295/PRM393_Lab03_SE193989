@@ -48,7 +48,7 @@ class AuthViewModel extends ChangeNotifier {
   ///
   /// Trả về `true` nếu đăng nhập thành công, ngược lại trả về `false`.
   Future<bool> signInWithGoogle() async {
-    _state = const StateLoading('Đang kết nối tài khoản Google FPT...');
+    _state = const StateLoading('Đang kết nối tài khoản Google...');
     notifyListeners();
 
     try {

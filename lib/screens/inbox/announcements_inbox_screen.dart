@@ -61,7 +61,7 @@ class _AnnouncementsInboxScreenState extends State<AnnouncementsInboxScreen> {
                 children: [
                   _buildFilterChip('Tất cả', 'All', inboxVM),
                   const SizedBox(width: 8),
-                  _buildFilterChip('Duyệt vé', 'ticket_approved', inboxVM),
+                  _buildFilterChip('Vé điện tử', 'ticket_approved', inboxVM),
                   const SizedBox(width: 8),
                   _buildFilterChip('Khẩn cấp', 'urgent', inboxVM),
                   const SizedBox(width: 8),
@@ -142,7 +142,7 @@ class _AnnouncementsInboxScreenState extends State<AnnouncementsInboxScreen> {
     if (item.category == 'ticket_approved') {
       tagColor = AppTheme.successInk;
       tagBg = AppTheme.successSoft;
-      tagLabel = 'DUYỆT VÉ THÀNH CÔNG';
+      tagLabel = 'VÉ ĐIỆN TỬ';
     } else if (item.category == 'urgent') {
       tagColor = AppTheme.error;
       tagBg = const Color(0xFFFFEBEE);
