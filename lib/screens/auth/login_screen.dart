@@ -261,12 +261,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? null
                         : () async {
                             final nav = Navigator.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
                             final success = await authVM.signInWithGoogle();
                             if (!mounted) return;
                             if (success) {
                               nav.pushReplacement(
                                 MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
                               );
+                            } else if (authVM.state is StateError) {
+                              final err = (authVM.state as StateError).error;
+                              if (err.isNotEmpty) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(err),
+                                    backgroundColor: AppTheme.errorInk,
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
                             }
                           },
                   ),

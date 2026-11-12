@@ -13,7 +13,7 @@ class RemoteConfigService {
 
   // Final Assignment: Gemini AI Feature Parameters
   bool _enableGeminiInsights = true;
-  String _geminiModelName = 'gemini-1.5-flash';
+  String _geminiModelName = 'gemini-3.5-flash-lite';
   String _geminiPromptTemplate =
       'Phân tích sự kiện sau và trả về JSON tóm tắt, điểm nổi bật, đối tượng phù hợp và câu hỏi gợi ý.';
 
@@ -41,7 +41,7 @@ class RemoteConfigService {
           'enable_live_qa': true,
           'featured_banner_title': 'Chào mừng đến với FPTU Tech Expo 2026',
           'enable_gemini_insights': true,
-          'gemini_model_name': 'gemini-1.5-flash',
+          'gemini_model_name': 'gemini-3.5-flash-lite',
           'gemini_prompt_template':
               'Phân tích sự kiện sau và trả về JSON tóm tắt, điểm nổi bật, đối tượng phù hợp và câu hỏi gợi ý.',
         });

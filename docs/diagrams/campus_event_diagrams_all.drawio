@@ -1,0 +1,550 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T01:07:18.194Z" agent="Antigravity/PRM393" version="24.0.0" type="device">
+  <diagram id="diagram_1" name="1. Kiến trúc Hệ thống (System Architecture)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+    <mxCell id="cell_2" value="HỆ THỐNG QUẢN LÝ SỰ KIỆN CAMPUS (PRM393 - ĐẠI HỌC FPT TP.HCM)
+KIẾN TRÚC HỆ THỐNG TOÀN DIỆN (SYSTEM ARCHITECTURE)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#0F172A;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="20" width="1120" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_client" value="TẦNG GIAO DIỆN &amp; TRẢI NGHIỆM NGƯỜI DÙNG (CLIENT PRESENTATION LAYER)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=13;fontColor=#0F172A;rounded=1;shadow=1;startSize=30;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="90" width="1120" height="230" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_mobile" value="📱 Mobile Client (Flutter 3.x / Dart 3.x - Android &amp; iOS)
+Đối tượng: Sinh viên FPTU (85%+ Traffic) &amp; CTV Soát vé Cổng" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontStyle=1;fontSize=12;fontColor=#1E3A8A;rounded=1;startSize=26;arcSize=4;" parent="box_client" vertex="1"   >
+      <mxGeometry x="20" y="40" width="530" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="m_screens" value="UI Screens:
+• HomeScreen (Banner, Featured, Categories)
+• ExploreScreen (46 CLB FPTU, Search Accent-free)
+• EventDetailScreen &amp; RegistrationModal
+• DigitalTicketScreen (Dynamic QR Token, Anti-fraud)
+• CalendarScreen (Lưới tháng &amp; ngày động now())
+• LiveCompanionScreen (Agenda, Live Q&amp;A, Upvote)
+• MobileDeskScreen (Bàn soát vé cổng Camera 1.5s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#93C5FD;align=left;spacingLeft=10;fontSize=11;fontColor=#1E293B;" parent="box_mobile" vertex="1"   >
+      <mxGeometry x="15" y="35" width="245" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="m_viewmodels" value="MVVM State Management (Provider):
+• AuthViewModel (Google SSO &amp; FPT Mail)
+• HomeViewModel &amp; ExploreViewModel
+• EventDetailViewModel (BR-001..004)
+• RegistrationViewModel (Slide 18 Cross-Role)
+• MyTicketsViewModel (Active, Attended, Cancel)
+• LiveEventViewModel (Realtime Firestore stream)
+• MobileDeskViewModel (Quét mã vé 1.5s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#93C5FD;align=left;spacingLeft=10;fontSize=11;fontColor=#1E293B;" parent="box_mobile" vertex="1"   >
+      <mxGeometry x="270" y="35" width="245" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_web" value="💻 Web Admin Portal (Desktop Responsive CMS - HTML5/CSS3/Vanilla JS)
+Đối tượng: Cán bộ Phòng CTSV &amp; Ban Chủ Nhiệm CLB" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#F97316;fontStyle=1;fontSize=12;fontColor=#7C2D12;rounded=1;startSize=26;arcSize=4;" parent="box_client" vertex="1"   >
+      <mxGeometry x="570" y="40" width="530" height="170" as="geometry"/>
+    </mxCell>
+    <mxCell id="w_modules" value="9 Phân Hệ Nghiệp Vụ Chuyên Sâu (View-Sections):
+1. Tổng quan &amp; Dashboard KPI Đồng bộ Firestore
+2. Hàng Chờ Duyệt Vé (Cross-Role Review Queue Slide 18)
+3. Thẩm định &amp; Phê duyệt Dự toán Ngân sách CLB
+4. Hồ sơ An toàn PCCC &amp; Sức chứa Hội trường Trịnh Công Sơn
+5. Danh bạ Sinh viên &amp; Xuất Chứng nhận e-Certificate
+6. Phát sóng Thông báo Khẩn (Announcements Broadcast)
+7. Giám sát Viễn trắc Cổng Check-In (Gate Telemetry Live)
+8. Lịch Trực Ban Soát Vé Cổng (Duty Roster)
+9. Quản lý Địa điểm &amp; Tạo Sự Kiện Mới" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FDBA74;align=left;spacingLeft=10;fontSize=10.5;fontColor=#1E293B;" parent="box_web" vertex="1"   >
+      <mxGeometry x="15" y="35" width="330" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="w_backend" value="Native Web Bridge Server:
+• Zero-dependency Node.js HTTP
+• Cloud Firestore REST API Bridge
+• Bearer Token Auto-refresh
+• Memory &amp; Disk Quota Cache
+• Port: 3000 (Local daemon)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FDBA74;align=left;spacingLeft=8;fontSize=10.5;fontColor=#1E293B;" parent="box_web" vertex="1"   >
+      <mxGeometry x="355" y="35" width="160" height="120" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_services" value="TẦNG DỊCH VỤ &amp; XỬ LÝ DỮ LIỆU ĐỘC LẬP (SERVICE &amp; REPOSITORY LAYER - LIB/SERVICES/)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontStyle=1;fontSize=13;fontColor=#14532D;rounded=1;shadow=1;startSize=30;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="340" width="1120" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_0" value="⚙️ AuthService
+Google SSO &amp; Mail FPT
+Session &amp; Activity Points" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="18" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_1" value="⚙️ FirestoreService
+Atomic Transactions
+Real-time Streams
+BR-001..004 Guard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="173" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_2" value="⚙️ StorageService
+PDF Certificate Upload
+reports/{uid}/ URL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="328" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_3" value="⚙️ FCMService
+Push Notifications
+Topic &amp; Device Tokens" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="483" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_4" value="⚙️ AnalyticsService
+DebugView Telemetry
+1-Tap &amp; Search Logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="638" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_5" value="⚙️ CrashlyticsService
+Realtime Error Capture
+Custom Keys Logging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="793" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="svc_6" value="⚙️ RemoteConfigService
+max_featured_events
+Dynamic Feature Flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#86EFAC;align=center;fontSize=10.5;fontColor=#0F172A;fontStyle=0;" parent="box_services" vertex="1"   >
+      <mxGeometry x="948" y="40" width="145" height="75" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_cloud" value="HẠ TẦNG NỀN TẢNG ĐÁM MÂY (FIREBASE CLOUD BACKEND - PROJECT: campus-event-48443)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontStyle=1;fontSize=13;fontColor=#78350F;rounded=1;shadow=1;startSize=30;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="490" width="1120" height="190" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_0" value="☁️ Firebase Authentication
+• Xác thực Email FPT (*@fpt.edu.vn)
+• Google Sign-In Identity
+• JWT Token &amp; UID Security" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="15" y="40" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_1" value="☁️ Cloud Firestore NoSQL
+• Collections: events, tickets, users
+• registrations (Slide 18), clubs
+• announcements, feedback, certificates
+• Snapshot listeners &amp; Atomic commits" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="197" y="40" width="220" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_2" value="☁️ Cloud Storage
+• Bucket lưu trữ PDF Chứng nhận
+• Path: reports/{uid}/ticket_*.pdf
+• Quy chuẩn storage.rules size &amp;lt;= 10MB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="429" y="40" width="180" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_3" value="☁️ Cloud Messaging (FCM)
+• Thông báo đẩy tức thời Mobile
+• Kênh thông báo Duyệt Vé Slide 18
+• Broadcast sự kiện khẩn cấp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="621" y="40" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_4" value="☁️ Remote Config &amp; Analytics
+• max_featured_events (5 vs 2)
+• DebugView Realtime Streams
+• Đo lường tỷ lệ chuyển đổi vé" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="803" y="40" width="170" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="cloud_5" value="☁️ Crashlytics
+• Ghi nhận crash &amp; lỗi ngoại lệ
+• Non-fatal logging chi tiết
+• User context &amp; Event IDs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FCD34D;align=left;spacingLeft=8;fontSize=10;fontColor=#0F172A;" parent="box_cloud" vertex="1"   >
+      <mxGeometry x="985" y="40" width="150" height="130" as="geometry"/>
+    </mxCell>
+    <mxCell id="edge_1" value="User Gestures / Data Flow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3B82F6;strokeWidth=2;fontColor=#1E3A8A;fontSize=11;" parent="1" vertex="1" edge="1" source="box_client" target="box_services">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="edge_2" value="Direct Firebase SDK &amp; REST API Bridge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#065F46;fontSize=11;" parent="1" vertex="1" edge="1" source="box_services" target="box_cloud">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="diagram_2" name="2. Biểu đồ Tuần tự (Sequence Diagram)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+    <mxCell id="seq_title" value="LUỒNG TUẦN TỰ ĐĂNG KÝ, XÉT DUYỆT LIÊN PHÂN HỆ (SLIDE 18) &amp; QUÉT VÉ CỔNG CAMPUS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#0F172A;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="20" width="1120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_student_head" value="Sinh viên An
+(Mobile App)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="70" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_student_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_student_head" target="ll_student_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_mobile_vm_head" value="RegistrationVM
+&amp; Mobile UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="260" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_mobile_vm_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_mobile_vm_head" target="ll_mobile_vm_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_firestore_head" value="Cloud Firestore
+(campus-event)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="470" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_firestore_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_firestore_head" target="ll_firestore_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_web_admin_head" value="Web Admin Portal
+(Review Queue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="680" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_web_admin_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_web_admin_head" target="ll_web_admin_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_staff_head" value="Cán bộ CTSV
+(Web Approver)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="890" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_staff_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_staff_head" target="ll_staff_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_scanner_head" value="CTV Soát Vé
+(MobileDesk)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="1060" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_scanner_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_scanner_head" target="ll_scanner_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_0" value="1. Nhấn &quot;Đăng ký tham gia&quot; &amp; chọn Xét Duyệt BTC" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#0F172A;strokeWidth=1.5;fontColor=#0F172A;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_1" value="2. POST registrations/{regId} {status: &quot;pending&quot;, userId, studentName}" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#2563EB;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_2" value="3. Real-time Snapshot Push: Đơn mới chờ duyệt (+1 Badge)" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_3" value="4. Hiển thị thông tin sinh viên &amp; nút [Duyệt &amp; Cấp Vé]" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#D97706;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_4" value="5. Cán bộ click &quot;Duyệt &amp; Cấp Vé&quot;" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#D97706;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_5" value="6. Atomic Batch Write: registrations(status=&quot;approved&quot;), tickets(active, qrToken), announcements" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#DC2626;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_6" value="7. Stream Snapshot Trigger: Đơn được phê duyệt thành công!" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_7" value="8. Mobile cập nhật tức thì: Nút xanh &quot;Đã Duyệt - Xem Vé&quot;" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_8" value="9. Tab &quot;Vé của tôi&quot; hiển thị vé số CE2026 kèm mã QR động" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#2563EB;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_9" value="10. Sinh viên xuất trình mã QR tại Bàn soát vé cổng Trịnh Công Sơn" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#0F172A;strokeWidth=1.5;fontColor=#0F172A;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_10" value="11. MobileDesk quét Camera trong 1.5s -&gt; validateAndCheckInTicket()" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#7C3AED;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_11" value="12. Chấp nhận vé hợp lệ -&gt; Rung Haptic &amp; Báo Thẻ Xanh" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_12" value="13. Live Telemetry Update: Số vé đã quét 4/342 (+1) &amp; Tốc độ nhịp độ cổng" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#EA580C;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_13" value="14. Mở khóa form Đánh giá Feedback &amp; Nhận ngay +5 Điểm rèn luyện" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="diagram_3" name="3. Biểu đồ Trạng thái (State Diagram)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+    <mxCell id="state_title" value="BIỂU ĐỒ TRẠNG THÁI VÒNG ĐỜI VÉ (TICKET), ĐĂNG KÝ (REGISTRATION) &amp; SỰ KIỆN (EVENT)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#0F172A;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="20" width="1120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_state_reg" value="1. VÒNG ĐỜI ĐƠN ĐĂNG KÝ XÉT DUYỆT (REGISTRATION LIFECYCLE - SLIDE 18)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="70" width="1120" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_reg_init" value="" style="ellipse;fillColor=#0F172A;strokeColor=none;" parent="box_state_reg" vertex="1"   >
+      <mxGeometry x="30" y="75" width="24" height="24" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_reg_pending" value="status: pending
+(Đơn chờ Cán bộ/BTC duyệt)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontStyle=1;fontSize=11;fontColor=#78350F;" parent="box_state_reg" vertex="1"   >
+      <mxGeometry x="150" y="60" width="180" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_reg_approved" value="status: approved
+(Đã duyệt - Tự động sinh Vé QR)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#22C55E;fontStyle=1;fontSize=11;fontColor=#14532D;" parent="box_state_reg" vertex="1"   >
+      <mxGeometry x="480" y="40" width="200" height="50" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_reg_rejected" value="status: rejected
+(Từ chối kèm lý do)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#EF4444;fontStyle=1;fontSize=11;fontColor=#7F1D1D;" parent="box_state_reg" vertex="1"   >
+      <mxGeometry x="480" y="100" width="200" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_reg_end" value="" style="ellipse;shape=doubleEllipse;fillColor=#0F172A;strokeColor=none;" parent="box_state_reg" vertex="1"   >
+      <mxGeometry x="820" y="75" width="26" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_r1" value="Nộp đơn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0F172A;" parent="box_state_reg" vertex="1" edge="1" source="st_reg_init" target="st_reg_pending">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_r2" value="BTC duyệt trên Web Admin" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16A34A;fontColor=#16A34A;" parent="box_state_reg" vertex="1" edge="1" source="st_reg_pending" target="st_reg_approved">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_r3" value="BTC từ chối" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;fontColor=#DC2626;" parent="box_state_reg" vertex="1" edge="1" source="st_reg_pending" target="st_reg_rejected">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_r4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0F172A;" parent="box_state_reg" vertex="1" edge="1" source="st_reg_approved" target="st_reg_end">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_r5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0F172A;" parent="box_state_reg" vertex="1" edge="1" source="st_reg_rejected" target="st_reg_end">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_state_ticket" value="2. VÒNG ĐỜI VÉ ĐIỆN TỬ (DIGITAL TICKET LIFECYCLE - TICKETS/{ID})" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="245" width="1120" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_init" value="" style="ellipse;fillColor=#0F172A;strokeColor=none;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="30" y="70" width="24" height="24" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_active" value="status: active (Chưa sử dụng)
+• Hiển thị QR Code mã hóa
+• Được phép Hủy vé trước giờ G" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontStyle=1;fontSize=11;fontColor=#1E3A8A;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="130" y="55" width="200" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_checked" value="status: checkedIn (Đã check-in cổng)
+• Quét thành công qua MobileDesk
+• Ghi nhận checkedInAt
+• Mở khóa gửi Feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#22C55E;fontStyle=1;fontSize=11;fontColor=#14532D;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="430" y="55" width="220" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_cert" value="Certificate Issued
+• Đã cộng +5 Điểm rèn luyện
+• Xuất file PDF Chứng nhận SHA-256
+• Upload Cloud Storage reports/{uid}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#9333EA;fontStyle=1;fontSize=11;fontColor=#581C87;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="750" y="55" width="230" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_cancel" value="status: cancelled / expired
+(Vé đã hủy hoặc quá hạn)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#EF4444;fontStyle=1;fontSize=11;fontColor=#7F1D1D;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="280" y="145" width="190" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_tk_end" value="" style="ellipse;shape=doubleEllipse;fillColor=#0F172A;strokeColor=none;" parent="box_state_ticket" vertex="1"   >
+      <mxGeometry x="1040" y="70" width="26" height="26" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_t1" value="Cấp vé" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0F172A;" parent="box_state_ticket" vertex="1" edge="1" source="st_tk_init" target="st_tk_active">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_t2" value="Quét QR Cổng" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16A34A;fontColor=#16A34A;" parent="box_state_ticket" vertex="1" edge="1" source="st_tk_active" target="st_tk_checked">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_t3" value="Gửi Feedback 5★" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#9333EA;fontColor=#9333EA;" parent="box_state_ticket" vertex="1" edge="1" source="st_tk_checked" target="st_tk_cert">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_t4" value="Sinh viên hủy vé" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#DC2626;fontColor=#DC2626;" parent="box_state_ticket" vertex="1" edge="1" source="st_tk_active" target="st_tk_cancel">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_t5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0F172A;" parent="box_state_ticket" vertex="1" edge="1" source="st_tk_cert" target="st_tk_end">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_state_event" value="3. TRẠNG THÁI THỜI GIAN THỰC SỰ KIỆN (EVENT TEMPORAL STATUS &amp; GATE RUNTIME)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="470" width="1120" height="180" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_ev_future" value="CHƯA DIỄN RA
+(now &amp;lt; start - 48h)
+• Mở đăng ký vé
+• Cổng soát vé: Chưa mở" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#94A3B8;fontStyle=1;fontSize=10.5;fontColor=#0F172A;align=center;" parent="box_state_event" vertex="1"   >
+      <mxGeometry x="50" y="55" width="210" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_ev_upcoming" value="SẮP DIỄN RA
+(start - 48h &amp;lt;= now &amp;lt; start)
+• Cảnh báo sắp khai mạc
+• Cổng soát vé: Sắp mở" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#F59E0B;fontStyle=1;fontSize=10.5;fontColor=#0F172A;align=center;" parent="box_state_event" vertex="1"   >
+      <mxGeometry x="320" y="55" width="210" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_ev_ongoing" value="ĐANG DIỄN RA
+(start &amp;lt;= now &amp;lt;= end)
+• Đang mở cổng check-in
+• Timer đếm tăng ca trực" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#22C55E;fontStyle=1;fontSize=10.5;fontColor=#0F172A;align=center;" parent="box_state_event" vertex="1"   >
+      <mxGeometry x="600" y="55" width="210" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="st_ev_ended" value="ĐÃ DIỄN RA / ĐÃ KẾT THÚC
+(now &amp;gt; end)
+• Đóng đăng ký (CTA Disabled)
+• Đóng cổng &amp; Dừng Timer ca trực" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#64748B;fontStyle=1;fontSize=10.5;fontColor=#0F172A;align=center;" parent="box_state_event" vertex="1"   >
+      <mxGeometry x="880" y="55" width="210" height="65" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_ev1" value="Đến gần ngày G (&amp;lt;48h)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D97706;" parent="box_state_event" vertex="1" edge="1" source="st_ev_future" target="st_ev_upcoming">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_ev2" value="Đến giờ khai mạc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#16A34A;" parent="box_state_event" vertex="1" edge="1" source="st_ev_upcoming" target="st_ev_ongoing">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e_ev3" value="Hết giờ sự kiện" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#475569;" parent="box_state_event" vertex="1" edge="1" source="st_ev_ongoing" target="st_ev_ended">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="diagram_4" name="4. Biểu đồ Lớp (UML Class Diagram)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+    <mxCell id="class_title" value="SƠ ĐỒ LỚP CHI TIẾT (UML CLASS DIAGRAM): DOMAIN MODELS, VIEWMODELS &amp; SERVICES" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#0F172A;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="20" width="1120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_cls_models" value="TẦNG THỰC THỂ DỮ LIỆU (DOMAIN MODELS - LIB/MODELS/)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="70" width="1120" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_event_model" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;
+EventModel
+--
++ id: String
++ title: String
++ description: String
++ category: String
++ clubName: String
++ date: String
++ time: String
++ location: String
++ capacity: int
++ registeredCount: int
++ isFeatured: bool
++ speakers: List&amp;lt;EventSpeaker&amp;gt;
++ sessions: List&amp;lt;EventSession&amp;gt;
+--
++ isFull: bool
++ spotsRemaining: int
++ parsedDate: DateTime?
++ startDateTime: DateTime?
++ endDateTime: DateTime?
++ isPast: bool
++ isOngoing: bool
++ isRegistrationOpen: bool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B82F6;fontSize=10;fontColor=#1E3A8A;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="20" y="40" width="220" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_ticket_model" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;
+TicketModel
+--
++ id: String
++ eventId: String
++ userId: String
++ eventTitle: String
++ eventDate: String
++ eventTime: String
++ eventLocation: String
++ studentName: String
++ studentEmail: String
++ qrToken: String
++ status: TicketStatus
++ checkedInAt: DateTime?
+--
++ isCheckedIn: bool
++ isCancelled: bool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;fontSize=10;fontColor=#064E3B;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="260" y="40" width="190" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_reg_model" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;
+RegistrationModel
+--
++ id: String
++ eventId: String
++ userId: String
++ studentName: String
++ studentEmail: String
++ eventTitle: String
++ status: RegistrationStatus
++ createdAt: DateTime
++ reviewedAt: DateTime?
+--
++ isPending: bool
++ isApproved: bool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F59E0B;fontSize=10;fontColor=#78350F;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="470" y="40" width="180" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_user_model" value="&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;
+UserModel
+--
++ id: String
++ name: String
++ email: String
++ avatarUrl: String
++ role: String
++ major: String
++ activityPoints: int
++ followedClubs: List&amp;lt;String&amp;gt;
+--
++ isStaff: bool
++ isAdmin: bool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8B5CF6;fontSize=10;fontColor=#4C1D95;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="670" y="40" width="180" height="205" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_screen_state" value="&amp;lt;&amp;lt;sealed&amp;gt;&amp;gt;
+ScreenState&amp;lt;T&amp;gt;
+--
++ StateInitial&amp;lt;T&amp;gt;()
++ StateLoading&amp;lt;T&amp;gt;(message)
++ StateData&amp;lt;T&amp;gt;(data: T)
++ StateEmpty&amp;lt;T&amp;gt;(message)
++ StateError&amp;lt;T&amp;gt;(error)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EC4899;fontSize=10;fontColor=#831843;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="870" y="40" width="220" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_enums" value="&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;
+TicketStatus: {active, checkedIn, cancelled}
+--
+&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;
+RegistrationStatus: {pending, approved, rejected}
+--
+&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;
+EventTemporalStatus: {ended, ongoing, upcoming, future}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#CBD5E1;align=left;spacingLeft=8;fontSize=9.5;fontColor=#0F172A;" parent="box_cls_models" vertex="1"   >
+      <mxGeometry x="870" y="160" width="220" height="85" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_cls_vm" value="TẦNG QUẢN LÝ TRẠNG THÁI GIAO DIỆN (VIEWMODELS - LIB/VIEWMODELS/)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="345" width="620" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_event_detail_vm" value="EventDetailViewModel
+--
+- _firestoreService: FirestoreService
++ state: ScreenState&amp;lt;EventModel&amp;gt;
+--
++ loadEvent(id: String): Future&amp;lt;void&amp;gt;
++ refreshEvent(id: String): Future&amp;lt;void&amp;gt;
++ incrementRegistration(): void" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=22;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B82F6;fontSize=9.5;fontColor=#1E3A8A;" parent="box_cls_vm" vertex="1"   >
+      <mxGeometry x="15" y="35" width="280" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_reg_vm" value="RegistrationViewModel
+--
+- _firestoreService: FirestoreService
+- _analyticsService: AnalyticsService
++ state: ScreenState&amp;lt;TicketModel&amp;gt;
+--
++ register(event, user): Future&amp;lt;bool&amp;gt;
++ submitPendingRegistration(event, user)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=22;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F59E0B;fontSize=9.5;fontColor=#78350F;" parent="box_cls_vm" vertex="1"   >
+      <mxGeometry x="315" y="35" width="280" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_tickets_vm" value="MyTicketsViewModel
+--
+- _firestoreService: FirestoreService
++ allTickets: List&amp;lt;TicketModel&amp;gt;
++ upcomingTickets: List&amp;lt;TicketModel&amp;gt;
+--
++ loadUserTickets(userId): Future&amp;lt;void&amp;gt;
++ getTicketForEvent(eventId): TicketModel?" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=22;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#10B981;fontSize=9.5;fontColor=#064E3B;" parent="box_cls_vm" vertex="1"   >
+      <mxGeometry x="15" y="145" width="280" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_mobile_desk_vm" value="MobileDeskViewModel
+--
+- _firestoreService: FirestoreService
++ checkedInCount: int
++ totalCapacity: int
+--
++ processQrCode(token): Future&amp;lt;bool&amp;gt;
++ loadEventStats(eventId): Future&amp;lt;void&amp;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=22;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8B5CF6;fontSize=9.5;fontColor=#4C1D95;" parent="box_cls_vm" vertex="1"   >
+      <mxGeometry x="315" y="145" width="280" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="box_cls_services" value="TẦNG DỊCH VỤ DỮ LIỆU &amp; CLOUD (SERVICES - LIB/SERVICES/)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;fontSize=12;fontColor=#0F172A;rounded=1;startSize=26;arcSize=4;" parent="1" vertex="1"   >
+      <mxGeometry x="680" y="345" width="480" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="cls_firestore_service" value="FirestoreService
+--
+- _firestore: FirebaseFirestore?
+- _cachedEvents: List&amp;lt;EventModel&amp;gt;
+- _cachedTickets: List&amp;lt;TicketModel&amp;gt;
+- _cachedRegistrations: List&amp;lt;RegistrationModel&amp;gt;
+--
++ getEvents(category, limit): Future&amp;lt;List&amp;lt;EventModel&amp;gt;&amp;gt;
++ getEventById(id): Future&amp;lt;EventModel?&amp;gt;
++ registerForEvent(event, user): Future&amp;lt;TicketModel&amp;gt;
++ submitRegistration(event, user): Future&amp;lt;RegistrationModel&amp;gt;
++ reviewRegistration(regId, approve, event): Future&amp;lt;void&amp;gt;
++ streamUserRegistration(eventId, userId): Stream&amp;lt;RegistrationModel?&amp;gt;
++ streamPendingRegistrations(): Stream&amp;lt;List&amp;lt;RegistrationModel&amp;gt;&amp;gt;
++ validateAndCheckInTicket(token): Future&amp;lt;CheckInResult&amp;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=22;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=9.5;fontColor=#064E3B;" parent="box_cls_services" vertex="1"   >
+      <mxGeometry x="15" y="35" width="450" height="205" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

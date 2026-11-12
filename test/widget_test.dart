@@ -22,6 +22,11 @@ import 'package:campus_event/viewmodels/my_tickets_vm.dart';
 import 'package:campus_event/services/crashlytics_service.dart';
 import 'package:campus_event/viewmodels/auth_viewmodel.dart';
 import 'package:campus_event/screens/tickets/digital_ticket_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:campus_event/services/gemini_ai_service.dart';
+import 'package:campus_event/services/remote_config_service.dart';
+import 'dart:convert';
 
 void main() {
   testWidgets('AppPrimaryButton renders label and triggers onPressed', (WidgetTester tester) async {
@@ -598,6 +603,85 @@ void main() {
         contains('Sự kiện đã kết thúc, không thể đăng ký tham gia'),
       )),
     );
+  });
+
+  test('GeminiAiService initializes with 10 official API keys and supports round-robin rotation', () async {
+    final aiService = GeminiAiService(
+      remoteConfigService: RemoteConfigService(null),
+      analyticsService: AnalyticsService(null),
+    );
+
+    expect(aiService.totalKeys, equals(10));
+    expect(aiService.currentKeyIndex, equals(0));
+    expect(aiService.currentApiKeyPreview, isNotEmpty);
+
+    // Manual rotation
+    aiService.rotateToNextKey();
+    expect(aiService.currentKeyIndex, equals(1));
+  });
+
+  test('GeminiAiService automatically rotates key on HTTP 429 quota error and uses next available key', () async {
+    int callCount = 0;
+    final mockClient = MockClient((request) async {
+      callCount++;
+      if (request.url.queryParameters['key'] == GeminiAiService.officialGeminiApiKeys[0]) {
+        // First key hits quota 429
+        return http.Response('{"error":{"code":429,"message":"Quota exceeded"}}', 429);
+      }
+      // Second key succeeds
+      return http.Response(
+        jsonEncode({
+          'candidates': [
+            {
+              'content': {
+                'parts': [
+                  {
+                    'text': jsonEncode({
+                      'summary': 'Tóm tắt tự động qua Gemini AI',
+                      'keyTakeaways': ['Điểm 1', 'Điểm 2'],
+                      'recommendedAudience': ['Sinh viên FPTU'],
+                      'suggestedQuestions': ['Câu hỏi 1?']
+                    })
+                  }
+                ]
+              }
+            }
+          ]
+        }),
+        200,
+        headers: {'content-type': 'application/json'},
+      );
+    });
+
+    final aiService = GeminiAiService(
+      remoteConfigService: RemoteConfigService(null),
+      analyticsService: AnalyticsService(null),
+      httpClient: mockClient,
+    );
+
+    const testEvent = EventModel(
+      id: 'EVT-AI-ROTATION',
+      title: 'Hội thảo AI 2026',
+      description: 'Khám phá GenAI',
+      category: 'Technology',
+      clubId: 'fcode',
+      clubName: 'CLB F-Code',
+      date: '20/11/2026',
+      time: '14:00 - 17:00',
+      location: 'Hội trường Trịnh Công Sơn',
+      capacity: 100,
+      registeredCount: 10,
+      bannerUrl: '',
+      isFeatured: false,
+    );
+
+    final insight = await aiService.generateEventInsights(testEvent);
+
+    expect(callCount, equals(2)); // Key 1 tried (429), rotated to Key 2 (200)
+    expect(aiService.currentKeyIndex, equals(1)); // Key 2 is now active
+    expect(insight.isFallback, isFalse);
+    expect(insight.summary, equals('Tóm tắt tự động qua Gemini AI'));
+    expect(insight.keyTakeaways, contains('Điểm 1'));
   });
 
 }

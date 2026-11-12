@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2026-11-12T01:07:18.193Z" agent="Antigravity/PRM393" version="24.0.0" type="device">
+  <diagram id="diagram_1" name="2. Biểu đồ Tuần tự (Sequence Diagram)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+    <mxCell id="seq_title" value="LUỒNG TUẦN TỰ ĐĂNG KÝ, XÉT DUYỆT LIÊN PHÂN HỆ (SLIDE 18) &amp; QUÉT VÉ CỔNG CAMPUS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#0F172A;" parent="1" vertex="1"   >
+      <mxGeometry x="40" y="20" width="1120" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_student_head" value="Sinh viên An
+(Mobile App)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="70" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_student_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_student_head" target="ll_student_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_mobile_vm_head" value="RegistrationVM
+&amp; Mobile UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="260" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_mobile_vm_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_mobile_vm_head" target="ll_mobile_vm_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_firestore_head" value="Cloud Firestore
+(campus-event)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="470" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_firestore_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_firestore_head" target="ll_firestore_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_web_admin_head" value="Web Admin Portal
+(Review Queue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="680" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_web_admin_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_web_admin_head" target="ll_web_admin_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_staff_head" value="Cán bộ CTSV
+(Web Approver)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="890" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_staff_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_staff_head" target="ll_staff_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_scanner_head" value="CTV Soát Vé
+(MobileDesk)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;strokeColor=#0F172A;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" parent="1" vertex="1"   >
+      <mxGeometry x="1060" y="70" width="110" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="ll_scanner_line" value="" style="endArrow=none;dashed=1;html=1;strokeWidth=1.5;strokeColor=#94A3B8;" parent="1" vertex="1" edge="1" source="ll_scanner_head" target="ll_scanner_head">
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_0" value="1. Nhấn &quot;Đăng ký tham gia&quot; &amp; chọn Xét Duyệt BTC" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#0F172A;strokeWidth=1.5;fontColor=#0F172A;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_1" value="2. POST registrations/{regId} {status: &quot;pending&quot;, userId, studentName}" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#2563EB;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_2" value="3. Real-time Snapshot Push: Đơn mới chờ duyệt (+1 Badge)" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_3" value="4. Hiển thị thông tin sinh viên &amp; nút [Duyệt &amp; Cấp Vé]" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#D97706;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_4" value="5. Cán bộ click &quot;Duyệt &amp; Cấp Vé&quot;" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#D97706;strokeWidth=1.5;fontColor=#D97706;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_5" value="6. Atomic Batch Write: registrations(status=&quot;approved&quot;), tickets(active, qrToken), announcements" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#DC2626;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_6" value="7. Stream Snapshot Trigger: Đơn được phê duyệt thành công!" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_7" value="8. Mobile cập nhật tức thì: Nút xanh &quot;Đã Duyệt - Xem Vé&quot;" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_8" value="9. Tab &quot;Vé của tôi&quot; hiển thị vé số CE2026 kèm mã QR động" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#2563EB;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_9" value="10. Sinh viên xuất trình mã QR tại Bàn soát vé cổng Trịnh Công Sơn" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#0F172A;strokeWidth=1.5;fontColor=#0F172A;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_10" value="11. MobileDesk quét Camera trong 1.5s -&gt; validateAndCheckInTicket()" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#7C3AED;strokeWidth=1.5;fontColor=#7C3AED;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_11" value="12. Chấp nhận vé hợp lệ -&gt; Rung Haptic &amp; Báo Thẻ Xanh" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_12" value="13. Live Telemetry Update: Số vé đã quét 4/342 (+1) &amp; Tốc độ nhịp độ cổng" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#EA580C;strokeWidth=1.5;fontColor=#EA580C;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="msg_13" value="14. Mở khóa form Đánh giá Feedback &amp; Nhận ngay +5 Điểm rèn luyện" style="edgeStyle=none;html=1;endArrow=block;endFill=1;strokeColor=#059669;strokeWidth=1.5;fontColor=#059669;fontSize=10.5;labelBackgroundColor=#FFFFFF;" parent="1" vertex="1" edge="1"  >
+      <mxGeometry x="0" y="0" width="120" height="60" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
