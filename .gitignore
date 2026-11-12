@@ -55,3 +55,7 @@ android/app/google-services.json.backup
 # Local Firebase security test dependencies and emulator logs
 firebase/tests/node_modules/
 *-debug.log
+
+# Draw.io temporary files
+.*.bkp
+.*.dtmp
